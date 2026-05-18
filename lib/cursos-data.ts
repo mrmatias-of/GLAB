@@ -1,4 +1,4 @@
-import { Smartphone, Monitor, Apple, type LucideIcon } from "lucide-react"
+import { Smartphone, Monitor, Apple, Layers, type LucideIcon } from "lucide-react"
 
 export type Modulo = {
   titulo: string
@@ -24,6 +24,69 @@ export type Curso = {
 }
 
 export const cursos: Curso[] = [
+  {
+    slug: "combo-iniciante-mobile",
+    tag: "Combo",
+    titulo: "Combo Iniciante Mobile",
+    subtitulo: "iPhone + Android — tudo que você precisa para começar na assistência técnica mobile.",
+    descricao:
+      "O combo completo para iniciantes: troca de tela, bateria e conector em iPhone e Android. Um único guia, dois mundos dominados.",
+    descricaoLonga:
+      "O ponto de partida ideal para quem quer entrar na assistência técnica mobile. Cobre os procedimentos mais rentáveis do mercado — troca de tela, bateria e conector de carga — tanto em iPhones quanto nos principais modelos Android. Tudo em um único guia, com linguagem direta e passo a passo ilustrado.",
+    icon: Layers,
+    destaque: true,
+    preco: "R$ 19,90",
+    precoOriginal: "R$ 47",
+    modulos: [
+      {
+        titulo: "Ferramentas & Segurança",
+        topicos: [
+          "Kit essencial para mobile",
+          "Segurança elétrica e ESD",
+          "Identificação de modelos iPhone e Android",
+          "Organização da bancada",
+        ],
+      },
+      {
+        titulo: "Troca de Tela — iPhone",
+        topicos: [
+          "Remoção segura da tela",
+          "Troca em iPhone 11 ao 15 Pro",
+          "Calibração de Face ID",
+          "Erros comuns e como evitar",
+        ],
+      },
+      {
+        titulo: "Troca de Tela — Android",
+        topicos: [
+          "LCD vs OLED — cuidados diferentes",
+          "Troca em Samsung Galaxy A e S",
+          "Troca em Motorola Moto G",
+          "Troca em Xiaomi Redmi e Note",
+        ],
+      },
+      {
+        titulo: "Bateria & Conector de Carga",
+        topicos: [
+          "Diagnóstico de bateria em iPhone e Android",
+          "Troca de bateria com e sem adesivo",
+          "Limpeza e troca do conector Lightning/USB-C",
+          "Substituição da flex de carga",
+        ],
+      },
+    ],
+    aprendizados: [
+      "Trocar tela em iPhones e nos principais Androids",
+      "Substituir bateria com segurança em qualquer modelo",
+      "Resolver problemas de carga nos aparelhos mais comuns",
+      "Usar ferramentas profissionais corretamente",
+      "Evitar os erros mais comuns de quem está começando",
+      "Cobrar corretamente pelos serviços desde o primeiro reparo",
+    ],
+    cta: "Quero Acessar o Guia",
+    ctaHref: "https://pay.kirvano.com/6a241556-a3c8-4c49-8001-c6ab139e64ec",
+    accentColor: "#00d4c8",
+  },
   {
     slug: "iphone",
     tag: "iPhone",
