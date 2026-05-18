@@ -1,37 +1,6 @@
-import { Smartphone, Monitor, Apple, ArrowRight, BookOpen } from "lucide-react"
-
-const categorias = [
-  {
-    icon: Apple,
-    tag: "iPhone",
-    titulo: "Reparo de iPhone",
-    descricao:
-      "Troca de tela, bateria, conector de carga, diagnóstico de software e muito mais. Técnicas validadas nos modelos mais recentes.",
-    modulos: ["Troca de Tela", "Bateria & Carga", "Diagnóstico de Software", "Recuperação de Dados"],
-    href: "#",
-    destaque: true,
-  },
-  {
-    icon: Smartphone,
-    tag: "Android",
-    titulo: "Reparo de Android",
-    descricao:
-      "Samsung, Motorola, Xiaomi e outros. Procedimentos precisos para os modelos mais vendidos do mercado brasileiro.",
-    modulos: ["Troca de Display", "Problemas de Carga", "Flashing de Firmware", "Microssoldagem"],
-    href: "#",
-    destaque: false,
-  },
-  {
-    icon: Monitor,
-    tag: "Windows",
-    titulo: "Formatação Windows",
-    descricao:
-      "Formatação profissional com backup completo, instalação de drivers, otimização de performance e segurança.",
-    modulos: ["Backup Profissional", "Instalação Limpa", "Drivers & Updates", "Otimização de Performance"],
-    href: "#",
-    destaque: false,
-  },
-]
+import Link from "next/link"
+import { ArrowRight, BookOpen } from "lucide-react"
+import { cursos } from "@/lib/cursos-data"
 
 export default function Cursos() {
   return (
@@ -49,7 +18,6 @@ export default function Cursos() {
       />
 
       <div className="relative z-10 max-w-6xl mx-auto px-5">
-
         {/* Section header */}
         <div className="flex flex-col items-center text-center mb-16">
           <div className="inline-flex items-center gap-2 rounded-full border border-cyan/25 bg-cyan/8 px-4 py-1.5 mb-5">
@@ -67,11 +35,11 @@ export default function Cursos() {
 
         {/* Cards */}
         <div className="grid md:grid-cols-3 gap-6">
-          {categorias.map((cat) => {
+          {cursos.map((cat) => {
             const Icon = cat.icon
             return (
               <div
-                key={cat.titulo}
+                key={cat.slug}
                 className={`group relative rounded-2xl border bg-gradient-to-b transition-all duration-500 card-premium flex flex-col ${
                   cat.destaque
                     ? "border-cyan/30 from-[#0d1e2e] to-surface shadow-[0_0_40px_rgba(0,212,200,0.1)] hover:shadow-[0_0_60px_rgba(0,212,200,0.18)]"
@@ -105,26 +73,34 @@ export default function Cursos() {
 
                   {/* Modules */}
                   <div className="flex flex-col gap-2 mb-8 flex-1">
-                    {cat.modulos.map((m) => (
-                      <div key={m} className="flex items-center gap-2">
+                    {cat.modulos.slice(0, 4).map((m) => (
+                      <div key={m.titulo} className="flex items-center gap-2">
                         <div className="w-1 h-1 rounded-full bg-cyan/60" />
-                        <span className="text-xs text-foreground/70">{m}</span>
+                        <span className="text-xs text-foreground/70">{m.titulo}</span>
                       </div>
                     ))}
                   </div>
 
+                  {/* Price */}
+                  <div className="flex items-baseline gap-2 mb-5">
+                    {cat.precoOriginal && (
+                      <span className="text-xs text-muted-foreground line-through">{cat.precoOriginal}</span>
+                    )}
+                    <span className="text-2xl font-black text-cyan">{cat.preco}</span>
+                  </div>
+
                   {/* CTA */}
-                  <a
-                    href={cat.href}
+                  <Link
+                    href={`/cursos/${cat.slug}`}
                     className={`w-full inline-flex items-center justify-center gap-2 rounded-xl font-bold text-sm px-5 py-3.5 transition-all duration-300 group/btn ${
                       cat.destaque
                         ? "bg-cyan text-background hover:bg-cyan/90 shadow-[0_0_24px_rgba(0,212,200,0.3)] hover:shadow-[0_0_36px_rgba(0,212,200,0.45)]"
                         : "border border-cyan/25 text-cyan hover:bg-cyan/10 hover:border-cyan/40"
                     }`}
                   >
-                    Acessar Guia
+                    Ver Guia Completo
                     <ArrowRight size={15} className="group-hover/btn:translate-x-1 transition-transform" />
-                  </a>
+                  </Link>
                 </div>
               </div>
             )
