@@ -15,10 +15,10 @@ export default function WhatsAppButton() {
         aria-label="Falar no WhatsApp"
         className="relative w-14 h-14 flex items-center justify-center"
       >
-        {/* Pulse ring — fora do overflow hidden */}
-        <span className="absolute inset-0 rounded-2xl bg-[#25d366] animate-ping opacity-25" />
+        {/* Pulse ring */}
+        <span className="absolute inset-0 rounded-full bg-[#25d366] animate-ping opacity-20" />
         {/* Button body */}
-        <span className="relative z-10 w-14 h-14 rounded-2xl bg-[#25d366] flex items-center justify-center shadow-[0_4px_24px_rgba(37,211,102,0.4)] hover:shadow-[0_4px_40px_rgba(37,211,102,0.65)] hover:scale-110 transition-all duration-300">
+        <span className="relative z-10 w-14 h-14 rounded-full bg-[#25d366] flex items-center justify-center shadow-[0_4px_24px_rgba(37,211,102,0.4)] hover:shadow-[0_4px_40px_rgba(37,211,102,0.65)] hover:scale-110 transition-all duration-300">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 32 32"
