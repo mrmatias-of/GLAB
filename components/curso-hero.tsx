@@ -80,7 +80,7 @@ export default function CursoHero({ curso }: { curso: Curso }) {
                 {curso.cta}
               </a>
               <p className="text-[11px] text-muted-foreground text-center mt-4">
-                Checkout seguro via Kirvano / Kiwify
+                Pagamento único &middot; Acesso vitalício
               </p>
             </div>
           </div>

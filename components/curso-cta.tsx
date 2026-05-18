@@ -46,7 +46,7 @@ export default function CursoCTA({ curso }: { curso: Curso }) {
           {/* Garantia */}
           <div className="flex items-center justify-center gap-2 mt-6 text-xs text-muted-foreground">
             <ShieldCheck size={13} className="text-cyan/70" />
-            Pagamento único &middot; Acesso vitalício &middot; Checkout seguro
+            Pagamento único &middot; Acesso vitalício
           </div>
         </div>
       </div>
