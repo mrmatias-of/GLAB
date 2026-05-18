@@ -38,8 +38,7 @@ export default function Professor() {
             <span className="text-xs font-semibold tracking-[0.18em] text-cyan uppercase">Sobre o Professor</span>
           </div>
           <h2 className="text-4xl md:text-5xl font-black text-balance leading-tight">
-            Guilherme{" "}
-            <span className="text-cyan glow-text">Julião</span>
+            O <span className="text-cyan glow-text">Professor</span>
           </h2>
         </div>
 
@@ -52,7 +51,7 @@ export default function Professor() {
               <p className="text-foreground/75 leading-[1.8] text-base mb-4">
                 Com mais de{" "}
                 <strong className="text-foreground">10 anos de experiência</strong> no mercado de assistência técnica,
-                Guilherme construiu seu conhecimento na prática — reparando
+                Um conhecimento construído na prática — reparando
                 smartphones, tablets e computadores de clientes reais, com
                 problemas reais.
               </p>

@@ -92,11 +92,9 @@ export default function Footer() {
       <div className="border-t border-[rgba(0,212,200,0.06)] py-5 px-5">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
           <p className="text-xs text-muted-foreground">
-            &copy; 2026 G•Lab &mdash; Feito por <strong className="text-foreground/60">Guilherme Julião</strong>
+            &copy; 2026 G•Lab Cursos. Todos os direitos reservados.
           </p>
-          <p className="text-xs text-muted-foreground">
-            Todos os direitos reservados
-          </p>
+
         </div>
       </div>
     </footer>

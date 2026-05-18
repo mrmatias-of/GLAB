@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 export const metadata: Metadata = {
   title: 'G•Lab Cursos — Guias Mestre',
   description: 'Guias técnicos práticos criados por quem já reparou mais de 20 mil aparelhos. Aprenda os métodos que funcionam de verdade no dia a dia da assistência técnica.',
-  keywords: 'curso reparo iPhone, curso reparo Android, assistência técnica, guia técnico, Guilherme Julião',
+  keywords: 'curso reparo iPhone, curso reparo Android, assistência técnica, guia técnico, G•Lab Cursos',
 }
 
 export default function RootLayout({
