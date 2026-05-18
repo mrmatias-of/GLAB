@@ -35,8 +35,8 @@ export const cursos: Curso[] = [
       "Um guia técnico completo criado para quem quer dominar o reparo de iPhones de forma profissional. Abordamos desde a abertura segura dos aparelhos até procedimentos avançados de microssoldagem, cobrindo os modelos iPhone 8 até o iPhone 15 Pro Max.",
     icon: Apple,
     destaque: true,
-    preco: "R$ 47",
-    precoOriginal: "R$ 97",
+    preco: "R$ 19,90",
+    precoOriginal: "R$ 47",
     modulos: [
       {
         titulo: "Fundamentos & Ferramentas",
@@ -93,7 +93,7 @@ export const cursos: Curso[] = [
       "Evitar os erros mais comuns na bancada",
     ],
     cta: "Quero Acessar o Guia",
-    ctaHref: "https://glabcursos.com.br",
+    ctaHref: "https://pay.kirvano.com/6a241556-a3c8-4c49-8001-c6ab139e64ec",
     accentColor: "#00d4c8",
   },
   {
@@ -107,8 +107,8 @@ export const cursos: Curso[] = [
       "O mercado Android representa mais de 80% dos aparelhos no Brasil. Este guia cobre os modelos mais vendidos com procedimentos detalhados, incluindo técnicas de flashing, microssoldagem e troca de display OLED e LCD.",
     icon: Smartphone,
     destaque: false,
-    preco: "R$ 47",
-    precoOriginal: "R$ 97",
+    preco: "R$ 19,90",
+    precoOriginal: "R$ 47",
     modulos: [
       {
         titulo: "Fundamentos Android",
@@ -165,7 +165,7 @@ export const cursos: Curso[] = [
       "Montar um estoque estratégico de peças",
     ],
     cta: "Quero Acessar o Guia",
-    ctaHref: "https://glabcursos.com.br",
+    ctaHref: "https://pay.kirvano.com/6a241556-a3c8-4c49-8001-c6ab139e64ec",
     accentColor: "#00d4c8",
   },
   {
