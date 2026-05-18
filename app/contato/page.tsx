@@ -67,7 +67,6 @@ export default function ContatoPage() {
               </div>
               <div>
                 <p className="font-bold text-foreground text-sm mb-1">WhatsApp</p>
-                <p className="text-muted-foreground text-sm">+55 19 98939-8294</p>
                 <p className="text-xs text-muted-foreground mt-1">Resposta rápida durante o horário comercial</p>
               </div>
             </a>
