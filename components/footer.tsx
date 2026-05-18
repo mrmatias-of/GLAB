@@ -1,9 +1,10 @@
+import Link from "next/link"
 import { Instagram, Youtube, Mail } from "lucide-react"
 
 const links = [
-  { label: "Início", href: "#inicio" },
-  { label: "Professor", href: "#professor" },
-  { label: "Cursos", href: "#cursos" },
+  { label: "Início", href: "/" },
+  { label: "Cursos", href: "/cursos" },
+  { label: "Contato", href: "/contato" },
 ]
 
 const socials = [
@@ -14,7 +15,7 @@ const socials = [
 
 export default function Footer() {
   return (
-    <footer id="contato" className="relative border-t border-[rgba(0,212,200,0.1)] overflow-hidden">
+    <footer className="relative border-t border-[rgba(0,212,200,0.1)] overflow-hidden">
       {/* Top glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-px bg-gradient-to-r from-transparent via-cyan/40 to-transparent" />
 
@@ -22,7 +23,7 @@ export default function Footer() {
 
         {/* Brand */}
         <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-3 w-fit">
             <div className="w-9 h-9 rounded-xl bg-cyan/15 border border-cyan/30 flex items-center justify-center">
               <span className="text-cyan font-black text-sm">G</span>
             </div>
@@ -30,12 +31,11 @@ export default function Footer() {
               <span className="text-foreground font-bold text-sm tracking-wide">G•Lab</span>
               <span className="text-muted-foreground text-[10px] tracking-widest uppercase">Guias Mestre</span>
             </div>
-          </div>
+          </Link>
           <p className="text-xs text-muted-foreground leading-relaxed max-w-xs">
             Guias técnicos práticos para profissionais de assistência técnica
             que querem resultados reais.
           </p>
-          {/* Socials */}
           <div className="flex items-center gap-2 mt-1">
             {socials.map(({ icon: Icon, href, label }) => (
               <a
@@ -54,13 +54,13 @@ export default function Footer() {
         <div className="flex flex-col gap-3">
           <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase mb-1">Navegação</p>
           {links.map((l) => (
-            <a
+            <Link
               key={l.href}
               href={l.href}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               {l.label}
-            </a>
+            </Link>
           ))}
         </div>
 
@@ -68,7 +68,7 @@ export default function Footer() {
         <div className="flex flex-col gap-3">
           <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase mb-1">Contato</p>
           <a
-            href="https://wa.me/5511999999999"
+            href="https://wa.me/5519989398294"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -94,7 +94,6 @@ export default function Footer() {
           <p className="text-xs text-muted-foreground">
             &copy; 2026 G•Lab Cursos. Todos os direitos reservados.
           </p>
-
         </div>
       </div>
     </footer>

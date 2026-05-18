@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { ArrowRight, ShieldCheck, Zap } from "lucide-react"
 
 export default function Hero() {
@@ -58,19 +59,19 @@ export default function Hero() {
 
         {/* CTAs */}
         <div className="animate-fade-up delay-400 flex flex-col sm:flex-row items-center gap-3 mb-14">
-          <a
-            href="#cursos"
+          <Link
+            href="/cursos"
             className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-cyan text-background font-bold text-sm hover:bg-cyan/90 transition-all duration-300 shadow-[0_0_30px_rgba(0,212,200,0.4)] hover:shadow-[0_0_50px_rgba(0,212,200,0.55)]"
           >
             Explorar Cursos
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-          </a>
-          <a
-            href="#professor"
+          </Link>
+          <Link
+            href="/contato"
             className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl border border-border bg-surface/50 backdrop-blur-sm text-sm font-medium text-foreground/80 hover:text-foreground hover:border-cyan/30 transition-all duration-300"
           >
-            Conhecer o Professor
-          </a>
+            Falar Conosco
+          </Link>
         </div>
 
         {/* Trust badges */}
