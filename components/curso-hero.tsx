@@ -52,9 +52,9 @@ export default function CursoHero({ curso }: { curso: Curso }) {
               </div>
               <div className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2">
                 <span className="text-sm font-bold text-cyan">
-                  {curso.modulos.reduce((acc, m) => acc + m.aulas.length, 0)}
+                  {curso.modulos.reduce((acc, m) => acc + m.topicos.length, 0)}
                 </span>
-                <span className="text-sm text-muted-foreground">aulas</span>
+                <span className="text-sm text-muted-foreground">tópicos</span>
               </div>
               <div className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2">
                 <Tag size={13} className="text-cyan" />

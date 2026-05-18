@@ -2,7 +2,7 @@ import { Smartphone, Monitor, Apple, type LucideIcon } from "lucide-react"
 
 export type Modulo = {
   titulo: string
-  aulas: string[]
+  topicos: string[]
 }
 
 export type Curso = {
@@ -40,7 +40,7 @@ export const cursos: Curso[] = [
     modulos: [
       {
         titulo: "Fundamentos & Ferramentas",
-        aulas: [
+        topicos: [
           "Kit de ferramentas essencial",
           "Segurança elétrica e ESD",
           "Identificação de modelos",
@@ -49,7 +49,7 @@ export const cursos: Curso[] = [
       },
       {
         titulo: "Troca de Tela",
-        aulas: [
+        topicos: [
           "Remoção sem danos",
           "Troca em iPhone 11, 12, 13, 14",
           "Troca em iPhone 15 e 15 Pro",
@@ -58,7 +58,7 @@ export const cursos: Curso[] = [
       },
       {
         titulo: "Bateria & Carga",
-        aulas: [
+        topicos: [
           "Diagnóstico de bateria",
           "Troca de bateria segura",
           "Limpeza do conector Lightning/USB-C",
@@ -67,7 +67,7 @@ export const cursos: Curso[] = [
       },
       {
         titulo: "Diagnóstico de Software",
-        aulas: [
+        topicos: [
           "Modo DFU e Recovery",
           "Restauração via iTunes / Finder",
           "Erros comuns e soluções",
@@ -76,7 +76,7 @@ export const cursos: Curso[] = [
       },
       {
         titulo: "Recuperação de Dados",
-        aulas: [
+        topicos: [
           "Backup antes do reparo",
           "Recuperação de fotos e contatos",
           "Ferramentas de recuperação profissional",
@@ -112,7 +112,7 @@ export const cursos: Curso[] = [
     modulos: [
       {
         titulo: "Fundamentos Android",
-        aulas: [
+        topicos: [
           "Diferenças entre fabricantes",
           "Kit de ferramentas por modelo",
           "Segurança e ESD",
@@ -121,7 +121,7 @@ export const cursos: Curso[] = [
       },
       {
         titulo: "Troca de Display",
-        aulas: [
+        topicos: [
           "LCD vs OLED — cuidados diferentes",
           "Troca em Samsung Galaxy S e A",
           "Troca em Motorola Moto G",
@@ -130,7 +130,7 @@ export const cursos: Curso[] = [
       },
       {
         titulo: "Problemas de Carga",
-        aulas: [
+        topicos: [
           "Limpeza e troca do conector USB-C",
           "Substituição da flex de carga",
           "Diagnóstico de bateria inchada",
@@ -139,7 +139,7 @@ export const cursos: Curso[] = [
       },
       {
         titulo: "Flashing de Firmware",
-        aulas: [
+        topicos: [
           "O que é e quando usar",
           "Flashing via Odin (Samsung)",
           "Flashing via QFIL (Qualcomm)",
@@ -148,7 +148,7 @@ export const cursos: Curso[] = [
       },
       {
         titulo: "Microssoldagem Básica",
-        aulas: [
+        topicos: [
           "Equipamentos necessários",
           "Troca de conector de carga soldado",
           "Recuperação de trilhas danificadas",
@@ -184,7 +184,7 @@ export const cursos: Curso[] = [
     modulos: [
       {
         titulo: "Antes de Formatar",
-        aulas: [
+        topicos: [
           "Conversa com o cliente — o que perguntar",
           "Inventário de programas instalados",
           "Backup completo e seguro",
@@ -193,7 +193,7 @@ export const cursos: Curso[] = [
       },
       {
         titulo: "Instalação Limpa",
-        aulas: [
+        topicos: [
           "Criando pendrive bootável",
           "BIOS / UEFI — configurações essenciais",
           "Instalação Windows 10 e 11",
@@ -202,7 +202,7 @@ export const cursos: Curso[] = [
       },
       {
         titulo: "Drivers & Atualizações",
-        aulas: [
+        topicos: [
           "Identificação automática de drivers",
           "Instalação manual de drivers críticos",
           "Windows Update — o que instalar",
@@ -211,7 +211,7 @@ export const cursos: Curso[] = [
       },
       {
         titulo: "Otimização de Performance",
-        aulas: [
+        topicos: [
           "Desativando serviços desnecessários",
           "Configuração de inicialização",
           "Limpeza pós-formatação",
@@ -220,7 +220,7 @@ export const cursos: Curso[] = [
       },
       {
         titulo: "Segurança & Entrega",
-        aulas: [
+        topicos: [
           "Configuração do Windows Defender",
           "Criação de ponto de restauração",
           "Checklist de entrega profissional",

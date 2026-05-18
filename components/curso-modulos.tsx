@@ -1,4 +1,4 @@
-import { BookOpen, PlayCircle } from "lucide-react"
+import { BookOpen, ChevronRight } from "lucide-react"
 import type { Curso } from "@/lib/cursos-data"
 
 export default function CursoModulos({ curso }: { curso: Curso }) {
@@ -9,11 +9,11 @@ export default function CursoModulos({ curso }: { curso: Curso }) {
         <div className="flex items-center gap-2 mb-10">
           <BookOpen size={16} className="text-cyan" />
           <h2 className="text-lg font-black text-foreground tracking-wide uppercase text-sm">
-            Conteúdo do curso
+            Conteúdo do guia
           </h2>
           <span className="ml-auto text-xs text-muted-foreground">
             {curso.modulos.length} módulos &middot;{" "}
-            {curso.modulos.reduce((acc, m) => acc + m.aulas.length, 0)} aulas
+            {curso.modulos.reduce((acc, m) => acc + m.topicos.length, 0)} tópicos
           </span>
         </div>
 
@@ -31,16 +31,16 @@ export default function CursoModulos({ curso }: { curso: Curso }) {
                 </div>
                 <h3 className="font-bold text-foreground text-sm">{modulo.titulo}</h3>
                 <span className="ml-auto text-xs text-muted-foreground shrink-0">
-                  {modulo.aulas.length} aulas
+                  {modulo.topicos.length} tópicos
                 </span>
               </div>
 
-              {/* Aulas */}
+              {/* Tópicos */}
               <div className="flex flex-col divide-y divide-border/30">
-                {modulo.aulas.map((aula) => (
-                  <div key={aula} className="flex items-center gap-3 px-6 py-3">
-                    <PlayCircle size={14} className="text-muted-foreground shrink-0" />
-                    <span className="text-sm text-muted-foreground">{aula}</span>
+                {modulo.topicos.map((topico) => (
+                  <div key={topico} className="flex items-center gap-3 px-6 py-3">
+                    <ChevronRight size={14} className="text-cyan/50 shrink-0" />
+                    <span className="text-sm text-muted-foreground">{topico}</span>
                   </div>
                 ))}
               </div>
