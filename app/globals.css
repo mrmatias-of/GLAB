@@ -161,9 +161,16 @@
 
 .card-premium {
   position: relative;
-  overflow: hidden;
 }
-.card-premium::before {
+.card-premium .shimmer-inner {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+}
+.card-premium .shimmer-inner::before {
   content: '';
   position: absolute;
   top: 0; left: -60%;
@@ -172,4 +179,4 @@
   transform: skewX(-18deg);
   transition: left 0.7s ease;
 }
-.card-premium:hover::before { left: 160%; }
+.card-premium:hover .shimmer-inner::before { left: 160%; }

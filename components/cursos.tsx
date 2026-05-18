@@ -37,14 +37,15 @@ export default function Cursos() {
         {cursos.filter(c => c.destaque).map((cat) => {
           const Icon = cat.icon
           return (
-            <div key={cat.slug} className="relative rounded-2xl border border-cyan/30 bg-gradient-to-br from-[#0d1e2e] to-surface shadow-[0_0_60px_rgba(0,212,200,0.12)] card-premium mb-6">
-              <div className="absolute -top-3 left-6">
+            <div key={cat.slug} className="relative rounded-2xl border border-cyan/30 bg-gradient-to-br from-[#0d1e2e] to-surface shadow-[0_0_60px_rgba(0,212,200,0.12)] card-premium mb-6 mt-5">
+              <span className="shimmer-inner" />
+              <div className="absolute -top-4 left-6">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan text-background text-[11px] font-black tracking-wide shadow-[0_0_14px_rgba(0,212,200,0.5)]">
                   <span className="w-1.5 h-1.5 rounded-full bg-background animate-glow" />
                   MAIS POPULAR
                 </div>
               </div>
-              <div className="p-8 md:p-10 grid md:grid-cols-2 gap-8 items-center">
+              <div className="relative z-10 p-8 md:p-10 grid md:grid-cols-2 gap-8 items-center">
                 {/* Left */}
                 <div>
                   <div className="flex items-center gap-3 mb-5">
@@ -96,7 +97,8 @@ export default function Cursos() {
                 key={cat.slug}
                 className="group relative rounded-2xl border border-[rgba(0,212,200,0.1)] bg-gradient-to-b from-surface to-[#0b1320] hover:border-cyan/25 hover:shadow-[0_0_30px_rgba(0,212,200,0.08)] transition-all duration-500 card-premium flex flex-col"
               >
-                <div className="p-7 flex flex-col flex-1">
+                <span className="shimmer-inner" />
+                <div className="p-7 flex flex-col flex-1 relative z-10">
                   <div className="flex items-center gap-3 mb-5">
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center border bg-cyan/8 border-cyan/15">
                       <Icon size={18} className="text-cyan" strokeWidth={1.5} />
