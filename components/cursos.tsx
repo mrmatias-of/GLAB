@@ -37,15 +37,19 @@ export default function Cursos() {
         {cursos.filter(c => c.destaque).map((cat) => {
           const Icon = cat.icon
           return (
-            <div key={cat.slug} className="relative rounded-2xl border border-cyan/30 bg-gradient-to-br from-[#0d1e2e] to-surface shadow-[0_0_60px_rgba(0,212,200,0.12)] card-premium mb-6 mt-5">
+            <div key={cat.slug} className="relative rounded-2xl border border-cyan/30 bg-gradient-to-br from-[#0d1e2e] to-surface shadow-[0_0_60px_rgba(0,212,200,0.12)] card-premium mb-6">
               <span className="shimmer-inner" />
-              <div className="absolute -top-4 left-6">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan text-background text-[11px] font-black tracking-wide shadow-[0_0_14px_rgba(0,212,200,0.5)]">
-                  <span className="w-1.5 h-1.5 rounded-full bg-background animate-glow" />
-                  MAIS POPULAR
-                </div>
-              </div>
               <div className="relative z-10 p-8 md:p-10 grid md:grid-cols-2 gap-8 items-center">
+                {/* Badge flutuante dentro do card */}
+                <div className="absolute top-4 right-5 md:top-6 md:right-7 z-20">
+                  <div
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cyan text-background text-[11px] font-black tracking-widest uppercase shadow-[0_0_18px_rgba(0,212,200,0.6)]"
+                    style={{ animation: "float 3s ease-in-out infinite" }}
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-background animate-glow" />
+                    Mais Popular
+                  </div>
+                </div>
                 {/* Left */}
                 <div>
                   <div className="flex items-center gap-3 mb-5">
