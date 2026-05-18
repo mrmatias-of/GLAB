@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { ArrowRight, BookOpen } from "lucide-react"
 import { cursos } from "@/lib/cursos-data"
 
@@ -72,13 +71,15 @@ export default function Cursos() {
                       </div>
                     ))}
                   </div>
-                  <Link
-                    href={`/cursos/${cat.slug}`}
+                  <a
+                    href={cat.ctaHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-full inline-flex items-center justify-center gap-2 rounded-xl font-bold text-sm px-5 py-4 bg-cyan text-background hover:bg-cyan/90 shadow-[0_0_28px_rgba(0,212,200,0.35)] hover:shadow-[0_0_44px_rgba(0,212,200,0.5)] transition-all duration-300 group/btn"
                   >
                     Ver Guia Completo
                     <ArrowRight size={15} className="group-hover/btn:translate-x-1 transition-transform" />
-                  </Link>
+                  </a>
                 </div>
               </div>
             </div>
@@ -117,13 +118,15 @@ export default function Cursos() {
                     )}
                     <span className="text-2xl font-black text-cyan">{cat.preco}</span>
                   </div>
-                  <Link
-                    href={`/cursos/${cat.slug}`}
+                  <a
+                    href={cat.ctaHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-full inline-flex items-center justify-center gap-2 rounded-xl font-bold text-sm px-5 py-3 border border-cyan/25 text-cyan hover:bg-cyan/10 hover:border-cyan/40 transition-all duration-300 group/btn"
                   >
                     Ver Guia Completo
                     <ArrowRight size={15} className="group-hover/btn:translate-x-1 transition-transform" />
-                  </Link>
+                  </a>
                 </div>
               </div>
             )
