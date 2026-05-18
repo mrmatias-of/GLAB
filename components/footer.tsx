@@ -27,7 +27,7 @@ export default function Footer() {
               <span className="text-cyan font-black text-sm">G</span>
             </div>
             <div className="flex flex-col leading-none">
-              <span className="text-foreground font-bold text-sm tracking-wide">G•Hub</span>
+              <span className="text-foreground font-bold text-sm tracking-wide">G•Lab</span>
               <span className="text-muted-foreground text-[10px] tracking-widest uppercase">Guias Mestre</span>
             </div>
           </div>
@@ -92,7 +92,7 @@ export default function Footer() {
       <div className="border-t border-[rgba(0,212,200,0.06)] py-5 px-5">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
           <p className="text-xs text-muted-foreground">
-            &copy; 2026 G•Hub &mdash; Feito por <strong className="text-foreground/60">Guilherme Julião</strong>
+            &copy; 2026 G•Lab &mdash; Feito por <strong className="text-foreground/60">Guilherme Julião</strong>
           </p>
           <p className="text-xs text-muted-foreground">
             Todos os direitos reservados

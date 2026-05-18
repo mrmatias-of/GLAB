@@ -37,7 +37,7 @@ export default function Header() {
             <span className="relative text-cyan font-black text-sm tracking-tight">G</span>
           </div>
           <div className="flex flex-col leading-none">
-            <span className="text-foreground font-bold text-sm tracking-wide">G•Hub</span>
+            <span className="text-foreground font-bold text-sm tracking-wide">G•Lab</span>
             <span className="text-muted-foreground text-[10px] tracking-widest uppercase">Cursos</span>
           </div>
         </a>

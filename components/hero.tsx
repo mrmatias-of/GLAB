@@ -35,7 +35,7 @@ export default function Hero() {
         <div className="animate-fade-up delay-100 inline-flex items-center gap-2 rounded-full border border-cyan/25 bg-cyan/8 px-4 py-1.5 mb-8 backdrop-blur-sm">
           <span className="w-1.5 h-1.5 rounded-full bg-cyan animate-glow" />
           <span className="text-xs font-semibold tracking-[0.2em] text-cyan uppercase">
-            G•Hub Cursos &mdash; Guias Mestre
+            G•Lab Cursos &mdash; Guias Mestre
           </span>
         </div>
 
