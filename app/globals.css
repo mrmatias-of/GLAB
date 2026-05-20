@@ -94,7 +94,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  /* scanline overlay */
+  /* scanline overlay - usar will-change para GPU acceleration */
   body::after {
     content: '';
     position: fixed;
@@ -108,11 +108,24 @@
     );
     pointer-events: none;
     z-index: 9999;
+    will-change: transform;
   }
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: var(--background); }
   ::-webkit-scrollbar-thumb { background: rgba(0, 212, 200, 0.2); border-radius: 999px; }
   ::-webkit-scrollbar-thumb:hover { background: rgba(0, 212, 200, 0.4); }
+  
+  /* Reduzir motion para usuários que preferem */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    html {
+      scroll-behavior: auto;
+    }
+  }
 }
 
 @keyframes fade-up {

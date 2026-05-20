@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 import { Plus, Trash2, Save, ArrowLeft } from "lucide-react"
@@ -42,6 +42,26 @@ const defaultForm: CursoFormData = {
   ordem: 0,
   modulos: [],
   aprendizados: [],
+}
+
+// Sanitiza string removendo caracteres perigosos
+function sanitize(str: string): string {
+  return str
+    .replace(/<[^>]*>/g, '') // Remove HTML tags
+    .replace(/javascript:/gi, '') // Remove javascript: protocol
+    .replace(/on\w+=/gi, '') // Remove event handlers
+    .trim()
+}
+
+// Valida URL
+function isValidUrl(str: string): boolean {
+  if (!str) return true // URL vazia é válida (campo opcional)
+  try {
+    const url = new URL(str)
+    return ['http:', 'https:'].includes(url.protocol)
+  } catch {
+    return false
+  }
 }
 
 export default function CursoForm({ initialData, id }: { initialData?: Partial<CursoFormData> & { id?: string }, id?: string }) {
@@ -102,19 +122,43 @@ export default function CursoForm({ initialData, id }: { initialData?: Partial<C
     setLoading(true)
     setError(null)
 
-    const supabase = createClient()
-    const payload = {
-      ...form,
-      modulos: form.modulos,
-      aprendizados: form.aprendizados,
+    // Validar URL do checkout
+    if (form.cta_href && !isValidUrl(form.cta_href)) {
+      setError("Link de checkout inválido. Use uma URL completa (https://...)")
+      setLoading(false)
+      return
     }
+
+    // Sanitizar todos os campos de texto
+    const sanitizedPayload = {
+      slug: sanitize(form.slug).toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
+      tag: sanitize(form.tag),
+      titulo: sanitize(form.titulo),
+      subtitulo: sanitize(form.subtitulo),
+      descricao: sanitize(form.descricao),
+      descricao_longa: sanitize(form.descricao_longa),
+      preco: sanitize(form.preco),
+      preco_original: sanitize(form.preco_original),
+      cta: sanitize(form.cta),
+      cta_href: form.cta_href.trim(), // URL já validada
+      destaque: form.destaque,
+      ativo: form.ativo,
+      ordem: form.ordem,
+      modulos: form.modulos.map(m => ({
+        titulo: sanitize(m.titulo),
+        topicos: m.topicos.map(t => sanitize(t)).filter(t => t.length > 0)
+      })).filter(m => m.titulo.length > 0),
+      aprendizados: form.aprendizados.map(a => sanitize(a)).filter(a => a.length > 0),
+    }
+
+    const supabase = createClient()
 
     let err
     if (isEditing) {
-      const { error } = await supabase.from("cursos").update(payload).eq("id", id)
+      const { error } = await supabase.from("cursos").update(sanitizedPayload).eq("id", id)
       err = error
     } else {
-      const { error } = await supabase.from("cursos").insert(payload)
+      const { error } = await supabase.from("cursos").insert(sanitizedPayload)
       err = error
     }
 
@@ -125,6 +169,14 @@ export default function CursoForm({ initialData, id }: { initialData?: Partial<C
     }
 
     setSuccess(true)
+    
+    // Revalidar cache de cursos
+    try {
+      await fetch('/api/revalidate', { method: 'POST' })
+    } catch {
+      // Ignora erro de revalidação
+    }
+    
     setTimeout(() => {
       router.push("/admin/cursos")
       router.refresh()

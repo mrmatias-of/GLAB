@@ -1,6 +1,7 @@
 import { ArrowRight, BookOpen, Package } from "lucide-react"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
+import { unstable_cache } from "next/cache"
 
 type Modulo = { titulo: string; topicos: string[] }
 
@@ -18,15 +19,24 @@ type CursoDB = {
   ordem: number
 }
 
-export default async function Cursos() {
-  const supabase = await createClient()
-  const { data, error } = await supabase
-    .from("cursos")
-    .select("id, slug, tag, titulo, descricao, preco, preco_original, cta_href, destaque, modulos, ordem")
-    .eq("ativo", true)
-    .order("ordem", { ascending: true })
+// Cache de cursos por 60 segundos com revalidação automática
+const getCursos = unstable_cache(
+  async () => {
+    const supabase = await createClient()
+    const { data, error } = await supabase
+      .from("cursos")
+      .select("id, slug, tag, titulo, descricao, preco, preco_original, cta_href, destaque, modulos, ordem")
+      .eq("ativo", true)
+      .order("ordem", { ascending: true })
+    
+    return (error || !data) ? [] : data as CursoDB[]
+  },
+  ['cursos-list'],
+  { revalidate: 60, tags: ['cursos'] }
+)
 
-  const cursos: CursoDB[] = (error || !data) ? [] : data
+export default async function Cursos() {
+  const cursos = await getCursos()
 
   const destaques = cursos.filter((c) => c.destaque)
   const secundarios = cursos.filter((c) => !c.destaque)

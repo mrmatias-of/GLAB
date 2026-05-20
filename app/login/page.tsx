@@ -1,9 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 import { Layers, Eye, EyeOff, Lock, Mail } from "lucide-react"
+
+// Rate limiting no client
+const MAX_ATTEMPTS = 5
+const LOCKOUT_TIME = 60000 // 1 minuto
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -11,25 +15,50 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [attempts, setAttempts] = useState(0)
+  const [lockedUntil, setLockedUntil] = useState<number | null>(null)
   const router = useRouter()
 
-  async function handleLogin(e: React.FormEvent) {
+  const handleLogin = useCallback(async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Verificar lockout
+    if (lockedUntil && Date.now() < lockedUntil) {
+      const remaining = Math.ceil((lockedUntil - Date.now()) / 1000)
+      setError(`Muitas tentativas. Aguarde ${remaining}s.`)
+      return
+    }
+
+    // Validação básica
+    if (!email.trim() || !password.trim()) {
+      setError("Preencha todos os campos.")
+      return
+    }
+
     setLoading(true)
     setError(null)
 
     const supabase = createClient()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password })
 
     if (error) {
-      setError("Email ou senha incorretos. Tente novamente.")
+      const newAttempts = attempts + 1
+      setAttempts(newAttempts)
+      
+      if (newAttempts >= MAX_ATTEMPTS) {
+        setLockedUntil(Date.now() + LOCKOUT_TIME)
+        setError(`Muitas tentativas. Aguarde 1 minuto.`)
+        setAttempts(0)
+      } else {
+        setError("Email ou senha incorretos. Tente novamente.")
+      }
       setLoading(false)
       return
     }
 
     router.push("/admin")
     router.refresh()
-  }
+  }, [email, password, attempts, lockedUntil, router])
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
