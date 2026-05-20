@@ -32,7 +32,7 @@ export async function updateSession(request: NextRequest) {
   // Protege /admin — redireciona para login se não autenticado
   if (request.nextUrl.pathname.startsWith('/admin') && !user) {
     const url = request.nextUrl.clone()
-    url.pathname = '/auth/login'
+    url.pathname = '/login'
     return NextResponse.redirect(url)
   }
 
