@@ -1,16 +1,14 @@
 import { createClient } from "@/lib/supabase/server"
-import { redirect } from "next/navigation"
 import AlunoSidebar from "@/components/aluno/sidebar"
 
 export const metadata = {
   title: "Minha Área — G•Lab",
 }
 
+// Middleware já garante que o usuário está autenticado antes de chegar aqui
 export default async function AlunoLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) redirect("/login?next=/aluno")
 
   // Buscar perfil do aluno
   const { data: profile } = await supabase
