@@ -1,10 +1,13 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-// Rotas privadas — exigem autenticação
-const privateRoutes = ['/admin', '/aluno']
+// Rotas de admin — apenas usuários com is_admin = true
+const adminRoutes = ['/admin']
 
-// Rotas de auth — usuários logados não devem acessar
+// Rotas de aluno — apenas usuários autenticados sem role admin
+const studentRoutes = ['/aluno']
+
+// Rotas de auth — usuários logados são redirecionados
 const authRoutes = ['/login']
 
 function addSecurityHeaders(response: NextResponse) {
@@ -33,26 +36,32 @@ function createSupabaseClient(request: NextRequest, response: NextResponse) {
   )
 }
 
+function redirect(request: NextRequest, pathname: string) {
+  const url = request.nextUrl.clone()
+  url.pathname = pathname
+  url.search = ''
+  return NextResponse.redirect(url)
+}
+
 export async function updateSession(request: NextRequest) {
   const response = NextResponse.next({ request })
   const pathname = request.nextUrl.pathname
 
-  // Sempre aplica headers de segurança
   addSecurityHeaders(response)
 
-  const isPrivateRoute = privateRoutes.some(r => pathname.startsWith(r))
-  const isAuthRoute = authRoutes.some(r => pathname.startsWith(r))
+  const isAdminRoute   = adminRoutes.some(r => pathname.startsWith(r))
+  const isStudentRoute = studentRoutes.some(r => pathname.startsWith(r))
+  const isAuthRoute    = authRoutes.some(r => pathname.startsWith(r))
+  const isPrivateRoute = isAdminRoute || isStudentRoute
 
-  // Rotas públicas — não precisa verificar autenticação
-  if (!isPrivateRoute && !isAuthRoute) {
-    return response
-  }
+  // Rotas públicas — nenhuma verificação necessária
+  if (!isPrivateRoute && !isAuthRoute) return response
 
-  // Verifica sessão apenas para rotas privadas ou de auth
+  // Verifica sessão
   const supabase = createSupabaseClient(request, response)
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Rota privada sem sessão → redireciona para login
+  // Sem sessão tentando acessar área privada → login
   if (isPrivateRoute && !user) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
@@ -60,14 +69,29 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  // Página de login com sessão ativa → redireciona para área correta
-  if (isAuthRoute && user) {
-    const url = request.nextUrl.clone()
-    const next = request.nextUrl.searchParams.get('next')
-    // Redireciona para o 'next' se for uma rota válida, senão vai para /aluno
-    url.pathname = next && privateRoutes.some(r => next.startsWith(r)) ? next : '/aluno'
-    url.search = ''
-    return NextResponse.redirect(url)
+  if (user) {
+    const isAdmin = user.user_metadata?.is_admin === true
+
+    // Aluno tentando acessar /admin → redireciona para /aluno (sem acesso)
+    if (isAdminRoute && !isAdmin) {
+      return redirect(request, '/aluno')
+    }
+
+    // Admin tentando acessar /aluno → redireciona para /admin
+    if (isStudentRoute && isAdmin) {
+      return redirect(request, '/admin')
+    }
+
+    // Usuário logado acessando /login → redireciona para a área certa
+    if (isAuthRoute) {
+      const next = request.nextUrl.searchParams.get('next') ?? ''
+      const isValidNext = [...adminRoutes, ...studentRoutes].some(r => next.startsWith(r))
+      // Só honra o ?next= se o usuário tiver permissão para aquela rota
+      const safeNext = isValidNext && (isAdmin ? adminRoutes : studentRoutes).some(r => next.startsWith(r))
+        ? next
+        : isAdmin ? '/admin' : '/aluno'
+      return redirect(request, safeNext)
+    }
   }
 
   return response
