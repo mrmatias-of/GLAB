@@ -153,21 +153,57 @@ export default function CursoForm({ initialData, id }: { initialData?: Partial<C
 
     const supabase = createClient()
 
+    let cursoId = id
     let err
+    
     if (isEditing) {
       const { error } = await supabase.from("cursos").update(sanitizedPayload).eq("id", id)
       err = error
     } else {
-      const { error } = await supabase.from("cursos").insert(sanitizedPayload)
+      const { data, error } = await supabase.from("cursos").insert(sanitizedPayload).select("id").single()
       err = error
+      if (data) cursoId = data.id
     }
 
-    setLoading(false)
     if (err) {
+      setLoading(false)
       setError(err.message)
       return
     }
 
+    // Se o curso está ativo e não tem link de checkout, criar no Cakto
+    if (sanitizedPayload.ativo && !sanitizedPayload.cta_href && cursoId) {
+      try {
+        console.log('[v0] Creating Cakto product...')
+        const caktoResponse = await fetch('/api/cakto/create-product', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            curso_id: cursoId,
+            titulo: sanitizedPayload.titulo,
+            descricao: sanitizedPayload.descricao || sanitizedPayload.descricao_longa,
+            preco: parseFloat(sanitizedPayload.preco.replace(/[^\d,.-]/g, '').replace(',', '.')) || 0,
+          }),
+        })
+
+        const caktoData = await caktoResponse.json()
+        if (!caktoResponse.ok) {
+          console.error('[v0] Cakto error:', caktoData)
+          setError(`Aviso: Curso salvo, mas erro ao criar produto Cakto: ${caktoData.error}`)
+          setLoading(false)
+          return
+        }
+
+        console.log('[v0] Cakto product created:', caktoData.product_id)
+      } catch (caktoError) {
+        console.error('[v0] Cakto exception:', caktoError)
+        setError(`Aviso: Curso salvo, mas erro ao integrar com Cakto. Tente novamente.`)
+        setLoading(false)
+        return
+      }
+    }
+
+    setLoading(false)
     setSuccess(true)
     
     // Revalidar cache de cursos
