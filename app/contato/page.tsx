@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { createClient } from "@/lib/supabase/client"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { Send, MessageCircle, Mail, Clock, CheckCircle } from "lucide-react"
@@ -9,11 +10,26 @@ export default function ContatoPage() {
   const [form, setForm] = useState({ nome: "", email: "", mensagem: "" })
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
-    await new Promise((r) => setTimeout(r, 1000))
+    setError(null)
+
+    const supabase = createClient()
+    const { error: err } = await supabase.from("mensagens").insert({
+      nome: form.nome.trim(),
+      email: form.email.trim(),
+      mensagem: form.mensagem.trim(),
+    })
+
+    if (err) {
+      setError("Erro ao enviar mensagem. Tente novamente.")
+      setLoading(false)
+      return
+    }
+
     setSent(true)
     setLoading(false)
   }

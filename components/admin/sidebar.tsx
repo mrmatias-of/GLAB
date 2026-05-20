@@ -3,11 +3,13 @@
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
-import { Layers, BookOpen, LogOut, Home, LayoutDashboard } from "lucide-react"
+import { Layers, BookOpen, LogOut, Home, LayoutDashboard, MessageSquare, Settings } from "lucide-react"
 
 const navItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Cursos", href: "/admin/cursos", icon: BookOpen },
+  { label: "Mensagens", href: "/admin/mensagens", icon: MessageSquare },
+  { label: "Configurações", href: "/admin/config", icon: Settings },
 ]
 
 export default function AdminSidebar({ userEmail }: { userEmail: string }) {
@@ -17,7 +19,7 @@ export default function AdminSidebar({ userEmail }: { userEmail: string }) {
   async function handleLogout() {
     const supabase = createClient()
     await supabase.auth.signOut()
-    router.push("/auth/login")
+    router.push("/login")
     router.refresh()
   }
 
