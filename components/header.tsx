@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, X } from "lucide-react"
+import { Menu, X, LogIn } from "lucide-react"
 
 const links = [
   { label: "Início", href: "/" },
@@ -70,6 +70,13 @@ export default function Header() {
         {/* CTA */}
         <div className="hidden md:flex items-center gap-3">
           <Link
+            href="/login"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground border border-border hover:border-cyan/30 transition-all duration-200"
+          >
+            <LogIn size={16} />
+            Entrar
+          </Link>
+          <Link
             href="/cursos"
             className="relative inline-flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-semibold text-background bg-cyan hover:bg-cyan/90 transition-all duration-200 shadow-[0_0_20px_rgba(0,212,200,0.3)]"
           >
@@ -109,6 +116,13 @@ export default function Header() {
             className="mt-2 px-4 py-3 rounded-lg text-sm font-semibold text-background bg-cyan text-center"
           >
             Ver Cursos
+          </Link>
+          <Link
+            href="/login"
+            className="px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground border border-border text-center flex items-center justify-center gap-2"
+          >
+            <LogIn size={16} />
+            Entrar
           </Link>
         </div>
       )}
