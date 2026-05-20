@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
-import { Save, CheckCircle, MessageCircle, Mail, Instagram, Youtube, Type, Key } from "lucide-react"
+import { Save, CheckCircle, MessageCircle, Mail, Instagram, Youtube, Type, Key, Webhook, Link2, Copy } from "lucide-react"
 
 type Config = {
   whatsapp: string
@@ -11,6 +11,8 @@ type Config = {
   youtube: string
   texto_hero: string
   subtitulo_hero: string
+  webhook_secret: string
+  zapier_webhook_url: string
 }
 
 export default function AdminConfigPage() {
@@ -21,6 +23,8 @@ export default function AdminConfigPage() {
     youtube: "",
     texto_hero: "",
     subtitulo_hero: "",
+    webhook_secret: "",
+    zapier_webhook_url: "",
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -48,6 +52,8 @@ export default function AdminConfigPage() {
         youtube: data.youtube ?? "",
         texto_hero: data.texto_hero ?? "",
         subtitulo_hero: data.subtitulo_hero ?? "",
+        webhook_secret: data.webhook_secret ?? "",
+        zapier_webhook_url: data.zapier_webhook_url ?? "",
       })
     }
     setLoading(false)
@@ -242,7 +248,7 @@ export default function AdminConfigPage() {
       </form>
 
       {/* Alterar senha */}
-      <form onSubmit={handleChangePassword} className="rounded-2xl border border-border bg-card p-6">
+      <form onSubmit={handleChangePassword} className="rounded-2xl border border-border bg-card p-6 mb-8">
         <h2 className="text-lg font-black text-foreground mb-6 flex items-center gap-2">
           <Key size={18} className="text-cyan" />
           Alterar Senha
@@ -295,6 +301,85 @@ export default function AdminConfigPage() {
           </p>
         )}
       </form>
+
+      {/* Integrações / Webhooks */}
+      <div className="rounded-2xl border border-border bg-card p-6">
+        <h2 className="text-lg font-black text-foreground mb-6 flex items-center gap-2">
+          <Webhook size={18} className="text-cyan" />
+          Integrações (Zapier / Webhooks)
+        </h2>
+
+        <div className="mb-6 p-4 rounded-xl bg-surface border border-border">
+          <h3 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2">
+            <Link2 size={14} className="text-cyan" />
+            URLs dos Webhooks (para configurar no Zapier)
+          </h3>
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <code className="flex-1 text-xs bg-background px-3 py-2 rounded-lg border border-border text-muted-foreground font-mono overflow-x-auto">
+                {typeof window !== "undefined" ? `${window.location.origin}/api/webhooks/cursos` : "/api/webhooks/cursos"}
+              </code>
+              <button
+                type="button"
+                onClick={() => navigator.clipboard.writeText(`${window.location.origin}/api/webhooks/cursos`)}
+                className="p-2 rounded-lg border border-border hover:border-cyan/30 hover:text-cyan transition-all"
+                title="Copiar URL"
+              >
+                <Copy size={14} />
+              </button>
+            </div>
+            <p className="text-[10px] text-muted-foreground">
+              Use GET para listar cursos, POST para criar, PUT para atualizar. Envie o token no header &quot;Authorization: Bearer SEU_TOKEN&quot;
+            </p>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="flex flex-col gap-2">
+            <label className="text-xs font-semibold text-muted-foreground tracking-wide uppercase">
+              Webhook Secret (Token de Autenticação)
+            </label>
+            <input
+              type="text"
+              value={config.webhook_secret}
+              onChange={(e) => setConfig({ ...config, webhook_secret: e.target.value })}
+              placeholder="seu-token-secreto-aqui"
+              className="w-full bg-background border border-border rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-cyan/50 transition-all font-mono"
+            />
+            <p className="text-[10px] text-muted-foreground">
+              Token que o Zapier deve enviar no header para autenticar as requisições
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-xs font-semibold text-muted-foreground tracking-wide uppercase">
+              Zapier Webhook URL (Notificações)
+            </label>
+            <input
+              type="text"
+              value={config.zapier_webhook_url}
+              onChange={(e) => setConfig({ ...config, zapier_webhook_url: e.target.value })}
+              placeholder="https://hooks.zapier.com/hooks/catch/..."
+              className="w-full bg-background border border-border rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-cyan/50 transition-all font-mono"
+            />
+            <p className="text-[10px] text-muted-foreground">
+              URL do webhook do Zapier para receber notificações quando cursos forem criados/atualizados
+            </p>
+          </div>
+        </div>
+
+        <div className="flex justify-end mt-6 pt-6 border-t border-border">
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={saving}
+            className="inline-flex items-center gap-2 bg-cyan text-background font-bold text-sm px-6 py-2.5 rounded-xl hover:bg-cyan/90 transition-all disabled:opacity-60"
+          >
+            {saving ? "Salvando..." : "Salvar Integrações"}
+            {!saving && <Save size={14} />}
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
