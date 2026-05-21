@@ -132,38 +132,27 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
     return () => clearTimeout(timer)
   }, [query, searchCursos])
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isOpen) return
-      
-      if (e.key === "Escape") {
-        onClose()
-      } else if (e.key === "ArrowDown") {
-        e.preventDefault()
-        setSelectedIndex(i => Math.min(i + 1, results.length - 1))
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault()
-        setSelectedIndex(i => Math.max(i - 1, 0))
-      } else if (e.key === "Enter" && results[selectedIndex]) {
-        router.push(results[selectedIndex].href)
-        onClose()
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyDown)
-    return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [isOpen, results, selectedIndex, router, onClose])
-
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[15vh]">
-      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={onClose} />
-      
-      <div className="relative w-full max-w-xl mx-4 bg-[#0a1018] border border-cyan/20 rounded-2xl shadow-2xl shadow-cyan/5 overflow-hidden">
+    <div 
+      className="fixed inset-0 z-[100] flex items-start justify-center pt-[20vh] md:pt-[15vh] px-4"
+      style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)' }}
+    >
+      <div
+        className="relative w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden"
+        style={{
+          backgroundColor: '#111113',
+          border: '1px solid #27272a',
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Input */}
-        <div className="flex items-center gap-3 px-5 py-4 border-b border-border">
-          <Search size={20} className="text-muted-foreground flex-shrink-0" />
+        <div 
+          className="flex items-center gap-3 px-5 py-4"
+          style={{ borderBottom: '1px solid #27272a' }}
+        >
+          <Search size={20} style={{ color: '#52525b', flexShrink: 0 }} />
           <input
             ref={inputRef}
             type="text"
@@ -172,26 +161,48 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
               setQuery(e.target.value)
               setSelectedIndex(0)
             }}
-            placeholder="Buscar cursos, topicos, paginas..."
-            className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground outline-none text-sm"
+            placeholder="Buscar cursos, tópicos, páginas..."
+            className="flex-1 bg-transparent outline-none text-sm"
+            style={{
+              color: '#ffffff',
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') onClose()
+              else if (e.key === 'ArrowDown') {
+                e.preventDefault()
+                setSelectedIndex(i => Math.min(i + 1, results.length - 1))
+              } else if (e.key === 'ArrowUp') {
+                e.preventDefault()
+                setSelectedIndex(i => Math.max(i - 1, 0))
+              } else if (e.key === 'Enter' && results[selectedIndex]) {
+                router.push(results[selectedIndex].href)
+                onClose()
+              }
+            }}
           />
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg hover:bg-white/5 text-muted-foreground hover:text-foreground transition-colors"
+            className="p-1.5 rounded-lg transition-colors"
+            style={{
+              color: '#52525b',
+              backgroundColor: 'transparent',
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#27272a'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
           >
             <X size={16} />
           </button>
         </div>
 
         {/* Results */}
-        <div className="max-h-[50vh] overflow-y-auto p-2">
+        <div className="max-h-[60vh] md:max-h-[50vh] overflow-y-auto p-2">
           {loading ? (
-            <div className="px-4 py-8 text-center text-sm text-muted-foreground">
+            <div className="px-4 py-8 text-center text-sm" style={{ color: '#52525b' }}>
               Buscando...
             </div>
           ) : results.length === 0 ? (
-            <div className="px-4 py-8 text-center text-sm text-muted-foreground">
-              Nenhum resultado encontrado para &quot;{query}&quot;
+            <div className="px-4 py-8 text-center text-sm" style={{ color: '#52525b' }}>
+              Nenhum resultado para &quot;{query}&quot;
             </div>
           ) : (
             <div className="space-y-1">
@@ -206,27 +217,34 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
                       onClose()
                     }}
                     onMouseEnter={() => setSelectedIndex(index)}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all ${
-                      isSelected 
-                        ? "bg-cyan/10 border border-cyan/20" 
-                        : "hover:bg-white/5 border border-transparent"
-                    }`}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all"
+                    style={{
+                      backgroundColor: isSelected ? '#1e1b4b' : 'transparent',
+                      border: isSelected ? '1px solid #4f46e5' : '1px solid transparent',
+                    }}
                   >
-                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                      isSelected ? "bg-cyan/20 text-cyan" : "bg-white/5 text-muted-foreground"
-                    }`}>
+                    <div
+                      className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                      style={{
+                        backgroundColor: isSelected ? '#27272a' : '#18181b',
+                        color: isSelected ? '#4f46e5' : '#52525b',
+                      }}
+                    >
                       <Icon size={16} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className={`text-sm font-medium truncate ${isSelected ? "text-foreground" : "text-foreground/80"}`}>
+                      <p 
+                        className="text-sm font-semibold truncate"
+                        style={{ color: isSelected ? '#ffffff' : '#a1a1aa' }}
+                      >
                         {result.title}
                       </p>
-                      <p className="text-xs text-muted-foreground truncate">
+                      <p className="text-xs truncate" style={{ color: '#52525b' }}>
                         {result.description}
                       </p>
                     </div>
                     {isSelected && (
-                      <ArrowRight size={14} className="text-cyan flex-shrink-0" />
+                      <ArrowRight size={14} style={{ color: '#4f46e5', flexShrink: 0 }} />
                     )}
                   </button>
                 )
@@ -236,24 +254,33 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
         </div>
 
         {/* Footer */}
-        <div className="px-4 py-3 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
+        <div 
+          className="hidden md:flex px-4 py-3 items-center justify-between text-xs"
+          style={{ borderTop: '1px solid #27272a', color: '#52525b' }}
+        >
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-border font-mono text-[10px]">↑</kbd>
-              <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-border font-mono text-[10px]">↓</kbd>
+              <kbd className="px-1.5 py-0.5 rounded bg-white/5 font-mono text-[10px]">↑</kbd>
+              <kbd className="px-1.5 py-0.5 rounded bg-white/5 font-mono text-[10px]">↓</kbd>
               navegar
             </span>
             <span className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-border font-mono text-[10px]">Enter</kbd>
+              <kbd className="px-1.5 py-0.5 rounded bg-white/5 font-mono text-[10px]">Enter</kbd>
               abrir
             </span>
           </div>
           <span className="flex items-center gap-1">
-            <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-border font-mono text-[10px]">Esc</kbd>
+            <kbd className="px-1.5 py-0.5 rounded bg-white/5 font-mono text-[10px]">Esc</kbd>
             fechar
           </span>
         </div>
       </div>
+
+      {/* Overlay para fechar ao clicar fora */}
+      <div 
+        className="absolute inset-0 -z-10"
+        onClick={onClose}
+      />
     </div>
   )
 }
