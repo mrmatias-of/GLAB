@@ -1,87 +1,88 @@
-import { Quote } from "lucide-react"
-
 const depoimentos = [
   {
-    nome: "Carlos Eduardo Silva",
+    nome: "Carlos S.",
     cidade: "Campinas, SP",
-    texto: "Os guias mudaram completamente minha forma de trabalhar. Antes eu perdia horas em reparos que agora faço em minutos. O conteudo e direto ao ponto.",
+    curso: "Guia Mestre: Troca de Tela",
+    texto: "Cara, eu tava quebrando a cabeça toda vez que chegava tela de iPhone aqui. Depois que peguei o guia entendi onde tava errando. Agora vai de primeira, sem drama.",
   },
   {
-    nome: "Rafael Oliveira Santos",
+    nome: "Rafael O.",
     cidade: "Ribeirao Preto, SP",
-    texto: "Comecei do zero na assistencia tecnica. Com os guias do G-Lab, em 3 meses ja estava atendendo clientes com confianca. Vale cada centavo.",
+    curso: "Combo Iniciante Mobile",
+    texto: "Comecei na assistencia faz 4 meses. Comprei o combo e foi a melhor coisa que fiz. Nao tinha ninguem pra me ensinar aqui perto, o guia supriu isso.",
   },
   {
-    nome: "Amanda Cristina Ferreira",
+    nome: "Amanda F.",
     cidade: "Sorocaba, SP",
-    texto: "O guia de troca de tela me ajudou a evitar erros que eu nem sabia que estava cometendo. Meu indice de retorno caiu muito depois que apliquei as tecnicas.",
+    curso: "Guia Mestre: Troca de Tela",
+    texto: "Eu ja fazia troca de tela mas ainda tinha retorno as vezes. Ai vi que tava pulando o checklist. Simples assim. Depois que comecei a seguir o protocolo, zerou.",
   },
   {
-    nome: "Lucas Henrique Martins",
+    nome: "Lucas M.",
     cidade: "Piracicaba, SP",
-    texto: "Profissionalismo puro. Os checklists e metodologias dos guias elevaram o nivel do meu trabalho. Meus clientes percebem a diferenca.",
+    curso: "Guia Mestre: Conectores & Carga",
+    texto: "O guia de conector me surpreendeu. Achei que ja sabia tudo sobre isso mas tinha coisa que eu fazia errado faz anos. Valeu demais.",
   },
   {
-    nome: "Fernanda Costa Lima",
+    nome: "Fernanda C.",
     cidade: "Jundiai, SP",
-    texto: "Tinha medo de mexer com conector de carga. Depois do guia, virou um dos servicos que mais executo. Explicacao clara e sem enrolacao.",
+    curso: "Guia Mestre: Conectores & Carga",
+    texto: "Antes eu evitava servico de conector, ficava insegura. Hoje e um dos que mais faço. O passo a passo e bem claro, nao tem como errar seguindo direito.",
   },
   {
-    nome: "Thiago Augusto Pereira",
+    nome: "Thiago P.",
     cidade: "Paulinia, SP",
-    texto: "O combo iniciante foi o melhor investimento que fiz. Aprendi troca de tela, bateria e conector de uma vez. Recomendo para quem esta comecando.",
+    curso: "Guia Mestre: Troca de Bateria",
+    texto: "Por 9 conto aprendi coisa que nao achei em video nenhum. Serio. O negocio e bem tecnico mesmo, nao e enrolacao. Ja indiquei pra dois colegas meus.",
   },
 ]
 
 export default function Depoimentos() {
   return (
     <section className="relative py-24 overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-cyan/[0.02] to-background" />
-      
       <div className="relative max-w-6xl mx-auto px-5">
         {/* Header */}
         <div className="text-center mb-16">
           <span className="inline-block px-3 py-1 rounded-full text-[10px] font-semibold tracking-widest uppercase bg-cyan/10 text-cyan border border-cyan/20 mb-4">
-            Depoimentos
+            Quem ja usou
           </span>
-          <h2 className="text-3xl md:text-4xl font-black text-foreground mb-4">
-            O que dizem nossos alunos
+          <h2 className="text-3xl md:text-4xl font-black text-foreground mb-4 text-balance">
+            O que estao falando
           </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            Tecnicos de todo o Brasil aplicando os metodos dos Guias Mestre no dia a dia da bancada.
+          <p className="text-muted-foreground max-w-md mx-auto text-sm leading-relaxed">
+            Tecnicos de todo o Brasil usando os Guias Mestre no dia a dia.
           </p>
         </div>
 
-        {/* Grid de depoimentos */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {depoimentos.map((dep, index) => (
             <div
               key={index}
-              className="relative group bg-[#0a1018] border border-border hover:border-cyan/20 rounded-2xl p-6 transition-all duration-300"
+              className="flex flex-col bg-[#0a1018] border border-border hover:border-white/10 rounded-2xl p-6 transition-all duration-300"
             >
-              {/* Quote icon */}
-              <div className="absolute -top-3 -left-2 w-8 h-8 rounded-lg bg-cyan/10 border border-cyan/20 flex items-center justify-center">
-                <Quote size={14} className="text-cyan" />
-              </div>
-
-              {/* Texto */}
-              <p className="text-sm text-foreground/80 leading-relaxed mb-6 mt-2">
-                &quot;{dep.texto}&quot;
-              </p>
-
-              {/* Autor */}
-              <div className="flex items-center gap-3 pt-4 border-t border-border">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan/20 to-cyan/5 border border-cyan/20 flex items-center justify-center">
-                  <span className="text-cyan font-bold text-sm">
-                    {dep.nome.split(" ").map(n => n[0]).slice(0, 2).join("")}
+              {/* Autor no topo */}
+              <div className="flex items-center gap-3 mb-5">
+                <div className="w-9 h-9 rounded-full bg-white/5 border border-border flex items-center justify-center flex-shrink-0">
+                  <span className="text-xs font-bold text-muted-foreground">
+                    {dep.nome.split(" ")[0][0]}{dep.nome.split(" ")[1]?.[0] ?? ""}
                   </span>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-foreground">{dep.nome}</p>
+                  <p className="text-sm font-semibold text-foreground leading-tight">{dep.nome}</p>
                   <p className="text-xs text-muted-foreground">{dep.cidade}</p>
                 </div>
               </div>
+
+              {/* Texto corrido, sem aspas gigantes */}
+              <p className="text-sm text-foreground/75 leading-relaxed flex-1">
+                {dep.texto}
+              </p>
+
+              {/* Curso referenciado */}
+              <p className="text-[11px] text-cyan/60 mt-5 pt-4 border-t border-border/60">
+                {dep.curso}
+              </p>
             </div>
           ))}
         </div>
