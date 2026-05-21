@@ -46,13 +46,13 @@ export default async function Hero() {
           {/* ── Imagem destaque + thumbnails ── */}
           <div className="flex gap-3">
             {/* Card principal */}
-            <div className="flex-1 relative rounded-2xl overflow-hidden" style={{ minHeight: 380 }}>
+            <div className="flex-1 relative rounded-2xl overflow-hidden" style={{ minHeight: 380, backgroundColor: '#0a0a0c' }}>
               {featured?.imagem ? (
                 <Image
                   src={featured.imagem}
                   alt={featured.titulo}
                   fill
-                  className="object-cover"
+                  className="object-contain"
                   priority
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
