@@ -3,23 +3,28 @@ import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Termos de Uso — G•Lab Cursos",
+  title: "Termos de Uso",
   description: "Termos e condições de uso da plataforma G•Lab Cursos",
 }
 
 export default function TermosPage() {
   return (
-    <main className="min-h-screen px-6 py-16" style={{ backgroundColor: '#0B0B0C' }}>
+    <section className="px-6 py-16">
       <div className="max-w-3xl mx-auto">
-        <Link href="/" className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase mb-8 transition-colors hover:text-white" style={{ color: '#71717a' }}>
-          <ArrowLeft size={14} /> Voltar
+
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase mb-10 transition-colors hover:text-white"
+          style={{ color: '#71717a' }}
+        >
+          <ArrowLeft size={14} /> Voltar ao início
         </Link>
+
         <p className="eyebrow mb-3">Legal</p>
-        <h1 className="section-title mb-10">Termos de Uso</h1>
+        <h1 className="section-title mb-2">Termos de Uso</h1>
+        <p className="text-sm mb-10" style={{ color: '#52525b' }}>Última atualização: Janeiro de 2026</p>
 
-        <div className="space-y-8" style={{ color: '#a1a1aa' }}>
-          <p className="text-sm leading-relaxed" style={{ color: '#52525b' }}>Última atualização: Janeiro de 2026</p>
-
+        <div className="space-y-4">
           {[
             {
               title: "1. Aceitação dos Termos",
@@ -50,13 +55,16 @@ export default function TermosPage() {
               body: "Para dúvidas sobre estes termos, entre em contato através do e-mail: contato@glabcursos.com.br",
             },
           ].map((s) => (
-            <section key={s.title} className="card p-6 rounded-2xl">
+            <section
+              key={s.title}
+              className="card p-6 rounded-2xl"
+            >
               <h2 className="text-sm font-bold text-white mb-3 uppercase tracking-wide">{s.title}</h2>
-              <p className="text-sm leading-relaxed">{s.body}</p>
+              <p className="text-sm leading-relaxed" style={{ color: '#a1a1aa' }}>{s.body}</p>
             </section>
           ))}
         </div>
       </div>
-    </main>
+    </section>
   )
 }

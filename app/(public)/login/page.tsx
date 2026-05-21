@@ -58,7 +58,7 @@ export default function LoginPage() {
   }, [email, password, attempts, lockedUntil, router])
 
   return (
-    <main className="min-h-[calc(100vh-56px)] flex items-center justify-center px-6 py-16" style={{ backgroundColor: '#0B0B0C' }}>
+    <section className="flex items-center justify-center px-6 py-16">
       <div className="w-full max-w-md">
 
         {/* Logo/Título */}
@@ -142,6 +142,6 @@ export default function LoginPage() {
           <Link href="/" className="hover:text-white transition-colors">Voltar ao site</Link>
         </p>
       </div>
-    </main>
+    </section>
   )
 }

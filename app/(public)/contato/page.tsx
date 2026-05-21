@@ -33,7 +33,7 @@ export default function ContatoPage() {
   }
 
   return (
-    <main className="min-h-screen px-6 py-16" style={{ backgroundColor: '#0B0B0C' }}>
+    <section className="px-6 py-16">
       <div className="max-w-5xl mx-auto">
 
         {/* Hero */}
@@ -178,6 +178,6 @@ export default function ContatoPage() {
           </div>
         </div>
       </div>
-    </main>
+    </section>
   )
 }
