@@ -39,11 +39,21 @@ export default function Footer() {
           <div>
             <p className="eyebrow mb-4">Legal</p>
             <ul className="space-y-2.5">
-              {['Termos de Uso', 'Privacidade', 'Reembolso'].map((l) => (
-                <li key={l}>
-                  <a href="#" className="text-sm transition-colors" style={{ color: '#71717a' }}>{l}</a>
-                </li>
-              ))}
+              <li>
+                <Link href="/termos" className="text-sm transition-colors" style={{ color: '#71717a' }}>
+                  Termos de Uso
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacidade" className="text-sm transition-colors" style={{ color: '#71717a' }}>
+                  Privacidade
+                </Link>
+              </li>
+              <li>
+                <Link href="/reembolso" className="text-sm transition-colors" style={{ color: '#71717a' }}>
+                  Reembolso
+                </Link>
+              </li>
             </ul>
           </div>
 

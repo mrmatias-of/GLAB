@@ -46,13 +46,13 @@ export default async function Hero() {
           {/* ── Imagem destaque + thumbnails ── */}
           <div className="flex gap-3">
             {/* Card principal */}
-            <div className="flex-1 relative rounded-2xl overflow-hidden" style={{ minHeight: 380, backgroundColor: '#0a0a0c' }}>
+            <Link href={`/cursos/${featured?.slug}`} className="flex-1 relative rounded-2xl overflow-hidden block group" style={{ minHeight: 380, backgroundColor: '#0a0a0c' }}>
               {featured?.imagem ? (
                 <Image
                   src={featured.imagem}
                   alt={featured.titulo}
                   fill
-                  className="object-contain"
+                  className="object-contain transition-transform duration-300 group-hover:scale-105"
                   priority
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
@@ -65,7 +65,7 @@ export default async function Hero() {
                 <p className="text-white font-bold text-lg leading-snug">{featured?.titulo}</p>
                 <p className="mt-1 font-extrabold" style={{ color: '#818cf8' }}>{featured?.preco}</p>
               </div>
-            </div>
+            </Link>
 
             {/* Coluna de thumbnails */}
             {thumbnails.length > 0 && (
