@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import WhatsAppButton from '@/components/whatsapp-button'
+import { VisitorTracker } from '@/components/visitor-tracker'
 import './globals.css'
 
 const inter = Inter({
@@ -68,6 +69,7 @@ export default function RootLayout({
         <meta name="format-detection" content="telephone=no" />
       </head>
       <body className="font-sans antialiased">
+        <VisitorTracker />
         {children}
         <WhatsAppButton />
         {process.env.NODE_ENV === 'production' && (
