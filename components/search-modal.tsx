@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { Search, X, ArrowRight, BookOpen, FileText, HelpCircle } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
+import { resolveSlugsBySynonym } from "@/lib/search-synonyms"
 
 type SearchResult = {
   type: "curso" | "pagina" | "topico"
@@ -36,15 +37,27 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
 
     setLoading(true)
     const supabase = createClient()
-    
-    const { data: cursos } = await supabase
-      .from("cursos")
-      .select("slug, titulo, descricao, modulos, aprendizados")
-      .eq("ativo", true)
-      .or(`titulo.ilike.%${searchQuery}%,descricao.ilike.%${searchQuery}%,tag.ilike.%${searchQuery}%`)
-      .limit(6)
+    const searchLower = searchQuery.toLowerCase()
 
-    const cursoResults: SearchResult[] = (cursos || []).map((c: any) => ({
+    // Resolver slugs via sinônimos
+    const synonymSlugs = resolveSlugsBySynonym(searchQuery)
+
+    // Busca direta + por sinônimo em paralelo
+    const [{ data: cursosDiretos }, { data: allCursos }] = await Promise.all([
+      supabase
+        .from("cursos")
+        .select("slug, titulo, descricao, modulos")
+        .eq("ativo", true)
+        .or(`titulo.ilike.%${searchQuery}%,descricao.ilike.%${searchQuery}%,tag.ilike.%${searchQuery}%`)
+        .limit(6),
+      supabase
+        .from("cursos")
+        .select("slug, titulo, modulos")
+        .eq("ativo", true),
+    ])
+
+    // Cursos encontrados por busca direta
+    const cursoResults: SearchResult[] = (cursosDiretos || []).map((c: any) => ({
       type: "curso" as const,
       title: c.titulo,
       description: c.descricao?.substring(0, 80) + "..." || "",
@@ -52,22 +65,27 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
       icon: BookOpen,
     }))
 
-    // Buscar em modulos e topicos
-    const { data: allCursos } = await supabase
-      .from("cursos")
-      .select("slug, titulo, modulos")
-      .eq("ativo", true)
+    // Cursos encontrados por sinônimo (que ainda não estão nos diretos)
+    const slugsJaIncluidos = new Set(cursoResults.map(r => r.href))
+    const synonymResults: SearchResult[] = (allCursos || [])
+      .filter((c: any) => synonymSlugs.includes(c.slug) && !slugsJaIncluidos.has(`/cursos/${c.slug}`))
+      .map((c: any) => ({
+        type: "curso" as const,
+        title: c.titulo,
+        description: "Resultado relacionado à sua busca",
+        href: `/cursos/${c.slug}`,
+        icon: BookOpen,
+      }))
 
+    // Busca em módulos e tópicos
     const topicoResults: SearchResult[] = []
-    const searchLower = searchQuery.toLowerCase()
-    
     ;(allCursos || []).forEach((curso: any) => {
       ;(curso.modulos || []).forEach((modulo: any) => {
         if (modulo.titulo?.toLowerCase().includes(searchLower)) {
           topicoResults.push({
             type: "topico",
             title: modulo.titulo,
-            description: `Modulo do curso ${curso.titulo}`,
+            description: `Módulo do curso ${curso.titulo}`,
             href: `/cursos/${curso.slug}`,
             icon: FileText,
           })
@@ -77,7 +95,7 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
             topicoResults.push({
               type: "topico",
               title: topico,
-              description: `${modulo.titulo} - ${curso.titulo}`,
+              description: `${modulo.titulo} — ${curso.titulo}`,
               href: `/cursos/${curso.slug}`,
               icon: FileText,
             })
@@ -87,14 +105,14 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
     })
 
     const pageResults = staticPages.filter(
-      p => p.title.toLowerCase().includes(searchLower) || 
+      p => p.title.toLowerCase().includes(searchLower) ||
            p.description.toLowerCase().includes(searchLower)
     )
 
-    const allResults = [...cursoResults, ...topicoResults.slice(0, 3), ...pageResults]
-    const uniqueResults = allResults.filter((r, i, arr) => 
-      arr.findIndex(x => x.href === r.href && x.title === r.title) === i
-    ).slice(0, 8)
+    const allResults = [...cursoResults, ...synonymResults, ...topicoResults.slice(0, 3), ...pageResults]
+    const uniqueResults = allResults
+      .filter((r, i, arr) => arr.findIndex(x => x.href === r.href && x.title === r.title) === i)
+      .slice(0, 8)
 
     setResults(uniqueResults)
     setLoading(false)
