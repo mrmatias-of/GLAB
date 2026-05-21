@@ -85,8 +85,8 @@ export default async function Cursos() {
                     <Icon size={48} className="text-violet-400/30" />
                   </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#0a0a0a] hidden md:block" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent md:hidden" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black/50 hidden md:block" />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60 md:hidden" />
                   
                   {/* Badge */}
                   <div className="absolute top-6 left-6">
