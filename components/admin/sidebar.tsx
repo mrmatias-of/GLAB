@@ -3,15 +3,12 @@
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
-import { Layers, BookOpen, LogOut, Home, LayoutDashboard, MessageSquare, Settings, Sparkles, Receipt } from "lucide-react"
+import { Layers, BookOpen, LogOut, Home, LayoutDashboard, Receipt } from "lucide-react"
 
 const navItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Cursos", href: "/admin/cursos", icon: BookOpen },
-  { label: "AI Generator", href: "/admin/ai-generator", icon: Sparkles },
   { label: "Vendas", href: "/admin/vendas", icon: Receipt },
-  { label: "Mensagens", href: "/admin/mensagens", icon: MessageSquare },
-  { label: "Configuracoes", href: "/admin/config", icon: Settings },
 ]
 
 export default function AdminSidebar({ userEmail }: { userEmail: string }) {
@@ -21,21 +18,21 @@ export default function AdminSidebar({ userEmail }: { userEmail: string }) {
   async function handleLogout() {
     const supabase = createClient()
     await supabase.auth.signOut()
-    router.push("/login")
+    router.push("/")
     router.refresh()
   }
 
   return (
-    <aside className="w-64 min-h-screen bg-card border-r border-border flex flex-col">
+    <aside className="w-64 min-h-screen border-r flex flex-col" style={{ backgroundColor: '#0B0B0C', borderColor: '#27272a' }}>
       {/* Logo */}
-      <div className="p-6 border-b border-border">
+      <div className="p-6 border-b" style={{ borderColor: '#27272a' }}>
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-cyan/15 border border-cyan/30 flex items-center justify-center">
-            <Layers size={17} className="text-cyan" strokeWidth={1.5} />
+          <div className="w-9 h-9 rounded-xl border flex items-center justify-center" style={{ backgroundColor: '#1a1a1d', borderColor: '#27272a' }}>
+            <Layers size={17} style={{ color: '#818cf8' }} strokeWidth={1.5} />
           </div>
           <div>
-            <span className="text-foreground font-black text-sm">G<span className="text-cyan">•</span>Lab</span>
-            <p className="text-[10px] text-muted-foreground leading-none mt-0.5">Admin Panel</p>
+            <span className="font-black text-sm" style={{ color: '#fff' }}>G<span style={{ color: '#818cf8' }}>•</span>Lab</span>
+            <p className="text-[10px] leading-none mt-0.5" style={{ color: '#71717a' }}>Admin</p>
           </div>
         </div>
       </div>
@@ -50,10 +47,13 @@ export default function AdminSidebar({ userEmail }: { userEmail: string }) {
               key={item.href}
               href={item.href}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
-                active
-                  ? "bg-cyan/15 text-cyan border border-cyan/20"
-                  : "text-muted-foreground hover:bg-surface-hover hover:text-foreground"
+                active ? "border" : ""
               }`}
+              style={{
+                color: active ? '#818cf8' : '#71717a',
+                backgroundColor: active ? '#1a1a1d' : 'transparent',
+                borderColor: active ? '#27272a' : 'transparent',
+              }}
             >
               <Icon size={16} strokeWidth={1.5} />
               {item.label}
@@ -61,10 +61,11 @@ export default function AdminSidebar({ userEmail }: { userEmail: string }) {
           )
         })}
 
-        <div className="mt-auto pt-4 border-t border-border">
+        <div className="mt-auto pt-4 border-t" style={{ borderColor: '#27272a' }}>
           <Link
             href="/"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:bg-surface-hover hover:text-foreground transition-all duration-200"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
+            style={{ color: '#71717a' }}
           >
             <Home size={16} strokeWidth={1.5} />
             Ver Site
@@ -73,14 +74,15 @@ export default function AdminSidebar({ userEmail }: { userEmail: string }) {
       </nav>
 
       {/* User */}
-      <div className="p-4 border-t border-border">
+      <div className="p-4 border-t" style={{ borderColor: '#27272a' }}>
         <div className="flex items-center justify-between gap-2">
           <div className="flex-1 min-w-0">
-            <p className="text-xs text-muted-foreground truncate">{userEmail}</p>
+            <p className="text-xs truncate" style={{ color: '#71717a' }}>{userEmail}</p>
           </div>
           <button
             onClick={handleLogout}
-            className="p-2 rounded-lg text-muted-foreground hover:text-red-400 hover:bg-red-400/10 transition-all"
+            className="p-2 rounded-lg transition-all"
+            style={{ color: '#71717a' }}
             title="Sair"
           >
             <LogOut size={15} />
