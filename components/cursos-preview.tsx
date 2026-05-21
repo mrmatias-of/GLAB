@@ -1,10 +1,11 @@
 import Link from "next/link"
-import { ArrowRight, Smartphone, Monitor, Cpu, Layers } from "lucide-react"
+import Image from "next/image"
+import { ArrowRight, Layers, Cpu, Smartphone, Monitor } from "lucide-react"
 import { createClient } from "@/lib/supabase/server"
 
 const getIconByTag = (tag: string) => {
-  if (tag?.toLowerCase().includes("iphone") || tag?.toLowerCase().includes("android") || tag?.toLowerCase().includes("mobile")) return Smartphone
-  if (tag?.toLowerCase().includes("windows") || tag?.toLowerCase().includes("pc")) return Monitor
+  if (tag?.toLowerCase().includes("mobile") || tag?.toLowerCase().includes("android")) return Smartphone
+  if (tag?.toLowerCase().includes("pc") || tag?.toLowerCase().includes("windows")) return Monitor
   if (tag?.toLowerCase().includes("combo")) return Layers
   return Cpu
 }
@@ -13,7 +14,7 @@ export default async function CursosPreview() {
   const supabase = await createClient()
   const { data: cursos } = await supabase
     .from("cursos")
-    .select("id, slug, tag, titulo, descricao, preco, preco_original, destaque, cta_href")
+    .select("id, slug, tag, titulo, descricao, preco, preco_original, destaque, imagem")
     .eq("ativo", true)
     .order("ordem", { ascending: true })
     .limit(4)
@@ -22,30 +23,29 @@ export default async function CursosPreview() {
 
   return (
     <section className="relative py-24 overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_100%,rgba(0,212,200,0.08)_0%,transparent_60%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_100%,rgba(37,99,235,0.1)_0%,transparent_65%)]" />
 
       <div className="relative max-w-6xl mx-auto px-5">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-14">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
           <div>
-            <p className="text-cyan/70 text-sm font-light italic mb-2 tracking-wide">Nossos Cursos</p>
+            <p className="text-[#3b82f6]/70 text-sm font-light italic mb-2 tracking-wide">Nossos Guias</p>
             <h2 className="text-3xl md:text-5xl font-black leading-tight">
               <span className="text-foreground">Comece a aprender</span>
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan to-blue-400">agora mesmo</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3b82f6] to-[#60a5fa]">agora mesmo</span>
             </h2>
           </div>
           <Link
             href="/cursos"
-            className="group inline-flex items-center gap-2 text-sm font-semibold text-cyan hover:text-foreground transition-colors shrink-0"
+            className="group inline-flex items-center gap-2 text-sm font-semibold text-[#3b82f6] hover:text-foreground transition-colors shrink-0"
           >
             Ver todos os guias
             <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
 
-        {/* Cards - estilo mockup com ícones circulares */}
+        {/* Cards */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {cursos.map((c) => {
             const Icon = getIconByTag(c.tag)
@@ -53,55 +53,57 @@ export default async function CursosPreview() {
               <Link
                 key={c.id}
                 href={`/cursos/${c.slug}`}
-                className={`group relative rounded-2xl border bg-gradient-to-b transition-all duration-300 flex flex-col overflow-hidden ${
+                className={`group relative rounded-xl border bg-[#080f1c] transition-all duration-300 flex flex-col overflow-hidden ${
                   c.destaque
-                    ? "border-cyan/40 from-[#0a1a28] to-[#060d14] shadow-[0_0_30px_rgba(0,212,200,0.1)] hover:shadow-[0_0_50px_rgba(0,212,200,0.2)]"
-                    : "border-white/10 from-[#0d1118] to-[#080c10] hover:border-cyan/30"
+                    ? "border-[#3b82f6]/40 shadow-[0_0_30px_rgba(59,130,246,0.12)] hover:shadow-[0_0_50px_rgba(59,130,246,0.22)]"
+                    : "border-white/8 hover:border-[#3b82f6]/30 hover:shadow-[0_0_25px_rgba(59,130,246,0.1)]"
                 }`}
               >
-                {/* Glow overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-b from-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
-                <div className="relative z-10 p-6 flex flex-col flex-1">
-                  {/* Icon circular com glow */}
-                  <div className={`w-14 h-14 rounded-full flex items-center justify-center mb-5 transition-all duration-300 ${
-                    c.destaque 
-                      ? "bg-gradient-to-b from-cyan/25 to-cyan/10 border border-cyan/40 shadow-[0_0_25px_rgba(0,212,200,0.35)] group-hover:shadow-[0_0_35px_rgba(0,212,200,0.5)]"
-                      : "bg-white/5 border border-white/10 group-hover:border-cyan/30 group-hover:bg-cyan/10 group-hover:shadow-[0_0_20px_rgba(0,212,200,0.2)]"
-                  }`}>
-                    <Icon size={24} className={c.destaque ? "text-cyan" : "text-white/60 group-hover:text-cyan transition-colors"} />
-                  </div>
-
-                  {/* Tag + Popular badge */}
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-[10px] font-bold tracking-widest text-cyan/80 uppercase">{c.tag}</span>
-                    {c.destaque && (
-                      <span className="text-[9px] font-black tracking-wider text-background bg-cyan px-2 py-0.5 rounded-full shadow-[0_0_10px_rgba(0,212,200,0.4)]">
+                {/* Thumbnail */}
+                <div className="relative w-full aspect-video overflow-hidden">
+                  {c.imagem ? (
+                    <Image
+                      src={c.imagem}
+                      alt={c.titulo}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-[#0d1a2e] to-[#04080f] flex items-center justify-center">
+                      <Icon size={32} className="text-[#3b82f6]/40" />
+                    </div>
+                  )}
+                  {/* Overlay gradient bottom */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#080f1c] via-transparent to-transparent opacity-70" />
+                  {/* Popular badge */}
+                  {c.destaque && (
+                    <div className="absolute top-2 right-2">
+                      <span className="text-[9px] font-black tracking-wider text-white bg-[#2563eb] px-2 py-0.5 rounded-full shadow-[0_0_12px_rgba(37,99,235,0.5)]">
                         POPULAR
                       </span>
-                    )}
-                  </div>
+                    </div>
+                  )}
+                </div>
 
-                  {/* Title */}
-                  <h3 className="text-base font-bold text-foreground mb-2 group-hover:text-cyan transition-colors line-clamp-2">
+                <div className="relative z-10 p-5 flex flex-col flex-1">
+                  <span className="text-[10px] font-bold tracking-widest text-[#3b82f6]/70 uppercase mb-1.5">{c.tag}</span>
+                  <h3 className="text-sm font-bold text-foreground mb-2 group-hover:text-[#60a5fa] transition-colors line-clamp-2 leading-snug">
                     {c.titulo}
                   </h3>
-
-                  {/* Description */}
-                  <p className="text-xs text-muted-foreground leading-relaxed mb-5 flex-1 line-clamp-3">
+                  <p className="text-[11px] text-muted-foreground leading-relaxed mb-4 flex-1 line-clamp-2">
                     {c.descricao}
                   </p>
 
-                  {/* Price + Arrow */}
-                  <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                  <div className="flex items-center justify-between pt-3 border-t border-white/5">
                     <div className="flex items-baseline gap-1.5">
                       {c.preco_original && (
                         <span className="text-[10px] text-muted-foreground line-through">{c.preco_original}</span>
                       )}
-                      <span className="text-lg font-black text-cyan">{c.preco}</span>
+                      <span className="text-base font-black text-[#60a5fa]">{c.preco}</span>
                     </div>
-                    <div className="w-8 h-8 rounded-full bg-cyan/10 border border-cyan/30 flex items-center justify-center group-hover:bg-cyan group-hover:border-cyan transition-all duration-300">
-                      <ArrowRight size={14} className="text-cyan group-hover:text-background transition-colors" />
+                    <div className="w-7 h-7 rounded-full bg-[#2563eb]/15 border border-[#3b82f6]/30 flex items-center justify-center group-hover:bg-[#2563eb] group-hover:border-[#2563eb] transition-all duration-300">
+                      <ArrowRight size={12} className="text-[#60a5fa] group-hover:text-white transition-colors" />
                     </div>
                   </div>
                 </div>
@@ -111,23 +113,21 @@ export default async function CursosPreview() {
         </div>
 
         {/* Bottom tagline */}
-        <div className="mt-12 flex items-center justify-center gap-3 text-xs text-muted-foreground">
-          <span>Moderno</span>
-          <span className="w-1 h-1 rounded-full bg-cyan/50" />
-          <span>Prático</span>
-          <span className="w-1 h-1 rounded-full bg-cyan/50" />
-          <span>Atualizado</span>
-          <span className="w-1 h-1 rounded-full bg-cyan/50" />
-          <span>Profissional</span>
+        <div className="mt-10 flex items-center justify-center gap-3 text-xs text-muted-foreground">
+          {["Moderno", "Prático", "Atualizado", "Profissional"].map((t, i, a) => (
+            <span key={t} className="flex items-center gap-3">
+              {t}
+              {i < a.length - 1 && <span className="w-1 h-1 rounded-full bg-[#3b82f6]/40" />}
+            </span>
+          ))}
         </div>
 
-        {/* CTA bottom */}
         <div className="mt-8 text-center">
           <Link
             href="/cursos"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan to-cyan/80 text-background text-sm font-bold hover:from-cyan/90 hover:to-cyan transition-all duration-300 shadow-[0_0_25px_rgba(0,212,200,0.3)] hover:shadow-[0_0_40px_rgba(0,212,200,0.5)] group"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#2563eb] to-[#3b82f6] text-white text-sm font-bold hover:from-[#1d4ed8] hover:to-[#2563eb] transition-all duration-300 shadow-[0_0_25px_rgba(37,99,235,0.35)] hover:shadow-[0_0_40px_rgba(37,99,235,0.5)] group"
           >
-            Ver Todos os Cursos
+            Ver Todos os Guias
             <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>

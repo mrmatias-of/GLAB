@@ -4,35 +4,35 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* G•Hub — dark tech premium */
-  --background: #070c12;
-  --foreground: #dde8f5;
-  --card: #0b1320;
-  --card-foreground: #dde8f5;
-  --popover: #0b1320;
-  --popover-foreground: #dde8f5;
-  --primary: #00d4c8;
-  --primary-foreground: #070c12;
-  --secondary: #0f1c2d;
-  --secondary-foreground: #dde8f5;
-  --muted: #0f1c2d;
-  --muted-foreground: #4d6a85;
-  --accent: #00d4c8;
-  --accent-foreground: #070c12;
+  /* G•Lab — BizNext dark blue tech */
+  --background: #04080f;
+  --foreground: #e8f0fb;
+  --card: #080f1c;
+  --card-foreground: #e8f0fb;
+  --popover: #080f1c;
+  --popover-foreground: #e8f0fb;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --secondary: #0d1a2e;
+  --secondary-foreground: #e8f0fb;
+  --muted: #0d1a2e;
+  --muted-foreground: #4a6280;
+  --accent: #3b82f6;
+  --accent-foreground: #ffffff;
   --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: #dde8f5;
-  --border: rgba(0, 212, 200, 0.1);
-  --input: #0f1c2d;
-  --ring: #00d4c8;
-  --radius: 1rem;
-  /* brand tokens */
-  --cyan: #00d4c8;
-  --cyan-dim: #007f78;
-  --cyan-glow: rgba(0, 212, 200, 0.18);
-  --surface: #0b1320;
-  --surface-hover: #0f1c2d;
-  --gold: #c9930a;
-  --gold-glow: rgba(201, 147, 10, 0.15);
+  --destructive-foreground: #e8f0fb;
+  --border: rgba(59, 130, 246, 0.15);
+  --input: #0d1a2e;
+  --ring: #3b82f6;
+  --radius: 0.875rem;
+  /* brand tokens — azul elétrico igual ao mockup */
+  --cyan: #3b82f6;
+  --cyan-dim: #1d4ed8;
+  --cyan-glow: rgba(59, 130, 246, 0.2);
+  --surface: #080f1c;
+  --surface-hover: #0d1a2e;
+  --gold: #f59e0b;
+  --gold-glow: rgba(245, 158, 11, 0.15);
 }
 
 @theme inline {
@@ -103,8 +103,8 @@
       0deg,
       transparent,
       transparent 2px,
-      rgba(0, 212, 200, 0.009) 2px,
-      rgba(0, 212, 200, 0.009) 4px
+      rgba(59, 130, 246, 0.008) 2px,
+      rgba(59, 130, 246, 0.008) 4px
     );
     pointer-events: none;
     z-index: 9999;
