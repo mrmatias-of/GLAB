@@ -86,7 +86,7 @@ export default async function Cursos() {
                   </div>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#0a0a0a] hidden md:block" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent md:hidden" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent md:hidden" />
                   
                   {/* Badge */}
                   <div className="absolute top-6 left-6">
