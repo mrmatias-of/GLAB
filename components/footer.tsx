@@ -25,8 +25,8 @@ export default function Footer() {
                 <li key={l}>
                   <Link
                     href={l === 'Home' ? '/' : `/${l.toLowerCase()}`}
-                    className="text-sm transition-colors"
-                    style={{ color: '#71717a' }}
+                    className="text-sm transition-colors hover:text-indigo-300"
+                    style={{ color: '#818cf8' }}
                   >
                     {l}
                   </Link>
@@ -40,17 +40,17 @@ export default function Footer() {
             <p className="eyebrow mb-4">Legal</p>
             <ul className="space-y-2.5">
               <li>
-                <Link href="/termos" className="text-sm transition-colors" style={{ color: '#71717a' }}>
+                <Link href="/termos" className="text-sm transition-colors hover:text-indigo-300" style={{ color: '#818cf8' }}>
                   Termos de Uso
                 </Link>
               </li>
               <li>
-                <Link href="/privacidade" className="text-sm transition-colors" style={{ color: '#71717a' }}>
+                <Link href="/privacidade" className="text-sm transition-colors hover:text-indigo-300" style={{ color: '#818cf8' }}>
                   Privacidade
                 </Link>
               </li>
               <li>
-                <Link href="/reembolso" className="text-sm transition-colors" style={{ color: '#71717a' }}>
+                <Link href="/reembolso" className="text-sm transition-colors hover:text-indigo-300" style={{ color: '#818cf8' }}>
                   Reembolso
                 </Link>
               </li>
@@ -66,14 +66,14 @@ export default function Footer() {
                   href="https://wa.me/5519989398294"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm transition-colors"
-                  style={{ color: '#71717a' }}
+                  className="text-sm transition-colors hover:text-indigo-300"
+                  style={{ color: '#818cf8' }}
                 >
                   WhatsApp
                 </a>
               </li>
               <li>
-                <a href="mailto:contato@glabcursos.com.br" className="text-sm transition-colors" style={{ color: '#71717a' }}>
+                <a href="mailto:contato@glabcursos.com.br" className="text-sm transition-colors hover:text-indigo-300" style={{ color: '#818cf8' }}>
                   contato@glabcursos.com.br
                 </a>
               </li>
