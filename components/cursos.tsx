@@ -113,15 +113,13 @@ export default async function Cursos() {
                     </div>
                   ))}
                 </div>
-                <a
-                  href={cat.cta_href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href={`/cursos/${cat.slug}`}
                   className="w-full inline-flex items-center justify-center gap-2 rounded-xl font-bold text-sm px-5 py-4 bg-cyan text-background hover:bg-cyan/90 shadow-[0_0_28px_rgba(0,212,200,0.35)] hover:shadow-[0_0_44px_rgba(0,212,200,0.5)] transition-all duration-300 group/btn"
                 >
                   Ver Guia Completo
                   <ArrowRight size={15} className="group-hover/btn:translate-x-1 transition-transform" />
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -159,25 +157,13 @@ export default async function Cursos() {
                     )}
                     <span className="text-2xl font-black text-cyan">{cat.preco}</span>
                   </div>
-                  {cat.cta_href && cat.cta_href !== "#" ? (
-                    <a
-                      href={cat.cta_href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full inline-flex items-center justify-center gap-2 rounded-xl font-bold text-sm px-5 py-3 border border-cyan/25 text-cyan hover:bg-cyan/10 hover:border-cyan/40 transition-all duration-300 group/btn"
-                    >
-                      Ver Guia Completo
-                      <ArrowRight size={15} className="group-hover/btn:translate-x-1 transition-transform" />
-                    </a>
-                  ) : (
-                    <Link
-                      href={`/cursos/${cat.slug}`}
-                      className="w-full inline-flex items-center justify-center gap-2 rounded-xl font-bold text-sm px-5 py-3 border border-cyan/25 text-cyan hover:bg-cyan/10 hover:border-cyan/40 transition-all duration-300 group/btn"
-                    >
-                      Ver Guia Completo
-                      <ArrowRight size={15} className="group-hover/btn:translate-x-1 transition-transform" />
-                    </Link>
-                  )}
+                  <Link
+                    href={`/cursos/${cat.slug}`}
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl font-bold text-sm px-5 py-3 border border-cyan/25 text-cyan hover:bg-cyan/10 hover:border-cyan/40 transition-all duration-300 group/btn"
+                  >
+                    Ver Guia Completo
+                    <ArrowRight size={15} className="group-hover/btn:translate-x-1 transition-transform" />
+                  </Link>
                 </div>
               </div>
             ))}
