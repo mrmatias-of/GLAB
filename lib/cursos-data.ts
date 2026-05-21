@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server"
+import { createClient, createAnonClient } from "@/lib/supabase/server"
 import { Smartphone, Monitor, Apple, Layers, type LucideIcon } from "lucide-react"
 
 export type Modulo = {
@@ -85,8 +85,23 @@ export async function getCursoBySlug(slug: string): Promise<Curso | undefined> {
   return cursos.find((c) => c.slug === slug)
 }
 
-// Fallback para geração estática
+// Função para geração estática (sem cookies)
 export async function getCursoSlugs(): Promise<string[]> {
-  const cursos = await getCursos()
-  return cursos.map((c) => c.slug)
+  try {
+    const supabase = createAnonClient()
+    const { data, error } = await supabase
+      .from("cursos")
+      .select("slug")
+      .eq("ativo", true)
+    
+    if (error || !data) {
+      console.error("[v0] Erro ao buscar slugs:", error)
+      return []
+    }
+    
+    return data.map((c: { slug: string }) => c.slug)
+  } catch (err) {
+    console.error("[v0] Erro ao conectar ao Supabase para slugs:", err)
+    return []
+  }
 }
