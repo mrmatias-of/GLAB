@@ -40,34 +40,23 @@ export default async function Cursos() {
   const secundarios = cursos.filter((c) => !c.destaque)
 
   return (
-    <section id="cursos" className="relative py-28 overflow-hidden">
-      <div className="absolute left-0 top-1/4 w-96 h-96 rounded-full bg-[#2563eb]/6 blur-[120px] pointer-events-none" />
-      <div className="absolute right-0 bottom-1/4 w-72 h-72 rounded-full bg-[#3b82f6]/6 blur-[100px] pointer-events-none" />
-      <div
-        className="absolute inset-0 opacity-[0.06]"
-        style={{
-          backgroundImage: `radial-gradient(circle, rgba(59,130,246,0.5) 1px, transparent 1px)`,
-          backgroundSize: "40px 40px",
-        }}
-      />
-
-      <div className="relative z-10 max-w-6xl mx-auto px-5">
+    <section id="cursos" className="relative py-28">
+      <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
-        <div className="flex flex-col items-center text-center mb-16">
-          <p className="text-[#3b82f6]/70 text-sm font-light italic mb-3 tracking-wide">Catálogo Completo</p>
-          <h2 className="text-4xl md:text-5xl font-black leading-tight mb-4">
-            <span className="text-foreground">Escolha sua</span>{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3b82f6] to-[#60a5fa]">especialidade</span>
+        <div className="text-center mb-16">
+          <p className="text-violet-400 text-xs uppercase tracking-widest mb-4">Catalogo Completo</p>
+          <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
+            Escolha sua especialidade
           </h2>
-          <p className="text-muted-foreground text-sm max-w-md">
-            Guias completos, passo a passo, criados para o profissional que quer resultados concretos.
+          <p className="text-white/50 max-w-md mx-auto">
+            Guias completos, passo a passo, criados para o profissional que quer resultados.
           </p>
         </div>
 
         {cursos.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-20 text-muted-foreground gap-3">
-            <Package size={40} className="opacity-30" />
-            <p className="text-sm">Nenhum curso disponível no momento.</p>
+          <div className="flex flex-col items-center justify-center py-20 text-white/40 gap-3">
+            <Package size={40} />
+            <p className="text-sm">Nenhum curso disponivel no momento.</p>
           </div>
         )}
 
@@ -77,13 +66,11 @@ export default async function Cursos() {
           return (
             <div
               key={cat.id}
-              className="relative rounded-2xl border border-[#3b82f6]/35 bg-[#080f1c] shadow-[0_0_60px_rgba(37,99,235,0.15)] mb-8 overflow-hidden"
+              className="relative rounded-3xl overflow-hidden border border-white/10 bg-[#0a0a0a] mb-8"
             >
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-px bg-gradient-to-r from-transparent via-[#3b82f6]/60 to-transparent" />
-
-              <div className="relative z-10 grid md:grid-cols-2 gap-0">
-                {/* Imagem lado esquerdo em desktop, topo em mobile */}
-                <div className="relative aspect-video md:aspect-auto md:min-h-[320px] overflow-hidden">
+              <div className="grid md:grid-cols-2">
+                {/* Imagem */}
+                <div className="relative aspect-video md:aspect-auto md:min-h-[400px]">
                   {cat.imagem ? (
                     <Image
                       src={cat.imagem}
@@ -94,49 +81,50 @@ export default async function Cursos() {
                       priority
                     />
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-[#0d1a2e] to-[#04080f] flex items-center justify-center">
-                      <Icon size={48} className="text-[#3b82f6]/30" />
+                    <div className="w-full h-full bg-gradient-to-br from-violet-600/30 to-purple-600/20 flex items-center justify-center">
+                      <Icon size={48} className="text-violet-400/30" />
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#080f1c]/80 hidden md:block" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#080f1c] via-transparent to-transparent md:hidden" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#0a0a0a] hidden md:block" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent md:hidden" />
+                  
                   {/* Badge */}
-                  <div className="absolute top-4 left-4">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#2563eb] to-[#3b82f6] text-white text-[10px] font-black tracking-widest uppercase shadow-[0_0_20px_rgba(37,99,235,0.5)]">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                  <div className="absolute top-6 left-6">
+                    <span className="px-4 py-1.5 rounded-full text-xs font-bold text-white bg-gradient-to-r from-violet-600 to-purple-600 shadow-lg">
                       Mais Popular
-                    </div>
+                    </span>
                   </div>
                 </div>
 
-                {/* Conteúdo */}
-                <div className="p-6 md:p-10 flex flex-col justify-center">
-                  <span className="text-xs font-bold tracking-widest text-[#3b82f6]/80 uppercase mb-2 block">{cat.tag}</span>
-                  <h3 className="text-2xl md:text-3xl font-black text-foreground mb-3">{cat.titulo}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-6">{cat.descricao}</p>
+                {/* Conteudo */}
+                <div className="p-8 md:p-12 flex flex-col justify-center">
+                  <p className="text-violet-400 text-xs uppercase tracking-widest mb-3">{cat.tag}</p>
+                  <h3 className="text-3xl md:text-4xl font-black text-white mb-4">{cat.titulo}</h3>
+                  <p className="text-white/50 leading-relaxed mb-8">{cat.descricao}</p>
 
-                  <div className="flex items-baseline gap-2 mb-6">
+                  <div className="flex items-baseline gap-3 mb-8">
                     {cat.preco_original && (
-                      <span className="text-sm text-muted-foreground line-through">{cat.preco_original}</span>
+                      <span className="text-lg text-white/40 line-through">{cat.preco_original}</span>
                     )}
-                    <span className="text-4xl font-black text-[#60a5fa] drop-shadow-[0_0_20px_rgba(59,130,246,0.4)]">{cat.preco}</span>
+                    <span className="text-4xl font-black text-violet-400">{cat.preco}</span>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
-                    {(cat.modulos ?? []).map((m) => (
-                      <div key={m.titulo} className="flex items-center gap-2.5 rounded-lg bg-white/4 border border-white/8 px-3 py-2.5 hover:border-[#3b82f6]/30 transition-colors">
-                        <div className="w-2 h-2 rounded-full bg-[#3b82f6] shadow-[0_0_8px_rgba(59,130,246,0.5)] flex-shrink-0" />
-                        <span className="text-xs text-foreground/80 leading-tight">{m.titulo}</span>
+                  {/* Modulos */}
+                  <div className="grid grid-cols-2 gap-2 mb-8">
+                    {(cat.modulos ?? []).slice(0, 6).map((m) => (
+                      <div key={m.titulo} className="flex items-center gap-2 text-sm text-white/60">
+                        <div className="w-1.5 h-1.5 rounded-full bg-violet-500" />
+                        <span className="truncate">{m.titulo}</span>
                       </div>
                     ))}
                   </div>
 
                   <Link
                     href={`/cursos/${cat.slug}`}
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl font-bold text-sm px-5 py-4 bg-gradient-to-r from-[#2563eb] to-[#3b82f6] text-white hover:from-[#1d4ed8] hover:to-[#2563eb] shadow-[0_0_30px_rgba(37,99,235,0.35)] hover:shadow-[0_0_50px_rgba(37,99,235,0.5)] transition-all duration-300 group/btn"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-white font-semibold bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 transition-all shadow-[0_0_30px_rgba(139,92,246,0.3)]"
                   >
                     Ver Guia Completo
-                    <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
+                    <ArrowRight size={18} />
                   </Link>
                 </div>
               </div>
@@ -144,19 +132,19 @@ export default async function Cursos() {
           )
         })}
 
-        {/* Cards Secundários */}
+        {/* Cards Secundarios - Grid de produtos */}
         {secundarios.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {secundarios.map((cat) => {
               const Icon = getIconByTag(cat.tag)
               return (
                 <Link
                   key={cat.id}
                   href={`/cursos/${cat.slug}`}
-                  className="group relative rounded-xl border border-white/8 bg-[#080f1c] hover:border-[#3b82f6]/35 hover:shadow-[0_0_35px_rgba(37,99,235,0.12)] transition-all duration-300 flex flex-col overflow-hidden"
+                  className="group relative rounded-3xl overflow-hidden border border-white/10 bg-[#0a0a0a] hover:border-violet-500/30 transition-all flex flex-col"
                 >
                   {/* Thumbnail */}
-                  <div className="relative w-full aspect-video overflow-hidden">
+                  <div className="relative aspect-video">
                     {cat.imagem ? (
                       <Image
                         src={cat.imagem}
@@ -166,41 +154,33 @@ export default async function Cursos() {
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-[#0d1a2e] to-[#04080f] flex items-center justify-center">
-                        <Icon size={28} className="text-[#3b82f6]/30" />
+                      <div className="w-full h-full bg-gradient-to-br from-violet-600/20 to-purple-600/10 flex items-center justify-center">
+                        <Icon size={32} className="text-violet-400/30" />
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#080f1c] via-[#080f1c]/20 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent" />
                   </div>
 
-                  <div className="p-5 flex flex-col flex-1">
-                    <span className="text-[10px] font-bold tracking-widest text-[#3b82f6]/60 uppercase mb-1.5">{cat.tag}</span>
-                    <h3 className="text-sm font-bold text-foreground mb-2 group-hover:text-[#60a5fa] transition-colors leading-snug">{cat.titulo}</h3>
-                    <p className="text-xs text-muted-foreground leading-relaxed mb-4 flex-1 line-clamp-2">{cat.descricao}</p>
+                  {/* Content */}
+                  <div className="p-6 flex flex-col flex-1">
+                    <p className="text-[10px] text-violet-400/70 uppercase tracking-widest mb-2">{cat.tag}</p>
+                    <h3 className="text-lg font-bold text-white group-hover:text-violet-400 transition-colors mb-2">
+                      {cat.titulo}
+                    </h3>
+                    <p className="text-sm text-white/40 leading-relaxed mb-4 flex-1 line-clamp-2">
+                      {cat.descricao}
+                    </p>
 
-                    {/* Módulos preview */}
-                    <div className="flex flex-col gap-1 mb-4">
-                      {(cat.modulos ?? []).slice(0, 3).map((m) => (
-                        <div key={m.titulo} className="flex items-center gap-2">
-                          <div className="w-1 h-1 rounded-full bg-[#3b82f6]/40 flex-shrink-0" />
-                          <span className="text-[11px] text-foreground/45 truncate">{m.titulo}</span>
-                        </div>
-                      ))}
-                      {(cat.modulos?.length ?? 0) > 3 && (
-                        <span className="text-[10px] text-[#3b82f6]/50 ml-3">+{(cat.modulos?.length ?? 0) - 3} módulos</span>
-                      )}
-                    </div>
-
-                    <div className="flex items-center justify-between pt-3 border-t border-white/5">
-                      <div className="flex items-baseline gap-1.5">
+                    <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                      <div className="flex items-baseline gap-2">
                         {cat.preco_original && (
-                          <span className="text-[10px] text-muted-foreground line-through">{cat.preco_original}</span>
+                          <span className="text-xs text-white/40 line-through">{cat.preco_original}</span>
                         )}
-                        <span className="text-lg font-black text-[#60a5fa]">{cat.preco}</span>
+                        <span className="text-xl font-black text-violet-400">{cat.preco}</span>
                       </div>
-                      <div className="w-8 h-8 rounded-full bg-[#2563eb]/10 border border-[#3b82f6]/25 flex items-center justify-center group-hover:bg-[#2563eb] group-hover:border-[#2563eb] transition-all duration-300">
-                        <ArrowRight size={13} className="text-[#60a5fa] group-hover:text-white transition-colors" />
-                      </div>
+                      <span className="px-4 py-2 rounded-full text-xs font-medium text-white border border-white/20 group-hover:bg-violet-600 group-hover:border-violet-600 transition-all">
+                        Ver mais
+                      </span>
                     </div>
                   </div>
                 </Link>
@@ -208,15 +188,6 @@ export default async function Cursos() {
             })}
           </div>
         )}
-
-        <div className="mt-14 flex items-center justify-center gap-3 text-xs text-muted-foreground">
-          {["Moderno", "Prático", "Atualizado", "Profissional"].map((t, i, a) => (
-            <span key={t} className="flex items-center gap-3">
-              {t}
-              {i < a.length - 1 && <span className="w-1 h-1 rounded-full bg-[#3b82f6]/40" />}
-            </span>
-          ))}
-        </div>
       </div>
     </section>
   )

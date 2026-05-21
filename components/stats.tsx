@@ -1,47 +1,58 @@
-import { Smartphone, Monitor, Cpu, HeadphonesIcon } from "lucide-react"
-
-const stats = [
-  { value: "20K+", label: "Reparos", icon: Smartphone },
-  { value: "98%", label: "Satisfação", icon: HeadphonesIcon },
-  { value: "500+", label: "Alunos", icon: Cpu },
-  { value: "10+", label: "Anos", icon: Monitor },
-]
-
 export default function Stats() {
-  return (
-    <section className="relative py-6 overflow-hidden">
-      {/* Glow line top */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-cyan/40 to-transparent" />
+  const stats = [
+    { value: "30", label: "Guias disponíveis" },
+    { value: "1 000+", label: "Alunos ativos" },
+  ]
 
-      <div className="relative max-w-4xl mx-auto px-5">
-        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-0 md:justify-between">
-          {stats.map((s, i) => (
+  const features = [
+    { value: "5 anos", label: "de experiência" },
+    { value: "2 horas", label: "tempo médio de estudo" },
+  ]
+
+  return (
+    <section className="relative py-20">
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Label */}
+        <p className="text-white/40 text-xs uppercase tracking-widest mb-8">
+          G-Lab Cursos
+        </p>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {/* Stats grandes */}
+          {stats.map((s) => (
             <div
               key={s.label}
-              className="flex items-center gap-3 group"
+              className="rounded-3xl border border-white/10 bg-[#0a0a0a] p-6 md:p-8"
             >
-              {/* Ícone circular com glow - estilo mockup */}
-              <div className="w-12 h-12 rounded-full bg-gradient-to-b from-cyan/20 to-cyan/5 border border-cyan/30 flex items-center justify-center shadow-[0_0_20px_rgba(0,212,200,0.25)] group-hover:shadow-[0_0_30px_rgba(0,212,200,0.4)] transition-all duration-300">
-                <s.icon size={20} className="text-cyan" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-2xl md:text-3xl font-black text-foreground tabular-nums">
-                  {s.value}
-                </span>
-                <span className="text-xs text-muted-foreground font-medium">{s.label}</span>
-              </div>
-              
-              {/* Separator - hidden on last item and mobile */}
-              {i < stats.length - 1 && (
-                <div className="hidden md:block w-px h-12 bg-gradient-to-b from-transparent via-white/10 to-transparent ml-6 md:ml-10" />
-              )}
+              <p className="text-4xl md:text-5xl font-black text-white mb-2">{s.value}</p>
+              <p className="text-sm text-white/50">{s.label}</p>
+            </div>
+          ))}
+
+          {/* Bloco de texto */}
+          <div className="col-span-2 rounded-3xl border border-white/10 bg-gradient-to-br from-violet-600/20 to-purple-600/10 p-6 md:p-8 flex flex-col justify-center">
+            <p className="text-2xl md:text-3xl font-black text-white mb-2">
+              Suporte
+              <br />
+              <span className="text-violet-400">24 horas</span>
+            </p>
+            <p className="text-sm text-white/50">
+              Tire suas dúvidas a qualquer momento com nossa equipe de suporte dedicada.
+            </p>
+          </div>
+
+          {/* Features menores */}
+          {features.map((f) => (
+            <div
+              key={f.label}
+              className="rounded-3xl border border-white/10 bg-[#0a0a0a] p-6"
+            >
+              <p className="text-2xl md:text-3xl font-black text-white mb-1">{f.value}</p>
+              <p className="text-xs text-white/50">{f.label}</p>
             </div>
           ))}
         </div>
       </div>
-
-      {/* Glow line bottom */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-cyan/40 to-transparent" />
     </section>
   )
 }

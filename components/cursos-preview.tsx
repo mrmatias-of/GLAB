@@ -21,114 +21,133 @@ export default async function CursosPreview() {
 
   if (!cursos?.length) return null
 
-  return (
-    <section className="relative py-24 overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_100%,rgba(37,99,235,0.1)_0%,transparent_65%)]" />
+  const destaque = cursos.find(c => c.destaque) || cursos[0]
+  const outros = cursos.filter(c => c.id !== destaque.id)
 
-      <div className="relative max-w-6xl mx-auto px-5">
+  return (
+    <section className="relative py-24">
+      <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
           <div>
-            <p className="text-[#3b82f6]/70 text-sm font-light italic mb-2 tracking-wide">Nossos Guias</p>
-            <h2 className="text-3xl md:text-5xl font-black leading-tight">
-              <span className="text-foreground">Comece a aprender</span>
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3b82f6] to-[#60a5fa]">agora mesmo</span>
+            <p className="text-violet-400 text-xs uppercase tracking-widest mb-3">Nossos Guias</p>
+            <h2 className="text-3xl md:text-5xl font-black text-white">
+              Comece a aprender
             </h2>
           </div>
           <Link
             href="/cursos"
-            className="group inline-flex items-center gap-2 text-sm font-semibold text-[#3b82f6] hover:text-foreground transition-colors shrink-0"
+            className="inline-flex items-center gap-2 text-sm font-medium text-white/60 hover:text-white transition-colors"
           >
-            Ver todos os guias
-            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            Ver todos
+            <ArrowRight size={14} />
           </Link>
         </div>
 
-        {/* Cards */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {cursos.map((c) => {
-            const Icon = getIconByTag(c.tag)
-            return (
-              <Link
-                key={c.id}
-                href={`/cursos/${c.slug}`}
-                className={`group relative rounded-xl border bg-[#080f1c] transition-all duration-300 flex flex-col overflow-hidden ${
-                  c.destaque
-                    ? "border-[#3b82f6]/40 shadow-[0_0_30px_rgba(59,130,246,0.12)] hover:shadow-[0_0_50px_rgba(59,130,246,0.22)]"
-                    : "border-white/8 hover:border-[#3b82f6]/30 hover:shadow-[0_0_25px_rgba(59,130,246,0.1)]"
-                }`}
-              >
-                {/* Thumbnail */}
-                <div className="relative w-full aspect-video overflow-hidden">
-                  {c.imagem ? (
-                    <Image
-                      src={c.imagem}
-                      alt={c.titulo}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-[#0d1a2e] to-[#04080f] flex items-center justify-center">
-                      <Icon size={32} className="text-[#3b82f6]/40" />
-                    </div>
-                  )}
-                  {/* Overlay gradient bottom */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#080f1c] via-transparent to-transparent opacity-70" />
-                  {/* Popular badge */}
-                  {c.destaque && (
-                    <div className="absolute top-2 right-2">
-                      <span className="text-[9px] font-black tracking-wider text-white bg-[#2563eb] px-2 py-0.5 rounded-full shadow-[0_0_12px_rgba(37,99,235,0.5)]">
-                        POPULAR
-                      </span>
-                    </div>
-                  )}
-                </div>
+        {/* Layout: destaque grande + lista lateral */}
+        <div className="grid lg:grid-cols-5 gap-6">
+          {/* Card destaque grande */}
+          <Link
+            href={`/cursos/${destaque.slug}`}
+            className="lg:col-span-3 group relative rounded-3xl overflow-hidden border border-white/10 bg-[#0a0a0a] aspect-[4/3] lg:aspect-auto lg:min-h-[450px]"
+          >
+            {destaque.imagem ? (
+              <Image
+                src={destaque.imagem}
+                alt={destaque.titulo}
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                sizes="(max-width: 1024px) 100vw, 60vw"
+              />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-violet-600/30 to-purple-600/20" />
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+            
+            {/* Badge */}
+            {destaque.destaque && (
+              <div className="absolute top-6 left-6">
+                <span className="px-4 py-1.5 rounded-full text-xs font-bold text-white bg-gradient-to-r from-violet-600 to-purple-600 shadow-lg">
+                  Mais Popular
+                </span>
+              </div>
+            )}
 
-                <div className="relative z-10 p-5 flex flex-col flex-1">
-                  <span className="text-[10px] font-bold tracking-widest text-[#3b82f6]/70 uppercase mb-1.5">{c.tag}</span>
-                  <h3 className="text-sm font-bold text-foreground mb-2 group-hover:text-[#60a5fa] transition-colors line-clamp-2 leading-snug">
-                    {c.titulo}
-                  </h3>
-                  <p className="text-[11px] text-muted-foreground leading-relaxed mb-4 flex-1 line-clamp-2">
-                    {c.descricao}
-                  </p>
+            {/* Content */}
+            <div className="absolute bottom-0 left-0 right-0 p-8">
+              <p className="text-violet-400 text-xs uppercase tracking-widest mb-2">{destaque.tag}</p>
+              <h3 className="text-2xl md:text-3xl font-black text-white mb-3">{destaque.titulo}</h3>
+              <p className="text-white/60 text-sm mb-4 line-clamp-2 max-w-lg">{destaque.descricao}</p>
+              <div className="flex items-center gap-4">
+                <span className="text-2xl font-black text-violet-400">{destaque.preco}</span>
+                {destaque.preco_original && (
+                  <span className="text-sm text-white/40 line-through">{destaque.preco_original}</span>
+                )}
+              </div>
+            </div>
+          </Link>
 
-                  <div className="flex items-center justify-between pt-3 border-t border-white/5">
-                    <div className="flex items-baseline gap-1.5">
+          {/* Cards menores */}
+          <div className="lg:col-span-2 flex flex-col gap-4">
+            {outros.map((c) => {
+              const Icon = getIconByTag(c.tag)
+              return (
+                <Link
+                  key={c.id}
+                  href={`/cursos/${c.slug}`}
+                  className="group flex gap-4 rounded-2xl border border-white/10 bg-[#0a0a0a] p-4 hover:border-violet-500/30 hover:bg-[#111] transition-all"
+                >
+                  {/* Thumbnail */}
+                  <div className="relative w-24 h-24 rounded-xl overflow-hidden flex-shrink-0">
+                    {c.imagem ? (
+                      <Image
+                        src={c.imagem}
+                        alt={c.titulo}
+                        fill
+                        className="object-cover"
+                        sizes="96px"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-violet-600/20 to-purple-600/10 flex items-center justify-center">
+                        <Icon size={24} className="text-violet-400/50" />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Info */}
+                  <div className="flex flex-col justify-center flex-1 min-w-0">
+                    <p className="text-[10px] text-violet-400/70 uppercase tracking-widest mb-1">{c.tag}</p>
+                    <h4 className="text-sm font-bold text-white group-hover:text-violet-400 transition-colors line-clamp-2 mb-2">
+                      {c.titulo}
+                    </h4>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-lg font-black text-violet-400">{c.preco}</span>
                       {c.preco_original && (
-                        <span className="text-[10px] text-muted-foreground line-through">{c.preco_original}</span>
+                        <span className="text-xs text-white/40 line-through">{c.preco_original}</span>
                       )}
-                      <span className="text-base font-black text-[#60a5fa]">{c.preco}</span>
-                    </div>
-                    <div className="w-7 h-7 rounded-full bg-[#2563eb]/15 border border-[#3b82f6]/30 flex items-center justify-center group-hover:bg-[#2563eb] group-hover:border-[#2563eb] transition-all duration-300">
-                      <ArrowRight size={12} className="text-[#60a5fa] group-hover:text-white transition-colors" />
                     </div>
                   </div>
-                </div>
-              </Link>
-            )
-          })}
+
+                  {/* Arrow */}
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 group-hover:text-white group-hover:border-violet-500/50 group-hover:bg-violet-500/10 transition-all">
+                      <ArrowRight size={16} />
+                    </div>
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
         </div>
 
-        {/* Bottom tagline */}
-        <div className="mt-10 flex items-center justify-center gap-3 text-xs text-muted-foreground">
-          {["Moderno", "Prático", "Atualizado", "Profissional"].map((t, i, a) => (
-            <span key={t} className="flex items-center gap-3">
-              {t}
-              {i < a.length - 1 && <span className="w-1 h-1 rounded-full bg-[#3b82f6]/40" />}
-            </span>
-          ))}
-        </div>
-
-        <div className="mt-8 text-center">
+        {/* CTA */}
+        <div className="mt-12 text-center">
           <Link
             href="/cursos"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#2563eb] to-[#3b82f6] text-white text-sm font-bold hover:from-[#1d4ed8] hover:to-[#2563eb] transition-all duration-300 shadow-[0_0_25px_rgba(37,99,235,0.35)] hover:shadow-[0_0_40px_rgba(37,99,235,0.5)] group"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-full text-white font-semibold bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 transition-all shadow-[0_0_30px_rgba(139,92,246,0.3)]"
           >
             Ver Todos os Guias
-            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            <ArrowRight size={16} />
           </Link>
         </div>
       </div>
