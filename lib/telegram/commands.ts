@@ -10,11 +10,15 @@ import { handleDashboard } from './handlers/dashboard'
 import { handleVendas }    from './handlers/vendas'
 import { handleCursos }    from './handlers/cursos'
 import { handleMensagens } from './handlers/mensagens'
+import { handleV0 }        from './handlers/v0'
 
 export interface CommandContext {
   command: string
   args: string[]
+  text: string
   chatId: number
+  userId: number
+  username?: string
   admin: { telegram_id: number; username?: string; nome?: string; role: string }
   supabase: SupabaseClient
 }
@@ -47,6 +51,16 @@ export async function handleCommand(ctx: CommandContext): Promise<void> {
       await handleMensagens(ctx)
       break
 
+    case '/v0':
+      await handleV0({
+        chatId: ctx.chatId,
+        userId: ctx.userId,
+        username: ctx.username,
+        text: ctx.text,
+        supabase: ctx.supabase,
+      })
+      break
+
     case '/site':
       await replyMessage(chatId,
         `<b>Links do site</b>\n\n` +
@@ -74,6 +88,7 @@ function buildHelp(nome: string): string {
     '/vendas     — Ultimas vendas e faturamento',
     '/cursos     — Cursos publicados',
     '/mensagens  — Mensagens de contato pendentes',
+    '/v0 [msg]   — Falar com a IA do G-Lab',
     '/site       — Links rapidos do site',
     '/ajuda      — Esta mensagem',
   ].join('\n')

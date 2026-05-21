@@ -87,7 +87,16 @@ export async function POST(req: NextRequest) {
 
   // Executar o handler do comando
   try {
-    await handleCommand({ command, args, chatId, admin, supabase })
+    await handleCommand({ 
+      command, 
+      args, 
+      text,
+      chatId, 
+      userId: telegramId,
+      username,
+      admin, 
+      supabase 
+    })
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Erro desconhecido'
     console.error('[telegram/webhook] Erro ao executar comando:', msg)
