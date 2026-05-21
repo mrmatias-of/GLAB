@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js"
 import { NextRequest, NextResponse } from "next/server"
 import crypto from "crypto"
+import { notifyVenda, notifyCadastro, notifyReembolso } from "@/lib/telegram"
 
 // Cliente Supabase com service role para operações admin
 function getServiceClient() {
@@ -175,7 +176,7 @@ export async function POST(request: NextRequest) {
       throw new Error(`Erro ao salvar compra: ${purchaseError.message}`)
     }
 
-    // Se aprovado, criar notificação
+    // Se aprovado, criar notificação e avisar no Telegram
     if (purchaseStatus === "approved") {
       await supabase.from("notifications").insert({
         user_id: userId,
@@ -183,6 +184,31 @@ export async function POST(request: NextRequest) {
         message: `Seu acesso ao curso "${curso.titulo}" foi liberado. Bons estudos!`,
         type: "success",
         link: `/aluno/cursos/${curso.id}`
+      })
+
+      // Notificar admin via Telegram
+      await notifyVenda({
+        curso:    curso.titulo,
+        valor:    `R$ ${(Commissions.charge_amount / 100).toFixed(2).replace('.', ',')}`,
+        cliente:  Customer.full_name,
+        email:    Customer.email,
+        metodo:   payment_method,
+        orderId:  order_id,
+      })
+
+      // Notificar cadastro se usuário foi criado agora
+      if (!user) {
+        await notifyCadastro({ email: Customer.email, nome: Customer.full_name, via: 'kiwify' })
+      }
+    }
+
+    if (purchaseStatus === "refunded") {
+      await notifyReembolso({
+        curso:    curso.titulo,
+        cliente:  Customer.full_name,
+        email:    Customer.email,
+        valor:    `R$ ${(Commissions.charge_amount / 100).toFixed(2).replace('.', ',')}`,
+        orderId:  order_id,
       })
     }
 
