@@ -108,14 +108,23 @@ export default function Header() {
           </Link>
         </div>
 
-        {/* Mobile toggle */}
-        <button
-          className="md:hidden w-9 h-9 flex items-center justify-center rounded-lg border border-border text-muted-foreground hover:text-foreground hover:border-cyan/40 transition-all"
-          onClick={() => setOpen(!open)}
-          aria-label="Menu"
-        >
-          {open ? <X size={18} /> : <Menu size={18} />}
-        </button>
+        {/* Mobile: botao de busca + toggle */}
+        <div className="md:hidden flex items-center gap-2">
+          <button
+            onClick={() => setSearchOpen(true)}
+            className="w-9 h-9 flex items-center justify-center rounded-lg border border-border text-muted-foreground hover:text-foreground hover:border-cyan/40 transition-all"
+            aria-label="Buscar"
+          >
+            <Search size={18} />
+          </button>
+          <button
+            className="w-9 h-9 flex items-center justify-center rounded-lg border border-border text-muted-foreground hover:text-foreground hover:border-cyan/40 transition-all"
+            onClick={() => setOpen(!open)}
+            aria-label="Menu"
+          >
+            {open ? <X size={18} /> : <Menu size={18} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}
