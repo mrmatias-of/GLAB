@@ -86,9 +86,6 @@ export default function Footer() {
             <MapPin size={14} className="text-cyan flex-shrink-0" />
             <span>Paulinia, SP - Brasil</span>
           </div>
-          <p className="text-xs text-muted-foreground">
-            Seg a Sex &mdash; 9h as 18h
-          </p>
         </div>
       </div>
 
