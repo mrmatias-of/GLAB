@@ -2,7 +2,7 @@ const ITEMS = [
   { value: '30',    label: 'Guias disponíveis',    wide: false },
   { value: '1.000+', label: 'Alunos ativos',       wide: false },
   { value: 'Trabalhamos\ncirurgicamente', label: 'Precisão técnica em cada guia. Sem atalhos, sem achismos.', wide: true },
-  { value: '5 anos', label: 'De experiência',      wide: false },
+  { value: '+10 anos', label: 'De experiência',      wide: false },
   { value: '2 horas', label: 'Tempo médio por módulo', wide: false },
 ]
 
@@ -45,7 +45,7 @@ export default function Stats() {
 
           {/* Stat 3 */}
           <div className="card p-6 rounded-2xl">
-            <p className="text-3xl sm:text-4xl font-extrabold text-white mb-2 tracking-tight">5 anos</p>
+            <p className="text-3xl sm:text-4xl font-extrabold text-white mb-2 tracking-tight">+10 anos</p>
             <p className="text-xs font-medium tracking-wide" style={{ color: '#71717a' }}>De experiência</p>
           </div>
 

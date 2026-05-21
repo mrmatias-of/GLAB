@@ -49,11 +49,6 @@ export default function Footer() {
                   Privacidade
                 </Link>
               </li>
-              <li>
-                <Link href="/reembolso" className="text-sm transition-colors hover:text-indigo-300" style={{ color: '#818cf8' }}>
-                  Reembolso
-                </Link>
-              </li>
             </ul>
           </div>
 
