@@ -52,7 +52,7 @@ export default function Header() {
               onClick={() => setSearchOpen(true)}
               aria-label="Buscar"
               style={{ color: '#71717a' }}
-              className="hover:text-white transition-colors"
+              className="hover:text-white transition-colors cursor-pointer"
             >
               <Search size={18} />
             </button>
@@ -65,7 +65,7 @@ export default function Header() {
             <button
               onClick={() => setOpen(!open)}
               aria-label={open ? 'Fechar menu' : 'Abrir menu'}
-              className="md:hidden transition-colors"
+              className="md:hidden transition-colors cursor-pointer"
               style={{ color: '#71717a' }}
             >
               {open ? <X size={20} /> : <Menu size={20} />}
