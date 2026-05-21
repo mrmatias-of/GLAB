@@ -1,7 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { replyMessage } from '@/lib/telegram'
-import { generateText } from 'ai'
-import { gateway } from '@ai-sdk/gateway'
 
 interface CommandContext {
   chatId: number
@@ -13,21 +11,7 @@ interface CommandContext {
 
 const SYSTEM_PROMPT = `Voce e o assistente oficial do G-Lab, uma plataforma de cursos de manutencao de celulares.
 
-Voce pode ajudar com:
-- Duvidas sobre o sistema (painel admin, cursos, vendas)
-- Sugestoes de melhorias
-- Resolver problemas tecnicos
-- Criar conteudo para cursos
-- Gerar textos de marketing
-- Qualquer outra tarefa relacionada ao negocio
-
-Responda sempre em portugues brasileiro, de forma direta e util.
-Use formatacao HTML do Telegram quando apropriado:
-- <b>negrito</b> para destacar
-- <code>codigo</code> para termos tecnicos
-- Listas com • para organizar
-
-Seja conciso mas completo. Maximo 3 paragrafos por resposta.`
+Responda sempre em portugues brasileiro, de forma direta e util.`
 
 export async function handleV0(ctx: CommandContext): Promise<void> {
   const { chatId, text } = ctx
@@ -51,18 +35,46 @@ export async function handleV0(ctx: CommandContext): Promise<void> {
   }
 
   // Avisar que esta processando
-  await replyMessage(chatId, '⏳ Processando...')
+  await replyMessage(chatId, '⏳ Processando sua requisicao com IA...')
 
   try {
-    const { text: response } = await generateText({
-      model: gateway('openai/gpt-4o-mini'),
-      system: SYSTEM_PROMPT,
-      prompt: userMessage,
-      maxTokens: 1000,
+    // Verificar se tem API key
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error('OPENAI_API_KEY nao configurada')
+    }
+
+    // Chamada direta à API OpenAI
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user', content: userMessage },
+        ],
+        max_tokens: 1000,
+        temperature: 0.7,
+      }),
     })
 
+    if (!response.ok) {
+      const error = await response.json()
+      throw new Error(`OpenAI API error: ${error.error?.message || 'Unknown error'}`)
+    }
+
+    const data = await response.json()
+    const aiResponse = data.choices?.[0]?.message?.content
+
+    if (!aiResponse) {
+      throw new Error('Nenhuma resposta gerada')
+    }
+
     // Enviar resposta
-    await replyMessage(chatId, response || 'Desculpe, nao consegui processar sua solicitacao.')
+    await replyMessage(chatId, aiResponse)
 
   } catch (error: any) {
     console.error('[v0] Erro ao gerar resposta:', error?.message || error)
@@ -71,7 +83,10 @@ export async function handleV0(ctx: CommandContext): Promise<void> {
       '',
       `Erro: ${error?.message || 'Desconhecido'}`,
       '',
-      'Tente novamente em alguns instantes.',
+      'Certifique-se que:',
+      '• Variável OPENAI_API_KEY esta configurada',
+      '• Voce tem credito na OpenAI',
+      '• Tente novamente em alguns instantes',
     ].join('\n'))
   }
 }
