@@ -1,13 +1,13 @@
-"use client"
+'use client'
 
-import { useState, useEffect, useRef, useCallback } from "react"
-import { useRouter } from "next/navigation"
-import { Search, X, ArrowRight, BookOpen, FileText, HelpCircle } from "lucide-react"
-import { createClient } from "@/lib/supabase/client"
-import { resolveSlugsBySynonym } from "@/lib/search-synonyms"
+import { useState, useEffect, useRef, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
+import { Search, X, ArrowRight, BookOpen, FileText, HelpCircle } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
+import { resolveSlugsBySynonym } from '@/lib/search-synonyms'
 
 type SearchResult = {
-  type: "curso" | "pagina" | "topico"
+  type: 'curso' | 'pagina' | 'topico'
   title: string
   description: string
   href: string
@@ -15,14 +15,14 @@ type SearchResult = {
 }
 
 const staticPages: SearchResult[] = [
-  { type: "pagina", title: "Inicio", description: "Pagina principal do G-Lab", href: "/", icon: FileText },
-  { type: "pagina", title: "Cursos", description: "Todos os guias mestre disponiveis", href: "/cursos", icon: BookOpen },
-  { type: "pagina", title: "Contato", description: "Entre em contato conosco", href: "/contato", icon: HelpCircle },
-  { type: "pagina", title: "Login", description: "Acesse sua conta", href: "/login", icon: FileText },
+  { type: 'pagina', title: 'Início', description: 'Página principal do G-Lab', href: '/', icon: FileText },
+  { type: 'pagina', title: 'Cursos', description: 'Todos os guias mestre disponíveis', href: '/cursos', icon: BookOpen },
+  { type: 'pagina', title: 'Contato', description: 'Entre em contato conosco', href: '/contato', icon: HelpCircle },
+  { type: 'pagina', title: 'Login', description: 'Acesse sua conta', href: '/login', icon: FileText },
 ]
 
 export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const [query, setQuery] = useState("")
+  const [query, setQuery] = useState('')
   const [results, setResults] = useState<SearchResult[]>([])
   const [loading, setLoading] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(0)
@@ -36,92 +36,96 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
     }
 
     setLoading(true)
-    const supabase = createClient()
-    const searchLower = searchQuery.toLowerCase()
+    try {
+      const supabase = createClient()
+      const searchLower = searchQuery.toLowerCase()
 
-    // Resolver slugs via sinônimos
-    const synonymSlugs = resolveSlugsBySynonym(searchQuery)
+      // Resolver slugs via sinônimos
+      const synonymSlugs = resolveSlugsBySynonym(searchQuery)
 
-    // Busca direta + por sinônimo em paralelo
-    const [{ data: cursosDiretos }, { data: allCursos }] = await Promise.all([
-      supabase
-        .from("cursos")
-        .select("slug, titulo, descricao, modulos")
-        .eq("ativo", true)
-        .or(`titulo.ilike.%${searchQuery}%,descricao.ilike.%${searchQuery}%,tag.ilike.%${searchQuery}%`)
-        .limit(6),
-      supabase
-        .from("cursos")
-        .select("slug, titulo, modulos")
-        .eq("ativo", true),
-    ])
+      // Busca direta + por sinônimo em paralelo
+      const [{ data: cursosDiretos }, { data: allCursos }] = await Promise.all([
+        supabase
+          .from('cursos')
+          .select('slug, titulo, descricao, modulos')
+          .eq('ativo', true)
+          .or(`titulo.ilike.%${searchQuery}%,descricao.ilike.%${searchQuery}%,tag.ilike.%${searchQuery}%`)
+          .limit(6),
+        supabase
+          .from('cursos')
+          .select('slug, titulo, modulos')
+          .eq('ativo', true),
+      ])
 
-    // Cursos encontrados por busca direta
-    const cursoResults: SearchResult[] = (cursosDiretos || []).map((c: any) => ({
-      type: "curso" as const,
-      title: c.titulo,
-      description: c.descricao?.substring(0, 80) + "..." || "",
-      href: `/cursos/${c.slug}`,
-      icon: BookOpen,
-    }))
-
-    // Cursos encontrados por sinônimo (que ainda não estão nos diretos)
-    const slugsJaIncluidos = new Set(cursoResults.map(r => r.href))
-    const synonymResults: SearchResult[] = (allCursos || [])
-      .filter((c: any) => synonymSlugs.includes(c.slug) && !slugsJaIncluidos.has(`/cursos/${c.slug}`))
-      .map((c: any) => ({
-        type: "curso" as const,
+      // Cursos encontrados por busca direta
+      const cursoResults: SearchResult[] = (cursosDiretos || []).map((c: any) => ({
+        type: 'curso' as const,
         title: c.titulo,
-        description: "Resultado relacionado à sua busca",
+        description: c.descricao?.substring(0, 80) + '...' || '',
         href: `/cursos/${c.slug}`,
         icon: BookOpen,
       }))
 
-    // Busca em módulos e tópicos
-    const topicoResults: SearchResult[] = []
-    ;(allCursos || []).forEach((curso: any) => {
-      ;(curso.modulos || []).forEach((modulo: any) => {
-        if (modulo.titulo?.toLowerCase().includes(searchLower)) {
-          topicoResults.push({
-            type: "topico",
-            title: modulo.titulo,
-            description: `Módulo do curso ${curso.titulo}`,
-            href: `/cursos/${curso.slug}`,
-            icon: FileText,
-          })
-        }
-        ;(modulo.topicos || []).forEach((topico: string) => {
-          if (topico.toLowerCase().includes(searchLower)) {
+      // Cursos encontrados por sinônimo (que ainda não estão nos diretos)
+      const slugsJaIncluidos = new Set(cursoResults.map(r => r.href))
+      const synonymResults: SearchResult[] = (allCursos || [])
+        .filter((c: any) => synonymSlugs.includes(c.slug) && !slugsJaIncluidos.has(`/cursos/${c.slug}`))
+        .map((c: any) => ({
+          type: 'curso' as const,
+          title: c.titulo,
+          description: 'Resultado relacionado à sua busca',
+          href: `/cursos/${c.slug}`,
+          icon: BookOpen,
+        }))
+
+      // Busca em módulos e tópicos
+      const topicoResults: SearchResult[] = []
+      ;(allCursos || []).forEach((curso: any) => {
+        ;(curso.modulos || []).forEach((modulo: any) => {
+          if (modulo.titulo?.toLowerCase().includes(searchLower)) {
             topicoResults.push({
-              type: "topico",
-              title: topico,
-              description: `${modulo.titulo} — ${curso.titulo}`,
+              type: 'topico',
+              title: modulo.titulo,
+              description: `Módulo do curso ${curso.titulo}`,
               href: `/cursos/${curso.slug}`,
               icon: FileText,
             })
           }
+          ;(modulo.topicos || []).forEach((topico: string) => {
+            if (topico.toLowerCase().includes(searchLower)) {
+              topicoResults.push({
+                type: 'topico',
+                title: topico,
+                description: `${modulo.titulo} — ${curso.titulo}`,
+                href: `/cursos/${curso.slug}`,
+                icon: FileText,
+              })
+            }
+          })
         })
       })
-    })
 
-    const pageResults = staticPages.filter(
-      p => p.title.toLowerCase().includes(searchLower) ||
-           p.description.toLowerCase().includes(searchLower)
-    )
+      const pageResults = staticPages.filter(
+        p => p.title.toLowerCase().includes(searchLower) ||
+             p.description.toLowerCase().includes(searchLower)
+      )
 
-    const allResults = [...cursoResults, ...synonymResults, ...topicoResults.slice(0, 3), ...pageResults]
-    const uniqueResults = allResults
-      .filter((r, i, arr) => arr.findIndex(x => x.href === r.href && x.title === r.title) === i)
-      .slice(0, 8)
+      const allResults = [...cursoResults, ...synonymResults, ...topicoResults.slice(0, 3), ...pageResults]
+      const uniqueResults = allResults
+        .filter((r, i, arr) => arr.findIndex(x => x.href === r.href && x.title === r.title) === i)
+        .slice(0, 8)
 
-    setResults(uniqueResults)
+      setResults(uniqueResults)
+    } catch (error) {
+      console.error('[v0] Search error:', error)
+    }
     setLoading(false)
   }, [])
 
   useEffect(() => {
     if (isOpen) {
       inputRef.current?.focus()
-      setQuery("")
+      setQuery('')
       setResults(staticPages.slice(0, 4))
       setSelectedIndex(0)
     }
@@ -138,6 +142,7 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
     <div 
       className="fixed inset-0 z-[100] flex items-start justify-center pt-[20vh] md:pt-[15vh] px-4"
       style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)' }}
+      onClick={onClose}
     >
       <div
         className="relative w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden"
@@ -275,12 +280,6 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
           </span>
         </div>
       </div>
-
-      {/* Overlay para fechar ao clicar fora */}
-      <div 
-        className="absolute inset-0 -z-10"
-        onClick={onClose}
-      />
     </div>
   )
 }
