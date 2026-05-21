@@ -12,29 +12,29 @@ export default function Stats() {
       <div className="max-w-7xl mx-auto">
         <p className="eyebrow mb-8">Internet da Assistência Técnica</p>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {/* Stat 1 */}
           <div className="card p-6 rounded-2xl">
-            <p className="text-5xl font-extrabold text-white mb-2 tracking-tight">30</p>
+            <p className="text-4xl sm:text-5xl font-extrabold text-white mb-2 tracking-tight">30</p>
             <p className="text-xs font-medium tracking-wide" style={{ color: '#71717a' }}>Guias disponíveis</p>
           </div>
 
           {/* Stat 2 */}
           <div className="card p-6 rounded-2xl">
-            <p className="text-5xl font-extrabold text-white mb-2 tracking-tight">1.000+</p>
+            <p className="text-4xl sm:text-5xl font-extrabold text-white mb-2 tracking-tight">1.000+</p>
             <p className="text-xs font-medium tracking-wide" style={{ color: '#71717a' }}>Alunos ativos</p>
           </div>
 
-          {/* Bloco texto — ocupa 2 colunas na linha da direita */}
+          {/* Bloco texto — ocupa 1 coluna mobile, 2 cols em sm+, 2 em lg */}
           <div
-            className="col-span-2 rounded-2xl p-6 flex flex-col justify-between"
+            className="sm:col-span-2 lg:col-span-2 rounded-2xl p-6 flex flex-col justify-between"
             style={{ background: 'linear-gradient(135deg,#1e1b4b 0%,#18181b 100%)', border: '1px solid #27272a' }}
           >
             <div>
-              <p className="text-2xl font-extrabold text-white leading-tight uppercase tracking-tight mb-3">
+              <p className="text-xl sm:text-2xl font-extrabold text-white leading-tight uppercase tracking-tight mb-3">
                 Trabalhamos<br />cirurgicamente
               </p>
-              <p className="text-sm leading-relaxed" style={{ color: '#71717a', maxWidth: '32ch' }}>
+              <p className="text-xs sm:text-sm leading-relaxed" style={{ color: '#71717a', maxWidth: '32ch' }}>
                 Precisão técnica em cada guia. Sem atalhos, sem achismos — só o que funciona na bancada.
               </p>
             </div>
@@ -45,13 +45,13 @@ export default function Stats() {
 
           {/* Stat 3 */}
           <div className="card p-6 rounded-2xl">
-            <p className="text-4xl font-extrabold text-white mb-2 tracking-tight">5 anos</p>
+            <p className="text-3xl sm:text-4xl font-extrabold text-white mb-2 tracking-tight">5 anos</p>
             <p className="text-xs font-medium tracking-wide" style={{ color: '#71717a' }}>De experiência</p>
           </div>
 
           {/* Stat 4 */}
           <div className="card p-6 rounded-2xl">
-            <p className="text-4xl font-extrabold text-white mb-2 tracking-tight">2 horas</p>
+            <p className="text-3xl sm:text-4xl font-extrabold text-white mb-2 tracking-tight">2 horas</p>
             <p className="text-xs font-medium tracking-wide" style={{ color: '#71717a' }}>Tempo médio por módulo</p>
           </div>
         </div>
