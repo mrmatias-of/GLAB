@@ -76,7 +76,7 @@ export default async function Cursos() {
                     src={cat.imagem}
                     alt={cat.titulo}
                     fill
-                    className="object-cover"
+                    className="object-contain"
                     sizes="(max-width: 768px) 100vw, 50vw"
                     priority
                   />
