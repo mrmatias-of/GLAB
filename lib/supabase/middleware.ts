@@ -4,9 +4,6 @@ import { NextResponse, type NextRequest } from 'next/server'
 // Rotas de admin — apenas usuários com is_admin = true
 const adminRoutes = ['/admin']
 
-// Rotas de aluno — apenas usuários autenticados sem role admin
-const studentRoutes = ['/aluno']
-
 // Rotas de auth — usuários logados são redirecionados
 const authRoutes = ['/login']
 
@@ -49,20 +46,18 @@ export async function updateSession(request: NextRequest) {
 
   addSecurityHeaders(response)
 
-  const isAdminRoute   = adminRoutes.some(r => pathname.startsWith(r))
-  const isStudentRoute = studentRoutes.some(r => pathname.startsWith(r))
-  const isAuthRoute    = authRoutes.some(r => pathname.startsWith(r))
-  const isPrivateRoute = isAdminRoute || isStudentRoute
+  const isAdminRoute = adminRoutes.some(r => pathname.startsWith(r))
+  const isAuthRoute  = authRoutes.some(r => pathname.startsWith(r))
 
   // Rotas públicas — nenhuma verificação necessária
-  if (!isPrivateRoute && !isAuthRoute) return response
+  if (!isAdminRoute && !isAuthRoute) return response
 
   // Verifica sessão
   const supabase = createSupabaseClient(request, response)
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Sem sessão tentando acessar área privada → login
-  if (isPrivateRoute && !user) {
+  // Sem sessão tentando acessar área admin → login
+  if (isAdminRoute && !user) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     url.searchParams.set('next', pathname)
@@ -72,25 +67,14 @@ export async function updateSession(request: NextRequest) {
   if (user) {
     const isAdmin = user.user_metadata?.is_admin === true
 
-    // Aluno tentando acessar /admin → redireciona para /aluno (sem acesso)
+    // Não-admin tentando acessar /admin → redireciona para home
     if (isAdminRoute && !isAdmin) {
-      return redirect(request, '/aluno')
+      return redirect(request, '/')
     }
 
-    // Admin tentando acessar /aluno → redireciona para /admin
-    if (isStudentRoute && isAdmin) {
-      return redirect(request, '/admin')
-    }
-
-    // Usuário logado acessando /login → redireciona para a área certa
+    // Usuário logado acessando /login → redireciona para admin se for admin, senão home
     if (isAuthRoute) {
-      const next = request.nextUrl.searchParams.get('next') ?? ''
-      const isValidNext = [...adminRoutes, ...studentRoutes].some(r => next.startsWith(r))
-      // Só honra o ?next= se o usuário tiver permissão para aquela rota
-      const safeNext = isValidNext && (isAdmin ? adminRoutes : studentRoutes).some(r => next.startsWith(r))
-        ? next
-        : isAdmin ? '/admin' : '/aluno'
-      return redirect(request, safeNext)
+      return redirect(request, isAdmin ? '/admin' : '/')
     }
   }
 

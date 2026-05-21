@@ -99,7 +99,6 @@ export async function notifyVenda(data: {
 
   return sendMessage(texto, {
     buttons: [[
-      { text: 'Ver Alunos', url: `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://glabcursos.com.br'}/admin/alunos` },
       { text: 'Ver Vendas',  url: `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://glabcursos.com.br'}/admin/vendas` },
     ]],
   })

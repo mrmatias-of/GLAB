@@ -13,11 +13,11 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   // Bloqueia no servidor caso o middleware seja bypassado
   if (!user || user.user_metadata?.is_admin !== true) {
-    redirect('/aluno')
+    redirect('/')
   }
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen flex" style={{ backgroundColor: '#0B0B0C' }}>
       <AdminSidebar userEmail={user.email ?? ""} />
       <main className="flex-1 overflow-auto">
         {children}

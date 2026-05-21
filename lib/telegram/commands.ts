@@ -8,7 +8,6 @@ import { SupabaseClient } from '@supabase/supabase-js'
 import { replyMessage } from '@/lib/telegram'
 import { handleDashboard } from './handlers/dashboard'
 import { handleVendas }    from './handlers/vendas'
-import { handleAlunos }    from './handlers/alunos'
 import { handleCursos }    from './handlers/cursos'
 import { handleMensagens } from './handlers/mensagens'
 
@@ -40,10 +39,6 @@ export async function handleCommand(ctx: CommandContext): Promise<void> {
       await handleVendas(ctx)
       break
 
-    case '/alunos':
-      await handleAlunos(ctx)
-      break
-
     case '/cursos':
       await handleCursos(ctx)
       break
@@ -73,11 +68,10 @@ function buildHelp(nome: string): string {
   return [
     `Ola, <b>${nome}</b>! Sou o bot administrativo do G-Lab Cursos.`,
     '',
-    '<b>Comandos disponíveis:</b>',
+    '<b>Comandos disponiveis:</b>',
     '',
     '/dashboard  — Visao geral da plataforma',
     '/vendas     — Ultimas vendas e faturamento',
-    '/alunos     — Lista de alunos cadastrados',
     '/cursos     — Cursos publicados',
     '/mensagens  — Mensagens de contato pendentes',
     '/site       — Links rapidos do site',

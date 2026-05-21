@@ -3,16 +3,15 @@
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
-import { Layers, BookOpen, LogOut, Home, LayoutDashboard, MessageSquare, Settings, Sparkles, Users, Receipt } from "lucide-react"
+import { Layers, BookOpen, LogOut, Home, LayoutDashboard, MessageSquare, Settings, Sparkles, Receipt } from "lucide-react"
 
 const navItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Cursos", href: "/admin/cursos", icon: BookOpen },
   { label: "AI Generator", href: "/admin/ai-generator", icon: Sparkles },
-  { label: "Alunos", href: "/admin/alunos", icon: Users },
   { label: "Vendas", href: "/admin/vendas", icon: Receipt },
   { label: "Mensagens", href: "/admin/mensagens", icon: MessageSquare },
-  { label: "Configurações", href: "/admin/config", icon: Settings },
+  { label: "Configuracoes", href: "/admin/config", icon: Settings },
 ]
 
 export default function AdminSidebar({ userEmail }: { userEmail: string }) {
