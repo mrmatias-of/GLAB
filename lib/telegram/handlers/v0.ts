@@ -55,7 +55,7 @@ export async function handleV0(ctx: CommandContext): Promise<void> {
 
   try {
     const { text: response } = await generateText({
-      model: gateway('anthropic/claude-sonnet-4'),
+      model: gateway('openai/gpt-4o-mini'),
       system: SYSTEM_PROMPT,
       prompt: userMessage,
       maxTokens: 1000,
@@ -64,12 +64,13 @@ export async function handleV0(ctx: CommandContext): Promise<void> {
     // Enviar resposta
     await replyMessage(chatId, response || 'Desculpe, nao consegui processar sua solicitacao.')
 
-  } catch (error) {
-    console.error('[v0] Erro ao gerar resposta:', error)
+  } catch (error: any) {
+    console.error('[v0] Erro ao gerar resposta:', error?.message || error)
     await replyMessage(chatId, [
       '❌ <b>Erro ao processar</b>',
       '',
-      'Nao foi possivel gerar uma resposta.',
+      `Erro: ${error?.message || 'Desconhecido'}`,
+      '',
       'Tente novamente em alguns instantes.',
     ].join('\n'))
   }
