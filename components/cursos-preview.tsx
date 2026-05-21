@@ -113,13 +113,13 @@ export default async function CursosPreview() {
                 {/* Texto */}
                 <div className="flex-1 min-w-0">
                   <p
-                    className="text-sm font-bold leading-snug line-clamp-2 mb-1 uppercase tracking-tight transition-colors"
+                    className="text-xs sm:text-sm font-bold leading-snug line-clamp-3 mb-1 uppercase tracking-tight transition-colors"
                     style={{ color: '#fff' }}
                   >
                     {curso.titulo}
                   </p>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-base font-extrabold" style={{ color: '#818cf8' }}>{curso.preco}</span>
+                    <span className="text-sm sm:text-base font-extrabold" style={{ color: '#818cf8' }}>{curso.preco}</span>
                     {curso.preco_original && (
                       <span className="text-xs line-through" style={{ color: '#52525b' }}>{curso.preco_original}</span>
                     )}
