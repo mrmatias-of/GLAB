@@ -3,7 +3,13 @@ import { Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import WhatsAppButton from '@/components/whatsapp-button'
+import { setupErrorHandler } from '@/lib/error-handler'
 import './globals.css'
+
+// Inicializar tratador de erros
+if (typeof window === 'undefined') {
+  setupErrorHandler()
+}
 
 const inter = Inter({
   subsets: ['latin'],
