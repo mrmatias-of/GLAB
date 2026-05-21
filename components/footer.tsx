@@ -19,10 +19,10 @@ export default function Footer() {
       {/* Top glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-px bg-gradient-to-r from-transparent via-cyan/40 to-transparent" />
 
-      <div className="relative max-w-6xl mx-auto px-5 py-14 grid md:grid-cols-3 gap-10">
+      <div className="relative max-w-6xl mx-auto px-5 py-12 grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-10">
 
-        {/* Brand */}
-        <div className="flex flex-col gap-4">
+        {/* Brand — ocupa coluna inteira em mobile */}
+        <div className="col-span-2 md:col-span-1 flex flex-col gap-4">
           <Link href="/" className="flex items-center gap-3 w-fit">
             <div className="w-9 h-9 rounded-xl bg-cyan/15 border border-cyan/30 flex items-center justify-center">
               <span className="text-cyan font-black text-sm">G</span>

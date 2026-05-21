@@ -54,12 +54,12 @@ export default function Depoimentos() {
           </p>
         </div>
 
-        {/* Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* Scroll horizontal em mobile, grid em desktop */}
+        <div className="-mx-5 px-5 md:mx-0 md:px-0 flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-5 md:overflow-visible md:pb-0">
           {depoimentos.map((dep, index) => (
             <div
               key={index}
-              className="flex flex-col bg-[#0a1018] border border-border hover:border-white/10 rounded-2xl p-6 transition-all duration-300"
+              className="flex flex-col bg-[#0a1018] border border-border hover:border-white/10 rounded-2xl p-6 transition-all duration-300 flex-shrink-0 w-[78vw] sm:w-[55vw] snap-start md:w-auto md:flex-shrink"
             >
               {/* Autor no topo */}
               <div className="flex items-center gap-3 mb-5">

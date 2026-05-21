@@ -21,61 +21,61 @@ export default function CursoHero({ curso }: { curso: Curso }) {
       <div className="relative z-10 max-w-5xl mx-auto px-5 w-full">
         {/* Back link */}
         <Link
-          href="/#cursos"
-          className="inline-flex items-center gap-2 text-muted-foreground hover:text-cyan transition-colors text-sm mb-10 group"
+          href="/cursos"
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-cyan transition-colors text-sm mb-8 group"
         >
           <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
           Voltar para os cursos
         </Link>
 
-        <div className="flex flex-col md:flex-row gap-10 items-start">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-10 items-start">
           {/* Left — content */}
           <div className="flex-1">
             {/* Tag */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-cyan/25 bg-cyan/8 px-4 py-1.5 mb-6">
+            <div className="inline-flex items-center gap-2 rounded-full border border-cyan/25 bg-cyan/8 px-4 py-1.5 mb-5">
               <Icon size={12} className="text-cyan" />
               <span className="text-xs font-semibold tracking-[0.18em] text-cyan uppercase">{curso.tag}</span>
             </div>
 
-            <h1 className="text-4xl md:text-6xl font-black text-balance leading-tight mb-5">
+            <h1 className="text-3xl md:text-6xl font-black text-balance leading-tight mb-4">
               {curso.titulo}
             </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed max-w-xl mb-8">
+            <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-xl mb-6">
               {curso.subtitulo}
             </p>
 
             {/* Modules count pill */}
-            <div className="flex flex-wrap gap-3">
-              <div className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2">
+            <div className="flex flex-wrap gap-2">
+              <div className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-1.5">
                 <span className="text-sm font-bold text-cyan">{curso.modulos.length}</span>
                 <span className="text-sm text-muted-foreground">módulos</span>
               </div>
-              <div className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2">
+              <div className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-1.5">
                 <span className="text-sm font-bold text-cyan">
                   {curso.modulos.reduce((acc, m) => acc + m.topicos.length, 0)}
                 </span>
                 <span className="text-sm text-muted-foreground">tópicos</span>
               </div>
-              <div className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2">
+              <div className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-1.5">
                 <Tag size={13} className="text-cyan" />
                 <span className="text-sm text-muted-foreground">Acesso vitalício</span>
               </div>
             </div>
           </div>
 
-          {/* Right — price card */}
+          {/* Right — price card: em mobile fica abaixo do conteúdo com destaque */}
           <div className="w-full md:w-72 shrink-0">
-            <div className="rounded-2xl border border-cyan/20 bg-gradient-to-b from-[#0d1e2e] to-surface p-7 shadow-[0_0_40px_rgba(0,212,200,0.08)]">
+            <div className="rounded-2xl border border-cyan/30 bg-gradient-to-b from-[#0d1e2e] to-surface p-6 md:p-7 shadow-[0_0_40px_rgba(0,212,200,0.12)]">
               {curso.precoOriginal && (
                 <p className="text-sm text-muted-foreground line-through mb-1">{curso.precoOriginal}</p>
               )}
-              <p className="text-5xl font-black text-cyan glow-text mb-1">{curso.preco}</p>
-              <p className="text-xs text-muted-foreground mb-6">pagamento único</p>
+              <p className="text-4xl md:text-5xl font-black text-cyan glow-text mb-1">{curso.preco}</p>
+              <p className="text-xs text-muted-foreground mb-5">pagamento único</p>
               <a
                 href={curso.ctaHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-cyan text-background font-black text-sm px-5 py-3.5 shadow-[0_0_24px_rgba(0,212,200,0.3)] hover:shadow-[0_0_40px_rgba(0,212,200,0.5)] hover:bg-cyan/90 transition-all duration-300"
+                className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-cyan text-background font-black text-base px-5 py-4 shadow-[0_0_24px_rgba(0,212,200,0.3)] hover:shadow-[0_0_40px_rgba(0,212,200,0.5)] hover:bg-cyan/90 transition-all duration-300"
               >
                 {curso.cta}
               </a>

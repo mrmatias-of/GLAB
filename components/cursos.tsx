@@ -73,11 +73,11 @@ export default async function Cursos() {
             className="relative rounded-2xl border border-cyan/30 bg-gradient-to-br from-[#0d1e2e] to-surface shadow-[0_0_60px_rgba(0,212,200,0.12)] card-premium mb-6"
           >
             <span className="shimmer-inner" />
-            <div className="relative z-10 p-8 md:p-10 grid md:grid-cols-2 gap-8 items-center">
+            <div className="relative z-10 p-6 md:p-10 grid md:grid-cols-2 gap-6 md:gap-8 items-center">
               {/* Badge flutuante */}
-              <div className="absolute top-4 right-5 md:top-6 md:right-7 z-20">
+              <div className="absolute top-4 right-4 md:top-6 md:right-7 z-20">
                 <div
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cyan text-background text-[11px] font-black tracking-widest uppercase shadow-[0_0_18px_rgba(0,212,200,0.6)]"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan text-background text-[10px] font-black tracking-widest uppercase shadow-[0_0_18px_rgba(0,212,200,0.6)]"
                   style={{ animation: "float 3s ease-in-out infinite" }}
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-background animate-glow" />
@@ -87,14 +87,14 @@ export default async function Cursos() {
 
               {/* Left */}
               <div>
-                <div className="flex items-center gap-3 mb-5">
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center border bg-cyan/15 border-cyan/30">
-                    <Package size={22} className="text-cyan" strokeWidth={1.5} />
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center border bg-cyan/15 border-cyan/30">
+                    <Package size={18} className="text-cyan" strokeWidth={1.5} />
                   </div>
                   <span className="text-xs font-bold tracking-widest text-cyan uppercase">{cat.tag}</span>
                 </div>
-                <h3 className="text-2xl md:text-3xl font-black text-foreground mb-3">{cat.titulo}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-6">{cat.descricao}</p>
+                <h3 className="text-xl md:text-3xl font-black text-foreground mb-2 pr-16 md:pr-0">{cat.titulo}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-5">{cat.descricao}</p>
                 <div className="flex items-baseline gap-2">
                   {cat.preco_original && (
                     <span className="text-sm text-muted-foreground line-through">{cat.preco_original}</span>
@@ -104,8 +104,8 @@ export default async function Cursos() {
               </div>
 
               {/* Right */}
-              <div className="flex flex-col gap-4">
-                <div className="grid grid-cols-2 gap-2">
+              <div className="flex flex-col gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {(cat.modulos ?? []).map((m) => (
                     <div key={m.titulo} className="flex items-center gap-2 rounded-lg bg-cyan/5 border border-cyan/10 px-3 py-2">
                       <div className="w-1.5 h-1.5 rounded-full bg-cyan flex-shrink-0" />
@@ -115,7 +115,7 @@ export default async function Cursos() {
                 </div>
                 <Link
                   href={`/cursos/${cat.slug}`}
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl font-bold text-sm px-5 py-4 bg-cyan text-background hover:bg-cyan/90 shadow-[0_0_28px_rgba(0,212,200,0.35)] hover:shadow-[0_0_44px_rgba(0,212,200,0.5)] transition-all duration-300 group/btn"
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl font-bold text-sm px-5 py-3.5 bg-cyan text-background hover:bg-cyan/90 shadow-[0_0_28px_rgba(0,212,200,0.35)] hover:shadow-[0_0_44px_rgba(0,212,200,0.5)] transition-all duration-300 group/btn"
                 >
                   Ver Guia Completo
                   <ArrowRight size={15} className="group-hover/btn:translate-x-1 transition-transform" />
@@ -127,7 +127,7 @@ export default async function Cursos() {
 
         {/* Cards Secundários */}
         {secundarios.length > 0 && (
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
             {secundarios.map((cat) => (
               <div
                 key={cat.id}

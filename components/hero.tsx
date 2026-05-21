@@ -25,9 +25,9 @@ export default function Hero() {
       {/* Horizontal line accent */}
       <div className="absolute top-1/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan/20 to-transparent" />
 
-      {/* Decorative spinning ring */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-cyan/5 animate-spin-slow pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full border border-cyan/[0.03] animate-spin-slow pointer-events-none" style={{ animationDirection: "reverse", animationDuration: "30s" }} />
+      {/* Decorative spinning ring — oculto em mobile para não vazar */}
+      <div className="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-cyan/5 animate-spin-slow pointer-events-none" />
+      <div className="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full border border-cyan/[0.03] animate-spin-slow pointer-events-none" style={{ animationDirection: "reverse", animationDuration: "30s" }} />
 
       {/* === Content === */}
       <div className="relative z-10 max-w-4xl mx-auto px-5 text-center pt-28 pb-20 flex flex-col items-center">
@@ -41,7 +41,7 @@ export default function Hero() {
         </div>
 
         {/* Headline */}
-        <h1 className="animate-fade-up delay-200 text-5xl sm:text-6xl md:text-7xl font-black leading-[1.05] tracking-tight text-balance mb-6">
+        <h1 className="animate-fade-up delay-200 text-4xl sm:text-6xl md:text-7xl font-black leading-[1.08] tracking-tight text-balance mb-5">
           Domine a{" "}
           <span className="relative inline-block">
             <span className="glow-text text-cyan">Assistência</span>
@@ -51,38 +51,38 @@ export default function Hero() {
         </h1>
 
         {/* Sub */}
-        <p className="animate-fade-up delay-300 text-base md:text-lg text-muted-foreground leading-relaxed mb-10 max-w-xl">
+        <p className="animate-fade-up delay-300 text-sm md:text-lg text-muted-foreground leading-relaxed mb-8 max-w-xl px-1">
           Guias técnicos criados por quem já reparou mais de{" "}
           <strong className="text-foreground font-semibold">20.000 aparelhos</strong>.
           Métodos que funcionam de verdade, direto na sua bancada.
         </p>
 
         {/* CTAs */}
-        <div className="animate-fade-up delay-400 flex flex-col sm:flex-row items-center gap-3 mb-14">
+        <div className="animate-fade-up delay-400 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-10 w-full sm:w-auto">
           <Link
             href="/cursos"
-            className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-cyan text-background font-bold text-sm hover:bg-cyan/90 transition-all duration-300 shadow-[0_0_30px_rgba(0,212,200,0.4)] hover:shadow-[0_0_50px_rgba(0,212,200,0.55)]"
+            className="group inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-cyan text-background font-bold text-sm hover:bg-cyan/90 transition-all duration-300 shadow-[0_0_30px_rgba(0,212,200,0.4)] hover:shadow-[0_0_50px_rgba(0,212,200,0.55)]"
           >
             Explorar Cursos
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
           </Link>
           <Link
             href="/contato"
-            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl border border-border bg-surface/50 backdrop-blur-sm text-sm font-medium text-foreground/80 hover:text-foreground hover:border-cyan/30 transition-all duration-300"
+            className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl border border-border bg-surface/50 backdrop-blur-sm text-sm font-medium text-foreground/80 hover:text-foreground hover:border-cyan/30 transition-all duration-300"
           >
             Falar Conosco
           </Link>
         </div>
 
         {/* Trust badges */}
-        <div className="animate-fade-up delay-500 flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground">
+        <div className="animate-fade-up delay-500 flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
-            <ShieldCheck size={14} className="text-cyan" />
+            <ShieldCheck size={13} className="text-cyan" />
             <span>Conteúdo Verificado</span>
           </div>
           <div className="w-px h-4 bg-border hidden sm:block" />
           <div className="flex items-center gap-2">
-            <Zap size={14} className="text-cyan" />
+            <Zap size={13} className="text-cyan" />
             <span>Resultados Imediatos</span>
           </div>
           <div className="w-px h-4 bg-border hidden sm:block" />
