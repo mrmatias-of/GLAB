@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import WhatsAppButton from '@/components/whatsapp-button'
 import { VisitorTracker } from '@/components/visitor-tracker'
+import { SocialProofPopup } from '@/components/social-proof-popup'
 import './globals.css'
 
 const inter = Inter({
@@ -70,6 +71,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased">
         <VisitorTracker />
+        <SocialProofPopup />
         {children}
         <WhatsAppButton />
         {process.env.NODE_ENV === 'production' && (

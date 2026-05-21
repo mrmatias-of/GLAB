@@ -105,5 +105,15 @@
   .hover\:scale-102:hover {
     transform: scale(1.02);
   }
+
+  /* Animacao barra de progresso social proof */
+  .animate-shrink {
+    animation: shrink 5s linear forwards;
+  }
+
+  @keyframes shrink {
+    from { width: 100%; }
+    to { width: 0%; }
+  }
 }
 
