@@ -28,7 +28,7 @@ export default function Depoimentos() {
       <div className="max-w-7xl mx-auto">
 
         <p className="eyebrow mb-3">Depoimentos</p>
-        <h2 className="section-title mb-12">O que dizem</h2>
+        <h2 className="section-title mb-12">Opiniões reais</h2>
 
         <div className="grid md:grid-cols-3 gap-4">
           {depoimentos.map((dep, i) => (
