@@ -70,25 +70,13 @@ export default async function CursosPreview() {
                     )}
                     <span className="text-xl font-black text-cyan">{c.preco}</span>
                   </div>
-                  {c.cta_href && c.cta_href !== "#" ? (
-                    <a
-                      href={c.cta_href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-background bg-cyan px-3 py-2 rounded-lg hover:bg-cyan/90 transition-all"
-                    >
-                      Acessar
-                      <ArrowRight size={12} />
-                    </a>
-                  ) : (
-                    <Link
-                      href={`/cursos/${c.slug}`}
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-cyan border border-cyan/30 px-3 py-2 rounded-lg hover:bg-cyan/10 transition-all"
-                    >
-                      Ver mais
-                      <ArrowRight size={12} />
-                    </Link>
-                  )}
+                  <Link
+                    href={`/cursos/${c.slug}`}
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-background bg-cyan px-3 py-2 rounded-lg hover:bg-cyan/90 transition-all"
+                  >
+                    Ver Guia
+                    <ArrowRight size={12} />
+                  </Link>
                 </div>
               </div>
             </div>
