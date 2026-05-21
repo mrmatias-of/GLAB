@@ -44,10 +44,10 @@ export default function Depoimentos() {
         {/* Header */}
         <div className="text-center mb-16">
           <span className="inline-block px-3 py-1 rounded-full text-[10px] font-semibold tracking-widest uppercase bg-cyan/10 text-cyan border border-cyan/20 mb-4">
-            Quem ja usou
+            Quem já comprou
           </span>
           <h2 className="text-3xl md:text-4xl font-black text-foreground mb-4 text-balance">
-            O que estao falando
+            O que estão dizendo
           </h2>
           <p className="text-muted-foreground max-w-md mx-auto text-sm leading-relaxed">
             Tecnicos de todo o Brasil usando os Guias Mestre no dia a dia.
