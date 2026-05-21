@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, ShieldCheck, Zap } from "lucide-react"
+import { ArrowRight, ShieldCheck, Zap, Award } from "lucide-react"
 
 export default function Hero() {
   return (
@@ -9,86 +9,95 @@ export default function Hero() {
     >
       {/* === Background layers === */}
 
-      {/* Deep radial nebula */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(0,212,200,0.12)_0%,transparent_70%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_40%_at_80%_80%,rgba(0,120,200,0.06)_0%,transparent_70%)]" />
+      {/* Deep radial glow - estilo mockup */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_-5%,rgba(0,212,200,0.18)_0%,transparent_60%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_50%_at_100%_100%,rgba(0,140,255,0.08)_0%,transparent_60%)]" />
 
-      {/* Dot grid */}
+      {/* Subtle dot grid */}
       <div
-        className="absolute inset-0 opacity-20"
+        className="absolute inset-0 opacity-[0.15]"
         style={{
-          backgroundImage: `radial-gradient(circle, rgba(0,212,200,0.35) 1px, transparent 1px)`,
-          backgroundSize: "36px 36px",
+          backgroundImage: `radial-gradient(circle, rgba(0,212,200,0.4) 1px, transparent 1px)`,
+          backgroundSize: "40px 40px",
         }}
       />
 
-      {/* Horizontal line accent */}
-      <div className="absolute top-1/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan/20 to-transparent" />
+      {/* Horizontal accent lines */}
+      <div className="absolute top-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan/15 to-transparent" />
+      <div className="absolute top-3/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan/10 to-transparent" />
 
-      {/* Decorative spinning ring — oculto em mobile para não vazar */}
-      <div className="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-cyan/5 animate-spin-slow pointer-events-none" />
-      <div className="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full border border-cyan/[0.03] animate-spin-slow pointer-events-none" style={{ animationDirection: "reverse", animationDuration: "30s" }} />
+      {/* Decorative glow orbs */}
+      <div className="hidden md:block absolute top-1/3 left-1/4 w-64 h-64 bg-cyan/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="hidden md:block absolute bottom-1/3 right-1/4 w-48 h-48 bg-blue-500/10 rounded-full blur-[80px] pointer-events-none" />
 
       {/* === Content === */}
       <div className="relative z-10 max-w-4xl mx-auto px-5 text-center pt-28 pb-20 flex flex-col items-center">
 
-        {/* Badge */}
-        <div className="animate-fade-up delay-100 inline-flex items-center gap-2 rounded-full border border-cyan/25 bg-cyan/8 px-4 py-1.5 mb-8 backdrop-blur-sm">
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan animate-glow" />
-          <span className="text-xs font-semibold tracking-[0.2em] text-cyan uppercase">
-            G•Lab Cursos &mdash; Guias Mestre
+        {/* Badge pill */}
+        <div className="animate-fade-up delay-100 inline-flex items-center gap-2.5 rounded-full border border-cyan/30 bg-cyan/10 px-5 py-2 mb-8 backdrop-blur-sm shadow-[0_0_20px_rgba(0,212,200,0.15)]">
+          <span className="w-2 h-2 rounded-full bg-cyan animate-pulse shadow-[0_0_8px_rgba(0,212,200,0.8)]" />
+          <span className="text-xs font-bold tracking-[0.15em] text-cyan uppercase">
+            Guias Mestre &mdash; Assistência Técnica
           </span>
         </div>
 
+        {/* Elegant script text */}
+        <p className="animate-fade-up delay-150 text-cyan/80 text-lg md:text-xl font-light italic mb-3 tracking-wide">
+          Profissional
+        </p>
+
         {/* Headline */}
-        <h1 className="animate-fade-up delay-200 text-4xl sm:text-6xl md:text-7xl font-black leading-[1.08] tracking-tight text-balance mb-5">
-          Domine a{" "}
-          <span className="relative inline-block">
-            <span className="glow-text text-cyan">Assistência</span>
-          </span>
+        <h1 className="animate-fade-up delay-200 text-4xl sm:text-6xl md:text-7xl font-black leading-[1.05] tracking-tight mb-5">
+          <span className="text-foreground">Assistência Técnica</span>
           <br />
-          <span className="text-foreground/90">Técnica de Ponta.</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan via-cyan to-blue-400 drop-shadow-[0_0_30px_rgba(0,212,200,0.5)]">
+            de Alta Performance
+          </span>
         </h1>
 
         {/* Sub */}
-        <p className="animate-fade-up delay-300 text-sm md:text-lg text-muted-foreground leading-relaxed mb-8 max-w-xl px-1">
+        <p className="animate-fade-up delay-300 text-sm md:text-lg text-muted-foreground leading-relaxed mb-10 max-w-xl px-2">
           Guias técnicos criados por quem já reparou mais de{" "}
           <strong className="text-foreground font-semibold">20.000 aparelhos</strong>.
-          Métodos que funcionam de verdade, direto na sua bancada.
+          Métodos testados na prática, direto para sua bancada.
         </p>
 
         {/* CTAs */}
-        <div className="animate-fade-up delay-400 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-10 w-full sm:w-auto">
+        <div className="animate-fade-up delay-400 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-14 w-full sm:w-auto">
           <Link
             href="/cursos"
-            className="group inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-cyan text-background font-bold text-sm hover:bg-cyan/90 transition-all duration-300 shadow-[0_0_30px_rgba(0,212,200,0.4)] hover:shadow-[0_0_50px_rgba(0,212,200,0.55)]"
+            className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-cyan to-cyan/90 text-background font-bold text-sm hover:from-cyan/90 hover:to-cyan transition-all duration-300 shadow-[0_0_30px_rgba(0,212,200,0.4)] hover:shadow-[0_0_50px_rgba(0,212,200,0.6)]"
           >
             Explorar Cursos
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
           </Link>
           <Link
             href="/contato"
-            className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl border border-border bg-surface/50 backdrop-blur-sm text-sm font-medium text-foreground/80 hover:text-foreground hover:border-cyan/30 transition-all duration-300"
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm text-sm font-medium text-foreground/90 hover:text-foreground hover:border-cyan/30 hover:bg-white/10 transition-all duration-300"
           >
             Falar Conosco
           </Link>
         </div>
 
-        {/* Trust badges */}
-        <div className="animate-fade-up delay-500 flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <ShieldCheck size={13} className="text-cyan" />
-            <span>Conteúdo Verificado</span>
+        {/* Feature pills - estilo mockup com ícones circulares */}
+        <div className="animate-fade-up delay-500 flex flex-wrap items-center justify-center gap-4 md:gap-6">
+          <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full px-4 py-2.5 backdrop-blur-sm hover:border-cyan/30 transition-all">
+            <div className="w-8 h-8 rounded-full bg-cyan/15 border border-cyan/30 flex items-center justify-center shadow-[0_0_12px_rgba(0,212,200,0.3)]">
+              <ShieldCheck size={14} className="text-cyan" />
+            </div>
+            <span className="text-xs font-medium text-foreground/80">Conteúdo Verificado</span>
           </div>
-          <div className="w-px h-4 bg-border hidden sm:block" />
-          <div className="flex items-center gap-2">
-            <Zap size={13} className="text-cyan" />
-            <span>Resultados Imediatos</span>
+          <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full px-4 py-2.5 backdrop-blur-sm hover:border-cyan/30 transition-all">
+            <div className="w-8 h-8 rounded-full bg-cyan/15 border border-cyan/30 flex items-center justify-center shadow-[0_0_12px_rgba(0,212,200,0.3)]">
+              <Zap size={14} className="text-cyan" />
+            </div>
+            <span className="text-xs font-medium text-foreground/80">Resultados Imediatos</span>
           </div>
-          <div className="w-px h-4 bg-border hidden sm:block" />
-          <div className="flex items-center gap-2">
-            <span className="text-cyan font-bold">20K+</span>
-            <span>Aparelhos Reparados</span>
+          <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full px-4 py-2.5 backdrop-blur-sm hover:border-cyan/30 transition-all">
+            <div className="w-8 h-8 rounded-full bg-cyan/15 border border-cyan/30 flex items-center justify-center shadow-[0_0_12px_rgba(0,212,200,0.3)]">
+              <Award size={14} className="text-cyan" />
+            </div>
+            <span className="text-xs font-medium text-foreground/80">20K+ Reparos</span>
           </div>
         </div>
       </div>
