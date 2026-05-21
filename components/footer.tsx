@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Instagram, Youtube, Mail } from "lucide-react"
+import { Instagram, Youtube, Mail, MapPin } from "lucide-react"
 
 const links = [
   { label: "Início", href: "/" },
@@ -82,8 +82,12 @@ export default function Footer() {
           >
             contato@glabcursos.com.br
           </a>
-          <p className="text-xs text-muted-foreground mt-2">
-            Seg a Sex &mdash; 9h às 18h
+          <div className="flex items-center gap-2 text-sm text-muted-foreground mt-2">
+            <MapPin size={14} className="text-cyan flex-shrink-0" />
+            <span>Paulinia, SP - Brasil</span>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Seg a Sex &mdash; 9h as 18h
           </p>
         </div>
       </div>

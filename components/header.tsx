@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, X, LogIn } from "lucide-react"
+import { Menu, X, LogIn, Search } from "lucide-react"
+import SearchModal from "@/components/search-modal"
 
 const links = [
   { label: "Início", href: "/" },
@@ -14,12 +15,25 @@ const links = [
 export default function Header() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
   const pathname = usePathname()
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20)
     window.addEventListener("scroll", handler)
     return () => window.removeEventListener("scroll", handler)
+  }, [])
+
+  // Atalho Ctrl+K ou Cmd+K para abrir busca
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault()
+        setSearchOpen(true)
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
   }, [])
 
   // Fecha menu mobile ao navegar
@@ -67,8 +81,18 @@ export default function Header() {
           })}
         </nav>
 
-        {/* CTA */}
+        {/* Search + CTA */}
         <div className="hidden md:flex items-center gap-3">
+          <button
+            onClick={() => setSearchOpen(true)}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border hover:border-cyan/30 text-muted-foreground hover:text-foreground transition-all duration-200 group"
+          >
+            <Search size={16} />
+            <span className="text-sm">Buscar</span>
+            <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-white/5 border border-border text-[10px] font-mono text-muted-foreground group-hover:border-cyan/20">
+              <span className="text-[9px]">⌘</span>K
+            </kbd>
+          </button>
           <Link
             href="/login"
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground border border-border hover:border-cyan/30 transition-all duration-200"
@@ -126,6 +150,9 @@ export default function Header() {
           </Link>
         </div>
       )}
+
+      {/* Search Modal */}
+      <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
   )
 }
