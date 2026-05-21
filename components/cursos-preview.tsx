@@ -99,7 +99,7 @@ export default async function CursosPreview() {
                 }}
               >
                 {/* Thumbnail */}
-                <div className="relative rounded-xl overflow-hidden flex-shrink-0 transition-transform duration-300 group-hover:scale-110" style={{ width: 80, height: 80 }}>
+                <div className="relative rounded-xl overflow-hidden flex-shrink-0 transition-transform duration-300 group-hover:scale-110 bg-zinc-900" style={{ width: 80, height: 80 }}>
                   {curso.imagem ? (
                     <Image
                       src={curso.imagem}
@@ -107,6 +107,8 @@ export default async function CursosPreview() {
                       fill
                       className="object-cover transition-brightness duration-300 group-hover:brightness-125"
                       sizes="80px"
+                      loading="lazy"
+                      placeholder="empty"
                     />
                   ) : (
                     <div className="w-full h-full" style={{ background: '#18181b' }} />

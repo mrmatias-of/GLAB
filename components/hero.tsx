@@ -71,13 +71,21 @@ export default async function Hero() {
             {thumbnails.length > 0 && (
               <div className="flex flex-col gap-3 w-28">
                 {thumbnails.map((c) => (
-                  <Link key={c.id} href={`/cursos/${c.slug}`} className="relative rounded-xl overflow-hidden flex-1 block" style={{ minHeight: 100 }}>
+                  <Link key={c.id} href={`/cursos/${c.slug}`} className="relative rounded-xl overflow-hidden flex-1 block group hover:shadow-lg transition-shadow duration-300 bg-zinc-900" style={{ minHeight: 100 }}>
                     {c.imagem ? (
-                      <Image src={c.imagem} alt={c.titulo} fill className="object-cover" sizes="112px" />
+                      <Image 
+                        src={c.imagem} 
+                        alt={c.titulo} 
+                        fill 
+                        className="object-cover transition-transform duration-300 group-hover:scale-110" 
+                        sizes="112px"
+                        loading="lazy"
+                        placeholder="empty"
+                      />
                     ) : (
                       <div className="w-full h-full" style={{ background: '#18181b' }} />
                     )}
-                    <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.35)' }} />
+                    <div className="absolute inset-0 transition-opacity duration-300 group-hover:opacity-0" style={{ background: 'rgba(0,0,0,0.35)' }} />
                   </Link>
                 ))}
               </div>

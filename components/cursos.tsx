@@ -69,24 +69,24 @@ export default async function Cursos() {
               className="relative rounded-3xl overflow-hidden border border-white/10 bg-[#0a0a0a] mb-8"
             >
               <div className="grid md:grid-cols-2">
-                {/* Imagem */}
-                <div className="relative aspect-video md:aspect-auto md:min-h-[400px]">
-                  {cat.imagem ? (
-                    <Image
-                      src={cat.imagem}
-                      alt={cat.titulo}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      priority
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-violet-600/30 to-purple-600/20 flex items-center justify-center">
-                      <Icon size={48} className="text-violet-400/30" />
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#0a0a0a] hidden md:block" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent md:hidden" />
+              {/* Imagem */}
+              <div className="relative aspect-video md:aspect-auto md:min-h-[400px] bg-zinc-900">
+                {cat.imagem ? (
+                  <Image
+                    src={cat.imagem}
+                    alt={cat.titulo}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    priority
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-violet-600/30 to-purple-600/20 flex items-center justify-center">
+                    <Icon size={48} className="text-violet-400/30" />
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#0a0a0a] hidden md:block" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent md:hidden" />
                   
                   {/* Badge */}
                   <div className="absolute top-6 left-6">
@@ -144,7 +144,7 @@ export default async function Cursos() {
                   className="group relative rounded-3xl overflow-hidden border border-white/10 bg-[#0a0a0a] hover:border-violet-500/30 transition-all flex flex-col"
                 >
                   {/* Thumbnail */}
-                  <div className="relative aspect-video">
+                  <div className="relative aspect-video bg-zinc-900">
                     {cat.imagem ? (
                       <Image
                         src={cat.imagem}
@@ -152,6 +152,8 @@ export default async function Cursos() {
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        loading="lazy"
+                        placeholder="empty"
                       />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-violet-600/20 to-purple-600/10 flex items-center justify-center">
