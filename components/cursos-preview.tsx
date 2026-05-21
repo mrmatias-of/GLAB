@@ -92,17 +92,20 @@ export default async function CursosPreview() {
               <Link
                 key={curso.id}
                 href={`/cursos/${curso.slug}`}
-                className="group flex gap-4 items-center rounded-2xl p-4 transition-colors"
-                style={{ backgroundColor: '#111113', border: '1px solid #27272a' }}
+                className="group flex gap-4 items-center rounded-2xl p-4 transition-all duration-300 hover:scale-102 hover:-translate-y-1"
+                style={{ 
+                  backgroundColor: '#111113', 
+                  border: '1px solid #27272a',
+                }}
               >
                 {/* Thumbnail */}
-                <div className="relative rounded-xl overflow-hidden flex-shrink-0" style={{ width: 80, height: 80 }}>
+                <div className="relative rounded-xl overflow-hidden flex-shrink-0 transition-transform duration-300 group-hover:scale-110" style={{ width: 80, height: 80 }}>
                   {curso.imagem ? (
                     <Image
                       src={curso.imagem}
                       alt={curso.titulo}
                       fill
-                      className="object-cover"
+                      className="object-cover transition-brightness duration-300 group-hover:brightness-125"
                       sizes="80px"
                     />
                   ) : (
@@ -113,20 +116,20 @@ export default async function CursosPreview() {
                 {/* Texto */}
                 <div className="flex-1 min-w-0">
                   <p
-                    className="text-xs sm:text-sm font-bold leading-snug line-clamp-3 mb-1 uppercase tracking-tight transition-colors"
+                    className="text-xs sm:text-sm font-bold leading-snug line-clamp-3 mb-1 uppercase tracking-tight transition-colors group-hover:text-indigo-300"
                     style={{ color: '#fff' }}
                   >
                     {curso.titulo}
                   </p>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-sm sm:text-base font-extrabold" style={{ color: '#818cf8' }}>{curso.preco}</span>
+                    <span className="text-sm sm:text-base font-extrabold transition-colors group-hover:text-indigo-400" style={{ color: '#818cf8' }}>{curso.preco}</span>
                     {curso.preco_original && (
                       <span className="text-xs line-through" style={{ color: '#52525b' }}>{curso.preco_original}</span>
                     )}
                   </div>
                 </div>
 
-                <ArrowRight size={15} className="flex-shrink-0 transition-transform group-hover:translate-x-1" style={{ color: '#52525b' }} />
+                <ArrowRight size={15} className="flex-shrink-0 transition-all duration-300 group-hover:translate-x-1 group-hover:text-indigo-400" style={{ color: '#52525b' }} />
               </Link>
             ))}
           </div>

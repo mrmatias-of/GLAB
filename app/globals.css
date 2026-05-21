@@ -100,5 +100,10 @@
     color: #ffffff;
     line-height: 1.1;
   }
+
+  /* Efeito hover customizado para cards */
+  .hover\:scale-102:hover {
+    transform: scale(1.02);
+  }
 }
 
