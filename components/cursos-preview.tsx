@@ -50,7 +50,7 @@ export default async function CursosPreview() {
                 src={featured.imagem}
                 alt={featured.titulo}
                 fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                className="object-contain object-center transition-transform duration-500 group-hover:scale-105 p-4"
                 sizes="(max-width: 1024px) 100vw, 60vw"
               />
             ) : (
