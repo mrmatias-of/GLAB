@@ -1,39 +1,84 @@
+import Link from "next/link"
+
 export default function Footer() {
   return (
-    <footer className="border-t border-gray-800 bg-black py-12 px-5">
+    <footer
+      className="px-6 pt-14 pb-8"
+      style={{ backgroundColor: '#0B0B0C', borderTop: '1px solid #27272a' }}
+    >
       <div className="max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-4 gap-8 mb-8">
+        <div className="grid md:grid-cols-4 gap-10 mb-12">
+
+          {/* Brand */}
           <div>
-            <h3 className="font-bold text-white mb-4">G•LAB</h3>
-            <p className="text-sm text-gray-400">Guias técnicos profissionais</p>
+            <p className="text-white font-extrabold tracking-widest uppercase text-sm mb-3">G•LAB</p>
+            <p className="text-sm leading-relaxed" style={{ color: '#52525b' }}>
+              Guias técnicos práticos para profissionais de assistência técnica.
+            </p>
           </div>
+
+          {/* Navegação */}
           <div>
-            <h4 className="font-semibold text-white mb-4">Navegação</h4>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li><a href="/" className="hover:text-white">Home</a></li>
-              <li><a href="/cursos" className="hover:text-white">Cursos</a></li>
-              <li><a href="#" className="hover:text-white">Sobre</a></li>
+            <p className="eyebrow mb-4">Navegação</p>
+            <ul className="space-y-2.5">
+              {['Home', 'Cursos', 'Contato'].map((l) => (
+                <li key={l}>
+                  <Link
+                    href={l === 'Home' ? '/' : `/${l.toLowerCase()}`}
+                    className="text-sm transition-colors"
+                    style={{ color: '#71717a' }}
+                  >
+                    {l}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
+
+          {/* Legal */}
           <div>
-            <h4 className="font-semibold text-white mb-4">Legal</h4>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li><a href="#" className="hover:text-white">Termos</a></li>
-              <li><a href="#" className="hover:text-white">Privacidade</a></li>
-              <li><a href="#" className="hover:text-white">Contato</a></li>
+            <p className="eyebrow mb-4">Legal</p>
+            <ul className="space-y-2.5">
+              {['Termos de Uso', 'Privacidade', 'Reembolso'].map((l) => (
+                <li key={l}>
+                  <a href="#" className="text-sm transition-colors" style={{ color: '#71717a' }}>{l}</a>
+                </li>
+              ))}
             </ul>
           </div>
+
+          {/* Contato */}
           <div>
-            <h4 className="font-semibold text-white mb-4">Contato</h4>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li><a href="#" className="hover:text-white">Email</a></li>
-              <li><a href="#" className="hover:text-white">WhatsApp</a></li>
-              <li><a href="#" className="hover:text-white">Suporte</a></li>
+            <p className="eyebrow mb-4">Contato</p>
+            <ul className="space-y-2.5">
+              <li>
+                <a
+                  href="https://wa.me/5519989398294"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm transition-colors"
+                  style={{ color: '#71717a' }}
+                >
+                  WhatsApp
+                </a>
+              </li>
+              <li>
+                <a href="mailto:contato@glabcursos.com.br" className="text-sm transition-colors" style={{ color: '#71717a' }}>
+                  contato@glabcursos.com.br
+                </a>
+              </li>
             </ul>
           </div>
+
         </div>
-        <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
-          <p>&copy; 2024 G•LAB. Todos os direitos reservados.</p>
+
+        {/* Rodapé */}
+        <div
+          className="flex flex-col md:flex-row items-center justify-between gap-2 pt-6 text-xs"
+          style={{ borderTop: '1px solid #27272a', color: '#3f3f46' }}
+        >
+          <p>&copy; {new Date().getFullYear()} G•LAB Cursos. Todos os direitos reservados.</p>
+          <p>Paulínia, SP — Brasil</p>
         </div>
       </div>
     </footer>

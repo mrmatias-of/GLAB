@@ -5,9 +5,10 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import WhatsAppButton from '@/components/whatsapp-button'
 import './globals.css'
 
-const inter = Inter({ 
-  subsets: ['latin'], 
+const inter = Inter({
+  subsets: ['latin'],
   variable: '--font-inter',
+  weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
   preload: true,
 })
@@ -60,7 +61,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR" className={`${inter.variable} bg-black`}>
+    <html lang="pt-BR" className={`${inter.variable}`} style={{ backgroundColor: '#0B0B0C' }}>
       <head>
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

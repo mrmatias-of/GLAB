@@ -1,27 +1,58 @@
+const ITEMS = [
+  { value: '30',    label: 'Guias disponíveis',    wide: false },
+  { value: '1.000+', label: 'Alunos ativos',       wide: false },
+  { value: 'Trabalhamos\ncirurgicamente', label: 'Precisão técnica em cada guia. Sem atalhos, sem achismos.', wide: true },
+  { value: '5 anos', label: 'De experiência',      wide: false },
+  { value: '2 horas', label: 'Tempo médio por módulo', wide: false },
+]
+
 export default function Stats() {
   return (
-    <section className="py-12 px-5">
+    <section className="px-6 py-16" style={{ backgroundColor: '#0B0B0C' }}>
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-gray-900 rounded-2xl p-6">
-            <p className="text-4xl font-bold text-white mb-1">30</p>
-            <p className="text-sm text-gray-400">Guias</p>
+        <p className="eyebrow mb-8">Internet da Assistência Técnica</p>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {/* Stat 1 */}
+          <div className="card p-6 rounded-2xl">
+            <p className="text-5xl font-extrabold text-white mb-2 tracking-tight">30</p>
+            <p className="text-xs font-medium tracking-wide" style={{ color: '#71717a' }}>Guias disponíveis</p>
           </div>
-          <div className="bg-gray-900 rounded-2xl p-6">
-            <p className="text-4xl font-bold text-white mb-1">1000+</p>
-            <p className="text-sm text-gray-400">Alunos ativos</p>
+
+          {/* Stat 2 */}
+          <div className="card p-6 rounded-2xl">
+            <p className="text-5xl font-extrabold text-white mb-2 tracking-tight">1.000+</p>
+            <p className="text-xs font-medium tracking-wide" style={{ color: '#71717a' }}>Alunos ativos</p>
           </div>
-          <div className="bg-purple-900/30 border border-purple-700/30 rounded-2xl p-6 col-span-2 md:col-span-1">
-            <p className="text-2xl font-bold text-white mb-1">24/7</p>
-            <p className="text-sm text-gray-400">Suporte</p>
+
+          {/* Bloco texto — ocupa 2 colunas na linha da direita */}
+          <div
+            className="col-span-2 rounded-2xl p-6 flex flex-col justify-between"
+            style={{ background: 'linear-gradient(135deg,#1e1b4b 0%,#18181b 100%)', border: '1px solid #27272a' }}
+          >
+            <div>
+              <p className="text-2xl font-extrabold text-white leading-tight uppercase tracking-tight mb-3">
+                Trabalhamos<br />cirurgicamente
+              </p>
+              <p className="text-sm leading-relaxed" style={{ color: '#71717a', maxWidth: '32ch' }}>
+                Precisão técnica em cada guia. Sem atalhos, sem achismos — só o que funciona na bancada.
+              </p>
+            </div>
+            <a href="/cursos" className="btn-primary mt-5 self-start text-xs py-2 px-5">
+              Ver Cursos
+            </a>
           </div>
-          <div className="bg-gray-900 rounded-2xl p-6">
-            <p className="text-2xl font-bold text-white mb-1">5 anos</p>
-            <p className="text-sm text-gray-400">Experiência</p>
+
+          {/* Stat 3 */}
+          <div className="card p-6 rounded-2xl">
+            <p className="text-4xl font-extrabold text-white mb-2 tracking-tight">5 anos</p>
+            <p className="text-xs font-medium tracking-wide" style={{ color: '#71717a' }}>De experiência</p>
           </div>
-          <div className="bg-gray-900 rounded-2xl p-6">
-            <p className="text-2xl font-bold text-white mb-1">2 h</p>
-            <p className="text-sm text-gray-400">Por módulo</p>
+
+          {/* Stat 4 */}
+          <div className="card p-6 rounded-2xl">
+            <p className="text-4xl font-extrabold text-white mb-2 tracking-tight">2 horas</p>
+            <p className="text-xs font-medium tracking-wide" style={{ color: '#71717a' }}>Tempo médio por módulo</p>
           </div>
         </div>
       </div>

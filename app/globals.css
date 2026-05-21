@@ -2,38 +2,103 @@
 
 @theme inline {
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Paleta principal */
+  --color-bg:        #0B0B0C;
+  --color-surface:   #111113;
+  --color-surface-2: #18181b;
+  --color-border:    #27272a;
+  --color-text:      #ffffff;
+  --color-muted:     #71717a;
+  --color-accent:    #4f46e5;   /* Indigo — cor de destaque sólida */
+  --color-accent-2:  #7c3aed;   /* Violeta — segundo tom do gradiente */
 }
 
 @layer base {
-  * {
-    @apply m-0 p-0;
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
   }
 
-  html,
-  body {
-    @apply bg-black text-white;
+  html {
+    background-color: #0B0B0C;
+    color: #ffffff;
+    scroll-behavior: smooth;
   }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #0B0B0C;
+    color: #ffffff;
+  }
+
+  /* Scrollbar discreta */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: #0B0B0C; }
+  ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 9999px; }
 }
 
+/* Botão CTA principal — gradiente azul→roxo sem glow */
 @layer components {
-  .card-rounded {
-    @apply rounded-3xl;
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 2rem;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 0.5rem;
+    transition: opacity 0.2s;
+  }
+  .btn-primary:hover { opacity: 0.88; }
+
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 2rem;
+    border: 1px solid #27272a;
+    color: #a1a1aa;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: 0.5rem;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-outline:hover { border-color: #52525b; color: #fff; }
+
+  /* Card padrão */
+  .card {
+    background-color: #111113;
+    border: 1px solid #27272a;
+    border-radius: 1rem;
   }
 
-  .text-primary {
-    @apply text-white;
+  /* Eyebrow — label acima dos títulos */
+  .eyebrow {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #71717a;
   }
 
-  .text-secondary {
-    @apply text-gray-400;
-  }
-
-  .bg-card {
-    @apply bg-gray-900;
-  }
-
-  .border-card {
-    @apply border border-gray-800;
+  /* Título de seção padrão */
+  .section-title {
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: #ffffff;
+    line-height: 1.1;
   }
 }
 
