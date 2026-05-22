@@ -25,8 +25,8 @@ export const metadata: Metadata = {
   authors: [{ name: 'G•Lab Cursos' }],
   creator: 'G•Lab Cursos',
   icons: {
-    icon: '/logo-glab-neon.png',
-    shortcut: '/logo-glab-neon.png',
+    icon: '/logo-glab-neon-transparent.png',
+    shortcut: '/logo-glab-neon-transparent.png',
   },
   robots: {
     index: true,

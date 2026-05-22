@@ -14,13 +14,12 @@ export default function Footer() {
           <div>
             <Link href="/" className="flex items-center gap-2 mb-3 hover:opacity-80 transition-opacity w-fit">
               <Image
-                src="/logo-glab-neon.png"
+                src="/logo-glab-neon-transparent.png"
                 alt="G-LAB Logo"
-                width={24}
-                height={24}
-                className="w-6 h-6"
+                width={32}
+                height={32}
+                className="w-8 h-8"
               />
-              <span className="text-white font-extrabold tracking-widest uppercase text-xs">G•LAB</span>
             </Link>
             <p className="text-sm leading-relaxed" style={{ color: '#52525b' }}>
               Guias técnicos práticos para profissionais de assistência técnica.
