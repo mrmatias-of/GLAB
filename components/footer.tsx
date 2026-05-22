@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 
 export default function Footer() {
   return (
@@ -11,7 +12,16 @@ export default function Footer() {
 
           {/* Brand */}
           <div>
-            <p className="text-white font-extrabold tracking-widest uppercase text-sm mb-3">G•LAB</p>
+            <Link href="/" className="flex items-center gap-2 mb-3 hover:opacity-80 transition-opacity w-fit">
+              <Image
+                src="/logo-glab-neon.png"
+                alt="G-LAB Logo"
+                width={24}
+                height={24}
+                className="w-6 h-6"
+              />
+              <span className="text-white font-extrabold tracking-widest uppercase text-xs">G•LAB</span>
+            </Link>
             <p className="text-sm leading-relaxed" style={{ color: '#52525b' }}>
               Guias técnicos práticos para profissionais de assistência técnica.
             </p>

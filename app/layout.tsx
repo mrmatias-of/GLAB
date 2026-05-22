@@ -24,6 +24,10 @@ export const metadata: Metadata = {
   keywords: 'curso reparo iPhone, curso reparo Android, assistência técnica, guia técnico, G•Lab Cursos',
   authors: [{ name: 'G•Lab Cursos' }],
   creator: 'G•Lab Cursos',
+  icons: {
+    icon: '/logo-glab-neon.png',
+    shortcut: '/logo-glab-neon.png',
+  },
   robots: {
     index: true,
     follow: true,

@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { Menu, X, Search } from 'lucide-react'
 import { useState } from 'react'
 import SearchModal from './search-modal'
@@ -23,11 +24,17 @@ export default function Header() {
       >
         <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
           {/* Logo */}
-          <Link
-            href="/"
-            className="text-white font-extrabold tracking-widest uppercase text-sm"
-          >
-            G•LAB
+          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <Image
+              src="/logo-glab-neon.png"
+              alt="G-LAB Logo"
+              width={32}
+              height={32}
+              className="w-8 h-8"
+            />
+            <span className="text-white font-extrabold tracking-widest uppercase text-xs hidden sm:inline">
+              G•LAB
+            </span>
           </Link>
 
           {/* Nav desktop */}
