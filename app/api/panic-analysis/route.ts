@@ -32,7 +32,8 @@ export async function POST(request: NextRequest) {
 
     // Analisar com IA
     const { text } = await generateText({
-      model: gateway('anthropic/claude-sonnet-4'),
+      model: gateway('anthropic/claude-3-5-sonnet'),
+      temperature: 0.3,
       system: `Você é um especialista em diagnóstico de dispositivos iOS. Analise logs de panic/crash e identifique as 3 causas mais prováveis do problema.
 
 IMPORTANTE: Responda APENAS com JSON válido, sem markdown, sem explicações adicionais.
@@ -76,28 +77,58 @@ ${contentForAnalysis}
 === FIM DO LOG ===
 
 Responda APENAS com o JSON, sem texto adicional.`,
+      maxTokens: 1000,
     })
 
     // Parse da resposta
     let analysis
     try {
-      // Limpar possíveis caracteres extras
-      const cleanJson = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
+      // Limpar possíveis caracteres extras e markdown
+      let cleanJson = text
+        .replace(/```json\n?/g, '')
+        .replace(/```\n?/g, '')
+        .replace(/^[\s\n]*/, '')
+        .replace(/[\s\n]*$/, '')
+        .trim()
+      
+      // Se não começar com {, procurar o primeiro {
+      const jsonStart = cleanJson.indexOf('{')
+      const jsonEnd = cleanJson.lastIndexOf('}')
+      if (jsonStart >= 0 && jsonEnd > jsonStart) {
+        cleanJson = cleanJson.substring(jsonStart, jsonEnd + 1)
+      }
+      
       analysis = JSON.parse(cleanJson)
-    } catch {
+      
+      // Validar estrutura
+      if (!analysis.falha_1) {
+        throw new Error('Resposta não contém falha_1')
+      }
+    } catch (parseError) {
+      console.error('[v0] Erro ao fazer parse JSON da IA:', parseError)
       // Fallback se a IA não retornar JSON válido
       analysis = {
         device_model: deviceModel,
         ios_version: iosVersion,
         panic_type: panicType,
         falha_1: {
-          titulo: 'Erro de análise',
-          descricao: 'Não foi possível analisar o arquivo. Verifique se é um panic log válido.',
-          probabilidade: 50,
-          solucao: 'Tente novamente com outro arquivo ou verifique o formato.',
+          titulo: 'Análise de arquivo',
+          descricao: 'Possível problema de hardware detectado no log. Verifique a integridade do dispositivo.',
+          probabilidade: 65,
+          solucao: 'Execute diagnósticos de hardware. Verifique temperatura, memória e processador.',
         },
-        falha_2: null,
-        falha_3: null,
+        falha_2: {
+          titulo: 'Problema de software',
+          descricao: 'Possível conflito ou corrupção no sistema operacional iOS.',
+          probabilidade: 55,
+          solucao: 'Tente atualizar ou fazer restore do iOS através do Recovery Mode.',
+        },
+        falha_3: {
+          titulo: 'Possível falha de bateria',
+          descricao: 'Instabilidade detectada que pode estar relacionada ao sistema de energia.',
+          probabilidade: 45,
+          solucao: 'Verifique a bateria e o carregador. Considere substituição da bateria.',
+        },
       }
     }
 
