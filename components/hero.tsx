@@ -22,7 +22,7 @@ export default async function Hero() {
 
           {/* ── Texto ── */}
           <div>
-            <p className="eyebrow mb-5">Manutenção de Celulares &amp; Troca de Vidro</p>
+            <p className="eyebrow mb-5">Manutenção Eletrônica</p>
             <h1 className="section-title mb-6">
               Domine a<br />
               Assistência<br />
