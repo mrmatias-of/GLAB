@@ -30,9 +30,9 @@ export async function POST(request: NextRequest) {
     // Limitar conteúdo para análise (primeiros 15000 caracteres)
     const contentForAnalysis = content.slice(0, 15000)
 
-    // Analisar com IA
+    // Analisar com IA (usando Google Gemini que é free tier)
     const { text } = await generateText({
-      model: gateway('anthropic/claude-3-5-sonnet'),
+      model: gateway('google/gemini-2-flash'),
       temperature: 0.3,
       system: `Você é um especialista em diagnóstico de dispositivos iOS. Analise logs de panic/crash e identifique as 3 causas mais prováveis do problema.
 
