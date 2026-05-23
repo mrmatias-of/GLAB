@@ -310,42 +310,37 @@ export async function POST(request: NextRequest) {
     // Analisar com base em padrões (sem IA)
     const analysis = analyzeWithPatterns(content)
 
-    // Salvar no banco de dados
-    const { data, error } = await supabase
-      .from('panic_analysis')
-      .insert({
-        filename,
-        file_content: content,
-        file_size: fileSize,
-        device_model: deviceModel,
-        ios_version: iosVersion,
-        panic_type: panicType,
-        falha_1: analysis.falha_1,
-        falha_2: analysis.falha_2,
-        falha_3: analysis.falha_3,
-        status: 'completed'
-      })
-      .select()
-      .single()
-
-    if (error) {
-      console.error('[v0] Erro ao salvar:', error)
-      return NextResponse.json(
-        { error: 'Erro ao salvar análise' },
-        { status: 500 }
-      )
+    // Salvar no banco de dados (opcional - não bloqueia resposta)
+    try {
+      await supabase
+        .from('panic_analysis')
+        .insert({
+          filename,
+          file_content: content.substring(0, 1000),
+          file_size: fileSize,
+          device_model: deviceModel,
+          ios_version: iosVersion,
+          panic_type: panicType,
+          falha_1: analysis.falha_1,
+          falha_2: analysis.falha_2,
+          falha_3: analysis.falha_3,
+          status: 'completed'
+        })
+    } catch (dbError) {
+      console.error('[v0] Erro ao salvar no banco (não bloqueia):', dbError)
+      // Continua mesmo se banco falhar
     }
 
+    console.log('[v0] Análise completada com sucesso')
+    
+    // Retornar resultado
     return NextResponse.json({
-      success: true,
-      analysis: {
-        deviceModel,
-        iosVersion,
-        panicType,
-        falha_1: analysis.falha_1,
-        falha_2: analysis.falha_2,
-        falha_3: analysis.falha_3
-      }
+      device_model: deviceModel,
+      ios_version: iosVersion,
+      panic_type: panicType,
+      falha_1: analysis.falha_1,
+      falha_2: analysis.falha_2,
+      falha_3: analysis.falha_3
     })
   } catch (error) {
     console.error('[v0] Erro na análise:', error)
