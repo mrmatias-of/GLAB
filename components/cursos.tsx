@@ -135,6 +135,41 @@ export default async function Cursos() {
         {/* Cards Secundarios - Grid de produtos */}
         {secundarios.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Card Grupo VIP - PRIMEIRO */}
+            <Link
+              href="/grupo-vip"
+              className="group relative rounded-3xl overflow-hidden border border-green-500/30 bg-gradient-to-br from-green-950/20 to-[#0a0a0a] hover:border-green-400/50 transition-all flex flex-col"
+            >
+              {/* Thumbnail */}
+              <div className="relative aspect-video bg-gradient-to-br from-green-600/20 to-emerald-600/10 flex items-center justify-center">
+                <div className="text-center">
+                  <div className="text-4xl mb-2">💬</div>
+                  <span className="text-xs text-green-400 font-bold">GRUPO VIP</span>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="p-6 flex flex-col flex-1">
+                <p className="text-[10px] text-green-400/70 uppercase tracking-widest mb-2">Comunidade</p>
+                <h3 className="text-lg font-bold text-white group-hover:text-green-400 transition-colors mb-2">
+                  Grupo VIP Iniciantes
+                </h3>
+                <p className="text-sm text-white/40 leading-relaxed mb-4 flex-1 line-clamp-2">
+                  Comunidade ativa com dicas práticas, avisos de cursos e suporte direto.
+                </p>
+
+                <div className="flex items-center justify-between pt-4 border-t border-green-500/10">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-xl font-black text-green-400">GRÁTIS</span>
+                  </div>
+                  <span className="px-4 py-2 rounded-full text-xs font-medium text-white border border-green-500/30 group-hover:bg-green-600 group-hover:border-green-400 transition-all">
+                    Entrar
+                  </span>
+                </div>
+              </div>
+            </Link>
+
+            {/* Cards de Cursos */}
             {secundarios.map((cat) => {
               const Icon = getIconByTag(cat.tag)
               return (
