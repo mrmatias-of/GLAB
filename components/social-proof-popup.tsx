@@ -30,12 +30,6 @@ const produtos = [
   { nome: 'Conector de Carga', cor: '#60a5fa' },
 ]
 
-// Tempos aleatórios
-const tempos = [
-  'agora mesmo', 'há 1 minuto', 'há 2 minutos', 'há 3 minutos', 
-  'há 5 minutos', 'há 8 minutos', 'há 10 minutos', 'há 15 minutos'
-]
-
 function getRandomItem<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)]
 }
@@ -46,7 +40,6 @@ function gerarNotificacao() {
     nome: getRandomItem(nomes),
     cidade: getRandomItem(cidades),
     produto: getRandomItem(produtos),
-    tempo: getRandomItem(tempos),
   }
 }
 
@@ -142,7 +135,7 @@ export function SocialProofPopup() {
               comprou <span className="font-medium text-white">{notificacao.produto.nome}</span>
             </p>
             <p className="text-[10px] mt-1.5" style={{ color: '#71717a' }}>
-              {notificacao.tempo}
+              comprou agora
             </p>
           </div>
         </div>
