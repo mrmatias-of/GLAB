@@ -95,50 +95,21 @@ export default function Hero() {
           </div>
           
           {/* Right Visual - Tech Setup with Image */}
-          <div className="relative hidden lg:block">
-            <div className="relative aspect-square rounded-2xl overflow-hidden border-2 border-cyan-500/30">
-              {/* Background gradient */}
-              <div className="absolute inset-0" style={{
-                background: 'linear-gradient(135deg, rgba(0,212,200,0.1) 0%, rgba(123, 58, 237, 0.05) 100%)'
-              }} />
-              
-              {/* Grid lines */}
-              <div className="absolute inset-0 opacity-20" style={{ 
-                backgroundImage: 'linear-gradient(rgba(0,212,200,.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,200,.3) 1px, transparent 1px)',
-                backgroundSize: '40px 40px'
-              }} />
-              
-              {/* Circuit board effect */}
-              <div className="absolute inset-0 opacity-30" style={{
-                background: 'radial-gradient(circle at 20% 50%, rgba(0,212,200,0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(123, 58, 237, 0.1) 0%, transparent 50%)'
-              }} />
-              
-              {/* Hero Image */}
-              <div className="absolute inset-0">
-                <Image
-                  src="/hero-tech-pcb.jpg"
-                  alt="Ferramentas técnicas profissionais - PCB com sonda laser"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/30 via-transparent to-violet-950/40" />
-              </div>
-              
-              {/* Floating elements */}
-              <div className="absolute top-1/4 left-1/4 w-20 h-20 rounded-lg border border-cyan-500/30 opacity-60 animate-pulse" />
-              <div className="absolute top-1/3 right-1/3 w-16 h-16 rounded border border-violet-500/30 opacity-40 animate-pulse" style={{ animationDelay: '0.3s' }} />
-              <div className="absolute bottom-1/4 right-1/4 w-24 h-24 rounded-lg border border-cyan-500/20 opacity-50 animate-pulse" style={{ animationDelay: '0.6s' }} />
-              
-              {/* Center light effect */}
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full" style={{
-                background: 'radial-gradient(circle, rgba(0,212,200,0.2) 0%, transparent 70%)',
-                filter: 'blur(40px)'
-              }} />
-              
+          <div className="relative hidden lg:flex items-center justify-center">
+            <div className="relative w-full rounded-2xl border-2 border-cyan-500/30 overflow-hidden" style={{ background: 'linear-gradient(135deg, rgba(0,212,200,0.05) 0%, rgba(123,58,237,0.05) 100%)' }}>
+              <Image
+                src="/hero-tech-pcb.jpg"
+                alt="Ferramentas técnicas profissionais - PCB com sonda laser"
+                width={1536}
+                height={1024}
+                className="w-full h-auto object-contain"
+                priority
+              />
+              {/* Overlay sutil */}
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/20 via-transparent to-violet-950/30 pointer-events-none" />
               {/* Neon accent lines */}
-              <div className="absolute top-0 left-1/3 w-px h-full opacity-20" style={{ background: 'linear-gradient(to bottom, rgba(0,212,200,0.5), transparent)' }} />
-              <div className="absolute top-1/2 left-0 w-full h-px opacity-20" style={{ background: 'linear-gradient(to right, rgba(0,212,200,0.5), transparent)' }} />
+              <div className="absolute top-0 left-1/3 w-px h-full opacity-10" style={{ background: 'linear-gradient(to bottom, rgba(0,212,200,0.5), transparent)' }} />
+              <div className="absolute top-1/2 left-0 w-full h-px opacity-10" style={{ background: 'linear-gradient(to right, rgba(0,212,200,0.5), transparent)' }} />
             </div>
           </div>
         </div>
