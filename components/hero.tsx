@@ -139,20 +139,6 @@ export default function Hero() {
               {/* Neon accent lines */}
               <div className="absolute top-0 left-1/3 w-px h-full opacity-20" style={{ background: 'linear-gradient(to bottom, rgba(0,212,200,0.5), transparent)' }} />
               <div className="absolute top-1/2 left-0 w-full h-px opacity-20" style={{ background: 'linear-gradient(to right, rgba(0,212,200,0.5), transparent)' }} />
-              
-              {/* Text labels */}
-              <div className="absolute top-8 right-8 text-xs font-bold text-cyan-400 opacity-60">CPU</div>
-              <div className="absolute bottom-8 left-8 text-xs font-bold text-cyan-400 opacity-40">3.80v</div>
-            </div>
-            
-            {/* Floating side panel */}
-            <div className="absolute -right-20 top-20 w-40 p-3 rounded-lg border border-cyan-500/30 bg-gradient-to-br from-cyan-950/20 to-black/60 backdrop-blur-sm">
-              <div className="text-[10px] font-mono text-cyan-400 space-y-1">
-                <div>▸ SYS_SCAN.exe</div>
-                <div>▸ DIAG_TOOL v2.1</div>
-                <div>▸ CPU_TEMP 45°C</div>
-                <div className="text-amber-500">⚠ PWR_CHK</div>
-              </div>
             </div>
           </div>
         </div>
