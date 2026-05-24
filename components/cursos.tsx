@@ -60,7 +60,7 @@ export default async function Cursos() {
               className="group relative rounded-xl overflow-hidden border border-green-500/30 bg-gradient-to-b from-green-950/30 to-[#050510] hover:border-green-400/50 transition-all h-fit"
             >
               {/* Image */}
-              <div className="relative aspect-[4/3] bg-gradient-to-br from-green-600/20 to-emerald-600/10 flex items-center justify-center">
+              <div className="relative aspect-[16/9] bg-gradient-to-br from-green-600/20 to-emerald-600/10 flex items-center justify-center">
                 <div className="text-center">
                   <div className="text-2xl">💬</div>
                   <span className="text-[9px] text-green-400 font-bold">GRUPO VIP</span>
@@ -73,18 +73,18 @@ export default async function Cursos() {
               </div>
 
               {/* Content */}
-              <div className="p-2">
-                <h3 className="text-[10px] font-bold text-white leading-tight mb-0.5 group-hover:text-green-400 transition-colors">
+              <div className="p-1.5">
+                <h3 className="text-[9px] font-bold text-white leading-tight mb-0 group-hover:text-green-400 transition-colors">
                   Grupo VIP
                 </h3>
-                <p className="text-[7px] text-white/40 line-clamp-1 mb-1.5">
+                <p className="text-[6px] text-white/40 line-clamp-1 mb-1">
                   Comunidade ativa
                 </p>
                 
                 <div className="flex items-center justify-between">
-                  <span className="text-[8px] font-bold text-green-400">GRATIS</span>
-                  <div className="w-4 h-4 rounded border border-green-500/30 bg-green-500/10 flex items-center justify-center">
-                    <Users size={9} className="text-green-400" />
+                  <span className="text-[7px] font-bold text-green-400">GRATIS</span>
+                  <div className="w-3.5 h-3.5 rounded border border-green-500/30 bg-green-500/10 flex items-center justify-center">
+                    <Users size={7} className="text-green-400" />
                   </div>
                 </div>
               </div>
@@ -100,7 +100,7 @@ export default async function Cursos() {
                   className="group relative rounded-xl overflow-hidden border border-white/10 bg-gradient-to-b from-[#0a0a14] to-[#050510] hover:border-cyan-500/30 transition-all h-fit"
                 >
                   {/* Image */}
-                  <div className="relative aspect-[4/3] bg-zinc-900/50">
+                  <div className="relative aspect-[16/9] bg-zinc-900/50">
                     {curso.imagem ? (
                       <Image
                         src={curso.imagem}
@@ -133,23 +133,23 @@ export default async function Cursos() {
                   </div>
 
                   {/* Content */}
-                  <div className="p-2">
-                    <h3 className="text-[10px] font-bold text-white leading-tight mb-0.5 line-clamp-2 group-hover:text-cyan-400 transition-colors">
+                  <div className="p-1.5">
+                    <h3 className="text-[9px] font-bold text-white leading-tight mb-0 line-clamp-2 group-hover:text-cyan-400 transition-colors">
                       {curso.titulo}
                     </h3>
-                    <p className="text-[7px] text-white/40 line-clamp-1 mb-1.5">
+                    <p className="text-[6px] text-white/40 line-clamp-1 mb-1">
                       {curso.descricao}
                     </p>
                     
                     <div className="flex items-center justify-between">
-                      <div className="flex items-baseline gap-0.5">
+                      <div className="flex items-baseline gap-0">
                         {curso.preco_original && (
-                          <span className="text-[6px] text-white/30 line-through">{curso.preco_original}</span>
+                          <span className="text-[5px] text-white/30 line-through">{curso.preco_original}</span>
                         )}
-                        <span className="text-[9px] font-black text-cyan-400">{curso.preco}</span>
+                        <span className="text-[8px] font-black text-cyan-400">{curso.preco}</span>
                       </div>
-                      <div className="w-4 h-4 rounded border border-white/10 bg-white/5 flex items-center justify-center">
-                        <Icon size={9} className="text-cyan-400" />
+                      <div className="w-3.5 h-3.5 rounded border border-white/10 bg-white/5 flex items-center justify-center">
+                        <Icon size={7} className="text-cyan-400" />
                       </div>
                     </div>
                   </div>
