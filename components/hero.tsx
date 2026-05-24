@@ -21,7 +21,7 @@ export default function Hero() {
       }} />
       
       <div className="max-w-7xl mx-auto px-6 py-16 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-8 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
           
           {/* Left Content */}
           <div className="flex flex-col">
@@ -95,14 +95,14 @@ export default function Hero() {
           </div>
           
           {/* Right Visual - Tech Setup with Image */}
-          <div className="relative hidden lg:flex items-center justify-center">
-            <div className="relative w-full rounded-2xl border-2 border-cyan-500/30 overflow-hidden" style={{ background: 'linear-gradient(135deg, rgba(0,212,200,0.05) 0%, rgba(123,58,237,0.05) 100%)' }}>
+          <div className="relative hidden lg:flex items-center justify-center h-[600px]">
+            <div className="relative w-full h-full rounded-2xl border-2 border-cyan-500/30 overflow-hidden" style={{ background: 'linear-gradient(135deg, rgba(0,212,200,0.05) 0%, rgba(123,58,237,0.05) 100%)' }}>
               <Image
                 src="/hero-tech-pcb.jpg"
                 alt="Ferramentas técnicas profissionais - PCB com sonda laser"
                 width={1536}
                 height={1024}
-                className="w-full h-auto object-contain"
+                className="w-full h-full object-contain"
                 priority
               />
               {/* Overlay sutil */}
