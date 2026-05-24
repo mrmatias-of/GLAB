@@ -94,7 +94,7 @@ export default function Hero() {
             </div>
           </div>
           
-          {/* Right Visual - Tech Setup */}
+          {/* Right Visual - Tech Setup with Image */}
           <div className="relative hidden lg:block">
             <div className="relative aspect-square rounded-2xl overflow-hidden border-2 border-cyan-500/30">
               {/* Background gradient */}
@@ -112,6 +112,18 @@ export default function Hero() {
               <div className="absolute inset-0 opacity-30" style={{
                 background: 'radial-gradient(circle at 20% 50%, rgba(0,212,200,0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(123, 58, 237, 0.1) 0%, transparent 50%)'
               }} />
+              
+              {/* Hero Image */}
+              <div className="absolute inset-0">
+                <Image
+                  src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=80"
+                  alt="Ferramentas técnicas profissionais"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/40 via-transparent to-violet-950/40" />
+              </div>
               
               {/* Floating elements */}
               <div className="absolute top-1/4 left-1/4 w-20 h-20 rounded-lg border border-cyan-500/30 opacity-60 animate-pulse" />
