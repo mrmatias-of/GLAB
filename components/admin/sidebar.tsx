@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
-import { Layers, BookOpen, LogOut, Home, LayoutDashboard, Receipt } from "lucide-react"
+import { Layers, BookOpen, LogOut, Home, LayoutDashboard, Receipt, Plus } from "lucide-react"
 
 const navItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
@@ -35,6 +35,18 @@ export default function AdminSidebar({ userEmail }: { userEmail: string }) {
             <p className="text-[10px] leading-none mt-0.5" style={{ color: '#71717a' }}>Admin</p>
           </div>
         </div>
+      </div>
+
+      {/* Botão Novo Curso destacado */}
+      <div className="px-4 pb-2 pt-3">
+        <Link
+          href="/admin/cursos/novo"
+          className="flex items-center justify-center gap-2 w-full px-3 py-2.5 rounded-xl text-sm font-bold transition-all"
+          style={{ backgroundColor: '#00d4c8', color: '#0B0B0C' }}
+        >
+          <Plus size={15} strokeWidth={2.5} />
+          Novo Curso
+        </Link>
       </div>
 
       {/* Nav */}
