@@ -144,7 +144,7 @@ export default function ImageCropUpload({
           <Image src={value} alt="Capa do curso" fill className="object-cover" />
         </div>
         <div className="flex gap-2 mt-3">
-          <label className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-border text-xs font-medium text-foreground hover:border-cyan/40 cursor-pointer transition-all">
+          <label className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-cyan/30 bg-cyan/5 text-xs font-medium text-cyan hover:bg-cyan/10 cursor-pointer transition-all">
             <Upload size={13} />
             Trocar imagem
             <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={onSelectFile} className="hidden" />
@@ -166,15 +166,15 @@ export default function ImageCropUpload({
   // --- Estado: selecionou imagem, exibe crop ---
   if (srcImage) {
     return (
-      <div className="rounded-xl border border-border bg-background p-4">
-        <div className="flex items-center justify-between mb-3">
+      <div className="rounded-xl border border-border bg-background p-4 space-y-3">
+        <div className="flex items-center justify-between">
           <p className="text-xs font-bold text-foreground">Recortar imagem</p>
           <button type="button" onClick={handleCancel} className="p-1 text-muted-foreground hover:text-foreground transition-colors">
             <X size={15} />
           </button>
         </div>
 
-        <div className="flex justify-center bg-black/30 rounded-lg overflow-hidden">
+        <div className="flex justify-center bg-black/30 rounded-lg overflow-hidden border border-cyan/20">
           <ReactCrop
             crop={crop}
             onChange={(c) => setCrop(c)}
@@ -195,19 +195,19 @@ export default function ImageCropUpload({
           </ReactCrop>
         </div>
 
-        <p className="text-[10px] text-muted-foreground mt-2 text-center">
+        <p className="text-[10px] text-muted-foreground text-center bg-cyan/5 border border-cyan/20 rounded px-2 py-1.5">
           Arraste para reposicionar o recorte. Proporção {aspectRatio === 16/9 ? "16:9" : aspectRatio === 4/3 ? "4:3" : "livre"}.
         </p>
 
         {error && (
-          <p className="text-xs text-red-400 mt-2 text-center">{error}</p>
+          <p className="text-xs text-red-400 text-center bg-red-500/5 border border-red-500/20 rounded px-2 py-1.5">{error}</p>
         )}
 
-        <div className="flex gap-2 mt-3 justify-end">
+        <div className="flex gap-2 justify-end pt-2">
           <button
             type="button"
             onClick={handleCancel}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-border text-xs font-medium text-muted-foreground hover:text-foreground transition-all"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-border text-xs font-medium text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all"
           >
             <RotateCcw size={12} />
             Cancelar
@@ -216,7 +216,7 @@ export default function ImageCropUpload({
             type="button"
             onClick={handleConfirmCrop}
             disabled={uploading || !completedCrop}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-cyan text-background text-xs font-bold disabled:opacity-50 hover:bg-cyan/90 transition-all"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-cyan text-background text-xs font-bold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-cyan/90 transition-all"
             style={{ color: "#050510" }}
           >
             {uploading ? (
@@ -226,8 +226,8 @@ export default function ImageCropUpload({
               </>
             ) : (
               <>
-                <Check size={12} />
-                Confirmar recorte
+                <Check size={13} />
+                Confirmar e salvar
               </>
             )}
           </button>
