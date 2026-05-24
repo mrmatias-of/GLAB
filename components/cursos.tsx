@@ -41,7 +41,7 @@ export default async function Cursos() {
   const cursos: CursoDB[] = error || !data ? [] : data
 
   return (
-    <section id="cursos" className="relative py-16" style={{ backgroundColor: '#050510' }}>
+    <section id="cursos" className="relative py-8" style={{ backgroundColor: '#050510' }}>
       <div className="max-w-7xl mx-auto px-6">
 
         {cursos.length === 0 && (
@@ -57,7 +57,7 @@ export default async function Cursos() {
             {/* Card Grupo VIP - PRIMEIRO */}
             <Link
               href="/grupo-vip"
-              className="group relative rounded-xl overflow-hidden border border-green-500/30 bg-gradient-to-b from-green-950/30 to-[#050510] hover:border-green-400/50 transition-all"
+              className="group relative rounded-xl overflow-hidden border border-green-500/30 bg-gradient-to-b from-green-950/30 to-[#050510] hover:border-green-400/50 transition-all h-fit"
             >
               {/* Image */}
               <div className="relative aspect-[4/3] bg-gradient-to-br from-green-600/20 to-emerald-600/10 flex items-center justify-center">
@@ -73,18 +73,18 @@ export default async function Cursos() {
               </div>
 
               {/* Content */}
-              <div className="p-2.5">
-                <h3 className="text-[11px] font-bold text-white leading-tight mb-1 group-hover:text-green-400 transition-colors">
+              <div className="p-2">
+                <h3 className="text-[10px] font-bold text-white leading-tight mb-0.5 group-hover:text-green-400 transition-colors">
                   Grupo VIP
                 </h3>
-                <p className="text-[8px] text-white/40 line-clamp-1">
+                <p className="text-[7px] text-white/40 line-clamp-1 mb-1.5">
                   Comunidade ativa
                 </p>
                 
-                <div className="flex items-center justify-between mt-2">
-                  <span className="text-[9px] font-bold text-green-400">GRATIS</span>
-                  <div className="w-5 h-5 rounded-md border border-green-500/30 bg-green-500/10 flex items-center justify-center">
-                    <Users size={10} className="text-green-400" />
+                <div className="flex items-center justify-between">
+                  <span className="text-[8px] font-bold text-green-400">GRATIS</span>
+                  <div className="w-4 h-4 rounded border border-green-500/30 bg-green-500/10 flex items-center justify-center">
+                    <Users size={9} className="text-green-400" />
                   </div>
                 </div>
               </div>
@@ -97,7 +97,7 @@ export default async function Cursos() {
                 <Link
                   key={curso.id}
                   href={`/cursos/${curso.slug}`}
-                  className="group relative rounded-xl overflow-hidden border border-white/10 bg-gradient-to-b from-[#0a0a14] to-[#050510] hover:border-cyan-500/30 transition-all"
+                  className="group relative rounded-xl overflow-hidden border border-white/10 bg-gradient-to-b from-[#0a0a14] to-[#050510] hover:border-cyan-500/30 transition-all h-fit"
                 >
                   {/* Image */}
                   <div className="relative aspect-[4/3] bg-zinc-900/50">
@@ -133,23 +133,23 @@ export default async function Cursos() {
                   </div>
 
                   {/* Content */}
-                  <div className="p-2.5">
-                    <h3 className="text-[11px] font-bold text-white leading-tight mb-1 line-clamp-2 group-hover:text-cyan-400 transition-colors">
+                  <div className="p-2">
+                    <h3 className="text-[10px] font-bold text-white leading-tight mb-0.5 line-clamp-2 group-hover:text-cyan-400 transition-colors">
                       {curso.titulo}
                     </h3>
-                    <p className="text-[8px] text-white/40 line-clamp-1 mb-2">
+                    <p className="text-[7px] text-white/40 line-clamp-1 mb-1.5">
                       {curso.descricao}
                     </p>
                     
                     <div className="flex items-center justify-between">
                       <div className="flex items-baseline gap-0.5">
                         {curso.preco_original && (
-                          <span className="text-[7px] text-white/30 line-through">{curso.preco_original}</span>
+                          <span className="text-[6px] text-white/30 line-through">{curso.preco_original}</span>
                         )}
-                        <span className="text-[10px] font-black text-cyan-400">{curso.preco}</span>
+                        <span className="text-[9px] font-black text-cyan-400">{curso.preco}</span>
                       </div>
-                      <div className="w-5 h-5 rounded-md border border-white/10 bg-white/5 flex items-center justify-center">
-                        <Icon size={10} className="text-cyan-400" />
+                      <div className="w-4 h-4 rounded border border-white/10 bg-white/5 flex items-center justify-center">
+                        <Icon size={9} className="text-cyan-400" />
                       </div>
                     </div>
                   </div>
