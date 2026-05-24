@@ -3,7 +3,8 @@
 import { useState, useCallback } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
-import { Plus, Trash2, Save, ArrowLeft } from "lucide-react"
+import { Plus, Trash2, Save, ArrowLeft, Upload, X, ImageIcon } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 
 type Modulo = { titulo: string; topicos: string[] }
@@ -15,6 +16,7 @@ type CursoFormData = {
   subtitulo: string
   descricao: string
   descricao_longa: string
+  imagem: string
   preco: string
   preco_original: string
   cta: string
@@ -33,6 +35,7 @@ const defaultForm: CursoFormData = {
   subtitulo: "",
   descricao: "",
   descricao_longa: "",
+  imagem: "",
   preco: "",
   preco_original: "",
   cta: "Quero Acessar o Guia",
@@ -70,10 +73,46 @@ export default function CursoForm({ initialData, id }: { initialData?: Partial<C
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [uploading, setUploading] = useState(false)
   const router = useRouter()
 
   function set(field: keyof CursoFormData, value: unknown) {
     setForm((prev) => ({ ...prev, [field]: value }))
+  }
+
+  // Upload de imagem
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploading(true)
+    setError(null)
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Erro no upload')
+      }
+
+      set('imagem', data.url)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erro no upload da imagem')
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  function removeImage() {
+    set('imagem', '')
   }
 
   // Módulos
@@ -137,6 +176,7 @@ export default function CursoForm({ initialData, id }: { initialData?: Partial<C
       subtitulo: sanitize(form.subtitulo),
       descricao: sanitize(form.descricao),
       descricao_longa: sanitize(form.descricao_longa),
+      imagem: form.imagem.trim(),
       preco: sanitize(form.preco),
       preco_original: sanitize(form.preco_original),
       cta: sanitize(form.cta),
@@ -247,6 +287,58 @@ export default function CursoForm({ initialData, id }: { initialData?: Partial<C
               <span className="text-sm text-foreground">Ativo (visível no site)</span>
             </label>
           </div>
+        </section>
+
+        {/* Imagem de Capa */}
+        <section className="rounded-2xl border border-border bg-card p-6">
+          <h2 className="text-sm font-black text-foreground mb-5">Imagem de Capa / Card</h2>
+          
+          {form.imagem ? (
+            <div className="relative">
+              <div className="relative aspect-video rounded-xl overflow-hidden border border-border bg-background">
+                <Image
+                  src={form.imagem}
+                  alt="Capa do curso"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={removeImage}
+                className="absolute top-3 right-3 p-2 rounded-lg bg-red-500/90 text-white hover:bg-red-600 transition-colors"
+              >
+                <X size={16} />
+              </button>
+              <p className="text-xs text-muted-foreground mt-2 truncate">{form.imagem}</p>
+            </div>
+          ) : (
+            <label className="flex flex-col items-center justify-center aspect-video rounded-xl border-2 border-dashed border-border hover:border-cyan/50 bg-background cursor-pointer transition-all group">
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                onChange={handleImageUpload}
+                className="hidden"
+                disabled={uploading}
+              />
+              {uploading ? (
+                <div className="flex flex-col items-center gap-3">
+                  <div className="w-10 h-10 rounded-full border-2 border-cyan border-t-transparent animate-spin" />
+                  <span className="text-sm text-muted-foreground">Enviando...</span>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center gap-3">
+                  <div className="w-14 h-14 rounded-xl bg-cyan/10 border border-cyan/20 flex items-center justify-center group-hover:bg-cyan/20 transition-colors">
+                    <ImageIcon size={24} className="text-cyan" />
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-foreground">Clique para fazer upload</p>
+                    <p className="text-xs text-muted-foreground mt-1">JPG, PNG, WebP ou GIF (max 5MB)</p>
+                  </div>
+                </div>
+              )}
+            </label>
+          )}
         </section>
 
         {/* Preço e Checkout */}
