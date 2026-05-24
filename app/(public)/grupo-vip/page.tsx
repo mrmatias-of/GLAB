@@ -45,7 +45,7 @@ const checkList = [
 ]
 
 export default function GrupoVIPPage() {
-  const whatsappLink = 'https://chat.whatsapp.com/SEU_LINK_AQUI' // Substituir pelo link real
+  const whatsappLink = 'https://chat.whatsapp.com/KiK2TDOf1HzGlkgH8IEL4B' // Substituir pelo link real
 
   return (
     <div className="min-h-screen bg-background">
