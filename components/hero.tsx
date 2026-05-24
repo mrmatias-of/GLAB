@@ -116,13 +116,13 @@ export default function Hero() {
               {/* Hero Image */}
               <div className="absolute inset-0">
                 <Image
-                  src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=80"
-                  alt="Ferramentas técnicas profissionais"
+                  src="/hero-tech-pcb.jpg"
+                  alt="Ferramentas técnicas profissionais - PCB com sonda laser"
                   fill
                   className="object-cover"
                   priority
                 />
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/40 via-transparent to-violet-950/40" />
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/30 via-transparent to-violet-950/40" />
               </div>
               
               {/* Floating elements */}
