@@ -53,38 +53,38 @@ export default async function Cursos() {
 
         {/* Grid de Cursos Numerados */}
         {cursos.length > 0 && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
             {/* Card Grupo VIP - PRIMEIRO */}
             <Link
               href="/grupo-vip"
-              className="group relative rounded-2xl overflow-hidden border border-green-500/30 bg-gradient-to-b from-green-950/30 to-[#050510] hover:border-green-400/50 transition-all"
+              className="group relative rounded-xl overflow-hidden border border-green-500/30 bg-gradient-to-b from-green-950/30 to-[#050510] hover:border-green-400/50 transition-all"
             >
               {/* Image */}
               <div className="relative aspect-[4/3] bg-gradient-to-br from-green-600/20 to-emerald-600/10 flex items-center justify-center">
                 <div className="text-center">
-                  <div className="text-3xl mb-1">💬</div>
-                  <span className="text-[10px] text-green-400 font-bold">GRUPO VIP</span>
+                  <div className="text-2xl">💬</div>
+                  <span className="text-[9px] text-green-400 font-bold">GRUPO VIP</span>
                 </div>
                 
                 {/* Number badge */}
-                <div className="absolute top-2 left-2 w-6 h-6 rounded-md bg-green-500/20 border border-green-500/30 flex items-center justify-center">
-                  <span className="text-[10px] font-bold text-green-400">00</span>
+                <div className="absolute top-2 left-2 w-5 h-5 rounded-md bg-green-500/20 border border-green-500/30 flex items-center justify-center">
+                  <span className="text-[9px] font-bold text-green-400">00</span>
                 </div>
               </div>
 
               {/* Content */}
-              <div className="p-3">
-                <h3 className="text-xs font-bold text-white leading-tight mb-1 group-hover:text-green-400 transition-colors">
-                  Grupo VIP Iniciantes
+              <div className="p-2.5">
+                <h3 className="text-[11px] font-bold text-white leading-tight mb-1 group-hover:text-green-400 transition-colors">
+                  Grupo VIP
                 </h3>
-                <p className="text-[9px] text-white/40 line-clamp-2 mb-2">
-                  Comunidade ativa com dicas e suporte.
+                <p className="text-[8px] text-white/40 line-clamp-1">
+                  Comunidade ativa
                 </p>
                 
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-black text-green-400">GRATIS</span>
-                  <div className="w-6 h-6 rounded-md border border-green-500/30 bg-green-500/10 flex items-center justify-center">
-                    <Users size={12} className="text-green-400" />
+                <div className="flex items-center justify-between mt-2">
+                  <span className="text-[9px] font-bold text-green-400">GRATIS</span>
+                  <div className="w-5 h-5 rounded-md border border-green-500/30 bg-green-500/10 flex items-center justify-center">
+                    <Users size={10} className="text-green-400" />
                   </div>
                 </div>
               </div>
@@ -97,7 +97,7 @@ export default async function Cursos() {
                 <Link
                   key={curso.id}
                   href={`/cursos/${curso.slug}`}
-                  className="group relative rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-b from-[#0a0a14] to-[#050510] hover:border-cyan-500/30 transition-all"
+                  className="group relative rounded-xl overflow-hidden border border-white/10 bg-gradient-to-b from-[#0a0a14] to-[#050510] hover:border-cyan-500/30 transition-all"
                 >
                   {/* Image */}
                   <div className="relative aspect-[4/3] bg-zinc-900/50">
@@ -107,25 +107,25 @@ export default async function Cursos() {
                         alt={curso.titulo}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 14vw"
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                         loading="lazy"
                       />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-cyan-600/20 to-blue-600/10 flex items-center justify-center">
-                        <Icon size={24} className="text-cyan-400/30" />
+                        <Icon size={20} className="text-cyan-400/30" />
                       </div>
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-[#050510] via-transparent to-transparent" />
                     
                     {/* Number badge */}
-                    <div className="absolute top-2 left-2 w-6 h-6 rounded-md bg-black/60 border border-white/10 flex items-center justify-center">
-                      <span className="text-[10px] font-bold text-white">{String(index + 1).padStart(2, '0')}</span>
+                    <div className="absolute top-2 left-2 w-5 h-5 rounded-md bg-black/60 border border-white/10 flex items-center justify-center">
+                      <span className="text-[9px] font-bold text-white">{String(index + 1).padStart(2, '0')}</span>
                     </div>
 
                     {/* Destaque badge */}
                     {curso.destaque && (
                       <div className="absolute top-2 right-2">
-                        <span className="px-2 py-0.5 rounded text-[8px] font-bold text-white bg-gradient-to-r from-violet-600 to-purple-600">
+                        <span className="px-2 py-0.5 rounded text-[7px] font-bold text-white bg-gradient-to-r from-violet-600 to-purple-600">
                           Popular
                         </span>
                       </div>
@@ -133,23 +133,23 @@ export default async function Cursos() {
                   </div>
 
                   {/* Content */}
-                  <div className="p-3">
-                    <h3 className="text-xs font-bold text-white leading-tight mb-1 line-clamp-2 group-hover:text-cyan-400 transition-colors">
+                  <div className="p-2.5">
+                    <h3 className="text-[11px] font-bold text-white leading-tight mb-1 line-clamp-2 group-hover:text-cyan-400 transition-colors">
                       {curso.titulo}
                     </h3>
-                    <p className="text-[9px] text-white/40 line-clamp-2 mb-2">
+                    <p className="text-[8px] text-white/40 line-clamp-1 mb-2">
                       {curso.descricao}
                     </p>
                     
                     <div className="flex items-center justify-between">
-                      <div className="flex items-baseline gap-1">
+                      <div className="flex items-baseline gap-0.5">
                         {curso.preco_original && (
-                          <span className="text-[8px] text-white/30 line-through">{curso.preco_original}</span>
+                          <span className="text-[7px] text-white/30 line-through">{curso.preco_original}</span>
                         )}
-                        <span className="text-xs font-black text-cyan-400">{curso.preco}</span>
+                        <span className="text-[10px] font-black text-cyan-400">{curso.preco}</span>
                       </div>
-                      <div className="w-6 h-6 rounded-md border border-white/10 bg-white/5 flex items-center justify-center">
-                        <Icon size={12} className="text-cyan-400" />
+                      <div className="w-5 h-5 rounded-md border border-white/10 bg-white/5 flex items-center justify-center">
+                        <Icon size={10} className="text-cyan-400" />
                       </div>
                     </div>
                   </div>
