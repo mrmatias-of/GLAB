@@ -13,6 +13,7 @@ export type Curso = {
   subtitulo?: string
   descricao: string
   descricaoLonga: string
+  imagem?: string
   icon: LucideIcon
   destaque: boolean
   preco: string
@@ -45,7 +46,7 @@ export async function getCursos(): Promise<Curso[]> {
     const supabase = await createClient()
     const { data, error } = await supabase
       .from("cursos")
-      .select("slug, tag, titulo, subtitulo, descricao, descricao_longa, preco, preco_original, cta, cta_href, destaque, modulos, aprendizados, ordem")
+      .select("slug, tag, titulo, subtitulo, descricao, descricao_longa, imagem, preco, preco_original, cta, cta_href, destaque, modulos, aprendizados, ordem")
       .eq("ativo", true)
       .order("ordem", { ascending: true })
 
@@ -61,6 +62,7 @@ export async function getCursos(): Promise<Curso[]> {
       subtitulo: curso.subtitulo || "",
       descricao: curso.descricao,
       descricaoLonga: curso.descricao_longa || curso.descricao,
+      imagem: curso.imagem || undefined,
       icon: getIconByTag(curso.tag),
       destaque: curso.destaque || false,
       preco: curso.preco,
