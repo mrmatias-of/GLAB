@@ -1,4 +1,4 @@
-import { ArrowRight, Package, Smartphone, Monitor, Cpu, Layers } from "lucide-react"
+import { ArrowRight, Package, Smartphone, Monitor, Cpu, Layers, Zap, Radio, Settings, Wrench } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
@@ -22,7 +22,10 @@ type CursoDB = {
 
 const getIconByTag = (tag: string) => {
   if (tag?.toLowerCase().includes("mobile") || tag?.toLowerCase().includes("android")) return Smartphone
-  if (tag?.toLowerCase().includes("pc") || tag?.toLowerCase().includes("windows")) return Monitor
+  if (tag?.toLowerCase().includes("pc") || tag?.toLowerCase().includes("gamer")) return Monitor
+  if (tag?.toLowerCase().includes("consumo") || tag?.toLowerCase().includes("eletrico")) return Zap
+  if (tag?.toLowerCase().includes("rf") || tag?.toLowerCase().includes("radio")) return Radio
+  if (tag?.toLowerCase().includes("software")) return Settings
   if (tag?.toLowerCase().includes("combo")) return Layers
   return Cpu
 }
@@ -36,22 +39,10 @@ export default async function Cursos() {
     .order("ordem", { ascending: true })
 
   const cursos: CursoDB[] = error || !data ? [] : data
-  const destaques = cursos.filter((c) => c.destaque)
-  const secundarios = cursos.filter((c) => !c.destaque)
 
   return (
-    <section id="cursos" className="relative py-28">
+    <section id="cursos" className="relative py-16" style={{ backgroundColor: '#050510' }}>
       <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <p className="text-violet-400 text-xs uppercase tracking-widest mb-4">Catalogo Completo</p>
-          <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
-            Escolha sua especialidade
-          </h2>
-          <p className="text-white/50 max-w-md mx-auto">
-            Guias completos, passo a passo, criados para o profissional que quer resultados.
-          </p>
-        </div>
 
         {cursos.length === 0 && (
           <div className="flex flex-col items-center justify-center py-20 text-white/40 gap-3">
@@ -60,164 +51,106 @@ export default async function Cursos() {
           </div>
         )}
 
-        {/* Cards Destaque */}
-        {destaques.map((cat) => {
-          const Icon = getIconByTag(cat.tag)
-          return (
-            <div
-              key={cat.id}
-              className="relative rounded-3xl overflow-hidden border border-white/10 bg-[#0a0a0a] mb-8"
-            >
-              <div className="grid md:grid-cols-2">
-              {/* Imagem */}
-              <div className="relative aspect-video md:aspect-auto md:min-h-[400px] bg-zinc-900">
-                {cat.imagem ? (
-                  <Image
-                    src={cat.imagem}
-                    alt={cat.titulo}
-                    fill
-                    className="object-contain"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    priority
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-violet-600/30 to-purple-600/20 flex items-center justify-center">
-                    <Icon size={48} className="text-violet-400/30" />
-                  </div>
-                )}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black/50 hidden md:block" />
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60 md:hidden" />
-                  
-                  {/* Badge */}
-                  <div className="absolute top-6 left-6">
-                    <span className="px-4 py-1.5 rounded-full text-xs font-bold text-white bg-gradient-to-r from-violet-600 to-purple-600 shadow-lg">
-                      Mais Popular
-                    </span>
-                  </div>
-                </div>
-
-                {/* Conteudo */}
-                <div className="p-8 md:p-12 flex flex-col justify-center">
-                  <p className="text-violet-400 text-xs uppercase tracking-widest mb-3">{cat.tag}</p>
-                  <h3 className="text-3xl md:text-4xl font-black text-white mb-4">{cat.titulo}</h3>
-                  <p className="text-white/50 leading-relaxed mb-8">{cat.descricao}</p>
-
-                  <div className="flex items-baseline gap-3 mb-8">
-                    {cat.preco_original && (
-                      <span className="text-lg text-white/40 line-through">{cat.preco_original}</span>
-                    )}
-                    <span className="text-4xl font-black text-violet-400">{cat.preco}</span>
-                  </div>
-
-                  {/* Modulos */}
-                  <div className="grid grid-cols-2 gap-2 mb-8">
-                    {(cat.modulos ?? []).slice(0, 6).map((m) => (
-                      <div key={m.titulo} className="flex items-center gap-2 text-sm text-white/60">
-                        <div className="w-1.5 h-1.5 rounded-full bg-violet-500" />
-                        <span className="truncate">{m.titulo}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <Link
-                    href={`/cursos/${cat.slug}`}
-                    className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-white font-semibold bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 transition-all shadow-[0_0_30px_rgba(139,92,246,0.3)]"
-                  >
-                    Ver Guia Completo
-                    <ArrowRight size={18} />
-                  </Link>
-                </div>
-              </div>
-            </div>
-          )
-        })}
-
-        {/* Cards Secundarios - Grid de produtos */}
-        {secundarios.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Grid de Cursos Numerados */}
+        {cursos.length > 0 && (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3">
             {/* Card Grupo VIP - PRIMEIRO */}
             <Link
               href="/grupo-vip"
-              className="group relative rounded-3xl overflow-hidden border border-green-500/30 bg-gradient-to-br from-green-950/20 to-[#0a0a0a] hover:border-green-400/50 transition-all flex flex-col"
+              className="group relative rounded-2xl overflow-hidden border border-green-500/30 bg-gradient-to-b from-green-950/30 to-[#050510] hover:border-green-400/50 transition-all"
             >
-              {/* Thumbnail */}
-              <div className="relative aspect-video bg-gradient-to-br from-green-600/20 to-emerald-600/10 flex items-center justify-center">
+              {/* Image */}
+              <div className="relative aspect-[4/3] bg-gradient-to-br from-green-600/20 to-emerald-600/10 flex items-center justify-center">
                 <div className="text-center">
-                  <div className="text-4xl mb-2">💬</div>
-                  <span className="text-xs text-green-400 font-bold">GRUPO VIP</span>
+                  <div className="text-3xl mb-1">💬</div>
+                  <span className="text-[10px] text-green-400 font-bold">GRUPO VIP</span>
+                </div>
+                
+                {/* Number badge */}
+                <div className="absolute top-2 left-2 w-6 h-6 rounded-md bg-green-500/20 border border-green-500/30 flex items-center justify-center">
+                  <span className="text-[10px] font-bold text-green-400">00</span>
                 </div>
               </div>
 
               {/* Content */}
-              <div className="p-6 flex flex-col flex-1">
-                <p className="text-[10px] text-green-400/70 uppercase tracking-widest mb-2">Comunidade</p>
-                <h3 className="text-lg font-bold text-white group-hover:text-green-400 transition-colors mb-2">
+              <div className="p-3">
+                <h3 className="text-xs font-bold text-white leading-tight mb-1 group-hover:text-green-400 transition-colors">
                   Grupo VIP Iniciantes
                 </h3>
-                <p className="text-sm text-white/40 leading-relaxed mb-4 flex-1 line-clamp-2">
-                  Comunidade ativa com dicas práticas, avisos de cursos e suporte direto.
+                <p className="text-[9px] text-white/40 line-clamp-2 mb-2">
+                  Comunidade ativa com dicas e suporte.
                 </p>
-
-                <div className="flex items-center justify-between pt-4 border-t border-green-500/10">
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-xl font-black text-green-400">GRÁTIS</span>
+                
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-black text-green-400">GRATIS</span>
+                  <div className="w-6 h-6 rounded-md border border-green-500/30 bg-green-500/10 flex items-center justify-center">
+                    <Users size={12} className="text-green-400" />
                   </div>
-                  <span className="px-4 py-2 rounded-full text-xs font-medium text-white border border-green-500/30 group-hover:bg-green-600 group-hover:border-green-400 transition-all">
-                    Entrar
-                  </span>
                 </div>
               </div>
             </Link>
 
             {/* Cards de Cursos */}
-            {secundarios.map((cat) => {
-              const Icon = getIconByTag(cat.tag)
+            {cursos.map((curso, index) => {
+              const Icon = getIconByTag(curso.tag)
               return (
                 <Link
-                  key={cat.id}
-                  href={`/cursos/${cat.slug}`}
-                  className="group relative rounded-3xl overflow-hidden border border-white/10 bg-[#0a0a0a] hover:border-violet-500/30 transition-all flex flex-col"
+                  key={curso.id}
+                  href={`/cursos/${curso.slug}`}
+                  className="group relative rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-b from-[#0a0a14] to-[#050510] hover:border-cyan-500/30 transition-all"
                 >
-                  {/* Thumbnail */}
-                  <div className="relative aspect-video bg-zinc-900">
-                    {cat.imagem ? (
+                  {/* Image */}
+                  <div className="relative aspect-[4/3] bg-zinc-900/50">
+                    {curso.imagem ? (
                       <Image
-                        src={cat.imagem}
-                        alt={cat.titulo}
+                        src={curso.imagem}
+                        alt={curso.titulo}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 14vw"
                         loading="lazy"
-                        placeholder="empty"
                       />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-violet-600/20 to-purple-600/10 flex items-center justify-center">
-                        <Icon size={32} className="text-violet-400/30" />
+                      <div className="w-full h-full bg-gradient-to-br from-cyan-600/20 to-blue-600/10 flex items-center justify-center">
+                        <Icon size={24} className="text-cyan-400/30" />
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#050510] via-transparent to-transparent" />
+                    
+                    {/* Number badge */}
+                    <div className="absolute top-2 left-2 w-6 h-6 rounded-md bg-black/60 border border-white/10 flex items-center justify-center">
+                      <span className="text-[10px] font-bold text-white">{String(index + 1).padStart(2, '0')}</span>
+                    </div>
+
+                    {/* Destaque badge */}
+                    {curso.destaque && (
+                      <div className="absolute top-2 right-2">
+                        <span className="px-2 py-0.5 rounded text-[8px] font-bold text-white bg-gradient-to-r from-violet-600 to-purple-600">
+                          Popular
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Content */}
-                  <div className="p-6 flex flex-col flex-1">
-                    <p className="text-[10px] text-violet-400/70 uppercase tracking-widest mb-2">{cat.tag}</p>
-                    <h3 className="text-lg font-bold text-white group-hover:text-violet-400 transition-colors mb-2">
-                      {cat.titulo}
+                  <div className="p-3">
+                    <h3 className="text-xs font-bold text-white leading-tight mb-1 line-clamp-2 group-hover:text-cyan-400 transition-colors">
+                      {curso.titulo}
                     </h3>
-                    <p className="text-sm text-white/40 leading-relaxed mb-4 flex-1 line-clamp-2">
-                      {cat.descricao}
+                    <p className="text-[9px] text-white/40 line-clamp-2 mb-2">
+                      {curso.descricao}
                     </p>
-
-                    <div className="flex items-center justify-between pt-4 border-t border-white/5">
-                      <div className="flex items-baseline gap-2">
-                        {cat.preco_original && (
-                          <span className="text-xs text-white/40 line-through">{cat.preco_original}</span>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-baseline gap-1">
+                        {curso.preco_original && (
+                          <span className="text-[8px] text-white/30 line-through">{curso.preco_original}</span>
                         )}
-                        <span className="text-xl font-black text-violet-400">{cat.preco}</span>
+                        <span className="text-xs font-black text-cyan-400">{curso.preco}</span>
                       </div>
-                      <span className="px-4 py-2 rounded-full text-xs font-medium text-white border border-white/20 group-hover:bg-violet-600 group-hover:border-violet-600 transition-all">
-                        Ver mais
-                      </span>
+                      <div className="w-6 h-6 rounded-md border border-white/10 bg-white/5 flex items-center justify-center">
+                        <Icon size={12} className="text-cyan-400" />
+                      </div>
                     </div>
                   </div>
                 </Link>
@@ -229,3 +162,6 @@ export default async function Cursos() {
     </section>
   )
 }
+
+// Import Users icon at top level for Grupo VIP card
+import { Users } from "lucide-react"
