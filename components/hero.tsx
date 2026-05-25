@@ -44,14 +44,16 @@ export default function Hero() {
             
             {/* CTAs */}
             <div className="flex flex-wrap gap-4 mb-12">
-              <Link 
-                href="/cursos" 
+              <a 
+                href="https://chat.whatsapp.com/KiK2TDOf1HzGlkgH8IEL4B"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-sm text-black transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/50 hover:scale-110"
                 style={{ background: 'linear-gradient(135deg, #00d4c8 0%, #7c3aed 100%)' }}
               >
-                Comecar Agora
+                Fazer Parte
                 <ArrowRight size={18} strokeWidth={3} />
-              </Link>
+              </a>
               <Link 
                 href="/cursos" 
                 className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-sm text-white border-2 transition-all duration-300 hover:bg-white/5 hover:scale-110"
