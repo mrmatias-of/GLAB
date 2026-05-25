@@ -1,115 +1,92 @@
 import Link from "next/link"
-import { ArrowRight, MessageCircle, Monitor, Award, Clock, Headphones, FileCheck, Shield } from "lucide-react"
+import { ArrowRight, Clock, Headphones, FileCheck, Shield, Quote } from "lucide-react"
+
+const depoimentos = [
+  {
+    texto: "Cara, eu trabalhava há 3 anos na assistência e achava que já sabia tudo sobre troca de tela. Depois que fiz o curso, percebi que tava fazendo muita coisa errada. Aprendi a identificar dano por pressão antes de abrir o aparelho, isso sozinho já me poupou muita dor de cabeça com cliente.",
+    nome: "Rafael M.",
+    cidade: "São Paulo, SP",
+    curso: "Troca de Tela",
+    accent: "cyan",
+  },
+  {
+    texto: "Fiz o de diagnóstico avançado e mudou completamente como eu atendo. Antes eu chutava o problema, hoje eu sigo um raciocínio. Semana passada resolvi um iPhone que dois outros técnicos já tinham devolvido pro cliente sem conserto. O cliente ficou em choque.",
+    nome: "Leandro T.",
+    cidade: "Curitiba, PR",
+    curso: "Diagnóstico Avançado",
+    accent: "violet",
+  },
+  {
+    texto: "Eu sou novo na área, comecei do zero mesmo. O que me conquistou foi a linguagem, sem enrolação, sem ficar aprofundando em coisa que não usa no dia a dia. Em dois meses já tô atendendo sozinho na loja do meu irmão. Recomendo pra quem quer entrar na área do jeito certo.",
+    nome: "Caio B.",
+    cidade: "Goiânia, GO",
+    curso: "COMBO INICIANTE",
+    accent: "orange",
+  },
+]
+
+const accentMap: Record<string, { border: string; text: string; bg: string; dot: string }> = {
+  cyan:   { border: "border-cyan-500/20",   text: "text-cyan-400",   bg: "rgba(0,212,200,0.04)",   dot: "#00d4c8" },
+  violet: { border: "border-violet-500/20", text: "text-violet-400", bg: "rgba(124,58,237,0.04)",  dot: "#7c3aed" },
+  orange: { border: "border-orange-500/20", text: "text-orange-400", bg: "rgba(249,115,22,0.04)",  dot: "#f97316" },
+}
 
 export default function Beneficios() {
   return (
     <section className="py-16 px-6" style={{ backgroundColor: '#050510' }}>
       <div className="max-w-7xl mx-auto">
-        
-        {/* 3 Cards de Beneficios */}
+
+        {/* Header da secao */}
+        <div className="text-center mb-10">
+          <p className="text-[10px] uppercase tracking-widest font-bold mb-3" style={{ color: '#00d4c8' }}>Quem ja passou por aqui</p>
+          <h2 className="text-3xl md:text-4xl font-black text-white">
+            O que os <span style={{ background: 'linear-gradient(135deg, #00d4c8 0%, #7c3aed 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>alunos falam</span>
+          </h2>
+        </div>
+
+        {/* Cards de depoimentos */}
         <div className="grid md:grid-cols-3 gap-4 mb-16">
-          
-          {/* Comunidade */}
-          <div className="relative rounded-2xl overflow-hidden border border-cyan-500/20 bg-gradient-to-br from-[#0a0a14] to-[#050510] p-6">
-            <p className="text-[10px] uppercase tracking-widest text-cyan-400 mb-3">Comunidade Exclusiva</p>
-            <h3 className="text-xl font-black text-white mb-2">
-              Faca Parte da Maior<br />Comunidade Tecnica
-            </h3>
-            <p className="text-xs text-white/50 mb-6 leading-relaxed">
-              Tire duvidas, compartilhe conhecimento e evolua junto com outros tecnicos.
-            </p>
-            
-            {/* Mock community preview */}
-            <div className="rounded-xl border border-white/10 bg-black/30 p-3 mb-6">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-6 h-6 rounded-full bg-cyan-500/20" />
-                <span className="text-[10px] text-white/60">Comunidade G-Lab</span>
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2 text-[9px] text-white/40">
-                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
-                  <span>Duvida sobre PMIC</span>
-                </div>
-                <div className="flex items-center gap-2 text-[9px] text-white/40">
-                  <div className="w-1.5 h-1.5 rounded-full bg-violet-500" />
-                  <span>Curto em linha de 1.8V</span>
-                </div>
-                <div className="flex items-center gap-2 text-[9px] text-white/40">
-                  <div className="w-1.5 h-1.5 rounded-full bg-orange-500" />
-                  <span>Intermitente na rede</span>
-                </div>
-              </div>
-            </div>
-            
-            <Link 
-              href="/grupo-vip"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 transition-all"
-            >
-              Entrar na Comunidade
-            </Link>
-          </div>
+          {depoimentos.map((d) => {
+            const a = accentMap[d.accent]
+            return (
+              <div
+                key={d.nome}
+                className={`relative rounded-2xl border ${a.border} p-6 flex flex-col gap-4 transition-all duration-300 hover:scale-[1.02]`}
+                style={{ background: a.bg }}
+              >
+                {/* Icone de aspas */}
+                <Quote size={20} className={a.text} style={{ opacity: 0.5 }} />
 
-          {/* Area do Aluno */}
-          <div className="relative rounded-2xl overflow-hidden border border-violet-500/20 bg-gradient-to-br from-[#0a0a14] to-[#050510] p-6">
-            <p className="text-[10px] uppercase tracking-widest text-violet-400 mb-3">Area do Aluno</p>
-            <h3 className="text-xl font-black text-white mb-2">
-              Aprenda do Seu<br />Jeito, Quando Quiser
-            </h3>
-            <p className="text-xs text-white/50 mb-6 leading-relaxed">
-              Acesse as aulas, materiais e atualizacoes na plataforma.
-            </p>
-            
-            {/* Mock platform preview */}
-            <div className="rounded-xl border border-white/10 bg-black/30 p-3 mb-6">
-              <div className="flex items-center gap-2 mb-2">
-                <Monitor size={14} className="text-violet-400" />
-                <span className="text-[10px] text-white/60">Meus Cursos</span>
-              </div>
-              <div className="grid grid-cols-3 gap-1">
-                {['PMIC', 'Diagnostico', 'Software'].map((item) => (
-                  <div key={item} className="aspect-video rounded bg-violet-500/10 flex items-center justify-center">
-                    <span className="text-[7px] text-violet-400/60">{item}</span>
+                {/* Texto do depoimento */}
+                <p className="text-sm text-white/70 leading-relaxed flex-1">
+                  &ldquo;{d.texto}&rdquo;
+                </p>
+
+                {/* Rodape */}
+                <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                  <div className="flex items-center gap-3">
+                    {/* Avatar inicial */}
+                    <div
+                      className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black text-white"
+                      style={{ background: a.dot, opacity: 0.9 }}
+                    >
+                      {d.nome.charAt(0)}
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-white">{d.nome}</p>
+                      <p className="text-[10px] text-white/30">{d.cidade}</p>
+                    </div>
                   </div>
-                ))}
-              </div>
-            </div>
-            
-            <Link 
-              href="/cursos"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold border border-violet-500/30 text-violet-400 hover:bg-violet-500/10 transition-all"
-            >
-              Acessar Minha Conta
-            </Link>
-          </div>
-
-          {/* Certificado */}
-          <div className="relative rounded-2xl overflow-hidden border border-orange-500/20 bg-gradient-to-br from-[#0a0a14] to-[#050510] p-6">
-            <p className="text-[10px] uppercase tracking-widest text-orange-400 mb-3">Evolua Sua Carreira</p>
-            <h3 className="text-xl font-black text-white mb-2">
-              Do Basico ao Avancado<br />Com Metodo Testado
-            </h3>
-            <p className="text-xs text-white/50 mb-6 leading-relaxed">
-              Conteudo atualizado, suporte especializado e certificacao reconhecida.
-            </p>
-            
-            {/* Mock certificate preview */}
-            <div className="rounded-xl border border-white/10 bg-black/30 p-3 mb-6">
-              <div className="flex items-center justify-center">
-                <div className="text-center">
-                  <Award size={24} className="text-orange-400 mx-auto mb-1" />
-                  <span className="text-[8px] text-white/40 block">CERTIFICADO</span>
-                  <span className="text-[10px] text-white/60">de Conclusao</span>
+                  <span
+                    className={`text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded-full border ${a.border} ${a.text}`}
+                    style={{ background: 'rgba(255,255,255,0.03)' }}
+                  >
+                    {d.curso}
+                  </span>
                 </div>
               </div>
-            </div>
-            
-            <Link 
-              href="/cursos"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold border border-orange-500/30 text-orange-400 hover:bg-orange-500/10 transition-all"
-            >
-              Quero Me Matricular
-            </Link>
-          </div>
+            )
+          })}
         </div>
 
         {/* CTA Final */}
