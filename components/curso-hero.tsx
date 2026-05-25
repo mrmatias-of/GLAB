@@ -1,7 +1,7 @@
 import Image from "next/image"
-import Link from "next/link"
-import { ArrowLeft, Tag, BookOpen, Clock, Zap } from "lucide-react"
+import { Tag, BookOpen, Clock, Zap } from "lucide-react"
 import type { Curso } from "@/lib/cursos-data"
+import BackButton from "@/components/back-button"
 
 export default function CursoHero({ curso }: { curso: Curso }) {
   const Icon = curso.icon
@@ -32,13 +32,7 @@ export default function CursoHero({ curso }: { curso: Curso }) {
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
         {/* Back button */}
-        <Link
-          href="javascript:history.back()"
-          className="inline-flex items-center gap-2 text-white/50 hover:text-cyan-400 transition-colors text-sm mb-8 group"
-        >
-          <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
-          Voltar
-        </Link>
+        <BackButton />
 
         <div className="grid lg:grid-cols-2 gap-10 items-center">
           {/* Left - Content */}
