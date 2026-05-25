@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import {
-  MapPin, Mail, Phone, Clock, Headphones, CheckCircle,
+  MapPin, Mail, Clock, Headphones, CheckCircle,
   LayoutGrid, Wrench, Users, Shield, Settings, Zap,
   Cpu, BarChart3, Target, FileText, GraduationCap
 } from "lucide-react"
@@ -167,12 +167,6 @@ export default function Footer() {
                   <a href="mailto:contato@glabcursos.com.br" className="flex items-center gap-2 text-xs text-white/50 hover:text-cyan-400 transition-colors">
                     <Mail size={14} className="text-cyan-400 shrink-0" />
                     contato@glabcursos.com.br
-                  </a>
-                </li>
-                <li>
-                  <a href="https://wa.me/5519989398294" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs text-white/50 hover:text-cyan-400 transition-colors">
-                    <Phone size={14} className="text-cyan-400 shrink-0" />
-                    (19) 98939-8294
                   </a>
                 </li>
                 <li className="flex items-start gap-2">
