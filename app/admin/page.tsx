@@ -26,16 +26,17 @@ export default async function AdminPage() {
   ]
 
   return (
-    <div className="min-h-screen p-8" style={{ background: 'linear-gradient(135deg, #0a0a0f 0%, #0d1117 50%, #0a0a0f 100%)' }}>
+    <div className="min-h-screen p-8" style={{ background: '#050510' }}>
       {/* Header com efeito glow */}
       <div className="mb-10 relative">
-        <div className="absolute -top-4 -left-4 w-32 h-32 bg-cyan-500/20 rounded-full blur-3xl" />
+        <div className="absolute -top-4 -left-4 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-32 h-32 bg-violet-500/10 rounded-full blur-3xl" />
         <div className="relative">
-          <p className="text-cyan-400 text-xs font-bold tracking-[0.3em] uppercase mb-2">Painel Administrativo</p>
+          <p className="text-xs font-bold tracking-[0.3em] uppercase mb-2" style={{ color: '#00d4c8' }}>Painel Administrativo</p>
           <h1 className="text-4xl font-black text-white">
-            Dashboard <span className="bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">G-LAB</span>
+            Dashboard <span style={{ background: 'linear-gradient(135deg, #00d4c8 0%, #7c3aed 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>G-LAB</span>
           </h1>
-          <p className="text-zinc-500 text-sm mt-2">Gerencie seus cursos, vendas e conteúdos da plataforma</p>
+          <p className="text-white/40 text-sm mt-2">Gerencie seus cursos, vendas e conteúdos da plataforma</p>
         </div>
       </div>
 
@@ -46,18 +47,21 @@ export default async function AdminPage() {
           return (
             <div 
               key={s.label} 
-              className={`relative overflow-hidden rounded-2xl border ${s.border} ${s.bg} p-6 backdrop-blur-sm`}
-              style={{ background: 'linear-gradient(135deg, rgba(15,15,20,0.9) 0%, rgba(10,10,15,0.95) 100%)' }}
+              className="relative overflow-hidden rounded-2xl border border-cyan-500/20 p-6 transition-all duration-300 hover:border-cyan-500/40 hover:scale-105"
+              style={{ background: 'rgba(0,212,200,0.03)' }}
             >
               {/* Glow effect */}
-              <div className={`absolute top-0 right-0 w-20 h-20 bg-gradient-to-br ${s.gradient} opacity-20 blur-2xl`} />
+              <div className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-br ${s.gradient} opacity-10 blur-2xl`} />
               
               <div className="relative">
-                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${s.gradient} flex items-center justify-center mb-4 shadow-lg`}>
-                  <Icon size={18} className="text-white" strokeWidth={2} />
+                <div 
+                  className={`w-10 h-10 rounded-xl bg-gradient-to-br ${s.gradient} flex items-center justify-center mb-4`}
+                  style={{ boxShadow: '0 0 20px rgba(0,212,200,0.3)' }}
+                >
+                  <Icon size={18} className="text-black" strokeWidth={2} />
                 </div>
-                <p className={`text-4xl font-black bg-gradient-to-r ${s.gradient} bg-clip-text text-transparent`}>{s.value}</p>
-                <p className="text-xs text-zinc-500 mt-1 font-medium">{s.label}</p>
+                <p className="text-4xl font-black text-white">{s.value}</p>
+                <p className="text-xs text-white/40 mt-1 font-medium">{s.label}</p>
               </div>
             </div>
           )
@@ -78,15 +82,21 @@ export default async function AdminPage() {
               <Link
                 key={action.num}
                 href={action.href}
-                className="group relative overflow-hidden rounded-2xl border border-zinc-800/50 p-5 transition-all duration-300 hover:border-cyan-500/50 hover:shadow-lg hover:shadow-cyan-500/10"
-                style={{ background: 'linear-gradient(180deg, rgba(20,20,25,0.9) 0%, rgba(10,10,15,0.95) 100%)' }}
+                className="group relative overflow-hidden rounded-2xl border border-white/10 p-5 transition-all duration-300 hover:border-cyan-500/50 hover:scale-105"
+                style={{ background: 'rgba(255,255,255,0.02)' }}
               >
                 {/* Number badge */}
                 <div className="flex items-start justify-between mb-4">
-                  <span className="text-2xl font-black bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">
+                  <span 
+                    className="text-2xl font-black"
+                    style={{ background: 'linear-gradient(135deg, #00d4c8 0%, #7c3aed 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
+                  >
                     {action.num}
                   </span>
-                  <div className="w-10 h-10 rounded-xl border border-cyan-500/30 bg-cyan-500/10 flex items-center justify-center group-hover:bg-cyan-500/20 transition-colors">
+                  <div 
+                    className="w-10 h-10 rounded-xl border border-cyan-500/30 flex items-center justify-center group-hover:border-cyan-500/50 transition-all"
+                    style={{ background: 'rgba(0,212,200,0.1)' }}
+                  >
                     <Icon size={18} className="text-cyan-400" strokeWidth={1.5} />
                   </div>
                 </div>
@@ -94,7 +104,7 @@ export default async function AdminPage() {
                 <h3 className="text-white font-bold text-sm mb-1 group-hover:text-cyan-400 transition-colors">
                   {action.label}
                 </h3>
-                <p className="text-zinc-600 text-xs leading-relaxed">
+                <p className="text-white/30 text-xs leading-relaxed">
                   {action.desc}
                 </p>
 
@@ -107,44 +117,57 @@ export default async function AdminPage() {
       </div>
 
       {/* Cursos recentes com visual melhorado */}
-      <div className="rounded-2xl border border-zinc-800/50 overflow-hidden" style={{ background: 'linear-gradient(180deg, rgba(15,15,20,0.95) 0%, rgba(10,10,15,0.98) 100%)' }}>
-        <div className="flex items-center justify-between p-6 border-b border-zinc-800/50">
+      <div 
+        className="rounded-2xl border border-cyan-500/20 overflow-hidden"
+        style={{ background: 'rgba(0,212,200,0.02)' }}
+      >
+        <div className="flex items-center justify-between p-6 border-b border-cyan-500/10">
           <div className="flex items-center gap-3">
-            <div className="w-1 h-6 bg-gradient-to-b from-cyan-400 to-teal-500 rounded-full" />
+            <div className="w-1 h-6 rounded-full" style={{ background: 'linear-gradient(180deg, #00d4c8 0%, #7c3aed 100%)' }} />
             <h2 className="font-black text-white">Cursos Cadastrados</h2>
-            <span className="text-xs text-zinc-600 font-medium">({total} total)</span>
+            <span className="text-xs text-white/30 font-medium">({total} total)</span>
           </div>
           <Link
             href="/admin/cursos/novo"
-            className="flex items-center gap-2 text-xs font-bold bg-gradient-to-r from-cyan-500 to-teal-500 text-black px-4 py-2.5 rounded-xl hover:shadow-lg hover:shadow-cyan-500/20 transition-all"
+            className="flex items-center gap-2 text-xs font-bold text-black px-4 py-2.5 rounded-xl transition-all duration-300 hover:scale-105"
+            style={{ 
+              background: 'linear-gradient(135deg, #00d4c8 0%, #7c3aed 100%)',
+              boxShadow: '0 0 20px rgba(0,212,200,0.3)'
+            }}
           >
             <Zap size={14} strokeWidth={2.5} />
             Novo Curso
           </Link>
         </div>
 
-        <div className="divide-y divide-zinc-800/30">
+        <div className="divide-y divide-cyan-500/10">
           {cursos?.slice(0, 8).map((curso, index) => (
             <div 
               key={curso.id} 
-              className="flex items-center justify-between px-6 py-4 hover:bg-zinc-800/20 transition-colors group"
+              className="flex items-center justify-between px-6 py-4 hover:bg-cyan-500/5 transition-colors group"
             >
               <div className="flex items-center gap-4">
                 {/* Index number */}
-                <span className="text-lg font-black text-zinc-700 w-6">
+                <span className="text-lg font-black text-white/20 w-6">
                   {String(index + 1).padStart(2, '0')}
                 </span>
                 
                 {/* Status dot */}
-                <div className={`w-2.5 h-2.5 rounded-full ${curso.ativo ? "bg-gradient-to-r from-cyan-400 to-teal-400 shadow-sm shadow-cyan-400/50" : "bg-zinc-700"}`} />
+                <div 
+                  className={`w-2.5 h-2.5 rounded-full ${curso.ativo ? "" : "bg-white/20"}`}
+                  style={curso.ativo ? { background: 'linear-gradient(135deg, #00d4c8 0%, #7c3aed 100%)', boxShadow: '0 0 10px rgba(0,212,200,0.5)' } : {}}
+                />
                 
                 <div>
                   <p className="text-sm font-semibold text-white group-hover:text-cyan-400 transition-colors">{curso.titulo}</p>
-                  <p className="text-xs text-zinc-600">{curso.tag} · <span className="text-cyan-500">{curso.preco}</span></p>
+                  <p className="text-xs text-white/30">{curso.tag} · <span style={{ color: '#00d4c8' }}>{curso.preco}</span></p>
                 </div>
 
                 {curso.destaque && (
-                  <span className="text-[10px] font-black bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded-full">
+                  <span 
+                    className="text-[10px] font-black px-2.5 py-1 rounded-full border border-amber-500/30"
+                    style={{ background: 'rgba(245, 158, 11, 0.1)', color: '#fbbf24' }}
+                  >
                     DESTAQUE
                   </span>
                 )}
@@ -152,7 +175,7 @@ export default async function AdminPage() {
 
               <Link
                 href={`/admin/cursos/editar/${curso.id}`}
-                className="text-xs font-medium text-zinc-500 hover:text-cyan-400 border border-zinc-800 hover:border-cyan-500/30 px-4 py-2 rounded-xl transition-all hover:bg-cyan-500/5"
+                className="text-xs font-medium text-white/50 hover:text-cyan-400 border border-white/10 hover:border-cyan-500/30 px-4 py-2 rounded-xl transition-all hover:bg-cyan-500/5"
               >
                 Editar
               </Link>
@@ -161,8 +184,8 @@ export default async function AdminPage() {
         </div>
 
         {cursos && cursos.length > 8 && (
-          <div className="p-4 border-t border-zinc-800/30 text-center">
-            <Link href="/admin/cursos" className="text-xs font-medium text-cyan-400 hover:text-cyan-300 transition-colors">
+          <div className="p-4 border-t border-cyan-500/10 text-center">
+            <Link href="/admin/cursos" className="text-xs font-medium transition-colors" style={{ color: '#00d4c8' }}>
               Ver todos os {total} cursos
             </Link>
           </div>

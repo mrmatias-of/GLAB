@@ -1,9 +1,10 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
-import { Layers, BookOpen, LogOut, Home, LayoutDashboard, Receipt, Plus, Zap, Settings } from "lucide-react"
+import { BookOpen, LogOut, Home, LayoutDashboard, Receipt, Plus } from "lucide-react"
 
 const navItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
@@ -24,39 +25,61 @@ export default function AdminSidebar({ userEmail }: { userEmail: string }) {
 
   return (
     <aside 
-      className="w-64 min-h-screen border-r border-zinc-800/50 flex flex-col"
-      style={{ background: 'linear-gradient(180deg, #0a0a0f 0%, #0d0d12 100%)' }}
+      className="w-64 min-h-screen flex flex-col relative overflow-hidden"
+      style={{ background: '#050510' }}
     >
-      {/* Logo com glow */}
-      <div className="p-6 border-b border-zinc-800/50 relative">
-        <div className="absolute top-0 left-0 w-20 h-20 bg-cyan-500/10 rounded-full blur-2xl" />
+      {/* Grid pattern overlay */}
+      <div 
+        className="absolute inset-0 opacity-30 pointer-events-none"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(0,212,200,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,212,200,0.03) 1px, transparent 1px)
+          `,
+          backgroundSize: '20px 20px'
+        }}
+      />
+      
+      {/* Borda direita neon */}
+      <div className="absolute right-0 top-0 bottom-0 w-px bg-gradient-to-b from-cyan-500/50 via-violet-500/30 to-transparent" />
+      
+      {/* Logo com imagem real */}
+      <div className="p-6 border-b border-cyan-500/10 relative z-10">
+        <div className="absolute top-0 left-0 w-32 h-32 bg-cyan-500/5 rounded-full blur-3xl" />
         <div className="flex items-center gap-3 relative">
-          <div 
-            className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-teal-500 flex items-center justify-center shadow-lg shadow-cyan-500/20"
-          >
-            <Zap size={18} className="text-black" strokeWidth={2.5} />
+          <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-cyan-500/30 shadow-lg shadow-cyan-500/20">
+            <Image
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-glab-neon-transparent-2kFvS2C6hGbJR8B91q0a0cgSa9Uqxz.png"
+              alt="G-Lab Logo"
+              fill
+              className="object-cover"
+            />
           </div>
           <div>
-            <span className="font-black text-base text-white">G<span className="text-cyan-400">•</span>LAB</span>
-            <p className="text-[10px] leading-none mt-0.5 text-zinc-600 font-medium tracking-wider">ADMIN PANEL</p>
+            <span className="font-black text-base text-white">G<span className="text-cyan-400" style={{ textShadow: '0 0 10px rgba(0,212,200,0.8)' }}>•</span>LAB</span>
+            <p className="text-[10px] leading-none mt-0.5 text-cyan-500/50 font-medium tracking-wider">ADMIN PANEL</p>
           </div>
         </div>
       </div>
 
       {/* Botao Novo Curso destacado */}
-      <div className="px-4 py-4">
+      <div className="px-4 py-4 relative z-10">
         <Link
           href="/admin/cursos/novo"
-          className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl text-sm font-bold transition-all bg-gradient-to-r from-cyan-500 to-teal-500 text-black hover:shadow-lg hover:shadow-cyan-500/30"
+          className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl text-sm font-bold transition-all duration-300 hover:scale-105"
+          style={{ 
+            background: 'linear-gradient(135deg, #00d4c8 0%, #7c3aed 100%)',
+            boxShadow: '0 0 20px rgba(0,212,200,0.3)'
+          }}
         >
-          <Plus size={16} strokeWidth={2.5} />
-          Novo Curso
+          <Plus size={16} strokeWidth={2.5} className="text-black" />
+          <span className="text-black">Novo Curso</span>
         </Link>
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-4 flex flex-col gap-1">
-        <p className="text-[10px] text-zinc-600 font-bold tracking-wider uppercase mb-2 px-3">Menu</p>
+      <nav className="flex-1 px-4 flex flex-col gap-1 relative z-10">
+        <p className="text-[10px] text-cyan-500/40 font-bold tracking-wider uppercase mb-2 px-3">Menu</p>
         
         {navItems.map((item) => {
           const Icon = item.icon
@@ -65,14 +88,18 @@ export default function AdminSidebar({ userEmail }: { userEmail: string }) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 relative overflow-hidden ${
+              className={`flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-300 relative overflow-hidden ${
                 active 
                   ? "text-cyan-400 bg-cyan-500/10 border border-cyan-500/30" 
-                  : "text-zinc-500 hover:text-white hover:bg-zinc-800/50 border border-transparent"
+                  : "text-white/50 hover:text-cyan-400 hover:bg-cyan-500/5 border border-transparent hover:border-cyan-500/20"
               }`}
+              style={active ? { boxShadow: '0 0 15px rgba(0,212,200,0.2)' } : {}}
             >
               {active && (
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-4 bg-gradient-to-b from-cyan-400 to-teal-500 rounded-r-full" />
+                <div 
+                  className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full"
+                  style={{ background: 'linear-gradient(180deg, #00d4c8 0%, #7c3aed 100%)' }}
+                />
               )}
               <Icon size={16} strokeWidth={1.5} />
               {item.label}
@@ -80,12 +107,12 @@ export default function AdminSidebar({ userEmail }: { userEmail: string }) {
           )
         })}
 
-        <div className="mt-6 pt-4 border-t border-zinc-800/50">
-          <p className="text-[10px] text-zinc-600 font-bold tracking-wider uppercase mb-2 px-3">Sistema</p>
+        <div className="mt-6 pt-4 border-t border-cyan-500/10">
+          <p className="text-[10px] text-cyan-500/40 font-bold tracking-wider uppercase mb-2 px-3">Sistema</p>
           
           <Link
             href="/"
-            className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-zinc-500 hover:text-white hover:bg-zinc-800/50"
+            className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-300 text-white/50 hover:text-cyan-400 hover:bg-cyan-500/5 border border-transparent hover:border-cyan-500/20"
           >
             <Home size={16} strokeWidth={1.5} />
             Ver Site
@@ -94,18 +121,27 @@ export default function AdminSidebar({ userEmail }: { userEmail: string }) {
       </nav>
 
       {/* User info */}
-      <div className="p-4 border-t border-zinc-800/50 mt-auto">
-        <div className="flex items-center gap-3 p-3 rounded-xl bg-zinc-900/50 border border-zinc-800/50">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold shadow-lg shadow-violet-500/20">
+      <div className="p-4 border-t border-cyan-500/10 mt-auto relative z-10">
+        <div 
+          className="flex items-center gap-3 p-3 rounded-xl border border-violet-500/20"
+          style={{ background: 'rgba(124, 58, 237, 0.05)' }}
+        >
+          <div 
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold"
+            style={{ 
+              background: 'linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)',
+              boxShadow: '0 0 15px rgba(124, 58, 237, 0.3)'
+            }}
+          >
             {userEmail.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-xs text-white font-medium truncate">{userEmail.split('@')[0]}</p>
-            <p className="text-[10px] text-zinc-600 truncate">Administrador</p>
+            <p className="text-[10px] text-violet-400/50 truncate">Administrador</p>
           </div>
           <button
             onClick={handleLogout}
-            className="p-2 rounded-lg transition-all text-zinc-600 hover:text-red-400 hover:bg-red-500/10"
+            className="p-2 rounded-lg transition-all duration-300 text-white/30 hover:text-red-400 hover:bg-red-500/10 border border-transparent hover:border-red-500/20"
             title="Sair"
           >
             <LogOut size={14} />
