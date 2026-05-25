@@ -21,13 +21,13 @@ const cursosFooter: CursoItem[] = [
   { label: 'Software de Celular', icon: FileText },
 ]
 
-// Mapeamento de nomes para slugs (hardcoded como fallback)
+// Mapeamento de nomes para slugs corretos do Supabase
 const cursoSlugsMap: Record<string, string> = {
-  'troca de tela': 'troca-de-tela',
-  'troca de bateria': 'troca-de-bateria',
-  'conectores e carga': 'conectores-e-carga',
-  'curto em placa': 'curto-em-placa',
-  'software de celular': 'software-de-celular',
+  'troca de tela': 'guia-troca-de-tela',
+  'troca de bateria': 'guia-troca-de-bateria',
+  'conectores e carga': 'guia-conectores-carga',
+  'curto em placa': 'guia-curto-em-placa',
+  'software de celular': 'guia-software-celular',
 }
 
 export default function Footer() {
