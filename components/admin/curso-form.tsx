@@ -4,7 +4,7 @@ import { useState } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 import { Plus, Trash2, Save, ArrowLeft } from "lucide-react"
-import ImageCropUpload from "@/components/admin/image-crop-upload"
+import SimpleImageUpload from "@/components/admin/simple-image-upload"
 import Link from "next/link"
 
 type Modulo = { titulo: string; topicos: string[] }
@@ -256,11 +256,10 @@ export default function CursoForm({ initialData, id }: { initialData?: Partial<C
         {/* Imagem de Capa */}
         <section className="rounded-2xl border border-border bg-card p-6">
           <h2 className="text-sm font-black text-foreground mb-1">Imagem de Capa / Card</h2>
-          <p className="text-xs text-muted-foreground mb-4">Após selecionar a imagem, recorte na proporção desejada antes de enviar.</p>
-          <ImageCropUpload
+          <p className="text-xs text-muted-foreground mb-4">Envie a imagem. O sistema otimiza automaticamente.</p>
+          <SimpleImageUpload
             value={form.imagem}
             onChange={(url) => set("imagem", url)}
-            aspectRatio={16 / 9}
           />
         </section>
 
