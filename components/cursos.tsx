@@ -60,11 +60,14 @@ export default async function Cursos() {
               className="group relative rounded-xl overflow-hidden border border-green-500/30 bg-gradient-to-b from-green-950/30 to-[#050510] hover:border-green-400/50 transition-all duration-300 hover:scale-105 h-fit"
             >
               {/* Image */}
-              <div className="relative aspect-[3/2] bg-gradient-to-br from-green-600/20 to-emerald-600/10 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="text-4xl">💬</div>
-                  <span className="text-xs text-green-400 font-bold">COMUNIDADE GJ</span>
-                </div>
+              <div className="relative aspect-[3/2] overflow-hidden bg-black">
+                <Image
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ChatGPT%20Image%2025%20de%20mai.%20de%202026%2C%2011_29_14-hzzSln2osQUTN0CuNRveCviyHzc89G.png"
+                  alt="Comunidade GJ - Conecte-se. Aprenda. Compartilhe. Evolua."
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                />
 
                 {/* Number badge */}
                 <div className="absolute top-3 left-3 w-7 h-7 rounded-md bg-green-500/20 border border-green-500/30 flex items-center justify-center">
