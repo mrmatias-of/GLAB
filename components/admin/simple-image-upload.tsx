@@ -66,6 +66,7 @@ export default function SimpleImageUpload({
             sizes="100%"
           />
           <button
+            type="button"
             onClick={() => onChange("")}
             className="absolute top-2 right-2 p-1 rounded-full bg-red-500/80 hover:bg-red-600 transition-colors"
           >
@@ -84,6 +85,7 @@ export default function SimpleImageUpload({
           className="hidden"
         />
         <button
+          type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={uploading}
           className="inline-flex flex-col items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
