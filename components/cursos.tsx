@@ -30,7 +30,7 @@ const getIconByTag = (tag: string) => {
   return Cpu
 }
 
-export default async function Cursos() {
+export default async function Cursos({ showComunidade = false }: { showComunidade?: boolean }) {
   const supabase = await createClient()
   const { data, error } = await supabase
     .from("cursos")
@@ -54,8 +54,8 @@ export default async function Cursos() {
         {/* Grid de Cursos Numerados */}
         {cursos.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {/* Card Comunidade GJ - PRIMEIRO */}
-            <a
+            {/* Card Comunidade GJ - apenas na home */}
+            {showComunidade && <a
               href="https://chat.whatsapp.com/KiK2TDOf1HzGlkgH8IEL4B"
               target="_blank"
               rel="noopener noreferrer"
@@ -96,7 +96,7 @@ export default async function Cursos() {
                   Quero participar
                 </button>
               </div>
-            </a>
+            </a>}
 
             {/* Cards de Cursos */}
             {cursos.map((curso, index) => {

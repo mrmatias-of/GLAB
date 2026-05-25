@@ -9,7 +9,7 @@ export default function Home() {
     <main className="min-h-screen text-white" style={{ backgroundColor: '#050510' }}>
       <Header />
       <Hero />
-      <Cursos />
+      <Cursos showComunidade={true} />
       <Beneficios />
       <Footer />
     </main>
