@@ -46,7 +46,7 @@ export default function Hero() {
             <div className="flex flex-wrap gap-4 mb-12">
               <Link 
                 href="/cursos" 
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-sm text-black transition-all hover:shadow-lg hover:shadow-cyan-500/50"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-sm text-black transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/50 hover:scale-110"
                 style={{ background: 'linear-gradient(135deg, #00d4c8 0%, #7c3aed 100%)' }}
               >
                 Comecar Agora
@@ -54,7 +54,7 @@ export default function Hero() {
               </Link>
               <Link 
                 href="/cursos" 
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-sm text-white border-2 transition-all hover:bg-white/5"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-sm text-white border-2 transition-all duration-300 hover:bg-white/5 hover:scale-110"
                 style={{ borderColor: '#a855f7' }}
               >
                 Ver Cursos
@@ -64,29 +64,29 @@ export default function Hero() {
             
             {/* Badges */}
             <div className="grid grid-cols-2 gap-4 text-sm">
-              <div className="flex items-center gap-3 p-3 rounded-lg border border-white/10 bg-white/5">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgba(0,212,200,0.1)', borderColor: '#00d4c8', borderWidth: '1px' }}>
+              <div className="flex items-center gap-3 p-3 rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-110 hover:border-cyan-500/50 hover:bg-cyan-500/10 cursor-pointer">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300" style={{ background: 'rgba(0,212,200,0.1)', borderColor: '#00d4c8', borderWidth: '1px' }}>
                   <Zap size={16} style={{ color: '#00d4c8' }} />
                 </div>
                 <span className="font-semibold text-white leading-tight">Aulas Praticas<br />e Objetivas</span>
               </div>
               
-              <div className="flex items-center gap-3 p-3 rounded-lg border border-white/10 bg-white/5">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgba(0,212,200,0.1)', borderColor: '#00d4c8', borderWidth: '1px' }}>
+              <div className="flex items-center gap-3 p-3 rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-110 hover:border-cyan-500/50 hover:bg-cyan-500/10 cursor-pointer">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300" style={{ background: 'rgba(0,212,200,0.1)', borderColor: '#00d4c8', borderWidth: '1px' }}>
                   <Headphones size={16} style={{ color: '#00d4c8' }} />
                 </div>
                 <span className="font-semibold text-white leading-tight">Suporte Tecnico<br />Especializado</span>
               </div>
               
-              <div className="flex items-center gap-3 p-3 rounded-lg border border-white/10 bg-white/5">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgba(168, 85, 247, 0.1)', borderColor: '#a855f7', borderWidth: '1px' }}>
+              <div className="flex items-center gap-3 p-3 rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-110 hover:border-violet-500/50 hover:bg-violet-500/10 cursor-pointer">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300" style={{ background: 'rgba(168, 85, 247, 0.1)', borderColor: '#a855f7', borderWidth: '1px' }}>
                   <Award size={16} style={{ color: '#a855f7' }} />
                 </div>
                 <span className="font-semibold text-white leading-tight">Certificado<br />Reconhecido</span>
               </div>
               
-              <div className="flex items-center gap-3 p-3 rounded-lg border border-white/10 bg-white/5">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgba(0,212,200,0.1)', borderColor: '#00d4c8', borderWidth: '1px' }}>
+              <div className="flex items-center gap-3 p-3 rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-110 hover:border-cyan-500/50 hover:bg-cyan-500/10 cursor-pointer">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300" style={{ background: 'rgba(0,212,200,0.1)', borderColor: '#00d4c8', borderWidth: '1px' }}>
                   <Users size={16} style={{ color: '#00d4c8' }} />
                 </div>
                 <span className="font-semibold text-white leading-tight">Comunidade<br />Ativa</span>

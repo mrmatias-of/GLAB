@@ -57,7 +57,7 @@ export default async function Cursos() {
             {/* Card Comunidade GJ - PRIMEIRO */}
             <Link
               href="/grupo-vip"
-              className="group relative rounded-xl overflow-hidden border border-green-500/30 bg-gradient-to-b from-green-950/30 to-[#050510] hover:border-green-400/50 transition-all h-fit"
+              className="group relative rounded-xl overflow-hidden border border-green-500/30 bg-gradient-to-b from-green-950/30 to-[#050510] hover:border-green-400/50 transition-all duration-300 hover:scale-105 h-fit"
             >
               {/* Image */}
               <div className="relative aspect-[3/2] bg-gradient-to-br from-green-600/20 to-emerald-600/10 flex items-center justify-center">
@@ -97,7 +97,7 @@ export default async function Cursos() {
                 <Link
                   key={curso.id}
                   href={`/cursos/${curso.slug}`}
-                  className="group relative rounded-xl overflow-hidden border border-white/10 bg-gradient-to-b from-[#0a0a14] to-[#050510] hover:border-cyan-500/30 transition-all h-fit"
+                  className="group relative rounded-xl overflow-hidden border border-white/10 bg-gradient-to-b from-[#0a0a14] to-[#050510] hover:border-cyan-500/30 transition-all duration-300 hover:scale-105 h-fit"
                 >
                   {/* Image */}
                   <div className="relative aspect-[3/2] bg-zinc-900/50">
