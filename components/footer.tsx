@@ -7,28 +7,33 @@ import {
   LayoutGrid, Wrench, Users, Shield, Settings, Zap,
   Cpu, BarChart3, Target, FileText, GraduationCap
 } from "lucide-react"
-import { getCursos } from "@/lib/cursos-data"
-import type { Curso } from "@/lib/cursos-data"
+
+type CursoItem = {
+  label: string
+  icon: typeof Target
+}
+
+const cursosFooter: CursoItem[] = [
+  { label: 'Troca de Tela', icon: Target },
+  { label: 'Troca de Bateria', icon: BarChart3 },
+  { label: 'Conectores e Carga', icon: Zap },
+  { label: 'Curto em Placa', icon: Cpu },
+  { label: 'Software de Celular', icon: FileText },
+]
+
+// Mapeamento de nomes para slugs (hardcoded como fallback)
+const cursoSlugsMap: Record<string, string> = {
+  'troca de tela': 'troca-de-tela',
+  'troca de bateria': 'troca-de-bateria',
+  'conectores e carga': 'conectores-e-carga',
+  'curto em placa': 'curto-em-placa',
+  'software de celular': 'software-de-celular',
+}
 
 export default function Footer() {
-  const [cursos, setCursos] = useState<Curso[]>([])
-
-  useEffect(() => {
-    getCursos().then(setCursos)
-  }, [])
-
-  // Mapeamento de nomes de cursos para encontrar slugs
-  const cursosFooter = [
-    { label: 'Troca de Tela', icon: Target },
-    { label: 'Troca de Bateria', icon: BarChart3 },
-    { label: 'Conectores e Carga', icon: Zap },
-    { label: 'Curto em Placa', icon: Cpu },
-    { label: 'Software de Celular', icon: FileText },
-  ]
-
   const getCursoHref = (label: string): string => {
-    const curso = cursos.find((c) => c.titulo.toLowerCase().includes(label.toLowerCase()))
-    return curso ? `/cursos/${curso.slug}` : '/cursos'
+    const slug = cursoSlugsMap[label.toLowerCase()]
+    return slug ? `/cursos/${slug}` : '/cursos'
   }
   return (
     <footer className="relative" style={{ backgroundColor: '#050510' }}>
