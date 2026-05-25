@@ -9,7 +9,7 @@ import { ImageIcon, X, RotateCcw, Check, Upload } from "lucide-react"
 interface ImageCropUploadProps {
   value: string
   onChange: (url: string) => void
-  aspectRatio?: number // ex: 16/9, 4/3, 1. Default: 16/9
+  aspectRatio?: number | undefined // ex: 16/9, 4/3, 1. Undefined = livre
 }
 
 function centerAspectCrop(mediaWidth: number, mediaHeight: number, aspect: number): Crop {
@@ -60,7 +60,7 @@ async function getCroppedBlob(
 export default function ImageCropUpload({
   value,
   onChange,
-  aspectRatio = 16 / 9,
+  aspectRatio,
 }: ImageCropUploadProps) {
   const [srcImage, setSrcImage] = useState<string | null>(null)
   const [crop, setCrop] = useState<Crop>()
@@ -192,7 +192,7 @@ export default function ImageCropUpload({
         </div>
 
         <p className="text-[10px] text-muted-foreground text-center bg-cyan/5 border border-cyan/20 rounded px-2 py-1.5">
-          Arraste para reposicionar o recorte. Proporção {aspectRatio === 16/9 ? "16:9" : aspectRatio === 4/3 ? "4:3" : "livre"}.
+          Arraste para reposicionar o recorte. Sem restrição de proporção.
         </p>
 
         {error && (
