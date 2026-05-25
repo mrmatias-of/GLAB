@@ -1,6 +1,10 @@
 import { put } from '@vercel/blob'
 import { type NextRequest, NextResponse } from 'next/server'
 
+export const config = {
+  api: { bodyParser: { sizeLimit: '50mb' } },
+}
+
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData()
@@ -15,15 +19,6 @@ export async function POST(request: NextRequest) {
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
         { error: 'Tipo de arquivo não permitido. Use: JPG, PNG, WebP ou GIF' },
-        { status: 400 }
-      )
-    }
-
-    // Validar tamanho (max 5MB)
-    const maxSize = 5 * 1024 * 1024
-    if (file.size > maxSize) {
-      return NextResponse.json(
-        { error: 'Arquivo muito grande. Tamanho máximo: 5MB' },
         { status: 400 }
       )
     }

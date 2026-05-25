@@ -79,10 +79,6 @@ export default function ImageCropUpload({
       setError("Tipo não permitido. Use JPG, PNG, WebP ou GIF.")
       return
     }
-    if (file.size > 5 * 1024 * 1024) {
-      setError("Arquivo muito grande. Máximo 5MB.")
-      return
-    }
 
     setError(null)
     originalFileName.current = file.name
@@ -252,7 +248,7 @@ export default function ImageCropUpload({
           </div>
           <div className="text-center">
             <p className="text-sm font-medium text-foreground">Clique para fazer upload</p>
-            <p className="text-xs text-muted-foreground mt-1">JPG, PNG, WebP ou GIF (max 5MB)</p>
+            <p className="text-xs text-muted-foreground mt-1">JPG, PNG, WebP ou GIF</p>
           </div>
         </div>
       </label>
