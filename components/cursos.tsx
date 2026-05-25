@@ -1,4 +1,4 @@
-import { ArrowRight, Package, Smartphone, Monitor, Cpu, Layers, Zap, Radio, Settings, Wrench } from "lucide-react"
+import { ArrowRight, Package, Smartphone, Monitor, Cpu, Layers, Zap, Radio, Settings, Wrench, MessageCircle } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
@@ -55,12 +55,14 @@ export default async function Cursos() {
         {cursos.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {/* Card Comunidade GJ - PRIMEIRO */}
-            <Link
-              href="/grupo-vip"
-              className="group relative rounded-xl overflow-hidden border border-green-500/30 bg-gradient-to-b from-green-950/30 to-[#050510] hover:border-green-400/50 transition-all duration-300 hover:scale-105 h-fit"
+            <a
+              href="https://chat.whatsapp.com/KiK2TDOf1HzGlkgH8IEL4B"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative rounded-xl overflow-hidden border border-green-500/30 bg-gradient-to-b from-green-950/30 to-[#050510] hover:border-green-400/50 transition-all duration-300 hover:scale-105 h-fit flex flex-col"
             >
               {/* Image */}
-              <div className="relative aspect-[3/2] overflow-hidden bg-black">
+              <div className="relative aspect-[3/2] overflow-hidden bg-black flex-shrink-0">
                 <Image
                   src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ChatGPT%20Image%2025%20de%20mai.%20de%202026%2C%2011_29_14-hzzSln2osQUTN0CuNRveCviyHzc89G.png"
                   alt="Comunidade GJ - Conecte-se. Aprenda. Compartilhe. Evolua."
@@ -76,22 +78,25 @@ export default async function Cursos() {
               </div>
 
               {/* Content */}
-              <div className="p-3">
-                <h3 className="text-sm font-bold text-white leading-tight mb-1 group-hover:text-green-400 transition-colors">
-                  Comunidade GJ
-                </h3>
-                <p className="text-xs text-white/40 line-clamp-1 mb-2">
-                  Comunidade ativa no WhatsApp
-                </p>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-green-400">GRATIS</span>
-                  <div className="w-5 h-5 rounded border border-green-500/30 bg-green-500/10 flex items-center justify-center">
-                    <Users size={11} className="text-green-400" />
-                  </div>
+              <div className="p-3 flex flex-col gap-3 flex-grow">
+                <div>
+                  <h3 className="text-sm font-bold text-white leading-tight mb-1 group-hover:text-green-400 transition-colors">
+                    Comunidade GJ
+                  </h3>
+                  <p className="text-xs text-white/40">
+                    Conecte-se, aprenda e evolua
+                  </p>
                 </div>
+
+                {/* WhatsApp Button */}
+                <button
+                  className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2.5 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 text-sm"
+                >
+                  <MessageCircle size={16} />
+                  Quero participar
+                </button>
               </div>
-            </Link>
+            </a>
 
             {/* Cards de Cursos */}
             {cursos.map((curso, index) => {
