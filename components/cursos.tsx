@@ -54,7 +54,7 @@ export default async function Cursos() {
         {/* Grid de Cursos Numerados */}
         {cursos.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {/* Card Grupo VIP - PRIMEIRO */}
+            {/* Card Comunidade GJ - PRIMEIRO */}
             <Link
               href="/grupo-vip"
               className="group relative rounded-xl overflow-hidden border border-green-500/30 bg-gradient-to-b from-green-950/30 to-[#050510] hover:border-green-400/50 transition-all h-fit"
@@ -63,9 +63,9 @@ export default async function Cursos() {
               <div className="relative aspect-[3/2] bg-gradient-to-br from-green-600/20 to-emerald-600/10 flex items-center justify-center">
                 <div className="text-center">
                   <div className="text-4xl">💬</div>
-                  <span className="text-xs text-green-400 font-bold">GRUPO VIP</span>
+                  <span className="text-xs text-green-400 font-bold">COMUNIDADE GJ</span>
                 </div>
-                
+
                 {/* Number badge */}
                 <div className="absolute top-3 left-3 w-7 h-7 rounded-md bg-green-500/20 border border-green-500/30 flex items-center justify-center">
                   <span className="text-[11px] font-bold text-green-400">00</span>
@@ -75,12 +75,12 @@ export default async function Cursos() {
               {/* Content */}
               <div className="p-3">
                 <h3 className="text-sm font-bold text-white leading-tight mb-1 group-hover:text-green-400 transition-colors">
-                  Grupo VIP
+                  Comunidade GJ
                 </h3>
                 <p className="text-xs text-white/40 line-clamp-1 mb-2">
-                  Comunidade ativa
+                  Comunidade ativa no WhatsApp
                 </p>
-                
+
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-green-400">GRATIS</span>
                   <div className="w-5 h-5 rounded border border-green-500/30 bg-green-500/10 flex items-center justify-center">
