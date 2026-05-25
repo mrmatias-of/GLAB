@@ -1,12 +1,35 @@
+"use client"
+
 import Link from "next/link"
-import Image from "next/image"
-import { 
+import { useEffect, useState } from "react"
+import {
   MapPin, Mail, Phone, Clock, Headphones, CheckCircle,
   LayoutGrid, Wrench, Users, Shield, Settings, Zap,
   Cpu, BarChart3, Target, FileText, GraduationCap
 } from "lucide-react"
+import { getCursos } from "@/lib/cursos-data"
+import type { Curso } from "@/lib/cursos-data"
 
 export default function Footer() {
+  const [cursos, setCursos] = useState<Curso[]>([])
+
+  useEffect(() => {
+    getCursos().then(setCursos)
+  }, [])
+
+  // Mapeamento de nomes de cursos para encontrar slugs
+  const cursosFooter = [
+    { label: 'Troca de Tela', icon: Target },
+    { label: 'Troca de Bateria', icon: BarChart3 },
+    { label: 'Conectores e Carga', icon: Zap },
+    { label: 'Curto em Placa', icon: Cpu },
+    { label: 'Software de Celular', icon: FileText },
+  ]
+
+  const getCursoHref = (label: string): string => {
+    const curso = cursos.find((c) => c.titulo.toLowerCase().includes(label.toLowerCase()))
+    return curso ? `/cursos/${curso.slug}` : '/cursos'
+  }
   return (
     <footer className="relative" style={{ backgroundColor: '#050510' }}>
       {/* Top decorative line */}
@@ -106,16 +129,10 @@ export default function Footer() {
               <h4 className="text-sm font-bold text-white tracking-wide">CURSOS</h4>
             </div>
             <ul className="space-y-2.5">
-              {[
-                { label: 'Troca de Tela', icon: Target },
-                { label: 'Troca de Bateria', icon: BarChart3 },
-                { label: 'Conectores e Carga', icon: Zap },
-                { label: 'Curto em Placa', icon: Cpu },
-                { label: 'Software de Celular', icon: FileText },
-              ].map((item) => (
+              {cursosFooter.map((item) => (
                 <li key={item.label}>
                   <Link
-                    href="/cursos"
+                    href={getCursoHref(item.label)}
                     className="flex items-center gap-2 text-sm text-white/50 hover:text-cyan-400 transition-colors group"
                   >
                     <item.icon size={12} className="text-cyan-500/50 group-hover:text-cyan-400" />
