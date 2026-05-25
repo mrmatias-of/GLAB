@@ -20,7 +20,7 @@ const benefits = [
   {
     number: '03',
     icon: FileText,
-    title: 'Materiais e Guias',
+    title: 'Materiais e Cursos',
     description: 'Acesso a apostilas, checklists e materiais de apoio.'
   },
   {

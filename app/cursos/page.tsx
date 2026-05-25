@@ -4,8 +4,8 @@ import Footer from "@/components/footer"
 import WhatsAppButton from "@/components/whatsapp-button"
 
 export const metadata = {
-  title: "Cursos - G-Lab Guias Mestre",
-  description: "Todos os guias tecnicos de assistencia disponiveis: iPhone, Android, Windows e muito mais.",
+  title: "Cursos - G-Lab Cursos Mestre",
+  description: "Todos os cursos tecnicos de assistencia disponiveis: iPhone, Android, Windows e muito mais.",
 }
 
 export default function CursosPage() {
@@ -34,7 +34,7 @@ export default function CursosPage() {
           
           <h1 className="text-4xl md:text-5xl font-black text-white mb-4">
             Todos os{" "}
-            <span className="text-cyan-400" style={{ textShadow: '0 0 30px rgba(0,212,200,0.5)' }}>Guias</span>
+            <span className="text-cyan-400" style={{ textShadow: '0 0 30px rgba(0,212,200,0.5)' }}>Cursos</span>
           </h1>
           
           <p className="text-base text-white/50 leading-relaxed max-w-xl mx-auto">

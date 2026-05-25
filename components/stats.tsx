@@ -1,5 +1,5 @@
 const ITEMS = [
-  { value: '30',    label: 'Guias disponíveis',    wide: false },
+  { value: '30',    label: 'Cursos disponíveis',    wide: false },
   { value: '1.000+', label: 'Alunos ativos',       wide: false },
   { value: 'Trabalhamos\ncirurgicamente', label: 'Precisão técnica em cada guia. Sem atalhos, sem achismos.', wide: true },
   { value: '+10 anos', label: 'De experiência',      wide: false },
@@ -16,7 +16,7 @@ export default function Stats() {
           {/* Stat 1 */}
           <div className="card p-6 rounded-2xl">
             <p className="text-4xl sm:text-5xl font-extrabold text-white mb-2 tracking-tight">30</p>
-            <p className="text-xs font-medium tracking-wide" style={{ color: '#71717a' }}>Guias disponíveis</p>
+            <p className="text-xs font-medium tracking-wide" style={{ color: '#71717a' }}>Cursos disponíveis</p>
           </div>
 
           {/* Stat 2 */}

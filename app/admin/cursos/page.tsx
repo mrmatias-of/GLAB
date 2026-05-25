@@ -130,15 +130,15 @@ export default function AdminCursosPage() {
     <div className="p-8">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-black text-foreground">Guias / Cursos</h1>
-          <p className="text-muted-foreground text-sm mt-1">{cursos.length} guia(s) cadastrado(s)</p>
+          <h1 className="text-2xl font-black text-foreground">Cursos</h1>
+          <p className="text-muted-foreground text-sm mt-1">{cursos.length} curso(s) cadastrado(s)</p>
         </div>
         <Link
           href="/admin/cursos/novo"
           className="inline-flex items-center gap-2 bg-cyan text-background font-bold text-sm px-5 py-2.5 rounded-xl hover:bg-cyan/90 shadow-[0_0_20px_rgba(0,212,200,0.25)] transition-all"
         >
           <Plus size={15} />
-          Novo Guia
+          Novo Curso
         </Link>
       </div>
 
@@ -147,7 +147,7 @@ export default function AdminCursosPage() {
           <thead>
             <tr className="border-b border-border">
               <th className="text-left text-xs font-bold text-muted-foreground uppercase tracking-wider px-6 py-4 w-10">Ordem</th>
-              <th className="text-left text-xs font-bold text-muted-foreground uppercase tracking-wider px-6 py-4">Guia</th>
+              <th className="text-left text-xs font-bold text-muted-foreground uppercase tracking-wider px-6 py-4">Curso</th>
               <th className="text-left text-xs font-bold text-muted-foreground uppercase tracking-wider px-6 py-4">Preço</th>
               <th className="text-left text-xs font-bold text-muted-foreground uppercase tracking-wider px-6 py-4">Checkout</th>
               <th className="text-left text-xs font-bold text-muted-foreground uppercase tracking-wider px-6 py-4">Status</th>

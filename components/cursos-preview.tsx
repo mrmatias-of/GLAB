@@ -24,7 +24,7 @@ export default async function CursosPreview() {
         {/* Cabeçalho da seção */}
         <div className="flex items-end justify-between mb-10">
           <div>
-            <p className="eyebrow mb-3">Nossos Guias</p>
+            <p className="eyebrow mb-3">Nossos Cursos</p>
             <h2 className="section-title">Experimente</h2>
           </div>
           <Link

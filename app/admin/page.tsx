@@ -12,14 +12,14 @@ export default async function AdminPage() {
   const ativos = cursos?.filter((c) => c.ativo).length ?? 0
 
   const stats = [
-    { label: "Total de Guias", value: total, icon: BookOpen, gradient: "from-cyan-500 to-teal-500", bg: "bg-cyan-500/10", border: "border-cyan-500/30" },
+    { label: "Total de Cursos", value: total, icon: BookOpen, gradient: "from-cyan-500 to-teal-500", bg: "bg-cyan-500/10", border: "border-cyan-500/30" },
     { label: "Em Destaque", value: destaques, icon: Star, gradient: "from-amber-400 to-orange-500", bg: "bg-amber-500/10", border: "border-amber-500/30" },
     { label: "Com Checkout", value: comCheckout, icon: ShoppingCart, gradient: "from-emerald-400 to-green-500", bg: "bg-emerald-500/10", border: "border-emerald-500/30" },
     { label: "Ativos", value: ativos, icon: Zap, gradient: "from-violet-400 to-purple-500", bg: "bg-violet-500/10", border: "border-violet-500/30" },
   ]
 
   const quickActions = [
-    { num: "01", label: "Novo Curso", desc: "Cadastrar um novo guia ou curso na plataforma", href: "/admin/cursos/novo", icon: BookOpen },
+    { num: "01", label: "Novo Curso", desc: "Cadastrar um novo curso na plataforma", href: "/admin/cursos/novo", icon: BookOpen },
     { num: "02", label: "Ver Cursos", desc: "Gerenciar cursos existentes e editar detalhes", href: "/admin/cursos", icon: Eye },
     { num: "03", label: "Vendas", desc: "Acompanhar vendas e métricas de receita", href: "/admin/vendas", icon: TrendingUp },
     { num: "04", label: "Ver Site", desc: "Visualizar o site público como visitante", href: "/", icon: LinkIcon },
@@ -111,7 +111,7 @@ export default async function AdminPage() {
         <div className="flex items-center justify-between p-6 border-b border-zinc-800/50">
           <div className="flex items-center gap-3">
             <div className="w-1 h-6 bg-gradient-to-b from-cyan-400 to-teal-500 rounded-full" />
-            <h2 className="font-black text-white">Guias Cadastrados</h2>
+            <h2 className="font-black text-white">Cursos Cadastrados</h2>
             <span className="text-xs text-zinc-600 font-medium">({total} total)</span>
           </div>
           <Link
@@ -119,7 +119,7 @@ export default async function AdminPage() {
             className="flex items-center gap-2 text-xs font-bold bg-gradient-to-r from-cyan-500 to-teal-500 text-black px-4 py-2.5 rounded-xl hover:shadow-lg hover:shadow-cyan-500/20 transition-all"
           >
             <Zap size={14} strokeWidth={2.5} />
-            Novo Guia
+            Novo Curso
           </Link>
         </div>
 
@@ -163,7 +163,7 @@ export default async function AdminPage() {
         {cursos && cursos.length > 8 && (
           <div className="p-4 border-t border-zinc-800/30 text-center">
             <Link href="/admin/cursos" className="text-xs font-medium text-cyan-400 hover:text-cyan-300 transition-colors">
-              Ver todos os {total} guias
+              Ver todos os {total} cursos
             </Link>
           </div>
         )}
