@@ -56,7 +56,7 @@ export default async function Cursos({ showComunidade = false }: { showComunidad
       titulo: "Diagnóstico e reparo avançado",
       descricao: "Conteúdos para técnicos que desejam evoluir em medições, análise e investigação de falhas mais complexas.",
       produtos: cursos.filter(c => {
-        const slugs = ["guia-diagnostico-avancado", "guia-consumo-eletrico", "guia-curto-placa", "guia-esquema-eletrico", "guia-pmic-alimentacao", "guia-radiofrequencia", "guia-falhas-intermitentes", "guia-perifericos"];
+        const slugs = ["guia-diagnostico-avancado", "guia-consumo-eletrico", "guia-curto-em-placa", "guia-esquema-eletrico", "guia-pmic-alimentacao", "guia-radiofrequencia", "guia-falhas-intermitentes", "guia-perifericos"];
         return slugs.includes(c.slug);
       })
     },
@@ -65,7 +65,7 @@ export default async function Cursos({ showComunidade = false }: { showComunidad
       titulo: "Gestão e profissionalização da bancada",
       descricao: "Organize processos, precifique melhor e desenvolva uma rotina mais profissional na assistência.",
       produtos: cursos.filter(c => {
-        const slugs = ["guia-precificacao", "guia-padronizacao-bancada"];
+        const slugs = ["guia-precificacao-profissional", "guia-padronizacao-bancada"];
         return slugs.includes(c.slug);
       })
     },
