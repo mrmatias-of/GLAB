@@ -1,13 +1,35 @@
+import { createClient } from "@/lib/supabase/server"
 import Header from "@/components/header"
-import Cursos from "@/components/cursos"
+import CursosCatalogo from "@/components/cursos-catalogo"
 import Footer from "@/components/footer"
+
+interface Curso {
+  id: string
+  slug: string
+  titulo: string
+  descricao: string
+  preco: string
+  preco_original?: string
+  imagem?: string
+  destaque?: boolean
+  tag?: string
+}
 
 export const metadata = {
   title: "Guias Técnicos - G•Lab Cursos",
   description: "Catálogo completo de guias técnicos: escolha o próximo passo da sua evolução na assistência mobile, diagnóstico avançado, gestão da bancada e PC.",
 }
 
-export default function CursosPage() {
+export default async function CursosPage() {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from("cursos")
+    .select("id, slug, tag, titulo, descricao, preco, preco_original, imagem, destaque, ordem")
+    .eq("ativo", true)
+    .order("ordem", { ascending: true })
+
+  const cursos: Curso[] = error || !data ? [] : data
+
   return (
     <main className="min-h-screen text-white" style={{ backgroundColor: '#050510' }}>
       <Header />
@@ -70,7 +92,7 @@ export default function CursosPage() {
         </div>
       </section>
 
-      <Cursos showCategoriesNav={false} />
+      <CursosCatalogo cursos={cursos} />
       <Footer />
     </main>
   )
