@@ -10,7 +10,7 @@ export default function Stats() {
   return (
     <section className="px-6 py-16" style={{ backgroundColor: '#0B0B0C' }}>
       <div className="max-w-7xl mx-auto">
-        <p className="eyebrow mb-8">Internet da Assistência Técnica</p>
+        <p className="eyebrow mb-8">A biblioteca prática do técnico de celulares</p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {/* Stat 1 */}
@@ -32,14 +32,14 @@ export default function Stats() {
           >
             <div>
               <p className="text-xl sm:text-2xl font-extrabold text-white leading-tight uppercase tracking-tight mb-3">
-                Trabalhamos<br />cirurgicamente
+                Procedimentos precisos para reduzir erros na bancada
               </p>
-              <p className="text-xs sm:text-sm leading-relaxed" style={{ color: '#71717a', maxWidth: '32ch' }}>
-                Precisão técnica em cada guia. Sem atalhos, sem achismos — só o que funciona na bancada.
+              <p className="text-xs sm:text-sm leading-relaxed" style={{ color: '#71717a', maxWidth: '36ch' }}>
+                Guias diretos ao ponto, com protocolos práticos para você executar reparos com mais segurança e consistência.
               </p>
             </div>
-            <a href="/cursos" className="btn-primary mt-5 self-start text-xs py-2 px-5">
-              Ver Cursos
+            <a href="#cursos" className="btn-primary mt-5 self-start text-xs py-2 px-5">
+              Ver Guias
             </a>
           </div>
 

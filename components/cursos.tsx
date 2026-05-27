@@ -41,8 +41,16 @@ export default async function Cursos({ showComunidade = false }: { showComunidad
   const cursos: CursoDB[] = error || !data ? [] : data
 
   return (
-    <section id="cursos" className="relative py-8" style={{ backgroundColor: '#050510' }}>
+    <section id="cursos" className="relative py-8 pt-16" style={{ backgroundColor: '#050510' }}>
       <div className="max-w-7xl mx-auto px-6">
+
+        {/* Título da seção */}
+        {cursos.length > 0 && (
+          <div className="mb-8">
+            <p className="text-[10px] uppercase tracking-widest font-bold mb-2" style={{ color: '#00d4c8' }}>Guias técnicos</p>
+            <h2 className="text-2xl md:text-3xl font-black text-white">Escolha o reparo que você quer dominar</h2>
+          </div>
+        )}
 
         {cursos.length === 0 && (
           <div className="flex flex-col items-center justify-center py-20 text-white/40 gap-3">

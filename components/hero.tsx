@@ -27,44 +27,45 @@ export default function Hero() {
           <div className="flex flex-col">
             <p className="text-xs uppercase tracking-widest mb-4 font-semibold inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-500/30" style={{ background: 'rgba(0,212,200,0.05)', color: '#00d4c8' }}>
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-              PLATAFORMA DE CURSOS PROFISSIONAIS
+              Manutenção Eletrônica
             </p>
             
             <h1 className="text-5xl md:text-6xl font-black leading-tight mb-6 text-white">
-              Aprenda técnicas
-              <br />
-              <span className="bg-gradient-to-r from-cyan-400 via-violet-500 to-purple-500 bg-clip-text text-transparent">
-                profissionais
-              </span>
-              <br />
-              e valorize cada
-              <br />
-              atendimento
+              Repare celulares com mais{" "}
+              <span className="bg-gradient-to-r from-cyan-400 to-violet-500 bg-clip-text text-transparent">
+                segurança e confiança
+              </span>{" "}
+              na bancada
             </h1>
             
             <p className="text-base leading-relaxed mb-8 max-w-lg" style={{ color: '#a1a1aa' }}>
-              Cursos práticos com acesso imediato, certificado digital e suporte direto para você evoluir com segurança e confiança.
+              Guias técnicos práticos para troca de tela, bateria, conectores e software, criados por quem já reparou mais de 20.000 aparelhos.
             </p>
             
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-12">
+            <div className="flex flex-col sm:flex-row gap-4 mb-6">
               <Link 
                 href="#cursos"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-sm text-black transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/50 hover:scale-105"
                 style={{ background: 'linear-gradient(135deg, #00d4c8 0%, #7c3aed 100%)' }}
               >
-                Conhecer os cursos
+                Ver Guias Técnicos
                 <ArrowRight size={18} strokeWidth={3} />
               </Link>
               <Link 
-                href="#resultados"
+                href="/cursos/combo-iniciante-mobile"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-sm text-white border-2 transition-all duration-300 hover:bg-white/5 hover:scale-105"
                 style={{ borderColor: '#a855f7' }}
               >
-                Ver resultados de alunos
+                Começar pelo Combo Iniciante — R$ 17,90
                 <ArrowRight size={18} strokeWidth={3} />
               </Link>
             </div>
+
+            {/* Badge Combo Iniciante */}
+            <p className="text-[11px] text-white/30 mb-10">
+              <span className="text-cyan-400/70 font-semibold">Melhor para começar</span> · Acesso imediato após a compra
+            </p>
             
             {/* Badges - Cards de Valor */}
             <div className="grid grid-cols-2 gap-4 text-sm">
