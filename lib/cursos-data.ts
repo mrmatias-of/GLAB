@@ -23,6 +23,17 @@ export type Curso = {
   cta: string
   ctaHref: string
   accentColor: string
+  // Campos de landing page
+  categoria?: string
+  headline?: string
+  headlineSub?: string
+  nivel?: string
+  paraQuem?: string[]
+  dores?: string[]
+  ctaHeadline?: string
+  ctaHeadlineSub?: string
+  trilha?: string
+  relacionados?: string[]
 }
 
 const getIconByTag = (tag: string): LucideIcon => {
@@ -46,7 +57,7 @@ export async function getCursos(): Promise<Curso[]> {
     const supabase = await createClient()
     const { data, error } = await supabase
       .from("cursos")
-      .select("slug, tag, titulo, subtitulo, descricao, descricao_longa, imagem, preco, preco_original, cta, cta_href, destaque, modulos, aprendizados, ordem")
+      .select("slug, tag, titulo, subtitulo, descricao, descricao_longa, imagem, preco, preco_original, cta, cta_href, destaque, modulos, aprendizados, ordem, nivel, categoria, headline, headline_sub, para_quem, dores, cta_headline, cta_headline_sub, trilha, relacionados")
       .eq("ativo", true)
       .order("ordem", { ascending: true })
 
@@ -72,6 +83,16 @@ export async function getCursos(): Promise<Curso[]> {
       cta: curso.cta || "Comprar Agora",
       ctaHref: curso.cta_href || "",
       accentColor: "#00d4c8",
+      nivel: curso.nivel || undefined,
+      categoria: curso.categoria || undefined,
+      headline: curso.headline || undefined,
+      headlineSub: curso.headline_sub || undefined,
+      paraQuem: curso.para_quem || undefined,
+      dores: curso.dores || undefined,
+      ctaHeadline: curso.cta_headline || undefined,
+      ctaHeadlineSub: curso.cta_headline_sub || undefined,
+      trilha: curso.trilha || undefined,
+      relacionados: curso.relacionados || undefined,
     }))
 
     cursoCacheTime = now
