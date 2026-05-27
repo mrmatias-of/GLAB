@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
-import { SpeedInsights } from '@vercel/speed-insights/next'
 import WhatsAppButton from '@/components/whatsapp-button'
 import { VisitorTracker } from '@/components/visitor-tracker'
 import { SocialProofPopup } from '@/components/social-proof-popup'
+import { PrivacyConsentBanner } from '@/components/privacy-consent-banner'
+import { ConditionalAnalytics } from '@/components/conditional-analytics'
 import './globals.css'
 
 const inter = Inter({
@@ -94,12 +94,8 @@ export default function RootLayout({
         <SocialProofPopup />
         {children}
         <WhatsAppButton />
-        {process.env.NODE_ENV === 'production' && (
-          <>
-            <Analytics />
-            <SpeedInsights />
-          </>
-        )}
+        <PrivacyConsentBanner />
+        {process.env.NODE_ENV === 'production' && <ConditionalAnalytics />}
       </body>
     </html>
   )
