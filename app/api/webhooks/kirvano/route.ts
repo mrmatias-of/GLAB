@@ -100,6 +100,13 @@ function formatCurrency(amountCents: number): string {
 }
 
 // ---------------------------------------------------------------------------
+// Codigo de erro do PostgreSQL para violacao de unicidade (unique_violation)
+// Retornado pelo Supabase quando o indice unico uq_webhook_logs_source_event_sale
+// rejeita um insert duplicado.
+// ---------------------------------------------------------------------------
+const PG_UNIQUE_VIOLATION = "23505"
+
+// ---------------------------------------------------------------------------
 // POST — processar eventos Kirvano
 // ---------------------------------------------------------------------------
 export async function POST(request: NextRequest) {
@@ -117,30 +124,34 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: false, error: "Invalid JSON" }, { status: 400 })
   }
 
-  const { eventType, saleId, productName, productId, amountCents, paymentMethod, status } =
+  const { eventType, saleId, productName, amountCents, paymentMethod } =
     extractMinimalFields(body)
 
   // ---------------------------------------------------------------------------
-  // Idempotencia: ignorar reenvios do mesmo evento para o mesmo sale_id
+  // Evento mapeado sem sale_id: nao ha idempotencia confiavel.
+  // Registrar log tecnico minimo e retornar sem enviar Telegram.
   // ---------------------------------------------------------------------------
-  if (saleId) {
-    const { data: existing } = await supabase
-      .from("webhook_logs")
-      .select("id")
-      .eq("source", "kirvano")
-      .eq("event_type", eventType)
-      .eq("sale_id", saleId)
-      .maybeSingle()
-
-    if (existing) {
-      return NextResponse.json({ success: true, message: "Evento ja processado (idempotente)" })
-    }
+  if (isKnownEvent(eventType) && !saleId) {
+    await supabase.from("webhook_logs").insert({
+      source: "kirvano",
+      event_type: eventType,
+      sale_id: null,
+      status: "missing_sale_id",
+      processed_at: new Date().toISOString(),
+    })
+    console.error(`[Kirvano Webhook] Evento mapeado sem sale_id: "${eventType}". Ignorado.`)
+    return NextResponse.json({ success: true, message: "Evento ignorado: sale_id ausente" })
   }
 
   // ---------------------------------------------------------------------------
-  // Registrar log minimo ANTES de processar — sem payload bruto, sem PII
+  // Idempotencia via INSERT atomico.
+  // O indice unico uq_webhook_logs_source_event_sale (source, event_type, sale_id)
+  // garante que dois requests simultaneos do mesmo evento:
+  //   - 1o request: insert bem-sucedido → continua para Telegram
+  //   - 2o request: insert rejeita com unique_violation (23505) → retorna idempotente
+  // Nao depender de SELECT anterior, pois ele nao evita condicao de corrida.
   // ---------------------------------------------------------------------------
-  const logRecord: Record<string, unknown> = {
+  const logRecord = {
     source: "kirvano",
     event_type: eventType,
     sale_id: saleId || null,
@@ -149,79 +160,27 @@ export async function POST(request: NextRequest) {
   }
 
   const { error: logErr } = await supabase.from("webhook_logs").insert(logRecord)
+
   if (logErr) {
+    // unique_violation: evento ja processado — retornar sucesso sem duplicar Telegram
+    if (logErr.code === PG_UNIQUE_VIOLATION) {
+      return NextResponse.json({ success: true, message: "Evento ja processado (idempotente)" })
+    }
+    // Outro erro de banco: nao enviar Telegram, retornar erro tecnico
     console.error("[Kirvano Webhook] Erro ao inserir log:", logErr.message)
+    return NextResponse.json(
+      { success: false, error: "Erro ao registrar evento" },
+      { status: 500 }
+    )
   }
 
   // ---------------------------------------------------------------------------
-  // Processar por evento mapeado
+  // Processar por evento mapeado.
+  // O insert acima foi bem-sucedido, entao este e o primeiro processamento.
   // ---------------------------------------------------------------------------
   try {
-    if (isKnownEvent(eventType)) {
-      switch (eventType) {
-        case KIRVANO_EVENTS.SALE_APPROVED: {
-          const msg = [
-            "<b>VENDA APROVADA</b>",
-            "",
-            `<b>Produto:</b> ${productName || "N/A"}`,
-            `<b>Valor:</b> ${formatCurrency(amountCents)}`,
-            `<b>Pagamento:</b> ${paymentMethod || "N/A"}`,
-            saleId ? `<b>ID da venda:</b> <code>${saleId}</code>` : "",
-            "",
-            "<i>Via Kirvano</i>",
-          ]
-            .filter(Boolean)
-            .join("\n")
-
-          await sendMessage(msg)
-
-          // Registrar no banco somente campos operacionais minimos
-          // Colunas existentes no schema real: kiwify_order_id, kiwify_product_id,
-          // status, valor, metodo_pagamento, email_comprador, approved_at
-          // user_id e curso_id sao NOT NULL no schema original — usamos valores
-          // placeholder neutros ate que o schema seja migrado para Kirvano.
-          // Por ora, gravamos apenas em webhook_logs (ja feito acima) e nao em
-          // purchases, pois o schema exige user_id e curso_id que nao existem
-          // no contexto do webhook externo. Ver nota de migracao no PR.
-          break
-        }
-
-        case KIRVANO_EVENTS.SALE_REFUNDED: {
-          const msg = [
-            "<b>REEMBOLSO</b>",
-            "",
-            `<b>Produto:</b> ${productName || "N/A"}`,
-            `<b>Valor:</b> ${formatCurrency(amountCents)}`,
-            saleId ? `<b>ID da venda:</b> <code>${saleId}</code>` : "",
-            "",
-            "<i>Via Kirvano</i>",
-          ]
-            .filter(Boolean)
-            .join("\n")
-
-          await sendMessage(msg)
-          break
-        }
-
-        case KIRVANO_EVENTS.SALE_CHARGEBACK: {
-          const msg = [
-            "<b>CHARGEBACK</b>",
-            "",
-            `<b>Produto:</b> ${productName || "N/A"}`,
-            `<b>Valor:</b> ${formatCurrency(amountCents)}`,
-            saleId ? `<b>ID da venda:</b> <code>${saleId}</code>` : "",
-            "",
-            "<i>Via Kirvano</i>",
-          ]
-            .filter(Boolean)
-            .join("\n")
-
-          await sendMessage(msg)
-          break
-        }
-      }
-    } else {
-      // Evento nao mapeado — registra apenas info tecnica minima, sem PII, sem Telegram pessoal
+    if (!isKnownEvent(eventType)) {
+      // Evento nao mapeado: apenas registra status tecnico, sem Telegram, sem PII
       await supabase
         .from("webhook_logs")
         .update({ status: "unmapped_event" })
@@ -231,11 +190,67 @@ export async function POST(request: NextRequest) {
         .eq("status", "received")
 
       console.error(
-        `[Kirvano Webhook] Evento nao mapeado recebido: "${eventType}". Adicionar ao mapa KIRVANO_EVENTS se confirmado.`
+        `[Kirvano Webhook] Evento nao mapeado: "${eventType}". Adicionar ao mapa KIRVANO_EVENTS se confirmado.`
       )
+      // Retorna imediatamente — nao executa o UPDATE para "processed" abaixo
+      return NextResponse.json({ success: true, message: "Evento registrado como nao mapeado" })
     }
 
-    // Marcar log como processado
+    // Evento mapeado: montar e enviar notificacao Telegram
+    let telegramMsg: string
+
+    switch (eventType) {
+      case KIRVANO_EVENTS.SALE_APPROVED:
+        telegramMsg = [
+          "<b>VENDA APROVADA</b>",
+          "",
+          `<b>Produto:</b> ${productName || "N/A"}`,
+          `<b>Valor:</b> ${formatCurrency(amountCents)}`,
+          `<b>Pagamento:</b> ${paymentMethod || "N/A"}`,
+          saleId ? `<b>ID da venda:</b> <code>${saleId}</code>` : "",
+          "",
+          "<i>Via Kirvano</i>",
+        ]
+          .filter(Boolean)
+          .join("\n")
+        break
+
+      case KIRVANO_EVENTS.SALE_REFUNDED:
+        telegramMsg = [
+          "<b>REEMBOLSO</b>",
+          "",
+          `<b>Produto:</b> ${productName || "N/A"}`,
+          `<b>Valor:</b> ${formatCurrency(amountCents)}`,
+          saleId ? `<b>ID da venda:</b> <code>${saleId}</code>` : "",
+          "",
+          "<i>Via Kirvano</i>",
+        ]
+          .filter(Boolean)
+          .join("\n")
+        break
+
+      case KIRVANO_EVENTS.SALE_CHARGEBACK:
+        telegramMsg = [
+          "<b>CHARGEBACK</b>",
+          "",
+          `<b>Produto:</b> ${productName || "N/A"}`,
+          `<b>Valor:</b> ${formatCurrency(amountCents)}`,
+          saleId ? `<b>ID da venda:</b> <code>${saleId}</code>` : "",
+          "",
+          "<i>Via Kirvano</i>",
+        ]
+          .filter(Boolean)
+          .join("\n")
+        break
+
+      default:
+        // TypeScript exhaustiveness — nunca deve chegar aqui
+        telegramMsg = `<b>Evento:</b> ${eventType}`
+    }
+
+    await sendMessage(telegramMsg)
+
+    // Marcar log como processado somente para eventos mapeados que chegaram ate aqui
     await supabase
       .from("webhook_logs")
       .update({ status: "processed" })

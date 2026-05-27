@@ -84,10 +84,16 @@ export default function PrivacidadePage() {
             </h3>
             <p>
               Se voce clicar em <em>"Permitir metricas"</em> no banner de consentimento, o site
-              registra dados anonimos de navegacao (pagina visitada, horario aproximado, tipo de
-              dispositivo) para analise interna de uso. Esses dados sao armazenados no Supabase e
-              processados pela Vercel Analytics. Nenhum dado e coletado se voce escolher{" "}
-              <em>"Somente essenciais"</em>.
+              podera registrar dados tecnicos de navegacao, como pagina visitada, referencia de
+              origem, navegador/dispositivo, endereco IP e data/hora de acesso, para analise
+              interna de uso e desempenho. Esses dados sao armazenados no Supabase e processados
+              pela Vercel Analytics.
+            </p>
+            <p className="mt-2">
+              Nenhum dado de metricas opcionais e coletado pelo VisitorTracker quando voce escolhe{" "}
+              <em>"Somente essenciais"</em>. Dados enviados voluntariamente pelo formulario de
+              contato e registros operacionais necessarios a compras realizadas na Kirvano seguem
+              as finalidades descritas nesta politica.
             </p>
             <p className="mt-2">
               Voce pode alterar sua preferencia a qualquer momento pelo link{" "}
@@ -100,22 +106,38 @@ export default function PrivacidadePage() {
             </h3>
             <p>
               Quando uma venda, reembolso ou chargeback e confirmado pela Kirvano, ela envia uma
-              notificacao automatica para o site. O site registra somente as seguintes informacoes
-              operacionais minimas:
+              notificacao automatica para o site. O tratamento desses dados e dividido em duas
+              etapas distintas:
             </p>
-            <ul className="list-disc pl-5 mt-2 space-y-1">
-              <li>Tipo do evento (venda aprovada, reembolso, chargeback)</li>
-              <li>Identificador da venda (sale_id), fornecido pela Kirvano</li>
-              <li>Nome do produto</li>
-              <li>Valor da transacao</li>
-              <li>Forma de pagamento</li>
-              <li>Data e hora do processamento</li>
-            </ul>
-            <p className="mt-2">
+
+            <p className="mt-3 font-medium" style={{ color: "#e4e4e7" }}>
+              Registro no banco
+            </p>
+            <p className="mt-1">
+              O site mantem registro operacional minimo contendo tipo de evento, identificador da
+              venda, status e data/hora de processamento.
+            </p>
+
+            <p className="mt-3 font-medium" style={{ color: "#e4e4e7" }}>
+              Notificacao administrativa
+            </p>
+            <p className="mt-1">
+              Para monitoramento operacional, uma notificacao administrativa pode ser enviada por
+              Telegram contendo tipo do evento, produto, valor, identificador da venda e forma de
+              pagamento, sem nome, e-mail, telefone, CPF ou dados completos de pagamento do
+              comprador.
+            </p>
+
+            <p className="mt-3">
               <strong style={{ color: "#fff" }}>Nao sao armazenados</strong> pelo site: nome do
               comprador, e-mail, CPF, telefone, endereco, dados bancarios, QR Code PIX, linha
               digitavel de boleto, payload completo da notificacao ou qualquer outro dado pessoal
               do comprador. Esses dados permanecem exclusivamente na Kirvano.
+            </p>
+            <p className="mt-2">
+              Para novos eventos processados apos a atualizacao desta politica (maio de 2026), o
+              site nao armazena payload completo, CPF, telefone, e-mail ou dados detalhados de
+              pagamento recebidos em notificacoes da Kirvano.
             </p>
           </section>
 
@@ -158,6 +180,11 @@ export default function PrivacidadePage() {
               <li>
                 <strong style={{ color: "#fff" }}>Kirvano</strong> — plataforma de checkout e
                 entrega; responsavel pelos dados completos de pagamento e cadastro do comprador
+              </li>
+              <li>
+                <strong style={{ color: "#fff" }}>Telegram</strong> — envio de notificacoes
+                administrativas minimas sobre eventos de venda, reembolso ou chargeback (tipo do
+                evento, produto, valor, identificador da venda e forma de pagamento)
               </li>
             </ul>
             <p className="mt-2">
