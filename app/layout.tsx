@@ -15,7 +15,11 @@ const inter = Inter({
   preload: true,
 })
 
+const SITE_URL = 'https://www.glabcursos.com.br'
+const OG_IMAGE = `${SITE_URL}/og-image.jpg`
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: 'G•Lab Cursos | Guias Técnicos para Assistência Mobile',
     template: '%s | G•Lab Cursos',
@@ -24,6 +28,9 @@ export const metadata: Metadata = {
   keywords: 'curso reparo iPhone, curso reparo Android, assistência técnica, guia técnico, G•Lab Cursos',
   authors: [{ name: 'G•Lab Cursos' }],
   creator: 'G•Lab Cursos',
+  alternates: {
+    canonical: SITE_URL,
+  },
   icons: {
     icon: '/logo-glab-neon-transparent.png',
     shortcut: '/logo-glab-neon-transparent.png',
@@ -42,15 +49,24 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'pt_BR',
-    url: 'https://glabcursos.com.br',
+    url: SITE_URL,
     siteName: 'G•Lab Cursos',
     title: 'G•Lab Cursos | Guias Técnicos para Assistência Mobile',
     description: 'Aprenda reparos em celulares com guias técnicos práticos para troca de tela, bateria, conectores, software e diagnóstico em bancada.',
+    images: [
+      {
+        url: OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: 'G•Lab Cursos — Guias técnicos para assistência mobile',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'G•Lab Cursos | Guias Técnicos para Assistência Mobile',
-    description: 'Guias técnicos práticos de assistência técnica mobile.',
+    description: 'Aprenda reparos em celulares com guias técnicos práticos para troca de tela, bateria, conectores, software e diagnóstico em bancada.',
+    images: [OG_IMAGE],
   },
 }
 

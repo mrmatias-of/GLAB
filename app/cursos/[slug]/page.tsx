@@ -16,22 +16,60 @@ import type { Metadata } from "next"
 
 type Props = { params: Promise<{ slug: string }> }
 
+const SITE_URL = 'https://www.glabcursos.com.br'
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const curso = await getCursoBySlug(slug)
   if (!curso) return {}
 
+  const pageUrl = `${SITE_URL}/cursos/${slug}`
+  const description = curso.descricaoLonga || curso.descricao
+
+  // Usa a imagem do produto se disponível; caso contrário, og-image padrão
+  const ogImage = curso.imagem
+    ? { url: curso.imagem, width: 1200, height: 630, alt: curso.titulo }
+    : { url: `${SITE_URL}/og-image.jpg`, width: 1200, height: 630, alt: curso.titulo }
+
   // Metadata específica para Combo Iniciante
   if (slug === "combo-iniciante-mobile") {
     return {
-      title: "Combo Iniciante Mobile | G•Lab Cursos",
+      title: "Combo Iniciante Mobile",
       description: "Comece na assistência técnica mobile com conteúdos práticos sobre tela, bateria, conector e fundamentos de bancada.",
+      alternates: { canonical: pageUrl },
+      openGraph: {
+        type: 'website',
+        url: pageUrl,
+        title: "Combo Iniciante Mobile | G•Lab Cursos",
+        description: "Comece na assistência técnica mobile com conteúdos práticos sobre tela, bateria, conector e fundamentos de bancada.",
+        images: [ogImage],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: "Combo Iniciante Mobile | G•Lab Cursos",
+        description: "Comece na assistência técnica mobile com conteúdos práticos sobre tela, bateria, conector e fundamentos de bancada.",
+        images: [ogImage.url],
+      },
     }
   }
 
   return {
-    title: `${curso.titulo} — G•Lab Cursos`,
-    description: curso.descricaoLonga || curso.descricao,
+    title: curso.titulo,
+    description,
+    alternates: { canonical: pageUrl },
+    openGraph: {
+      type: 'website',
+      url: pageUrl,
+      title: `${curso.titulo} | G•Lab Cursos`,
+      description,
+      images: [ogImage],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${curso.titulo} | G•Lab Cursos`,
+      description,
+      images: [ogImage.url],
+    },
   }
 }
 
