@@ -9,9 +9,44 @@ function getSupabase() {
   )
 }
 
+/**
+ * Valida o token de autenticação do webhook da Kirvano.
+ * Só rejeita quando KIRVANO_WEBHOOK_TOKEN estiver configurada —
+ * enquanto a variável não existir, todos os eventos passam (modo permissivo).
+ * Isso garante que nenhuma venda em produção seja interrompida antes que
+ * o token seja configurado nas duas pontas (Kirvano + Vercel).
+ *
+ * Formato esperado do header: Authorization: Bearer <token>
+ * (Confirmar no painel da Kirvano antes de ativar.)
+ */
+function validateKirvanoToken(request: NextRequest): boolean {
+  const expectedToken = process.env.KIRVANO_WEBHOOK_TOKEN
+  if (!expectedToken) {
+    // Variável não configurada → modo permissivo (não rejeita)
+    return true
+  }
+  const authHeader = request.headers.get("authorization") ?? ""
+  const receivedToken = authHeader.startsWith("Bearer ")
+    ? authHeader.slice(7).trim()
+    : authHeader.trim()
+  // Comparação com timing constante para evitar timing attacks
+  if (receivedToken.length !== expectedToken.length) return false
+  let equal = 0
+  for (let i = 0; i < expectedToken.length; i++) {
+    equal |= receivedToken.charCodeAt(i) ^ expectedToken.charCodeAt(i)
+  }
+  return equal === 0
+}
+
 export async function POST(request: NextRequest) {
   const supabase = getSupabase()
-  
+
+  // Validação de autenticidade — só bloqueia se KIRVANO_WEBHOOK_TOKEN estiver definida
+  if (!validateKirvanoToken(request)) {
+    console.error("[Kirvano Webhook] Token inválido — requisição rejeitada")
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
+
   try {
     const body = await request.json()
     

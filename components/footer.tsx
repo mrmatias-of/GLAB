@@ -5,8 +5,9 @@ import { useEffect, useState } from "react"
 import {
   MapPin, Mail, Clock, Headphones, CheckCircle,
   LayoutGrid, Wrench, Users, Shield, Settings, Zap,
-  Cpu, BarChart3, Target, FileText, GraduationCap
+  Cpu, BarChart3, Target, FileText, GraduationCap, Scale
 } from "lucide-react"
+import { usePrivacyConsent } from "@/hooks/use-privacy-consent"
 
 type CursoItem = {
   label: string
@@ -31,6 +32,8 @@ const cursoSlugsMap: Record<string, string> = {
 }
 
 export default function Footer() {
+  const { reset } = usePrivacyConsent()
+
   const getCursoHref = (label: string): string => {
     const slug = cursoSlugsMap[label.toLowerCase()]
     return slug ? `/cursos/${slug}` : '/cursos'
@@ -52,7 +55,7 @@ export default function Footer() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6">
           
           {/* Column 1 - Logo & Brand */}
           <div className="space-y-4">
@@ -146,7 +149,37 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 4 - Contato & Redes Sociais */}
+          {/* Column 4 - Legal */}
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-6 h-6 rounded border border-cyan-500/30 bg-cyan-500/10 flex items-center justify-center">
+                <Scale size={12} className="text-cyan-400" />
+              </div>
+              <h4 className="text-sm font-bold text-white tracking-wide">LEGAL</h4>
+            </div>
+            <ul className="space-y-2.5">
+              <li>
+                <Link
+                  href="/privacidade"
+                  className="flex items-center gap-2 text-sm text-white/50 hover:text-cyan-400 transition-colors group"
+                >
+                  <span className="text-cyan-500/50 group-hover:text-cyan-400">▸</span>
+                  Política de Privacidade
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/termos"
+                  className="flex items-center gap-2 text-sm text-white/50 hover:text-cyan-400 transition-colors group"
+                >
+                  <span className="text-cyan-500/50 group-hover:text-cyan-400">▸</span>
+                  Termos de Uso
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 5 - Contato & Redes Sociais */}
           <div className="space-y-5">
             {/* Contato */}
             <div>
@@ -219,9 +252,18 @@ export default function Footer() {
               <CheckCircle size={16} className="text-cyan-400" />
               <span className="text-xs font-medium text-white/50 tracking-widest">TECNOLOGIA. PRECISÃO. CONFIANÇA.</span>
             </div>
-            <p className="text-xs text-white/30">
-              &copy; {new Date().getFullYear()} G•Lab Cursos. Todos os direitos reservados.
-            </p>
+            <div className="flex items-center gap-4">
+              <p className="text-xs text-white/30">
+                &copy; {new Date().getFullYear()} G•Lab Cursos. Todos os direitos reservados.
+              </p>
+              <button
+                onClick={reset}
+                className="text-xs text-white/30 hover:text-cyan-400 transition-colors underline underline-offset-2"
+                type="button"
+              >
+                Preferências de privacidade
+              </button>
+            </div>
           </div>
         </div>
       </div>

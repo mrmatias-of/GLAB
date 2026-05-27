@@ -1,12 +1,14 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { Send } from 'lucide-react'
 
 export default function ContactForm() {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
+  const [privacyAccepted, setPrivacyAccepted] = useState(false)
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
@@ -33,6 +35,13 @@ export default function ContactForm() {
         return
       }
 
+      // Consentimento obrigatório
+      if (!privacyAccepted) {
+        setError('Para enviar sua mensagem, confirme a leitura da Política de Privacidade.')
+        setLoading(false)
+        return
+      }
+
       // Enviar para API que notifica Telegram
       const response = await fetch('/api/contact', {
         method: 'POST',
@@ -46,6 +55,7 @@ export default function ContactForm() {
       }
 
       setSuccess(true)
+      setPrivacyAccepted(false)
       setFormData({ nome: '', email: '', assunto: '', mensagem: '' })
       setTimeout(() => setSuccess(false), 5000)
 
@@ -178,6 +188,31 @@ export default function ContactForm() {
           ✓ Mensagem enviada com sucesso! Responderemos em breve.
         </div>
       )}
+
+      {/* Consentimento de privacidade */}
+      <div className="flex items-start gap-3">
+        <input
+          type="checkbox"
+          id="privacy-consent"
+          checked={privacyAccepted}
+          onChange={(e) => setPrivacyAccepted(e.target.checked)}
+          className="mt-0.5 flex-shrink-0 w-4 h-4 rounded cursor-pointer"
+          style={{ accentColor: '#00D4C8' }}
+        />
+        <label htmlFor="privacy-consent" className="text-xs leading-relaxed cursor-pointer" style={{ color: '#a1a1aa' }}>
+          Li a{' '}
+          <Link
+            href="/privacidade"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2 hover:text-cyan-400 transition-colors"
+            style={{ color: '#00D4C8' }}
+          >
+            Política de Privacidade
+          </Link>{' '}
+          e concordo com o uso dos meus dados para receber resposta à minha solicitação.
+        </label>
+      </div>
 
       {/* Botão */}
       <button
