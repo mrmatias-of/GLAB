@@ -33,7 +33,7 @@ const accentMap: Record<string, { border: string; text: string; bg: string; dot:
 
 export default function Beneficios() {
   return (
-    <section className="py-16 px-6" style={{ backgroundColor: '#050510' }}>
+    <section className="py-16 px-6" style={{ backgroundColor: '#050510' }} id="resultados">
       <div className="max-w-7xl mx-auto">
 
         {/* Header da secao */}

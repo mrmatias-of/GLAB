@@ -61,6 +61,15 @@ export default function Header() {
               <Search size={18} />
             </button>
             <Link
+              href="/login"
+              className="hidden md:inline-flex text-xs font-semibold tracking-widest uppercase transition-colors"
+              style={{ color: '#71717a' }}
+              onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+              onMouseLeave={e => (e.currentTarget.style.color = '#71717a')}
+            >
+              Entrar como aluno
+            </Link>
+            <Link
               href="/cursos"
               className="hidden md:inline-flex btn-primary text-xs py-2 px-5"
             >
@@ -94,8 +103,16 @@ export default function Header() {
                 {n.label}
               </Link>
             ))}
-            <div className="pt-3">
-              <Link href="/cursos" className="btn-primary w-full justify-center text-xs py-2.5">
+            <div className="pt-4 space-y-2 border-t border-white/10">
+              <Link 
+                href="/login" 
+                onClick={() => setOpen(false)}
+                className="block py-2 text-sm font-semibold tracking-wider uppercase transition-colors"
+                style={{ color: '#71717a' }}
+              >
+                Entrar como aluno
+              </Link>
+              <Link href="/cursos" className="btn-primary w-full justify-center text-xs py-2.5" onClick={() => setOpen(false)}>
                 Ver Cursos
               </Link>
             </div>

@@ -25,73 +25,79 @@ export default function Hero() {
           
           {/* Left Content */}
           <div className="flex flex-col">
-            <p className="text-xs uppercase tracking-widest mb-4 font-semibold" style={{ color: '#00d4c8' }}>
-              Do Basico ao Avancado
+            <p className="text-xs uppercase tracking-widest mb-4 font-semibold inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-500/30" style={{ background: 'rgba(0,212,200,0.05)', color: '#00d4c8' }}>
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+              PLATAFORMA DE CURSOS PROFISSIONAIS
             </p>
             
             <h1 className="text-5xl md:text-6xl font-black leading-tight mb-6 text-white">
-              Domine a<br />
-              Assistencia<br />
-              Tecnica<br />
-              <span className="bg-gradient-to-r from-violet-500 via-purple-500 to-cyan-400 bg-clip-text text-transparent">
-                Avancada
+              Aprenda técnicas
+              <br />
+              <span className="bg-gradient-to-r from-cyan-400 via-violet-500 to-purple-500 bg-clip-text text-transparent">
+                profissionais
               </span>
+              <br />
+              e valorize cada
+              <br />
+              atendimento
             </h1>
             
-            <p className="text-base leading-relaxed mb-8 max-w-sm" style={{ color: '#a1a1aa' }}>
-              Cursos praticos para tecnicos que querem diagnosticar, reparar e evoluir com metodo profissional.
+            <p className="text-base leading-relaxed mb-8 max-w-lg" style={{ color: '#a1a1aa' }}>
+              Cursos práticos com acesso imediato, certificado digital e suporte direto para você evoluir com segurança e confiança.
             </p>
             
             {/* CTAs */}
-            <div className="flex flex-wrap gap-4 mb-12">
-              <a 
-                href="https://chat.whatsapp.com/KiK2TDOf1HzGlkgH8IEL4B"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-sm text-black transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/50 hover:scale-110"
+            <div className="flex flex-col sm:flex-row gap-4 mb-12">
+              <Link 
+                href="#cursos"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-sm text-black transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/50 hover:scale-105"
                 style={{ background: 'linear-gradient(135deg, #00d4c8 0%, #7c3aed 100%)' }}
               >
-                Fazer Parte
+                Conhecer os cursos
                 <ArrowRight size={18} strokeWidth={3} />
-              </a>
+              </Link>
               <Link 
-                href="/cursos" 
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-sm text-white border-2 transition-all duration-300 hover:bg-white/5 hover:scale-110"
+                href="#resultados"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-sm text-white border-2 transition-all duration-300 hover:bg-white/5 hover:scale-105"
                 style={{ borderColor: '#a855f7' }}
               >
-                Ver Cursos
+                Ver resultados de alunos
                 <ArrowRight size={18} strokeWidth={3} />
               </Link>
             </div>
             
-            {/* Badges */}
+            {/* Badges - Cards de Valor */}
             <div className="grid grid-cols-2 gap-4 text-sm">
-              <div className="flex items-center gap-3 p-3 rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-110 hover:border-cyan-500/50 hover:bg-cyan-500/10 cursor-pointer">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300" style={{ background: 'rgba(0,212,200,0.1)', borderColor: '#00d4c8', borderWidth: '1px' }}>
-                  <Zap size={16} style={{ color: '#00d4c8' }} />
-                </div>
-                <span className="font-semibold text-white leading-tight">Aulas Praticas<br />e Objetivas</span>
-              </div>
-              
-              <div className="flex items-center gap-3 p-3 rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-110 hover:border-cyan-500/50 hover:bg-cyan-500/10 cursor-pointer">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300" style={{ background: 'rgba(0,212,200,0.1)', borderColor: '#00d4c8', borderWidth: '1px' }}>
-                  <Headphones size={16} style={{ color: '#00d4c8' }} />
-                </div>
-                <span className="font-semibold text-white leading-tight">Suporte Tecnico<br />Especializado</span>
-              </div>
-              
-              <div className="flex items-center gap-3 p-3 rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-110 hover:border-violet-500/50 hover:bg-violet-500/10 cursor-pointer">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300" style={{ background: 'rgba(168, 85, 247, 0.1)', borderColor: '#a855f7', borderWidth: '1px' }}>
-                  <Award size={16} style={{ color: '#a855f7' }} />
-                </div>
-                <span className="font-semibold text-white leading-tight">Certificado<br />Reconhecido</span>
-              </div>
-              
-              <div className="flex items-center gap-3 p-3 rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-110 hover:border-cyan-500/50 hover:bg-cyan-500/10 cursor-pointer">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300" style={{ background: 'rgba(0,212,200,0.1)', borderColor: '#00d4c8', borderWidth: '1px' }}>
+              <div className="flex flex-col items-start p-4 rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-105 hover:border-cyan-500/50 hover:bg-cyan-500/10">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center mb-3 transition-all duration-300" style={{ background: 'rgba(0,212,200,0.1)', borderColor: '#00d4c8', borderWidth: '1px' }}>
                   <Users size={16} style={{ color: '#00d4c8' }} />
                 </div>
-                <span className="font-semibold text-white leading-tight">Comunidade<br />Ativa</span>
+                <span className="font-black text-white text-lg">2.000+</span>
+                <span className="text-xs text-white/60 leading-tight">Alunos capacitados</span>
+              </div>
+              
+              <div className="flex flex-col items-start p-4 rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-105 hover:border-violet-500/50 hover:bg-violet-500/10">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center mb-3 transition-all duration-300" style={{ background: 'rgba(168, 85, 247, 0.1)', borderColor: '#a855f7', borderWidth: '1px' }}>
+                  <Zap size={16} style={{ color: '#a855f7' }} />
+                </div>
+                <span className="font-black text-white text-lg">Acesso imediato</span>
+                <span className="text-xs text-white/60 leading-tight">Comece a estudar hoje</span>
+              </div>
+              
+              <div className="flex flex-col items-start p-4 rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-105 hover:border-orange-500/50 hover:bg-orange-500/10">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center mb-3 transition-all duration-300" style={{ background: 'rgba(249, 115, 22, 0.1)', borderColor: '#f97316', borderWidth: '1px' }}>
+                  <Award size={16} style={{ color: '#f97316' }} />
+                </div>
+                <span className="font-black text-white text-lg">Certificado digital</span>
+                <span className="text-xs text-white/60 leading-tight">Valorize seu currículo</span>
+              </div>
+              
+              <div className="flex flex-col items-start p-4 rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-105 hover:border-green-500/50 hover:bg-green-500/10">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center mb-3 transition-all duration-300" style={{ background: 'rgba(16, 185, 129, 0.1)', borderColor: '#10b981', borderWidth: '1px' }}>
+                  <Headphones size={16} style={{ color: '#10b981' }} />
+                </div>
+                <span className="font-black text-white text-lg">Suporte direto</span>
+                <span className="text-xs text-white/60 leading-tight">Aprenda com acompanhamento</span>
               </div>
             </div>
           </div>
