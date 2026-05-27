@@ -2,7 +2,6 @@ import { notFound } from "next/navigation"
 import { getCursoBySlug, getCursoSlugs, getCursos, type CursoSerializavel } from "@/lib/cursos-data"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
-import WhatsAppButton from "@/components/whatsapp-button"
 import ProductHero from "@/components/produto/product-hero"
 import ProductQuickInfo from "@/components/produto/product-quick-info"
 import ProductAudienceSection from "@/components/produto/product-audience-section"
@@ -91,7 +90,6 @@ export default async function PaginaCurso({ params }: Props) {
         <RelatedProductsSection curso={cs} todosCursos={todosCursosSerializaveis} />
       </main>
       <Footer />
-      <WhatsAppButton />
     </>
   )
 }

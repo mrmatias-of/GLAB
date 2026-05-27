@@ -3,6 +3,7 @@ import type { CursoSerializavel } from "@/lib/cursos-data"
 
 export default function ProductAudienceSection({ curso }: { curso: CursoSerializavel }) {
   const dores = curso.dores
+  const isCombo = curso.slug === "combo-iniciante-mobile"
 
   if (!dores || dores.length === 0) return null
 
@@ -24,7 +25,7 @@ export default function ProductAudienceSection({ curso }: { curso: CursoSerializ
               </span>
             </div>
             <h2 className="text-2xl md:text-3xl font-black text-white leading-tight mb-4">
-              Este guia é para você se:
+              {isCombo ? "Este combo é para você se:" : "Este guia é para você se:"}
             </h2>
             <p className="text-sm text-white/40 leading-relaxed">
               Se você se identificar com alguma dessas situações, este conteúdo foi desenvolvido para ajudar você a avançar com mais segurança.

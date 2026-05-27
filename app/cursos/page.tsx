@@ -1,7 +1,6 @@
 import Header from "@/components/header"
 import Cursos from "@/components/cursos"
 import Footer from "@/components/footer"
-import WhatsAppButton from "@/components/whatsapp-button"
 
 export const metadata = {
   title: "Cursos - G•Lab Cursos",
@@ -45,7 +44,6 @@ export default function CursosPage() {
 
       <Cursos />
       <Footer />
-      <WhatsAppButton />
     </main>
   )
 }
