@@ -42,7 +42,7 @@ function getFaqItems(curso: CursoSerializavel): FaqItem[] {
       {
         pergunta: "Preciso ter experiência anterior?",
         resposta:
-          "Não é necessário dominar diagnósticos avançados para iniciar. O conteúdo é organizado para quem deseja construir uma base na assistência mobile.",
+          "Não é necessário ter experiência avançada para começar. O conteúdo é organizado para quem deseja construir uma base sólida na assistência mobile.",
       },
     ]
   }
