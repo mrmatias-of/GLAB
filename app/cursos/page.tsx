@@ -4,8 +4,8 @@ import Footer from "@/components/footer"
 import WhatsAppButton from "@/components/whatsapp-button"
 
 export const metadata = {
-  title: "Cursos - G-Lab Cursos Mestre",
-  description: "Todos os cursos tecnicos de assistencia disponiveis: iPhone, Android, Windows e muito mais.",
+  title: "Cursos - G•Lab Cursos",
+  description: "Todos os cursos técnicos de assistência disponíveis: iPhone, Android, Windows e muito mais.",
 }
 
 export default function CursosPage() {
@@ -29,7 +29,7 @@ export default function CursosPage() {
         <div className="relative z-10 max-w-6xl mx-auto text-center">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-4 py-1.5 mb-6">
-            <span className="text-xs font-bold tracking-wider text-cyan-400 uppercase">Catalogo completo</span>
+            <span className="text-xs font-bold tracking-wider text-cyan-400 uppercase">Catálogo completo</span>
           </div>
           
           <h1 className="text-4xl md:text-5xl font-black text-white mb-4">
@@ -38,7 +38,7 @@ export default function CursosPage() {
           </h1>
           
           <p className="text-base text-white/50 leading-relaxed max-w-xl mx-auto">
-            Conteudo pratico, direto ao ponto - criado por quem ja reparou mais de 20.000 aparelhos.
+            Conteúdo prático, direto ao ponto - criado por quem já reparou mais de 20.000 aparelhos.
           </p>
         </div>
       </section>

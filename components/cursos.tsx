@@ -23,7 +23,7 @@ type CursoDB = {
 const getIconByTag = (tag: string) => {
   if (tag?.toLowerCase().includes("mobile") || tag?.toLowerCase().includes("android")) return Smartphone
   if (tag?.toLowerCase().includes("pc") || tag?.toLowerCase().includes("gamer")) return Monitor
-  if (tag?.toLowerCase().includes("consumo") || tag?.toLowerCase().includes("eletrico")) return Zap
+  if (tag?.toLowerCase().includes("consumo") || tag?.toLowerCase().includes("elétrico")) return Zap
   if (tag?.toLowerCase().includes("rf") || tag?.toLowerCase().includes("radio")) return Radio
   if (tag?.toLowerCase().includes("software")) return Settings
   if (tag?.toLowerCase().includes("combo")) return Layers
@@ -91,9 +91,9 @@ export default async function Cursos({ showComunidade = false }: { showComunidad
                   <h3 className="text-sm font-bold text-white leading-tight mb-1 group-hover:text-green-400 transition-colors">
                     Comunidade GJ
                   </h3>
-                  <p className="text-xs text-white/40">
-                    Conecte-se, aprenda e evolua
-                  </p>
+            <p className="text-xs text-white/40">
+              Nenhum curso disponível no momento.
+            </p>
                 </div>
 
                 {/* WhatsApp Button */}

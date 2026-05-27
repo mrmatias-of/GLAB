@@ -62,16 +62,15 @@ export default function Footer() {
                 <Cpu size={22} className="text-cyan-400" />
               </div>
               <div>
-                <h3 className="text-lg font-black text-white tracking-tight">G-LAB</h3>
-                <p className="text-[10px] text-cyan-400 font-medium tracking-widest">ASSISTÊNCIA TÉCNICA</p>
+                <h3 className="text-lg font-black text-white tracking-tight">G•Lab Cursos</h3>
+                <p className="text-[10px] text-cyan-400 font-medium tracking-widest">GUIAS TÉCNICOS</p>
               </div>
             </Link>
             
             {/* Description */}
             <p className="text-sm text-white/50 leading-relaxed">
-              Soluções em assistência técnica<br />
-              com qualidade, precisão e confiança.<br />
-              <span className="text-cyan-400">Seu equipamento, nossa prioridade.</span>
+              Guias técnicos para assistência mobile, diagnóstico e profissionalização da bancada.<br />
+              Conteúdo prático para quem quer começar ou evoluir na assistência técnica.
             </p>
             
             {/* Trust badges */}
@@ -109,7 +108,6 @@ export default function Footer() {
               {[
                 { label: 'Página Inicial', href: '/' },
                 { label: 'Cursos', href: '/cursos' },
-                { label: 'Sobre Nós', href: '/sobre' },
                 { label: 'Contato', href: '/contato' },
               ].map((item) => (
                 <li key={item.label}>
@@ -246,7 +244,7 @@ export default function Footer() {
               <span className="text-xs font-medium text-white/50 tracking-widest">TECNOLOGIA. PRECISÃO. CONFIANÇA.</span>
             </div>
             <p className="text-xs text-white/30">
-              &copy; {new Date().getFullYear()} G-LAB Cursos. Todos os direitos reservados.
+              &copy; {new Date().getFullYear()} G•Lab Cursos. Todos os direitos reservados.
             </p>
           </div>
         </div>

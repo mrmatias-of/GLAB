@@ -17,10 +17,10 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'G•Lab Cursos — Cursos Mestre',
+    default: 'G•Lab Cursos | Guias Técnicos para Assistência Mobile',
     template: '%s | G•Lab Cursos',
   },
-  description: 'Cursos técnicos práticos criados por quem já reparou mais de 20 mil aparelhos. Aprenda os métodos que funcionam de verdade no dia a dia da assistência técnica.',
+  description: 'Aprenda reparos em celulares com guias técnicos práticos para troca de tela, bateria, conectores, software e diagnóstico em bancada.',
   keywords: 'curso reparo iPhone, curso reparo Android, assistência técnica, guia técnico, G•Lab Cursos',
   authors: [{ name: 'G•Lab Cursos' }],
   creator: 'G•Lab Cursos',
@@ -44,13 +44,13 @@ export const metadata: Metadata = {
     locale: 'pt_BR',
     url: 'https://glabcursos.com.br',
     siteName: 'G•Lab Cursos',
-    title: 'G•Lab Cursos — Cursos Mestre',
-    description: 'Cursos técnicos práticos criados por quem já reparou mais de 20 mil aparelhos.',
+    title: 'G•Lab Cursos | Guias Técnicos para Assistência Mobile',
+    description: 'Aprenda reparos em celulares com guias técnicos práticos para troca de tela, bateria, conectores, software e diagnóstico em bancada.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'G•Lab Cursos — Cursos Mestre',
-    description: 'Cursos técnicos práticos de assistência técnica.',
+    title: 'G•Lab Cursos | Guias Técnicos para Assistência Mobile',
+    description: 'Guias técnicos práticos de assistência técnica mobile.',
   },
 }
 
