@@ -128,19 +128,19 @@ export default function Beneficios() {
                   </div>
                   
                   <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 leading-tight">
-                    Transforme Sua
+                    Comece a
                     <br />
                     <span style={{ background: 'linear-gradient(135deg, #00d4c8 0%, #7c3aed 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                      Carreira Tecnica
+                      Faturar ja
                     </span>
                     <br />
-                    Agora.
+                    no Primeiro Curso.
                   </h2>
                   
                   <p className="text-base md:text-lg text-white/50 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed">
-                    Domine as tecnicas que separam tecnicos comuns de 
-                    <span className="text-white font-medium"> profissionais requisitados</span>. 
-                    Metodo validado por mais de 2.000 alunos.
+                    Com os cursos, os resultados sao 
+                    <span className="text-white font-medium"> imediatos</span>. 
+                    Aplique ja no primeiro cliente e veja a diferenca na sua renda.
                   </p>
                   
                   {/* Botao CTA Premium */}
@@ -182,8 +182,8 @@ export default function Beneficios() {
                 <div className="grid grid-cols-2 gap-3 w-full max-w-sm">
                   {[
                     { icon: Users, value: "2.000+", label: "Tecnicos Formados", color: "#00d4c8" },
-                    { icon: Target, value: "100%", label: "Metodo Pratico", color: "#7c3aed" },
-                    { icon: Zap, value: "7 dias", label: "Resultado Rapido", color: "#f97316" },
+                    { icon: Target, value: "Imediato", label: "Comece a Faturar", color: "#7c3aed" },
+                    { icon: Zap, value: "3-7 dias", label: "Resultado no Cliente", color: "#f97316" },
                     { icon: Play, value: "Agora", label: "Acesso Imediato", color: "#10b981" },
                   ].map((item) => {
                     const Icon = item.icon
