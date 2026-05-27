@@ -1,117 +1,127 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Menu, X } from "lucide-react"
+import Link from 'next/link'
+import Image from 'next/image'
+import { Menu, X, Search } from 'lucide-react'
+import { useState } from 'react'
+import SearchModal from './search-modal'
 
-const links = [
-  { label: "Início", href: "/" },
-  { label: "Cursos", href: "/cursos" },
-  { label: "Contato", href: "/contato" },
+const NAV = [
+  { label: 'Home',   href: '/' },
+  { label: 'Cursos', href: '/cursos' },
+  { label: 'Contato', href: '/contato' },
 ]
 
 export default function Header() {
   const [open, setOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const pathname = usePathname()
-
-  useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 20)
-    window.addEventListener("scroll", handler)
-    return () => window.removeEventListener("scroll", handler)
-  }, [])
-
-  // Fecha menu mobile ao navegar
-  useEffect(() => { setOpen(false) }, [pathname])
+  const [searchOpen, setSearchOpen] = useState(false)
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? "py-3 bg-[#070c12]/90 backdrop-blur-xl border-b border-[rgba(0,212,200,0.1)] shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
-          : "py-5 bg-transparent"
-      }`}
-    >
-      <div className="max-w-6xl mx-auto px-5 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="relative w-8 h-8 flex items-center justify-center">
-            <div className="absolute inset-0 rounded-lg bg-cyan/20 group-hover:bg-cyan/30 transition-colors" />
-            <div className="absolute inset-0 rounded-lg border border-cyan/40" />
-            <span className="relative text-cyan font-black text-sm tracking-tight">G</span>
-          </div>
-          <div className="flex flex-col leading-none">
-            <span className="text-foreground font-bold text-sm tracking-wide">G•Lab</span>
-            <span className="text-muted-foreground text-[10px] tracking-widest uppercase">Cursos</span>
-          </div>
-        </Link>
-
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-1">
-          {links.map((l) => {
-            const active = pathname === l.href
-            return (
-              <Link
-                key={l.href}
-                href={l.href}
-                className={`px-4 py-2 text-sm rounded-lg transition-all duration-200 ${
-                  active
-                    ? "text-cyan bg-cyan/8 font-semibold"
-                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-                }`}
-              >
-                {l.label}
-              </Link>
-            )
-          })}
-        </nav>
-
-        {/* CTA */}
-        <div className="hidden md:flex items-center gap-3">
-          <Link
-            href="/cursos"
-            className="relative inline-flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-semibold text-background bg-cyan hover:bg-cyan/90 transition-all duration-200 shadow-[0_0_20px_rgba(0,212,200,0.3)]"
-          >
-            Ver Cursos
+    <>
+      <header
+        className="sticky top-0 z-50"
+        style={{ backgroundColor: '#0B0B0C', borderBottom: '1px solid #27272a' }}
+      >
+        <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <Image
+              src="/logo-glab-neon-transparent.png"
+              alt="G-LAB Logo"
+              width={40}
+              height={40}
+              className="w-10 h-10"
+            />
           </Link>
+
+          {/* Nav desktop */}
+          <nav className="hidden md:flex items-center gap-8">
+            {NAV.map((n) => (
+              <Link
+                key={n.href}
+                href={n.href}
+                className="text-xs font-semibold tracking-widest uppercase transition-colors"
+                style={{ color: '#71717a' }}
+                onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+                onMouseLeave={e => (e.currentTarget.style.color = '#71717a')}
+              >
+                {n.label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Ações direita */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setSearchOpen(true)}
+              aria-label="Buscar"
+              style={{ color: '#71717a' }}
+              className="hover:text-white transition-colors cursor-pointer"
+            >
+              <Search size={18} />
+            </button>
+            <Link
+              href="/login"
+              className="hidden md:inline-flex text-xs font-semibold tracking-widest uppercase transition-colors"
+              style={{ color: '#71717a' }}
+              onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+              onMouseLeave={e => (e.currentTarget.style.color = '#71717a')}
+            >
+              Entrar como aluno
+            </Link>
+            <Link
+              href="/cursos"
+              className="hidden md:inline-flex btn-primary text-xs py-2 px-5"
+            >
+              Ver Cursos
+            </Link>
+            <button
+              onClick={() => setOpen(!open)}
+              aria-label={open ? 'Fechar menu' : 'Abrir menu'}
+              className="md:hidden transition-colors cursor-pointer"
+              style={{ color: '#71717a' }}
+            >
+              {open ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </div>
 
-        {/* Mobile toggle */}
-        <button
-          className="md:hidden w-9 h-9 flex items-center justify-center rounded-lg border border-border text-muted-foreground hover:text-foreground hover:border-cyan/40 transition-all"
-          onClick={() => setOpen(!open)}
-          aria-label="Menu"
-        >
-          {open ? <X size={18} /> : <Menu size={18} />}
-        </button>
-      </div>
-
-      {/* Mobile menu */}
-      {open && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-[#070c12]/98 backdrop-blur-xl border-b border-[rgba(0,212,200,0.1)] px-5 py-4 flex flex-col gap-1">
-          {links.map((l) => {
-            const active = pathname === l.href
-            return (
-              <Link
-                key={l.href}
-                href={l.href}
-                className={`px-4 py-3 text-sm rounded-lg transition-all ${
-                  active ? "text-cyan bg-cyan/8 font-semibold" : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-                }`}
-              >
-                {l.label}
-              </Link>
-            )
-          })}
-          <Link
-            href="/cursos"
-            className="mt-2 px-4 py-3 rounded-lg text-sm font-semibold text-background bg-cyan text-center"
+        {/* Menu mobile */}
+        {open && (
+          <nav
+            className="md:hidden px-6 py-4 space-y-1"
+            style={{ borderTop: '1px solid #27272a', backgroundColor: '#0B0B0C' }}
           >
-            Ver Cursos
-          </Link>
-        </div>
-      )}
-    </header>
+            {NAV.map((n) => (
+              <Link
+                key={n.href}
+                href={n.href}
+                onClick={() => setOpen(false)}
+                className="block py-2 text-sm font-semibold tracking-wider uppercase transition-colors"
+                style={{ color: '#71717a' }}
+              >
+                {n.label}
+              </Link>
+            ))}
+            <div className="pt-4 space-y-2 border-t border-white/10">
+              <Link 
+                href="/login" 
+                onClick={() => setOpen(false)}
+                className="block py-2 text-sm font-semibold tracking-wider uppercase transition-colors"
+                style={{ color: '#71717a' }}
+              >
+                Entrar como aluno
+              </Link>
+              <Link href="/cursos" className="btn-primary w-full justify-center text-xs py-2.5" onClick={() => setOpen(false)}>
+                Ver Cursos
+              </Link>
+            </div>
+          </nav>
+        )}
+      </header>
+
+      <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+    </>
   )
 }
+

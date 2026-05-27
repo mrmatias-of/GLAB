@@ -121,55 +121,69 @@ export default function AdminCursosPage() {
   if (loading) {
     return (
       <div className="p-8 flex items-center justify-center min-h-[400px]">
-        <div className="w-6 h-6 border-2 border-cyan border-t-transparent rounded-full animate-spin" />
+        <div 
+          className="w-6 h-6 border-2 border-t-transparent rounded-full animate-spin"
+          style={{ borderColor: '#00d4c8', borderTopColor: 'transparent' }}
+        />
       </div>
     )
   }
 
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-black text-foreground">Guias / Cursos</h1>
-          <p className="text-muted-foreground text-sm mt-1">{cursos.length} guia(s) cadastrado(s)</p>
+    <div className="p-8" style={{ background: '#050510' }}>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8 relative">
+        <div className="absolute -top-4 -left-4 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl" />
+        <div className="relative">
+          <p className="text-xs font-bold tracking-[0.3em] uppercase mb-2" style={{ color: '#00d4c8' }}>Gerenciamento</p>
+          <h1 className="text-2xl font-black text-white">Cursos</h1>
+          <p className="text-white/40 text-sm mt-1">{cursos.length} curso(s) cadastrado(s)</p>
         </div>
         <Link
           href="/admin/cursos/novo"
-          className="inline-flex items-center gap-2 bg-cyan text-background font-bold text-sm px-5 py-2.5 rounded-xl hover:bg-cyan/90 shadow-[0_0_20px_rgba(0,212,200,0.25)] transition-all"
+          className="inline-flex items-center gap-2 text-black font-bold text-sm px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-105"
+          style={{ 
+            background: 'linear-gradient(135deg, #00d4c8 0%, #7c3aed 100%)',
+            boxShadow: '0 0 20px rgba(0,212,200,0.3)'
+          }}
         >
           <Plus size={15} />
-          Novo Guia
+          Novo Curso
         </Link>
       </div>
 
-      <div className="rounded-2xl border border-border bg-card overflow-hidden">
+      {/* Tabela */}
+      <div 
+        className="rounded-2xl border border-cyan-500/20 overflow-hidden"
+        style={{ background: 'rgba(0,212,200,0.02)' }}
+      >
         <table className="w-full">
           <thead>
-            <tr className="border-b border-border">
-              <th className="text-left text-xs font-bold text-muted-foreground uppercase tracking-wider px-6 py-4 w-10">Ordem</th>
-              <th className="text-left text-xs font-bold text-muted-foreground uppercase tracking-wider px-6 py-4">Guia</th>
-              <th className="text-left text-xs font-bold text-muted-foreground uppercase tracking-wider px-6 py-4">Preço</th>
-              <th className="text-left text-xs font-bold text-muted-foreground uppercase tracking-wider px-6 py-4">Checkout</th>
-              <th className="text-left text-xs font-bold text-muted-foreground uppercase tracking-wider px-6 py-4">Status</th>
-              <th className="text-right text-xs font-bold text-muted-foreground uppercase tracking-wider px-6 py-4">Ações</th>
+            <tr className="border-b border-cyan-500/10">
+              <th className="text-left text-xs font-bold uppercase tracking-wider px-6 py-4 w-10" style={{ color: 'rgba(0,212,200,0.5)' }}>Ordem</th>
+              <th className="text-left text-xs font-bold uppercase tracking-wider px-6 py-4" style={{ color: 'rgba(0,212,200,0.5)' }}>Curso</th>
+              <th className="text-left text-xs font-bold uppercase tracking-wider px-6 py-4" style={{ color: 'rgba(0,212,200,0.5)' }}>Preço</th>
+              <th className="text-left text-xs font-bold uppercase tracking-wider px-6 py-4" style={{ color: 'rgba(0,212,200,0.5)' }}>Checkout</th>
+              <th className="text-left text-xs font-bold uppercase tracking-wider px-6 py-4" style={{ color: 'rgba(0,212,200,0.5)' }}>Status</th>
+              <th className="text-right text-xs font-bold uppercase tracking-wider px-6 py-4" style={{ color: 'rgba(0,212,200,0.5)' }}>Ações</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border">
+          <tbody className="divide-y divide-cyan-500/10">
             {cursos.map((curso, index) => (
-              <tr key={curso.id} className="hover:bg-surface-hover transition-colors">
+              <tr key={curso.id} className="hover:bg-cyan-500/5 transition-colors">
                 <td className="px-6 py-4">
                   <div className="flex flex-col gap-1">
                     <button
                       onClick={() => handleReorder(curso.id, "up")}
                       disabled={index === 0}
-                      className="p-1 rounded hover:bg-surface disabled:opacity-30 disabled:cursor-not-allowed text-muted-foreground hover:text-foreground transition-colors"
+                      className="p-1 rounded hover:bg-cyan-500/10 disabled:opacity-30 disabled:cursor-not-allowed text-white/30 hover:text-cyan-400 transition-colors"
                     >
                       <ChevronUp size={14} />
                     </button>
                     <button
                       onClick={() => handleReorder(curso.id, "down")}
                       disabled={index === cursos.length - 1}
-                      className="p-1 rounded hover:bg-surface disabled:opacity-30 disabled:cursor-not-allowed text-muted-foreground hover:text-foreground transition-colors"
+                      className="p-1 rounded hover:bg-cyan-500/10 disabled:opacity-30 disabled:cursor-not-allowed text-white/30 hover:text-cyan-400 transition-colors"
                     >
                       <ChevronDown size={14} />
                     </button>
@@ -180,24 +194,28 @@ export default function AdminCursosPage() {
                     <button
                       onClick={() => handleToggleAtivo(curso.id, curso.ativo)}
                       disabled={actionLoading === curso.id}
-                      className={`w-2 h-2 rounded-full flex-shrink-0 transition-colors ${curso.ativo ? "bg-cyan" : "bg-muted-foreground"}`}
+                      className="w-2.5 h-2.5 rounded-full flex-shrink-0 transition-colors"
+                      style={curso.ativo ? { background: 'linear-gradient(135deg, #00d4c8 0%, #7c3aed 100%)', boxShadow: '0 0 10px rgba(0,212,200,0.5)' } : { background: 'rgba(255,255,255,0.2)' }}
                       title={curso.ativo ? "Clique para desativar" : "Clique para ativar"}
                     />
                     <div>
-                      <p className="text-sm font-semibold text-foreground">{curso.titulo}</p>
-                      <p className="text-xs text-muted-foreground">{curso.tag} · /{curso.slug}</p>
+                      <p className="text-sm font-semibold text-white">{curso.titulo}</p>
+                      <p className="text-xs text-white/30">{curso.tag} · /{curso.slug}</p>
                     </div>
                     {curso.destaque && (
-                      <span className="text-[10px] font-black bg-cyan/15 text-cyan border border-cyan/20 px-2 py-0.5 rounded-full">
+                      <span 
+                        className="text-[10px] font-black px-2 py-0.5 rounded-full border border-amber-500/30"
+                        style={{ background: 'rgba(245,158,11,0.1)', color: '#fbbf24' }}
+                      >
                         DESTAQUE
                       </span>
                     )}
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  <span className="text-sm font-bold text-cyan">{curso.preco}</span>
+                  <span className="text-sm font-bold" style={{ color: '#00d4c8' }}>{curso.preco}</span>
                   {curso.preco_original && (
-                    <span className="text-xs text-muted-foreground line-through ml-2">{curso.preco_original}</span>
+                    <span className="text-xs text-white/30 line-through ml-2">{curso.preco_original}</span>
                   )}
                 </td>
                 <td className="px-6 py-4">
@@ -212,11 +230,14 @@ export default function AdminCursosPage() {
                       Configurado
                     </a>
                   ) : (
-                    <span className="text-xs text-muted-foreground">Sem link</span>
+                    <span className="text-xs text-white/30">Sem link</span>
                   )}
                 </td>
                 <td className="px-6 py-4">
-                  <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${curso.ativo ? "bg-green-400/10 text-green-400" : "bg-muted text-muted-foreground"}`}>
+                  <span 
+                    className="text-xs font-bold px-2.5 py-1 rounded-full"
+                    style={curso.ativo ? { background: 'rgba(74,222,128,0.1)', color: '#4ade80' } : { background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.3)' }}
+                  >
                     {curso.ativo ? "Ativo" : "Inativo"}
                   </span>
                 </td>
@@ -224,7 +245,7 @@ export default function AdminCursosPage() {
                   <div className="flex items-center justify-end gap-2">
                     <Link
                       href={`/admin/cursos/editar/${curso.id}`}
-                      className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-cyan border border-border hover:border-cyan/30 px-3 py-1.5 rounded-lg transition-all"
+                      className="inline-flex items-center gap-1.5 text-xs font-medium text-white/50 hover:text-cyan-400 border border-white/10 hover:border-cyan-500/30 px-3 py-1.5 rounded-lg transition-all hover:bg-cyan-500/5"
                     >
                       <Pencil size={12} />
                       Editar
@@ -234,7 +255,7 @@ export default function AdminCursosPage() {
                     <div className="relative">
                       <button
                         onClick={() => setMenuOpen(menuOpen === curso.id ? null : curso.id)}
-                        className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-surface transition-all"
+                        className="p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/5 transition-all"
                       >
                         <MoreHorizontal size={14} />
                       </button>
@@ -242,11 +263,14 @@ export default function AdminCursosPage() {
                       {menuOpen === curso.id && (
                         <>
                           <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(null)} />
-                          <div className="absolute right-0 top-full mt-1 w-40 bg-card border border-border rounded-xl shadow-lg z-20 py-1 overflow-hidden">
+                          <div 
+                            className="absolute right-0 top-full mt-1 w-40 border border-cyan-500/20 rounded-xl shadow-lg z-20 py-1 overflow-hidden"
+                            style={{ background: '#0a0a14' }}
+                          >
                             <button
                               onClick={() => handleDuplicate(curso)}
                               disabled={actionLoading === curso.id}
-                              className="w-full flex items-center gap-2 px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-surface transition-colors"
+                              className="w-full flex items-center gap-2 px-4 py-2 text-sm text-white/50 hover:text-white hover:bg-cyan-500/5 transition-colors"
                             >
                               <Copy size={14} />
                               Duplicar
@@ -272,13 +296,14 @@ export default function AdminCursosPage() {
         
         {cursos.length === 0 && (
           <div className="p-12 text-center">
-            <p className="text-muted-foreground mb-4">Nenhum guia cadastrado ainda.</p>
+            <p className="text-white/40 mb-4">Nenhum curso cadastrado ainda.</p>
             <Link
               href="/admin/cursos/novo"
-              className="inline-flex items-center gap-2 bg-cyan text-background font-bold text-sm px-5 py-2.5 rounded-xl hover:bg-cyan/90 transition-all"
+              className="inline-flex items-center gap-2 text-black font-bold text-sm px-5 py-2.5 rounded-xl transition-all"
+              style={{ background: 'linear-gradient(135deg, #00d4c8 0%, #7c3aed 100%)' }}
             >
               <Plus size={15} />
-              Criar Primeiro Guia
+              Criar Primeiro Curso
             </Link>
           </div>
         )}

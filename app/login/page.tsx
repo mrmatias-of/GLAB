@@ -1,143 +1,165 @@
-"use client"
+'use client'
 
-import { useState, useCallback } from "react"
-import { createClient } from "@/lib/supabase/client"
-import { useRouter } from "next/navigation"
-import { Layers, Eye, EyeOff, Lock, Mail } from "lucide-react"
-
-// Rate limiting no client
-const MAX_ATTEMPTS = 5
-const LOCKOUT_TIME = 60000 // 1 minuto
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Image from 'next/image'
+import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [attempts, setAttempts] = useState(0)
-  const [lockedUntil, setLockedUntil] = useState<number | null>(null)
   const router = useRouter()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  const handleLogin = useCallback(async (e: React.FormEvent) => {
+  async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
-    
-    // Verificar lockout
-    if (lockedUntil && Date.now() < lockedUntil) {
-      const remaining = Math.ceil((lockedUntil - Date.now()) / 1000)
-      setError(`Muitas tentativas. Aguarde ${remaining}s.`)
-      return
-    }
-
-    // Validação básica
-    if (!email.trim() || !password.trim()) {
-      setError("Preencha todos os campos.")
-      return
-    }
-
+    setError('')
     setLoading(true)
-    setError(null)
 
-    const supabase = createClient()
-    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password })
+    try {
+      const supabase = createClient()
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
 
-    if (error) {
-      const newAttempts = attempts + 1
-      setAttempts(newAttempts)
-      
-      if (newAttempts >= MAX_ATTEMPTS) {
-        setLockedUntil(Date.now() + LOCKOUT_TIME)
-        setError(`Muitas tentativas. Aguarde 1 minuto.`)
-        setAttempts(0)
-      } else {
-        setError("Email ou senha incorretos. Tente novamente.")
+      if (signInError) {
+        setError(signInError.message === 'Invalid login credentials' 
+          ? 'Email ou senha incorretos' 
+          : signInError.message)
+        setLoading(false)
+        return
       }
-      setLoading(false)
-      return
-    }
 
-    router.push("/admin")
-    router.refresh()
-  }, [email, password, attempts, lockedUntil, router])
+      router.push('/admin')
+      router.refresh()
+    } catch {
+      setError('Erro ao fazer login. Tente novamente.')
+      setLoading(false)
+    }
+  }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      {/* Background glow */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-cyan/5 blur-[120px]" />
-      </div>
-
-      <div className="relative w-full max-w-md">
-        {/* Logo */}
-        <div className="flex flex-col items-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-cyan/15 border border-cyan/30 flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(0,212,200,0.2)]">
-            <Layers size={26} className="text-cyan" strokeWidth={1.5} />
+    <div className="min-h-screen bg-background flex">
+      {/* Left side - Form */}
+      <div className="flex-1 flex items-center justify-center p-8">
+        <div className="w-full max-w-md">
+          {/* Logo */}
+          <div className="flex justify-center mb-8">
+            <Link href="/">
+              <Image
+                src="/logo-glab-neon-transparent.png"
+                alt="G-LAB Logo"
+                width={80}
+                height={80}
+                className="w-20 h-20"
+              />
+            </Link>
           </div>
-          <span className="text-foreground font-black text-xl tracking-wide">G<span className="text-cyan">•</span>Lab</span>
-          <p className="text-muted-foreground text-sm mt-1">Painel Administrativo</p>
-        </div>
 
-        {/* Card */}
-        <div className="rounded-2xl border border-border bg-card p-8 shadow-[0_0_60px_rgba(0,0,0,0.4)]">
-          <h1 className="text-xl font-black text-foreground mb-1">Entrar</h1>
-          <p className="text-sm text-muted-foreground mb-6">Acesso restrito ao administrador</p>
+          {/* Title */}
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-extrabold text-white mb-2">Painel Admin</h1>
+            <p className="text-sm" style={{ color: '#71717a' }}>
+              Acesso restrito a administradores
+            </p>
+          </div>
 
-          <form onSubmit={handleLogin} className="flex flex-col gap-4">
+          {/* Form */}
+          <form onSubmit={handleLogin} className="space-y-5">
             {/* Email */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Email</label>
-              <div className="relative">
-                <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  placeholder="seu@email.com"
-                  className="w-full bg-input border border-border rounded-xl pl-10 pr-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-cyan/50 focus:ring-1 focus:ring-cyan/30 transition-all"
-                />
-              </div>
+            <div>
+              <label htmlFor="email" className="block text-xs font-medium text-white mb-2">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="admin@glabcursos.com.br"
+                required
+                autoComplete="email"
+                className="w-full px-4 py-3 rounded-xl bg-zinc-900 border border-zinc-800 text-white placeholder-zinc-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+              />
             </div>
 
-            {/* Senha */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Senha</label>
-              <div className="relative">
-                <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  placeholder="••••••••"
-                  className="w-full bg-input border border-border rounded-xl pl-10 pr-11 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-cyan/50 focus:ring-1 focus:ring-cyan/30 transition-all"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
-                </button>
-              </div>
+            {/* Password */}
+            <div>
+              <label htmlFor="password" className="block text-xs font-medium text-white mb-2">
+                Senha
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                autoComplete="current-password"
+                className="w-full px-4 py-3 rounded-xl bg-zinc-900 border border-zinc-800 text-white placeholder-zinc-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+              />
             </div>
 
-            {/* Erro */}
+            {/* Error */}
             {error && (
-              <div className="rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3 text-sm text-red-400">
+              <div className="p-4 rounded-xl bg-red-950/50 border border-red-900/50 text-sm text-red-200">
                 {error}
               </div>
             )}
 
-            {/* Botão */}
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-cyan text-background font-bold rounded-xl py-3.5 text-sm hover:bg-cyan/90 shadow-[0_0_24px_rgba(0,212,200,0.3)] hover:shadow-[0_0_36px_rgba(0,212,200,0.45)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+              className="w-full py-3 rounded-xl font-semibold text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90"
+              style={{
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+              }}
             >
-              {loading ? "Entrando..." : "Entrar no Painel"}
+              {loading ? 'Entrando...' : 'Entrar no Painel'}
             </button>
           </form>
+
+          {/* Footer */}
+          <div className="mt-8 text-center">
+            <Link 
+              href="/" 
+              className="text-sm text-indigo-400 hover:text-indigo-300 transition-colors"
+            >
+              Voltar para o site
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Right side - Hero */}
+      <div 
+        className="hidden lg:flex flex-1 items-center justify-center p-12"
+        style={{
+          background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)',
+        }}
+      >
+        <div className="max-w-md text-center">
+          <div className="mb-6">
+            <div 
+              className="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center"
+              style={{ background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)' }}
+            >
+              <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+          </div>
+          <h2 className="text-2xl font-bold text-white mb-4">
+            Area Restrita
+          </h2>
+          <p className="text-zinc-400 leading-relaxed">
+            Este painel e exclusivo para administradores do G-LAB. 
+            Gerencie cursos, usuarios e configuracoes do sistema.
+          </p>
         </div>
       </div>
     </div>

@@ -1,16 +1,14 @@
 import Header from "@/components/header"
 import Hero from "@/components/hero"
-import Stats from "@/components/stats"
-import CursosPreview from "@/components/cursos-preview"
+import Cursos from "@/components/cursos"
 import Footer from "@/components/footer"
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main className="min-h-screen text-white" style={{ backgroundColor: '#050510' }}>
       <Header />
       <Hero />
-      <Stats />
-      <CursosPreview />
+      <Cursos showComunidade={true} />
       <Footer />
     </main>
   )

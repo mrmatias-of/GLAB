@@ -1,9 +1,10 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 import { Plus, Trash2, Save, ArrowLeft } from "lucide-react"
+import SimpleImageUpload from "@/components/admin/simple-image-upload"
 import Link from "next/link"
 
 type Modulo = { titulo: string; topicos: string[] }
@@ -15,6 +16,7 @@ type CursoFormData = {
   subtitulo: string
   descricao: string
   descricao_longa: string
+  imagem: string
   preco: string
   preco_original: string
   cta: string
@@ -33,6 +35,7 @@ const defaultForm: CursoFormData = {
   subtitulo: "",
   descricao: "",
   descricao_longa: "",
+  imagem: "",
   preco: "",
   preco_original: "",
   cta: "Quero Acessar o Guia",
@@ -137,6 +140,7 @@ export default function CursoForm({ initialData, id }: { initialData?: Partial<C
       subtitulo: sanitize(form.subtitulo),
       descricao: sanitize(form.descricao),
       descricao_longa: sanitize(form.descricao_longa),
+      imagem: form.imagem.trim(),
       preco: sanitize(form.preco),
       preco_original: sanitize(form.preco_original),
       cta: sanitize(form.cta),
@@ -153,21 +157,25 @@ export default function CursoForm({ initialData, id }: { initialData?: Partial<C
 
     const supabase = createClient()
 
+    let cursoId = id
     let err
+    
     if (isEditing) {
       const { error } = await supabase.from("cursos").update(sanitizedPayload).eq("id", id)
       err = error
     } else {
-      const { error } = await supabase.from("cursos").insert(sanitizedPayload)
+      const { data, error } = await supabase.from("cursos").insert(sanitizedPayload).select("id").single()
       err = error
+      if (data) cursoId = data.id
     }
 
-    setLoading(false)
     if (err) {
+      setLoading(false)
       setError(err.message)
       return
     }
 
+    setLoading(false)
     setSuccess(true)
     
     // Revalidar cache de cursos
@@ -243,6 +251,16 @@ export default function CursoForm({ initialData, id }: { initialData?: Partial<C
               <span className="text-sm text-foreground">Ativo (visível no site)</span>
             </label>
           </div>
+        </section>
+
+        {/* Imagem de Capa */}
+        <section className="rounded-2xl border border-border bg-card p-6">
+          <h2 className="text-sm font-black text-foreground mb-1">Imagem de Capa / Card</h2>
+          <p className="text-xs text-muted-foreground mb-4">Envie a imagem. O sistema otimiza automaticamente.</p>
+          <SimpleImageUpload
+            value={form.imagem}
+            onChange={(url) => set("imagem", url)}
+          />
         </section>
 
         {/* Preço e Checkout */}

@@ -5,11 +5,11 @@ export default function WhatsAppButton() {
     <div className="fixed bottom-6 right-6 z-50 flex items-center justify-end group">
       {/* Tooltip label */}
       <span className="hidden sm:block mr-3 bg-[#0b1320] border border-[rgba(0,212,200,0.15)] text-foreground/90 text-xs font-medium px-3 py-2 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0 shadow-lg whitespace-nowrap pointer-events-none">
-        Falar no WhatsApp
+        Dúvidas? Fale com a G•Lab
       </span>
 
       <a
-        href="https://wa.me/5519989398294"
+        href="https://chat.whatsapp.com/KiK2TDOf1HzGlkgH8IEL4B"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Falar no WhatsApp"

@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 import { createClient } from "@/lib/supabase/server"
 
@@ -6,105 +7,137 @@ export default async function CursosPreview() {
   const supabase = await createClient()
   const { data: cursos } = await supabase
     .from("cursos")
-    .select("id, slug, tag, titulo, descricao, preco, preco_original, destaque, cta_href")
+    .select("id, slug, titulo, descricao, preco, preco_original, imagem, destaque")
     .eq("ativo", true)
     .order("ordem", { ascending: true })
-    .limit(3)
+    .limit(5)
 
   if (!cursos?.length) return null
 
-  return (
-    <section className="relative py-24 overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_100%,rgba(0,212,200,0.05)_0%,transparent_70%)]" />
+  const featured = cursos.find(c => c.destaque) || cursos[0]
+  const rest = cursos.filter(c => c.id !== featured.id)
 
-      <div className="relative max-w-6xl mx-auto px-5">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
+  return (
+    <section className="px-6 py-16" style={{ backgroundColor: '#0B0B0C' }}>
+      <div className="max-w-7xl mx-auto">
+
+        {/* Cabeçalho da seção */}
+        <div className="flex items-end justify-between mb-10">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-cyan/20 bg-cyan/5 px-3 py-1 mb-4">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan animate-glow" />
-              <span className="text-xs font-semibold tracking-widest text-cyan uppercase">Guias Disponíveis</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl font-black text-balance leading-tight">
-              Comece a aprender{" "}
-              <span className="text-cyan glow-text">agora mesmo</span>
-            </h2>
+            <p className="eyebrow mb-3">Nossos Cursos</p>
+            <h2 className="section-title">Experimente</h2>
           </div>
           <Link
             href="/cursos"
-            className="group inline-flex items-center gap-2 text-sm font-semibold text-cyan hover:text-foreground transition-colors shrink-0"
+            className="hidden md:inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase transition-colors"
+            style={{ color: '#71717a' }}
           >
-            Ver todos os guias
-            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            Ver todos <ArrowRight size={13} />
           </Link>
         </div>
 
-        {/* Cards */}
-        <div className="grid md:grid-cols-3 gap-5">
-          {cursos.map((c) => (
+        {/* Grid destaque + lista */}
+        <div className="grid lg:grid-cols-5 gap-4">
+
+          {/* Card destaque grande */}
+          <Link
+            href={`/cursos/${featured.slug}`}
+            className="lg:col-span-3 group relative rounded-2xl overflow-hidden block"
+            style={{ minHeight: 420 }}
+          >
+            {featured.imagem ? (
+              <Image
+                src={featured.imagem}
+                alt={featured.titulo}
+                fill
+                className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                sizes="(max-width: 1024px) 100vw, 60vw"
+              />
+            ) : (
+              <div className="w-full h-full" style={{ background: '#18181b' }} />
+            )}
             <div
-              key={c.id}
-              className={`group relative rounded-2xl border bg-gradient-to-b transition-all duration-300 card-premium flex flex-col ${
-                c.destaque
-                  ? "border-cyan/30 from-[#0d1e2e] to-surface hover:shadow-[0_0_40px_rgba(0,212,200,0.15)]"
-                  : "border-[rgba(0,212,200,0.1)] from-surface to-[#0b1320] hover:border-cyan/20"
-              }`}
-            >
-              <span className="shimmer-inner" />
-              <div className="relative z-10 p-6 flex flex-col flex-1">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs font-bold tracking-widest text-cyan uppercase">{c.tag}</span>
-                  {c.destaque && (
-                    <span className="text-[10px] font-black tracking-widest text-background bg-cyan px-2 py-0.5 rounded-full"
-                      style={{ animation: "float 3s ease-in-out infinite" }}>
-                      POPULAR
-                    </span>
-                  )}
-                </div>
-                <h3 className="text-lg font-black text-foreground mb-2">{c.titulo}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-6 flex-1">{c.descricao}</p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-baseline gap-1.5">
-                    {c.preco_original && (
-                      <span className="text-xs text-muted-foreground line-through">{c.preco_original}</span>
-                    )}
-                    <span className="text-xl font-black text-cyan">{c.preco}</span>
-                  </div>
-                  {c.cta_href && c.cta_href !== "#" ? (
-                    <a
-                      href={c.cta_href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-background bg-cyan px-3 py-2 rounded-lg hover:bg-cyan/90 transition-all"
-                    >
-                      Acessar
-                      <ArrowRight size={12} />
-                    </a>
-                  ) : (
-                    <Link
-                      href={`/cursos/${c.slug}`}
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-cyan border border-cyan/30 px-3 py-2 rounded-lg hover:bg-cyan/10 transition-all"
-                    >
-                      Ver mais
-                      <ArrowRight size={12} />
-                    </Link>
-                  )}
-                </div>
+              className="absolute inset-0"
+              style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.2) 55%, transparent 100%)' }}
+            />
+            {featured.destaque && (
+              <div className="absolute top-5 left-5">
+                <span
+                  className="text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded"
+                  style={{ background: 'linear-gradient(135deg,#4f46e5,#7c3aed)', color: '#fff' }}
+                >
+                  Mais Popular
+                </span>
+              </div>
+            )}
+            <div className="absolute bottom-6 left-6 right-6">
+              <p className="text-white font-extrabold text-2xl leading-tight mb-2 uppercase tracking-tight">
+                {featured.titulo}
+              </p>
+              {featured.descricao && (
+                <p className="text-sm mb-4 line-clamp-2" style={{ color: '#a1a1aa' }}>{featured.descricao}</p>
+              )}
+              <div className="flex items-center gap-3">
+                <span className="text-xl font-extrabold" style={{ color: '#818cf8' }}>{featured.preco}</span>
+                {featured.preco_original && (
+                  <span className="text-sm line-through" style={{ color: '#52525b' }}>{featured.preco_original}</span>
+                )}
               </div>
             </div>
-          ))}
+          </Link>
+
+          {/* Cards menores */}
+          <div className="lg:col-span-2 flex flex-col gap-3">
+            {rest.map((curso) => (
+              <Link
+                key={curso.id}
+                href={`/cursos/${curso.slug}`}
+                className="group flex gap-4 items-center rounded-2xl p-4 transition-all duration-300 hover:scale-102 hover:-translate-y-1"
+                style={{ 
+                  backgroundColor: '#111113', 
+                  border: '1px solid #27272a',
+                }}
+              >
+                {/* Thumbnail */}
+                <div className="relative rounded-xl overflow-hidden flex-shrink-0 transition-transform duration-300 group-hover:scale-110 bg-zinc-900" style={{ width: 80, height: 80 }}>
+                  {curso.imagem ? (
+                    <Image
+                      src={curso.imagem}
+                      alt={curso.titulo}
+                      fill
+                      className="object-cover transition-brightness duration-300 group-hover:brightness-125"
+                      sizes="80px"
+                      loading="lazy"
+                      placeholder="empty"
+                    />
+                  ) : (
+                    <div className="w-full h-full" style={{ background: '#18181b' }} />
+                  )}
+                </div>
+
+                {/* Texto */}
+                <div className="flex-1 min-w-0">
+                  <p
+                    className="text-xs sm:text-sm font-bold leading-snug line-clamp-3 mb-1 uppercase tracking-tight transition-colors group-hover:text-indigo-300"
+                    style={{ color: '#fff' }}
+                  >
+                    {curso.titulo}
+                  </p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-sm sm:text-base font-extrabold transition-colors group-hover:text-indigo-400" style={{ color: '#818cf8' }}>{curso.preco}</span>
+                    {curso.preco_original && (
+                      <span className="text-xs line-through" style={{ color: '#52525b' }}>{curso.preco_original}</span>
+                    )}
+                  </div>
+                </div>
+
+                <ArrowRight size={15} className="flex-shrink-0 transition-all duration-300 group-hover:translate-x-1 group-hover:text-indigo-400" style={{ color: '#52525b' }} />
+              </Link>
+            ))}
+          </div>
+
         </div>
 
-        {/* CTA bottom */}
-        <div className="mt-10 text-center">
-          <Link
-            href="/cursos"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border border-cyan/25 text-cyan text-sm font-semibold hover:bg-cyan/10 hover:border-cyan/40 transition-all duration-300 group"
-          >
-            Ver todos os guias disponíveis
-            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </div>
       </div>
     </section>
   )

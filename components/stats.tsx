@@ -1,33 +1,58 @@
-const stats = [
-  { value: "10+", label: "Anos de Experiência", detail: "no mercado de assistência" },
-  { value: "20K+", label: "Aparelhos Reparados", detail: "smartphones, tablets e PCs" },
-  { value: "500+", label: "Alunos Formados", detail: "em todo o Brasil" },
-  { value: "98%", label: "Satisfação", detail: "dos alunos recomendam" },
+const ITEMS = [
+  { value: '30',    label: 'Cursos disponíveis',    wide: false },
+  { value: '1.000+', label: 'Alunos ativos',       wide: false },
+  { value: 'Trabalhamos\ncirurgicamente', label: 'Precisão técnica em cada guia. Sem atalhos, sem achismos.', wide: true },
+  { value: '+10 anos', label: 'De experiência',      wide: false },
+  { value: '2 horas', label: 'Tempo médio por módulo', wide: false },
 ]
 
 export default function Stats() {
   return (
-    <section className="relative py-2 overflow-hidden">
-      {/* Top line */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan/25 to-transparent" />
-      {/* Bottom line */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan/25 to-transparent" />
+    <section className="px-6 py-16" style={{ backgroundColor: '#0B0B0C' }}>
+      <div className="max-w-7xl mx-auto">
+        <p className="eyebrow mb-8">A biblioteca prática do técnico de celulares</p>
 
-      <div className="relative bg-surface/40 backdrop-blur-sm border-y border-[rgba(0,212,200,0.08)]">
-        <div className="max-w-5xl mx-auto px-5">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-[rgba(0,212,200,0.08)]">
-            {stats.map((s) => (
-              <div
-                key={s.label}
-                className="flex flex-col items-center text-center gap-1 py-8 px-4"
-              >
-                <span className="text-4xl md:text-5xl font-black text-cyan glow-text tabular-nums">
-                  {s.value}
-                </span>
-                <span className="text-sm font-semibold text-foreground/90 mt-1">{s.label}</span>
-                <span className="text-xs text-muted-foreground leading-relaxed hidden md:block">{s.detail}</span>
-              </div>
-            ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {/* Stat 1 */}
+          <div className="card p-6 rounded-2xl">
+            <p className="text-4xl sm:text-5xl font-extrabold text-white mb-2 tracking-tight">30</p>
+            <p className="text-xs font-medium tracking-wide" style={{ color: '#71717a' }}>Cursos disponíveis</p>
+          </div>
+
+          {/* Stat 2 */}
+          <div className="card p-6 rounded-2xl">
+            <p className="text-4xl sm:text-5xl font-extrabold text-white mb-2 tracking-tight">1.000+</p>
+            <p className="text-xs font-medium tracking-wide" style={{ color: '#71717a' }}>Alunos ativos</p>
+          </div>
+
+          {/* Bloco texto — ocupa 1 coluna mobile, 2 cols em sm+, 2 em lg */}
+          <div
+            className="sm:col-span-2 lg:col-span-2 rounded-2xl p-6 flex flex-col justify-between"
+            style={{ background: 'linear-gradient(135deg,#1e1b4b 0%,#18181b 100%)', border: '1px solid #27272a' }}
+          >
+            <div>
+              <p className="text-xl sm:text-2xl font-extrabold text-white leading-tight uppercase tracking-tight mb-3">
+                Procedimentos precisos para reduzir erros na bancada
+              </p>
+              <p className="text-xs sm:text-sm leading-relaxed" style={{ color: '#71717a', maxWidth: '36ch' }}>
+                Guias diretos ao ponto, com protocolos práticos para você executar reparos com mais segurança e consistência.
+              </p>
+            </div>
+            <a href="#cursos" className="btn-primary mt-5 self-start text-xs py-2 px-5">
+              Ver Guias
+            </a>
+          </div>
+
+          {/* Stat 3 */}
+          <div className="card p-6 rounded-2xl">
+            <p className="text-3xl sm:text-4xl font-extrabold text-white mb-2 tracking-tight">+10 anos</p>
+            <p className="text-xs font-medium tracking-wide" style={{ color: '#71717a' }}>De experiência</p>
+          </div>
+
+          {/* Stat 4 */}
+          <div className="card p-6 rounded-2xl">
+            <p className="text-3xl sm:text-4xl font-extrabold text-white mb-2 tracking-tight">2 horas</p>
+            <p className="text-xs font-medium tracking-wide" style={{ color: '#71717a' }}>Tempo médio por módulo</p>
           </div>
         </div>
       </div>

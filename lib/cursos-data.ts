@@ -1,3 +1,4 @@
+import { createClient, createAnonClient } from "@/lib/supabase/server"
 import { Smartphone, Monitor, Apple, Layers, type LucideIcon } from "lucide-react"
 
 export type Modulo = {
@@ -9,9 +10,10 @@ export type Curso = {
   slug: string
   tag: string
   titulo: string
-  subtitulo: string
+  subtitulo?: string
   descricao: string
   descricaoLonga: string
+  imagem?: string
   icon: LucideIcon
   destaque: boolean
   preco: string
@@ -21,290 +23,111 @@ export type Curso = {
   cta: string
   ctaHref: string
   accentColor: string
+  // Campos de landing page
+  categoria?: string
+  headline?: string
+  headlineSub?: string
+  nivel?: string
+  paraQuem?: string[]
+  dores?: string[]
+  ctaHeadline?: string
+  ctaHeadlineSub?: string
+  trilha?: string
+  relacionados?: string[]
 }
 
-export const cursos: Curso[] = [
-  {
-    slug: "combo-iniciante-mobile",
-    tag: "Combo",
-    titulo: "Combo Iniciante Mobile",
-    subtitulo: "iPhone + Android — tudo que você precisa para começar na assistência técnica mobile.",
-    descricao:
-      "O combo completo para iniciantes: troca de tela, bateria e conector em iPhone e Android. Um único guia, dois mundos dominados.",
-    descricaoLonga:
-      "O ponto de partida ideal para quem quer entrar na assistência técnica mobile. Cobre os procedimentos mais rentáveis do mercado — troca de tela, bateria e conector de carga — tanto em iPhones quanto nos principais modelos Android. Tudo em um único guia, com linguagem direta e passo a passo ilustrado.",
-    icon: Layers,
-    destaque: true,
-    preco: "R$ 19,90",
-    precoOriginal: "R$ 47",
-    modulos: [
-      {
-        titulo: "Ferramentas & Segurança",
-        topicos: [
-          "Kit essencial para mobile",
-          "Segurança elétrica e ESD",
-          "Identificação de modelos iPhone e Android",
-          "Organização da bancada",
-        ],
-      },
-      {
-        titulo: "Troca de Tela — iPhone",
-        topicos: [
-          "Remoção segura da tela",
-          "Troca em iPhone 11 ao 15 Pro",
-          "Calibração de Face ID",
-          "Erros comuns e como evitar",
-        ],
-      },
-      {
-        titulo: "Troca de Tela — Android",
-        topicos: [
-          "LCD vs OLED — cuidados diferentes",
-          "Troca em Samsung Galaxy A e S",
-          "Troca em Motorola Moto G",
-          "Troca em Xiaomi Redmi e Note",
-        ],
-      },
-      {
-        titulo: "Bateria & Conector de Carga",
-        topicos: [
-          "Diagnóstico de bateria em iPhone e Android",
-          "Troca de bateria com e sem adesivo",
-          "Limpeza e troca do conector Lightning/USB-C",
-          "Substituição da flex de carga",
-        ],
-      },
-    ],
-    aprendizados: [
-      "Trocar tela em iPhones e nos principais Androids",
-      "Substituir bateria com segurança em qualquer modelo",
-      "Resolver problemas de carga nos aparelhos mais comuns",
-      "Usar ferramentas profissionais corretamente",
-      "Evitar os erros mais comuns de quem está começando",
-      "Cobrar corretamente pelos serviços desde o primeiro reparo",
-    ],
-    cta: "Quero Acessar o Guia",
-    ctaHref: "https://pay.kirvano.com/6a241556-a3c8-4c49-8001-c6ab139e64ec",
-    accentColor: "#00d4c8",
-  },
-  {
-    slug: "iphone",
-    tag: "iPhone",
-    titulo: "Reparo de iPhone",
-    subtitulo: "Do diagnóstico à entrega — tudo que você precisa para reparar qualquer iPhone.",
-    descricao:
-      "Troca de tela, bateria, conector de carga, diagnóstico de software e muito mais. Técnicas validadas nos modelos mais recentes.",
-    descricaoLonga:
-      "Um guia técnico completo criado para quem quer dominar o reparo de iPhones de forma profissional. Abordamos desde a abertura segura dos aparelhos até procedimentos avançados de microssoldagem, cobrindo os modelos iPhone 8 até o iPhone 15 Pro Max.",
-    icon: Apple,
-    destaque: true,
-    preco: "R$ 19,90",
-    precoOriginal: "R$ 47",
-    modulos: [
-      {
-        titulo: "Fundamentos & Ferramentas",
-        topicos: [
-          "Kit de ferramentas essencial",
-          "Segurança elétrica e ESD",
-          "Identificação de modelos",
-          "Organização do bancada",
-        ],
-      },
-      {
-        titulo: "Troca de Tela",
-        topicos: [
-          "Remoção sem danos",
-          "Troca em iPhone 11, 12, 13, 14",
-          "Troca em iPhone 15 e 15 Pro",
-          "Calibração de Face ID",
-        ],
-      },
-      {
-        titulo: "Bateria & Carga",
-        topicos: [
-          "Diagnóstico de bateria",
-          "Troca de bateria segura",
-          "Limpeza do conector Lightning/USB-C",
-          "Troca do flex de carga",
-        ],
-      },
-      {
-        titulo: "Diagnóstico de Software",
-        topicos: [
-          "Modo DFU e Recovery",
-          "Restauração via iTunes / Finder",
-          "Erros comuns e soluções",
-          "Desbloqueio de iCloud (legal)",
-        ],
-      },
-      {
-        titulo: "Recuperação de Dados",
-        topicos: [
-          "Backup antes do reparo",
-          "Recuperação de fotos e contatos",
-          "Ferramentas de recuperação profissional",
-          "Prevenção de perda de dados",
-        ],
-      },
-    ],
-    aprendizados: [
-      "Trocar tela, bateria e conector de carga em qualquer iPhone",
-      "Diagnosticar e resolver falhas de software",
-      "Usar ferramentas profissionais com segurança",
-      "Recuperar dados antes e após reparos",
-      "Precificar e cobrar corretamente pelos serviços",
-      "Evitar os erros mais comuns na bancada",
-    ],
-    cta: "Quero Acessar o Guia",
-    ctaHref: "https://pay.kirvano.com/6a241556-a3c8-4c49-8001-c6ab139e64ec",
-    accentColor: "#00d4c8",
-  },
-  {
-    slug: "android",
-    tag: "Android",
-    titulo: "Reparo de Android",
-    subtitulo: "Samsung, Motorola, Xiaomi e muito mais — procedimentos precisos para o mercado brasileiro.",
-    descricao:
-      "Samsung, Motorola, Xiaomi e outros. Procedimentos precisos para os modelos mais vendidos do mercado brasileiro.",
-    descricaoLonga:
-      "O mercado Android representa mais de 80% dos aparelhos no Brasil. Este guia cobre os modelos mais vendidos com procedimentos detalhados, incluindo técnicas de flashing, microssoldagem e troca de display OLED e LCD.",
-    icon: Smartphone,
-    destaque: false,
-    preco: "R$ 19,90",
-    precoOriginal: "R$ 47",
-    modulos: [
-      {
-        titulo: "Fundamentos Android",
-        topicos: [
-          "Diferenças entre fabricantes",
-          "Kit de ferramentas por modelo",
-          "Segurança e ESD",
-          "Identificando versões de hardware",
-        ],
-      },
-      {
-        titulo: "Troca de Display",
-        topicos: [
-          "LCD vs OLED — cuidados diferentes",
-          "Troca em Samsung Galaxy S e A",
-          "Troca em Motorola Moto G",
-          "Troca em Xiaomi Redmi e Note",
-        ],
-      },
-      {
-        titulo: "Problemas de Carga",
-        topicos: [
-          "Limpeza e troca do conector USB-C",
-          "Substituição da flex de carga",
-          "Diagnóstico de bateria inchada",
-          "Troca de bateria com adesivo",
-        ],
-      },
-      {
-        titulo: "Flashing de Firmware",
-        topicos: [
-          "O que é e quando usar",
-          "Flashing via Odin (Samsung)",
-          "Flashing via QFIL (Qualcomm)",
-          "Recuperação de soft-brick",
-        ],
-      },
-      {
-        titulo: "Microssoldagem Básica",
-        topicos: [
-          "Equipamentos necessários",
-          "Troca de conector de carga soldado",
-          "Recuperação de trilhas danificadas",
-          "Identificação de componentes SMD",
-        ],
-      },
-    ],
-    aprendizados: [
-      "Reparar os modelos mais vendidos no Brasil",
-      "Trocar displays LCD e OLED sem danos",
-      "Fazer flashing de firmware de forma segura",
-      "Executar microssoldagem básica na bancada",
-      "Diagnosticar falhas de carga e bateria",
-      "Montar um estoque estratégico de peças",
-    ],
-    cta: "Quero Acessar o Guia",
-    ctaHref: "https://pay.kirvano.com/6a241556-a3c8-4c49-8001-c6ab139e64ec",
-    accentColor: "#00d4c8",
-  },
-  {
-    slug: "windows",
-    tag: "Windows",
-    titulo: "Formatação Windows",
-    subtitulo: "Formatação profissional, rápida e limpa — entregue o computador do jeito certo.",
-    descricao:
-      "Formatação profissional com backup completo, instalação de drivers, otimização de performance e segurança.",
-    descricaoLonga:
-      "Formatação vai além de apertar 'Formatar'. Este guia ensina o processo completo — do backup inteligente à otimização pós-instalação — para você entregar um computador rápido, seguro e sem problemas para o cliente.",
-    icon: Monitor,
-    destaque: false,
-    preco: "R$ 37",
-    precoOriginal: "R$ 67",
-    modulos: [
-      {
-        titulo: "Antes de Formatar",
-        topicos: [
-          "Conversa com o cliente — o que perguntar",
-          "Inventário de programas instalados",
-          "Backup completo e seguro",
-          "Verificação de hardware antes da formatação",
-        ],
-      },
-      {
-        titulo: "Instalação Limpa",
-        topicos: [
-          "Criando pendrive bootável",
-          "BIOS / UEFI — configurações essenciais",
-          "Instalação Windows 10 e 11",
-          "Particionamento de disco correto",
-        ],
-      },
-      {
-        titulo: "Drivers & Atualizações",
-        topicos: [
-          "Identificação automática de drivers",
-          "Instalação manual de drivers críticos",
-          "Windows Update — o que instalar",
-          "Drivers de placa de vídeo e som",
-        ],
-      },
-      {
-        titulo: "Otimização de Performance",
-        topicos: [
-          "Desativando serviços desnecessários",
-          "Configuração de inicialização",
-          "Limpeza pós-formatação",
-          "Configuração do SSD vs HDD",
-        ],
-      },
-      {
-        titulo: "Segurança & Entrega",
-        topicos: [
-          "Configuração do Windows Defender",
-          "Criação de ponto de restauração",
-          "Checklist de entrega profissional",
-          "Como precificar o serviço",
-        ],
-      },
-    ],
-    aprendizados: [
-      "Fazer backup completo sem perder dados do cliente",
-      "Instalar o Windows de forma limpa e segura",
-      "Identificar e instalar todos os drivers corretos",
-      "Otimizar a performance pós-formatação",
-      "Entregar o computador com checklist profissional",
-      "Cobrar corretamente pelo serviço de formatação",
-    ],
-    cta: "Quero Acessar o Guia",
-    ctaHref: "https://glabcursos.com.br",
-    accentColor: "#00d4c8",
-  },
-]
+// Versão sem `icon` para uso em Client Components (evita erro de serialização)
+export type CursoSerializavel = Omit<Curso, "icon">
 
-export function getCursoBySlug(slug: string): Curso | undefined {
+const getIconByTag = (tag: string): LucideIcon => {
+  if (tag.includes("iPhone")) return Apple
+  if (tag.includes("Android")) return Smartphone
+  if (tag.includes("Windows")) return Monitor
+  return Layers
+}
+
+// Cache de 1 hora
+let cursosCache: Curso[] | null = null
+let cursoCacheTime = 0
+
+export async function getCursos(): Promise<Curso[]> {
+  const now = Date.now()
+  if (cursosCache && (now - cursoCacheTime) < 3600000) {
+    return cursosCache
+  }
+
+  try {
+    const supabase = await createClient()
+    const { data, error } = await supabase
+      .from("cursos")
+      .select("slug, tag, titulo, subtitulo, descricao, descricao_longa, imagem, preco, preco_original, cta, cta_href, destaque, modulos, aprendizados, ordem, nivel, categoria, headline, headline_sub, para_quem, dores, cta_headline, cta_headline_sub, trilha, relacionados")
+      .eq("ativo", true)
+      .order("ordem", { ascending: true })
+
+    if (error || !data) {
+      console.error("[v0] Erro ao buscar cursos:", error)
+      return []
+    }
+
+    cursosCache = data.map((curso: any) => ({
+      slug: curso.slug,
+      tag: curso.tag,
+      titulo: curso.titulo,
+      subtitulo: curso.subtitulo || "",
+      descricao: curso.descricao,
+      descricaoLonga: curso.descricao_longa || curso.descricao,
+      imagem: curso.imagem || undefined,
+      icon: getIconByTag(curso.tag),
+      destaque: curso.destaque || false,
+      preco: curso.preco,
+      precoOriginal: curso.preco_original || undefined,
+      modulos: curso.modulos || [],
+      aprendizados: curso.aprendizados || [],
+      cta: curso.cta || "Comprar Agora",
+      ctaHref: curso.cta_href || "",
+      accentColor: "#00d4c8",
+      nivel: curso.nivel || undefined,
+      categoria: curso.categoria || undefined,
+      headline: curso.headline || undefined,
+      headlineSub: curso.headline_sub || undefined,
+      paraQuem: curso.para_quem || undefined,
+      dores: curso.dores || undefined,
+      ctaHeadline: curso.cta_headline || undefined,
+      ctaHeadlineSub: curso.cta_headline_sub || undefined,
+      trilha: curso.trilha || undefined,
+      relacionados: curso.relacionados || undefined,
+    }))
+
+    cursoCacheTime = now
+    return cursosCache
+  } catch (err) {
+    console.error("[v0] Erro ao conectar ao Supabase:", err)
+    return []
+  }
+}
+
+export async function getCursoBySlug(slug: string): Promise<Curso | undefined> {
+  const cursos = await getCursos()
   return cursos.find((c) => c.slug === slug)
+}
+
+// Função para geração estática (sem cookies)
+export async function getCursoSlugs(): Promise<string[]> {
+  try {
+    const supabase = createAnonClient()
+    const { data, error } = await supabase
+      .from("cursos")
+      .select("slug")
+      .eq("ativo", true)
+    
+    if (error || !data) {
+      console.error("[v0] Erro ao buscar slugs:", error)
+      return []
+    }
+    
+    return data.map((c: { slug: string }) => c.slug)
+  } catch (err) {
+    console.error("[v0] Erro ao conectar ao Supabase para slugs:", err)
+    return []
+  }
 }

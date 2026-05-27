@@ -1,100 +1,131 @@
 import Link from "next/link"
-import { ArrowRight, ShieldCheck, Zap } from "lucide-react"
+import Image from "next/image"
+import { ArrowRight, Zap, Headphones, Award, Users } from "lucide-react"
 
 export default function Hero() {
   return (
-    <section
-      id="inicio"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
-    >
-      {/* === Background layers === */}
+    <section className="relative w-full overflow-hidden" style={{ backgroundColor: '#050510', minHeight: '600px' }}>
+      {/* Neon border top */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50" />
+      
+      {/* Neon border left */}
+      <div className="absolute top-0 bottom-0 left-0 w-px bg-gradient-to-b from-transparent via-cyan-500 to-transparent opacity-30" />
+      
+      {/* Neon border right */}
+      <div className="absolute top-0 bottom-0 right-0 w-px bg-gradient-to-b from-transparent via-violet-500 to-transparent opacity-30" />
+      
+      {/* Grid background */}
+      <div className="absolute inset-0 opacity-5" style={{ 
+        backgroundImage: 'linear-gradient(rgba(0,212,200,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,200,.1) 1px, transparent 1px)',
+        backgroundSize: '50px 50px'
+      }} />
+      
+      <div className="max-w-7xl mx-auto px-6 py-16 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          
+          {/* Left Content */}
+          <div className="flex flex-col">
+            <p className="text-xs uppercase tracking-widest mb-4 font-semibold inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-500/30" style={{ background: 'rgba(0,212,200,0.05)', color: '#00d4c8' }}>
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+              ASSISTÊNCIA TÉCNICA MOBILE
+            </p>
+            
+            <h1 className="text-5xl md:text-6xl font-black leading-tight mb-6 text-white">
+              Aprenda reparos em celulares com mais{" "}
+              <span className="bg-gradient-to-r from-cyan-400 to-violet-500 bg-clip-text text-transparent">
+                segurança e método
+              </span>{" "}
+              na bancada
+            </h1>
+            
+            <p className="text-base leading-relaxed mb-8 max-w-lg" style={{ color: '#a1a1aa' }}>
+              Guias técnicos práticos para troca de tela, bateria, conectores, software e diagnóstico, desenvolvidos para quem quer começar ou evoluir na assistência técnica.
+            </p>
+            
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row gap-4 mb-6">
+              <Link 
+                href="/cursos"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-sm text-black transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/50 hover:scale-105"
+                style={{ background: 'linear-gradient(135deg, #00d4c8 0%, #7c3aed 100%)' }}
+              >
+                Ver Guias Técnicos
+                <ArrowRight size={18} strokeWidth={3} />
+              </Link>
+              <Link 
+                href="/cursos/combo-iniciante-mobile"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-sm text-white border-2 transition-all duration-300 hover:bg-white/5 hover:scale-105"
+                style={{ borderColor: '#a855f7' }}
+              >
+                Começar pelo Combo Iniciante — R$ 17,90
+                <ArrowRight size={18} strokeWidth={3} />
+              </Link>
+            </div>
 
-      {/* Deep radial nebula */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(0,212,200,0.12)_0%,transparent_70%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_40%_at_80%_80%,rgba(0,120,200,0.06)_0%,transparent_70%)]" />
-
-      {/* Dot grid */}
-      <div
-        className="absolute inset-0 opacity-20"
-        style={{
-          backgroundImage: `radial-gradient(circle, rgba(0,212,200,0.35) 1px, transparent 1px)`,
-          backgroundSize: "36px 36px",
-        }}
-      />
-
-      {/* Horizontal line accent */}
-      <div className="absolute top-1/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan/20 to-transparent" />
-
-      {/* Decorative spinning ring */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-cyan/5 animate-spin-slow pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full border border-cyan/[0.03] animate-spin-slow pointer-events-none" style={{ animationDirection: "reverse", animationDuration: "30s" }} />
-
-      {/* === Content === */}
-      <div className="relative z-10 max-w-4xl mx-auto px-5 text-center pt-28 pb-20 flex flex-col items-center">
-
-        {/* Badge */}
-        <div className="animate-fade-up delay-100 inline-flex items-center gap-2 rounded-full border border-cyan/25 bg-cyan/8 px-4 py-1.5 mb-8 backdrop-blur-sm">
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan animate-glow" />
-          <span className="text-xs font-semibold tracking-[0.2em] text-cyan uppercase">
-            G•Lab Cursos &mdash; Guias Mestre
-          </span>
-        </div>
-
-        {/* Headline */}
-        <h1 className="animate-fade-up delay-200 text-5xl sm:text-6xl md:text-7xl font-black leading-[1.05] tracking-tight text-balance mb-6">
-          Domine a{" "}
-          <span className="relative inline-block">
-            <span className="glow-text text-cyan">Assistência</span>
-          </span>
-          <br />
-          <span className="text-foreground/90">Técnica de Ponta.</span>
-        </h1>
-
-        {/* Sub */}
-        <p className="animate-fade-up delay-300 text-base md:text-lg text-muted-foreground leading-relaxed mb-10 max-w-xl">
-          Guias técnicos criados por quem já reparou mais de{" "}
-          <strong className="text-foreground font-semibold">20.000 aparelhos</strong>.
-          Métodos que funcionam de verdade, direto na sua bancada.
-        </p>
-
-        {/* CTAs */}
-        <div className="animate-fade-up delay-400 flex flex-col sm:flex-row items-center gap-3 mb-14">
-          <Link
-            href="/cursos"
-            className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-cyan text-background font-bold text-sm hover:bg-cyan/90 transition-all duration-300 shadow-[0_0_30px_rgba(0,212,200,0.4)] hover:shadow-[0_0_50px_rgba(0,212,200,0.55)]"
-          >
-            Explorar Cursos
-            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-          </Link>
-          <Link
-            href="/contato"
-            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl border border-border bg-surface/50 backdrop-blur-sm text-sm font-medium text-foreground/80 hover:text-foreground hover:border-cyan/30 transition-all duration-300"
-          >
-            Falar Conosco
-          </Link>
-        </div>
-
-        {/* Trust badges */}
-        <div className="animate-fade-up delay-500 flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <ShieldCheck size={14} className="text-cyan" />
-            <span>Conteúdo Verificado</span>
+            {/* Linha de confiança */}
+            <p className="text-[11px] text-white/40 mb-10">
+              Conteúdo prático • Acesso imediato • Certificado digital
+            </p>
+            
+            {/* Badges - Cards de Valor */}
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div className="flex flex-col items-start p-4 rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-105 hover:border-cyan-500/50 hover:bg-cyan-500/10">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center mb-3 transition-all duration-300" style={{ background: 'rgba(0,212,200,0.1)', borderColor: '#00d4c8', borderWidth: '1px' }}>
+                  <Zap size={16} style={{ color: '#00d4c8' }} />
+                </div>
+                <span className="font-black text-white text-lg">30+</span>
+                <span className="text-xs text-white/60 leading-tight">Guias técnicos</span>
+              </div>
+              
+              <div className="flex flex-col items-start p-4 rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-105 hover:border-violet-500/50 hover:bg-violet-500/10">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center mb-3 transition-all duration-300" style={{ background: 'rgba(168, 85, 247, 0.1)', borderColor: '#a855f7', borderWidth: '1px' }}>
+                  <Users size={16} style={{ color: '#a855f7' }} />
+                </div>
+                <span className="font-black text-white text-lg">1.000+</span>
+                <span className="text-xs text-white/60 leading-tight">Alunos ativos</span>
+              </div>
+              
+              <div className="flex flex-col items-start p-4 rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-105 hover:border-orange-500/50 hover:bg-orange-500/10">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center mb-3 transition-all duration-300" style={{ background: 'rgba(249, 115, 22, 0.1)', borderColor: '#f97316', borderWidth: '1px' }}>
+                  <Award size={16} style={{ color: '#f97316' }} />
+                </div>
+                <span className="font-black text-white text-lg">Conteúdo prático</span>
+                <span className="text-xs text-white/60 leading-tight">Para aplicar na bancada</span>
+              </div>
+              
+              <div className="flex flex-col items-start p-4 rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-105 hover:border-green-500/50 hover:bg-green-500/10">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center mb-3 transition-all duration-300" style={{ background: 'rgba(16, 185, 129, 0.1)', borderColor: '#10b981', borderWidth: '1px' }}>
+                  <Headphones size={16} style={{ color: '#10b981' }} />
+                </div>
+                <span className="font-black text-white text-lg">Do básico ao avançado</span>
+                <span className="text-xs text-white/60 leading-tight">Evolua por etapas</span>
+              </div>
+            </div>
           </div>
-          <div className="w-px h-4 bg-border hidden sm:block" />
-          <div className="flex items-center gap-2">
-            <Zap size={14} className="text-cyan" />
-            <span>Resultados Imediatos</span>
-          </div>
-          <div className="w-px h-4 bg-border hidden sm:block" />
-          <div className="flex items-center gap-2">
-            <span className="text-cyan font-bold">20K+</span>
-            <span>Aparelhos Reparados</span>
+          
+          {/* Right Visual - Tech Setup with Image */}
+          <div className="relative hidden lg:flex items-center justify-center h-[600px]">
+            <div className="relative w-full h-full rounded-2xl border-2 border-cyan-500/30 overflow-hidden" style={{ background: 'linear-gradient(135deg, rgba(0,212,200,0.05) 0%, rgba(123,58,237,0.05) 100%)' }}>
+              <Image
+                src="/hero-tech-pcb.jpg"
+                alt="Ferramentas técnicas profissionais - PCB com sonda laser"
+                width={1536}
+                height={1024}
+                className="w-full h-full object-contain"
+                priority
+              />
+              {/* Overlay sutil */}
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/20 via-transparent to-violet-950/30 pointer-events-none" />
+              {/* Neon accent lines */}
+              <div className="absolute top-0 left-1/3 w-px h-full opacity-10" style={{ background: 'linear-gradient(to bottom, rgba(0,212,200,0.5), transparent)' }} />
+              <div className="absolute top-1/2 left-0 w-full h-px opacity-10" style={{ background: 'linear-gradient(to right, rgba(0,212,200,0.5), transparent)' }} />
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Bottom fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-background to-transparent pointer-events-none" />
+      
+      {/* Bottom neon border */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500 to-transparent opacity-30" />
     </section>
   )
 }
