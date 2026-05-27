@@ -56,16 +56,16 @@ export default function CursoHero({ curso }: { curso: Curso }) {
               <div className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5">
                 <BookOpen size={16} className="text-cyan-400" />
                 <span className="text-sm font-bold text-white">{curso.modulos.length}</span>
-                <span className="text-sm text-white/50">modulos</span>
+                <span className="text-sm text-white/50">módulos</span>
               </div>
               <div className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5">
                 <Zap size={16} className="text-cyan-400" />
                 <span className="text-sm font-bold text-white">{totalTopicos}</span>
-                <span className="text-sm text-white/50">topicos</span>
+                <span className="text-sm text-white/50">tópicos</span>
               </div>
               <div className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5">
                 <Clock size={16} className="text-cyan-400" />
-                <span className="text-sm text-white/50">Acesso vitalicio</span>
+                <span className="text-sm text-white/50">Acesso vitalício</span>
               </div>
             </div>
 
@@ -117,7 +117,7 @@ function PriceCard({ curso }: { curso: Curso }) {
           )}
           <span className="text-4xl md:text-5xl font-black text-cyan-400" style={{ textShadow: '0 0 30px rgba(0,212,200,0.5)' }}>{curso.preco}</span>
         </div>
-        <p className="text-xs text-white/40 mb-6">pagamento unico</p>
+        <p className="text-xs text-white/40 mb-6">pagamento único</p>
 
         <a
           href={curso.ctaHref}
@@ -135,7 +135,7 @@ function PriceCard({ curso }: { curso: Curso }) {
 
         <p className="text-[11px] text-white/40 text-center mt-4 flex items-center justify-center gap-2">
           <Tag size={12} />
-          Pagamento unico - Acesso vitalicio
+          Pagamento único - Acesso vitalício
         </p>
       </div>
     </div>

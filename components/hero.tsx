@@ -27,25 +27,25 @@ export default function Hero() {
           <div className="flex flex-col">
             <p className="text-xs uppercase tracking-widest mb-4 font-semibold inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-500/30" style={{ background: 'rgba(0,212,200,0.05)', color: '#00d4c8' }}>
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-              Manutenção Eletrônica
+              ASSISTÊNCIA TÉCNICA MOBILE
             </p>
             
             <h1 className="text-5xl md:text-6xl font-black leading-tight mb-6 text-white">
-              Repare celulares com mais{" "}
+              Aprenda reparos em celulares com mais{" "}
               <span className="bg-gradient-to-r from-cyan-400 to-violet-500 bg-clip-text text-transparent">
-                segurança e confiança
+                segurança e método
               </span>{" "}
               na bancada
             </h1>
             
             <p className="text-base leading-relaxed mb-8 max-w-lg" style={{ color: '#a1a1aa' }}>
-              Guias técnicos práticos para troca de tela, bateria, conectores e software, criados por quem já reparou mais de 20.000 aparelhos.
+              Guias técnicos práticos para troca de tela, bateria, conectores, software e diagnóstico, desenvolvidos para quem quer começar ou evoluir na assistência técnica.
             </p>
             
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 mb-6">
               <Link 
-                href="#cursos"
+                href="/cursos"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-sm text-black transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/50 hover:scale-105"
                 style={{ background: 'linear-gradient(135deg, #00d4c8 0%, #7c3aed 100%)' }}
               >
@@ -62,43 +62,43 @@ export default function Hero() {
               </Link>
             </div>
 
-            {/* Badge Combo Iniciante */}
-            <p className="text-[11px] text-white/30 mb-10">
-              <span className="text-cyan-400/70 font-semibold">Melhor para começar</span> · Acesso imediato após a compra
+            {/* Linha de confiança */}
+            <p className="text-[11px] text-white/40 mb-10">
+              Conteúdo prático • Acesso imediato • Certificado digital
             </p>
             
             {/* Badges - Cards de Valor */}
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div className="flex flex-col items-start p-4 rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-105 hover:border-cyan-500/50 hover:bg-cyan-500/10">
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center mb-3 transition-all duration-300" style={{ background: 'rgba(0,212,200,0.1)', borderColor: '#00d4c8', borderWidth: '1px' }}>
-                  <Users size={16} style={{ color: '#00d4c8' }} />
+                  <Zap size={16} style={{ color: '#00d4c8' }} />
                 </div>
-                <span className="font-black text-white text-lg">2.000+</span>
-                <span className="text-xs text-white/60 leading-tight">Alunos capacitados</span>
+                <span className="font-black text-white text-lg">30+</span>
+                <span className="text-xs text-white/60 leading-tight">Guias técnicos</span>
               </div>
               
               <div className="flex flex-col items-start p-4 rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-105 hover:border-violet-500/50 hover:bg-violet-500/10">
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center mb-3 transition-all duration-300" style={{ background: 'rgba(168, 85, 247, 0.1)', borderColor: '#a855f7', borderWidth: '1px' }}>
-                  <Zap size={16} style={{ color: '#a855f7' }} />
+                  <Users size={16} style={{ color: '#a855f7' }} />
                 </div>
-                <span className="font-black text-white text-lg">Acesso imediato</span>
-                <span className="text-xs text-white/60 leading-tight">Comece a estudar hoje</span>
+                <span className="font-black text-white text-lg">1.000+</span>
+                <span className="text-xs text-white/60 leading-tight">Alunos ativos</span>
               </div>
               
               <div className="flex flex-col items-start p-4 rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-105 hover:border-orange-500/50 hover:bg-orange-500/10">
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center mb-3 transition-all duration-300" style={{ background: 'rgba(249, 115, 22, 0.1)', borderColor: '#f97316', borderWidth: '1px' }}>
                   <Award size={16} style={{ color: '#f97316' }} />
                 </div>
-                <span className="font-black text-white text-lg">Certificado digital</span>
-                <span className="text-xs text-white/60 leading-tight">Valorize seu currículo</span>
+                <span className="font-black text-white text-lg">Conteúdo prático</span>
+                <span className="text-xs text-white/60 leading-tight">Para aplicar na bancada</span>
               </div>
               
               <div className="flex flex-col items-start p-4 rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-105 hover:border-green-500/50 hover:bg-green-500/10">
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center mb-3 transition-all duration-300" style={{ background: 'rgba(16, 185, 129, 0.1)', borderColor: '#10b981', borderWidth: '1px' }}>
                   <Headphones size={16} style={{ color: '#10b981' }} />
                 </div>
-                <span className="font-black text-white text-lg">Suporte direto</span>
-                <span className="text-xs text-white/60 leading-tight">Aprenda com acompanhamento</span>
+                <span className="font-black text-white text-lg">Do básico ao avançado</span>
+                <span className="text-xs text-white/60 leading-tight">Evolua por etapas</span>
               </div>
             </div>
           </div>

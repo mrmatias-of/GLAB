@@ -78,7 +78,7 @@ export default function CursoCTA({ curso }: { curso: Curso }) {
               </div>
               <div className="flex items-center gap-2 text-xs text-white/40">
                 <Clock size={14} className="text-cyan-400/50" />
-                Acesso vitalicio
+                Acesso vitalício
               </div>
               <div className="flex items-center gap-2 text-xs text-white/40">
                 <Award size={14} className="text-cyan-400/50" />
