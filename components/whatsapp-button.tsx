@@ -9,7 +9,7 @@ export default function WhatsAppButton() {
       </span>
 
       <a
-        href="https://chat.whatsapp.com/KiK2TDOf1HzGlkgH8IEL4B"
+        href="https://wa.me/5519989398294?text=Ol%C3%A1%21+Vim+pelo+site+da+G%E2%80%A2Lab+Cursos+e+tenho+uma+d%C3%BAvida+sobre+os+guias."
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Falar no WhatsApp"

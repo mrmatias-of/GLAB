@@ -3,8 +3,31 @@ import Cursos from "@/components/cursos"
 import Footer from "@/components/footer"
 
 export const metadata = {
-  title: "Guias Técnicos - G•Lab Cursos",
+  title: "Guias Técnicos",
   description: "Catálogo completo de guias técnicos: escolha o próximo passo da sua evolução na assistência mobile, diagnóstico avançado, gestão da bancada e PC.",
+  alternates: {
+    canonical: "https://www.glabcursos.com.br/cursos",
+  },
+  openGraph: {
+    type: "website",
+    url: "https://www.glabcursos.com.br/cursos",
+    title: "Guias Técnicos | G•Lab Cursos",
+    description: "Catálogo completo de guias técnicos: escolha o próximo passo da sua evolução na assistência mobile, diagnóstico avançado, gestão da bancada e PC.",
+    images: [
+      {
+        url: "https://www.glabcursos.com.br/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "G•Lab Cursos — Catálogo de guias técnicos",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Guias Técnicos | G•Lab Cursos",
+    description: "Catálogo completo de guias técnicos: escolha o próximo passo da sua evolução na assistência mobile, diagnóstico avançado, gestão da bancada e PC.",
+    images: ["https://www.glabcursos.com.br/og-image.jpg"],
+  },
 }
 
 export default function CursosPage() {
