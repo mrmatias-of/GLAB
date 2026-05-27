@@ -1,9 +1,6 @@
-'use client'
-
 import Link from "next/link"
 import Image from "next/image"
 import { Package, MessageCircle } from "lucide-react"
-import { useEffect, useState } from "react"
 
 interface Curso {
   id: string
@@ -17,62 +14,60 @@ interface Curso {
   tag?: string
 }
 
-function getIconByTag(tag?: string) {
-  const tagLower = tag?.toLowerCase() || ""
-  const icons: Record<string, any> = {
-    tela: () => <div>📱</div>,
-    bateria: () => <div>🔋</div>,
-    software: () => <div>💾</div>,
-    diagnostico: () => <div>🔍</div>,
-    pc: () => <div>🖥️</div>,
-  }
-  return icons[tagLower] || (() => <Package size={20} />)
-}
-
 export default function CursosCatalogo({ cursos }: { cursos: Curso[] }) {
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  // Organizar por trilhas com IDs e descrições específicas
-  const trilhas = {
-    iniciantes: {
+  // Organizar por trilhas — slugs verificados contra os valores reais do Supabase
+  const trilhas = [
+    {
       id: "iniciantes",
       titulo: "Começando na assistência mobile",
       descricao: "Guias indicados para quem quer construir uma base prática nos serviços mais comuns da bancada.",
-      slugs: ["combo-iniciante-mobile", "guia-troca-de-tela", "guia-troca-de-bateria", "guia-conectores-carga", "guia-software-celular"],
+      slugs: [
+        "combo-iniciante-mobile",
+        "guia-troca-de-tela",
+        "guia-troca-de-bateria",
+        "guia-conectores-carga",
+        "guia-software-celular",
+      ],
     },
-    diagnostico: {
+    {
       id: "diagnostico",
       titulo: "Diagnóstico e reparo avançado",
       descricao: "Conteúdos para técnicos que desejam evoluir em medições, análise e investigação de falhas mais complexas.",
-      slugs: ["guia-diagnostico-avancado", "guia-consumo-eletrico", "guia-curto-placa", "guia-esquema-eletrico", "guia-pmic-alimentacao", "guia-radiofrequencia", "guia-falhas-intermitentes", "guia-perifericos"],
+      slugs: [
+        "guia-diagnostico-avancado",
+        "guia-consumo-eletrico",
+        "guia-curto-em-placa",        // corrigido: era "guia-curto-placa"
+        "guia-esquema-eletrico",
+        "guia-pmic-alimentacao",
+        "guia-radiofrequencia",
+        "guia-falhas-intermitentes",
+        "guia-perifericos",
+      ],
     },
-    gestao: {
+    {
       id: "gestao",
       titulo: "Gestão e profissionalização da bancada",
       descricao: "Organize processos, precifique melhor e desenvolva uma rotina mais profissional na assistência.",
-      slugs: ["guia-precificacao", "guia-padronizacao-bancada"],
+      slugs: [
+        "guia-precificacao-profissional", // corrigido: era "guia-precificacao"
+        "guia-padronizacao-bancada",
+      ],
     },
-    pc: {
+    {
       id: "pc-performance",
       titulo: "PC & Performance",
       descricao: "Conteúdo específico para otimização e desempenho de computadores.",
       slugs: ["guia-otimizacao-pc-gamer"],
     },
-  }
+  ]
 
-  // Mapear cursos às trilhas
-  const trilhasComProdutos = Object.entries(trilhas).map(([key, trilha]) => ({
+  // Mapear cursos às trilhas e filtrar apenas os encontrados
+  const trilhasComProdutos = trilhas.map(trilha => ({
     ...trilha,
     produtos: trilha.slugs
       .map(slug => cursos.find(c => c.slug === slug))
-      .filter((c): c is Curso => !!c)
+      .filter((c): c is Curso => !!c),
   }))
-
-  if (!mounted) return null
 
   return (
     <section className="relative py-8 pt-0" style={{ backgroundColor: '#050510' }}>
