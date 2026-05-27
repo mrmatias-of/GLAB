@@ -82,19 +82,19 @@ export default function Footer() {
                 <div className="w-10 h-10 rounded-lg border border-cyan-500/30 bg-cyan-500/5 flex items-center justify-center">
                   <Shield size={18} className="text-cyan-400" />
                 </div>
-                <span className="text-[8px] text-white/40 text-center font-medium leading-tight">QUALIDADE<br/>GARANTIDA</span>
+                <span className="text-[8px] text-white/40 text-center font-medium leading-tight">CONTEÚDO<br/>PRÁTICO</span>
               </div>
               <div className="flex flex-col items-center gap-1.5">
                 <div className="w-10 h-10 rounded-lg border border-cyan-500/30 bg-cyan-500/5 flex items-center justify-center">
                   <Settings size={18} className="text-cyan-400" />
                 </div>
-                <span className="text-[8px] text-white/40 text-center font-medium leading-tight">SUPORTE<br/>ESPECIALIZADO</span>
+                <span className="text-[8px] text-white/40 text-center font-medium leading-tight">ACESSO<br/>VITALÍCIO</span>
               </div>
               <div className="flex flex-col items-center gap-1.5">
                 <div className="w-10 h-10 rounded-lg border border-cyan-500/30 bg-cyan-500/5 flex items-center justify-center">
                   <Zap size={18} className="text-cyan-400" />
                 </div>
-                <span className="text-[8px] text-white/40 text-center font-medium leading-tight">ATENDIMENTO<br/>RÁPIDO</span>
+                <span className="text-[8px] text-white/40 text-center font-medium leading-tight">CERTIFICADO<br/>DIGITAL</span>
               </div>
             </div>
           </div>
