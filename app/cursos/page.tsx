@@ -1,37 +1,13 @@
-import { createClient } from "@/lib/supabase/server"
 import Header from "@/components/header"
-import CursosCatalogo from "@/components/cursos-catalogo"
+import Cursos from "@/components/cursos"
 import Footer from "@/components/footer"
-
-export const dynamic = "force-dynamic"
-
-interface Curso {
-  id: string
-  slug: string
-  titulo: string
-  descricao: string
-  preco: string
-  preco_original?: string
-  imagem?: string
-  destaque?: boolean
-  tag?: string
-}
 
 export const metadata = {
   title: "Guias Técnicos - G•Lab Cursos",
   description: "Catálogo completo de guias técnicos: escolha o próximo passo da sua evolução na assistência mobile, diagnóstico avançado, gestão da bancada e PC.",
 }
 
-export default async function CursosPage() {
-  const supabase = await createClient()
-  const { data, error } = await supabase
-    .from("cursos")
-    .select("id, slug, tag, titulo, descricao, preco, preco_original, imagem, destaque, ordem")
-    .eq("ativo", true)
-    .order("ordem", { ascending: true })
-
-  const cursos: Curso[] = error || !data ? [] : data
-
+export default function CursosPage() {
   return (
     <main className="min-h-screen text-white" style={{ backgroundColor: '#050510' }}>
       <Header />
@@ -54,37 +30,37 @@ export default async function CursosPage() {
           <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-4 py-1.5 mb-6">
             <span className="text-xs font-bold tracking-wider text-cyan-400 uppercase">Catálogo de guias técnicos</span>
           </div>
-          
+
           <h1 className="text-4xl md:text-5xl font-black text-white mb-4">
             Escolha o próximo passo da sua{" "}
             <span className="text-cyan-400" style={{ textShadow: '0 0 30px rgba(0,212,200,0.5)' }}>evolução</span> na bancada
           </h1>
-          
+
           <p className="text-base text-white/50 leading-relaxed mb-8 max-w-2xl">
             Do primeiro reparo ao diagnóstico avançado: encontre o guia ideal para o seu momento na assistência técnica.
           </p>
 
           {/* Navigation Buttons */}
           <div className="flex flex-wrap gap-3">
-            <a 
+            <a
               href="#iniciantes"
               className="px-4 py-2.5 rounded-lg border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/20 transition-all duration-300 text-sm font-semibold"
             >
               Começando na assistência
             </a>
-            <a 
+            <a
               href="#diagnostico"
               className="px-4 py-2.5 rounded-lg border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/20 transition-all duration-300 text-sm font-semibold"
             >
               Diagnóstico avançado
             </a>
-            <a 
+            <a
               href="#gestao"
               className="px-4 py-2.5 rounded-lg border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/20 transition-all duration-300 text-sm font-semibold"
             >
               Gestão da bancada
             </a>
-            <a 
+            <a
               href="#pc-performance"
               className="px-4 py-2.5 rounded-lg border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/20 transition-all duration-300 text-sm font-semibold"
             >
@@ -94,7 +70,9 @@ export default async function CursosPage() {
         </div>
       </section>
 
-      <CursosCatalogo cursos={cursos} />
+      {/* Reutiliza o mesmo componente e query que já funcionam na homepage */}
+      <Cursos showComunidade={false} />
+
       <Footer />
     </main>
   )
