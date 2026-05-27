@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, Clock, Headphones, FileCheck, Shield, Quote, Users, Zap, Target, Play } from "lucide-react"
+import { ArrowRight, Clock, Headphones, FileCheck, Quote, Users, Zap, Target, Play } from "lucide-react"
 
 const depoimentos = [
   {
@@ -208,7 +208,6 @@ export default function Beneficios() {
                   { icon: Clock, text: "Acesso Vitalicio" },
                   { icon: Headphones, text: "Suporte Direto" },
                   { icon: FileCheck, text: "Certificado Digital" },
-                  { icon: Shield, text: "Garantia 7 Dias" },
                 ].map((badge) => {
                   const Icon = badge.icon
                   return (
