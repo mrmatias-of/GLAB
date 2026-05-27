@@ -78,7 +78,15 @@ function getFaqItems(curso: CursoSerializavel): FaqItem[] {
     })
   }
 
-  if (curso.tag?.toLowerCase().includes("celular") || curso.categoria?.toLowerCase().includes("mobile") || !curso.tag?.toLowerCase().includes("pc")) {
+  // Inclui pergunta sobre iPhone/Android apenas se for conteúdo mobile
+  // (exclui explicitamente PC/Windows para evitar pergunta irrelevante)
+  const isPC =
+    curso.slug === "guia-otimizacao-pc-gamer" ||
+    curso.tag?.toLowerCase().includes("pc") ||
+    curso.tag?.toLowerCase().includes("windows") ||
+    curso.categoria?.toLowerCase().includes("pc")
+
+  if (!isPC) {
     base.push({
       pergunta: "O conteúdo serve para iPhone e Android?",
       resposta:
