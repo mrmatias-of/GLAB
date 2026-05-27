@@ -42,33 +42,37 @@ export default async function Cursos({ showComunidade = false }: { showComunidad
 
   // Organizar por trilhas e categorias
   const trilhas = {
-    iniciante: {
+    iniciantes: {
+      id: "iniciantes",
       titulo: "Começando na assistência mobile",
-      descricao: "Estrutura essencial para iniciantes dominarem os reparos mais comuns",
+      descricao: "Guias indicados para quem quer construir uma base prática nos serviços mais comuns da bancada.",
       produtos: cursos.filter(c => {
         const slugs = ["combo-iniciante-mobile", "guia-troca-de-tela", "guia-troca-de-bateria", "guia-conectores-carga", "guia-software-celular"];
         return slugs.includes(c.slug);
       })
     },
-    avancado: {
+    diagnostico: {
+      id: "diagnostico",
       titulo: "Diagnóstico e reparo avançado",
-      descricao: "Técnicas sofisticadas para resolver problemas complexos na bancada",
+      descricao: "Conteúdos para técnicos que desejam evoluir em medições, análise e investigação de falhas mais complexas.",
       produtos: cursos.filter(c => {
         const slugs = ["guia-diagnostico-avancado", "guia-consumo-eletrico", "guia-curto-placa", "guia-esquema-eletrico", "guia-pmic-alimentacao", "guia-radiofrequencia", "guia-falhas-intermitentes", "guia-perifericos"];
         return slugs.includes(c.slug);
       })
     },
     gestao: {
+      id: "gestao",
       titulo: "Gestão e profissionalização da bancada",
-      descricao: "Estruture seu negócio e padronize seus processos de trabalho",
+      descricao: "Organize processos, precifique melhor e desenvolva uma rotina mais profissional na assistência.",
       produtos: cursos.filter(c => {
         const slugs = ["guia-precificacao", "guia-padronizacao-bancada"];
         return slugs.includes(c.slug);
       })
     },
     pc: {
+      id: "pc-performance",
       titulo: "PC & Performance",
-      descricao: "Especialização em computadores e otimizações avançadas",
+      descricao: "Conteúdo específico para otimização e desempenho de computadores.",
       produtos: cursos.filter(c => {
         const slugs = ["guia-otimizacao-pc-gamer"];
         return slugs.includes(c.slug);
@@ -140,9 +144,8 @@ export default async function Cursos({ showComunidade = false }: { showComunidad
 
             {/* Trilhas */}
             {trilhasAtivas.map((trilha, trilhaIndex) => (
-              <div key={trilhaIndex} className="mb-16">
+              <div key={trilhaIndex} id={trilha.id} className="mb-16 scroll-mt-20">
                 <div className="mb-8">
-                  <p className="text-[10px] uppercase tracking-widest font-bold mb-2" style={{ color: '#00d4c8' }}>Trilha {trilhaIndex + 1}</p>
                   <h2 className="text-2xl md:text-3xl font-black text-white mb-2">{trilha.titulo}</h2>
                   <p className="text-sm text-white/50">{trilha.descricao}</p>
                 </div>
