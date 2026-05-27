@@ -21,6 +21,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const curso = await getCursoBySlug(slug)
   if (!curso) return {}
+
+  // Metadata específica para Combo Iniciante
+  if (slug === "combo-iniciante-mobile") {
+    return {
+      title: "Combo Iniciante Mobile | G•Lab Cursos",
+      description: "Comece na assistência técnica mobile com conteúdos práticos sobre tela, bateria, conector e fundamentos de bancada.",
+    }
+  }
+
   return {
     title: `${curso.titulo} — G•Lab Cursos`,
     description: curso.descricaoLonga || curso.descricao,

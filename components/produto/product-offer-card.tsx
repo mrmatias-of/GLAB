@@ -2,7 +2,18 @@ import { ArrowRight, Clock, Award, Zap, ShieldCheck } from "lucide-react"
 import type { CursoSerializavel } from "@/lib/cursos-data"
 
 export default function ProductOfferCard({ curso }: { curso: CursoSerializavel }) {
-  const ctaLabel = `Quero acessar este guia por ${curso.preco}`
+  const isComboIniciante = curso.slug === "combo-iniciante-mobile"
+  
+  const titleText = isComboIniciante
+    ? "Construa sua base na assistência técnica mobile"
+    : curso.titulo
+  
+  const descText = isComboIniciante
+    ? "Estude os reparos essenciais em uma sequência organizada para começar com mais segurança na bancada."
+    : curso.descricao
+  
+  const badgeText = isComboIniciante ? "Comece por aqui" : "Oferta especial"
+  const ctaLabel = `Quero ${isComboIniciante ? "começar com o Combo" : "acessar este guia"} por ${curso.preco}`
 
   return (
     <section className="py-12 relative" style={{ backgroundColor: "#050510" }}>
@@ -28,7 +39,20 @@ export default function ProductOfferCard({ curso }: { curso: CursoSerializavel }
           <div className="absolute top-0 right-0 w-px h-20" style={{ background: "linear-gradient(180deg, rgba(139,92,246,0.5), transparent)" }} />
 
           <div className="relative text-center">
-            <p className="text-sm font-bold text-white/60 mb-1">{curso.titulo}</p>
+            {isComboIniciante && (
+              <p className="text-xs font-black uppercase tracking-widest text-cyan-400 mb-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-cyan-500/25" style={{ background: "rgba(0,212,200,0.06)" }}>
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                {badgeText}
+              </p>
+            )}
+            <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
+              {titleText}
+            </h2>
+            {isComboIniciante && (
+              <p className="text-base text-white/60 leading-relaxed mb-6 max-w-2xl mx-auto">
+                {descText}
+              </p>
+            )}
 
             {/* Preço */}
             <div className="flex items-baseline justify-center gap-3 mb-1">

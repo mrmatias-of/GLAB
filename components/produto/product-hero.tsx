@@ -26,6 +26,7 @@ export default function ProductHero({ curso }: { curso: CursoSerializavel }) {
   const nivelLabel = curso.nivel
     ? curso.nivel.charAt(0).toUpperCase() + curso.nivel.slice(1)
     : "Iniciante"
+  const isComboIniciante = curso.slug === "combo-iniciante-mobile"
 
   return (
     <section
@@ -72,6 +73,14 @@ export default function ProductHero({ curso }: { curso: CursoSerializavel }) {
           <div>
             {/* Badges superiores */}
             <div className="flex flex-wrap items-center gap-2 mb-5">
+              {isComboIniciante && (
+                <span
+                  className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full border"
+                  style={{ background: "rgba(16,185,129,0.08)", color: "#10b981", borderColor: "rgba(16,185,129,0.3)" }}
+                >
+                  Melhor escolha para iniciantes
+                </span>
+              )}
               {curso.categoria && (
                 <span
                   className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full border"

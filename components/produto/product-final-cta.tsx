@@ -2,15 +2,19 @@ import { ArrowRight, ShieldCheck, Clock, Award, Zap } from "lucide-react"
 import type { CursoSerializavel } from "@/lib/cursos-data"
 
 export default function ProductFinalCTA({ curso }: { curso: CursoSerializavel }) {
-  const headline =
-    curso.ctaHeadline ||
-    `Pronto para evoluir com ${curso.titulo}?`
-  const sub =
-    curso.ctaHeadlineSub ||
-    curso.descricaoLonga ||
-    curso.descricao
+  const isComboIniciante = curso.slug === "combo-iniciante-mobile"
+  
+  const headline = isComboIniciante
+    ? "Dê o primeiro passo na bancada com os reparos certos"
+    : (curso.ctaHeadline || `Pronto para evoluir com ${curso.titulo}?`)
+  
+  const sub = isComboIniciante
+    ? "Comece pelos serviços essenciais da assistência técnica mobile e desenvolva sua base com mais confiança."
+    : (curso.ctaHeadlineSub || curso.descricaoLonga || curso.descricao)
 
-  const ctaLabel = `Quero acessar por ${curso.preco}`
+  const ctaLabel = isComboIniciante 
+    ? `Quero começar agora por ${curso.preco}`
+    : `Quero acessar por ${curso.preco}`
 
   return (
     <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "#050510" }}>

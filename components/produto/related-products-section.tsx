@@ -10,6 +10,8 @@ export default function RelatedProductsSection({
   curso: CursoSerializavel
   todosCursos: CursoSerializavel[]
 }) {
+  const isComboIniciante = curso.slug === "combo-iniciante-mobile"
+  
   // Busca relacionados: usa a lista de slugs se disponível, senão usa mesma trilha
   let relacionados: CursoSerializavel[] = []
 
@@ -35,9 +37,11 @@ export default function RelatedProductsSection({
 
       <div className="max-w-7xl mx-auto px-6">
         <p className="text-[10px] uppercase tracking-widest font-bold mb-2" style={{ color: "#00d4c8" }}>
-          Continue sua trilha
+          {isComboIniciante ? "Próximos passos" : "Continue sua trilha"}
         </p>
-        <h2 className="text-xl md:text-2xl font-black text-white mb-8">Guias relacionados</h2>
+        <h2 className="text-xl md:text-2xl font-black text-white mb-8">
+          {isComboIniciante ? "Depois do Combo, continue evoluindo" : "Guias relacionados"}
+        </h2>
 
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
           {relacionados.map((rel) => (

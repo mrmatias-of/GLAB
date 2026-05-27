@@ -7,8 +7,45 @@ import type { CursoSerializavel } from "@/lib/cursos-data"
 type FaqItem = { pergunta: string; resposta: string }
 
 function getFaqItems(curso: CursoSerializavel): FaqItem[] {
+  const isComboIniciante = curso.slug === "combo-iniciante-mobile"
   const isAvancado =
     curso.nivel === "avançado" || curso.nivel === "intermediário"
+
+  // FAQs específicas para Combo Iniciante
+  if (isComboIniciante) {
+    return [
+      {
+        pergunta: "Para quem o Combo Iniciante é indicado?",
+        resposta:
+          "Ele foi desenvolvido para quem deseja iniciar seus estudos em assistência técnica mobile pelos reparos essenciais da bancada.",
+      },
+      {
+        pergunta: "Quais temas estão incluídos no Combo?",
+        resposta:
+          "O Combo Iniciante cobre Ferramentas & Segurança, Troca de Tela (iPhone e Android), Bateria & Conector com 4 módulos organizados.",
+      },
+      {
+        pergunta: "Como recebo acesso após a compra?",
+        resposta:
+          "O acesso é liberado imediatamente após a confirmação do pagamento. Você receberá um e-mail com as instruções para acessar a plataforma.",
+      },
+      {
+        pergunta: "O acesso é vitalício?",
+        resposta:
+          "Sim. Após a compra, você tem acesso ao conteúdo sem prazo de expiração.",
+      },
+      {
+        pergunta: "Recebo certificado digital?",
+        resposta:
+          "Sim. Ao concluir o combo, você recebe um certificado digital de conclusão.",
+      },
+      {
+        pergunta: "Preciso ter experiência anterior?",
+        resposta:
+          "Não é necessário dominar diagnósticos avançados para iniciar. O conteúdo é organizado para quem deseja construir uma base na assistência mobile.",
+      },
+    ]
+  }
 
   const base: FaqItem[] = [
     {
