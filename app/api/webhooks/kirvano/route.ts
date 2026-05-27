@@ -19,7 +19,7 @@ function isKnownEvent(eventType: string): eventType is KirvanoEvent {
 }
 
 // ---------------------------------------------------------------------------
-// Validacao de token — INATIVA ate confirmacao do formato real da Kirvano.
+// Validacao de token -- INATIVA ate confirmacao do formato real da Kirvano.
 // O campo "Token" da Kirvano nao especifica publicamente o nome do header
 // nem o formato (Bearer, direto, HMAC).
 // Manter funcao preparada; ativar somente apos confirmacao nos logs da Kirvano.
@@ -27,7 +27,7 @@ function isKnownEvent(eventType: string): eventType is KirvanoEvent {
 function validateKirvanoToken(request: NextRequest): boolean {
   const token = process.env.KIRVANO_WEBHOOK_TOKEN
   if (!token) {
-    // Permissivo enquanto token nao estiver configurado — nao bloqueia eventos reais
+    // Permissivo enquanto token nao estiver configurado -- nao bloqueia eventos reais
     return true
   }
 
@@ -107,7 +107,7 @@ function formatCurrency(amountCents: number): string {
 const PG_UNIQUE_VIOLATION = "23505"
 
 // ---------------------------------------------------------------------------
-// POST — processar eventos Kirvano
+// POST -- processar eventos Kirvano
 // ---------------------------------------------------------------------------
 export async function POST(request: NextRequest) {
   const supabase = getSupabase()
@@ -167,8 +167,8 @@ export async function POST(request: NextRequest) {
   // Idempotencia via INSERT atomico.
   // O indice unico uq_webhook_logs_source_event_sale (source, event_type, sale_id)
   // garante que dois requests simultaneos do mesmo evento:
-  //   - 1o request: insert bem-sucedido → continua para Telegram
-  //   - 2o request: insert rejeita com unique_violation (23505) → retorna idempotente
+  //   - 1o request: insert bem-sucedido -> continua para Telegram
+  //   - 2o request: insert rejeita com unique_violation (23505) -> retorna idempotente
   // Nao depender de SELECT anterior, pois ele nao evita condicao de corrida.
   // ---------------------------------------------------------------------------
   const logRecord = {
@@ -182,7 +182,7 @@ export async function POST(request: NextRequest) {
   const { error: logErr } = await supabase.from("webhook_logs").insert(logRecord)
 
   if (logErr) {
-    // unique_violation: evento ja processado — retornar sucesso sem duplicar Telegram
+    // unique_violation: evento ja processado -- retornar sucesso sem duplicar Telegram
     if (logErr.code === PG_UNIQUE_VIOLATION) {
       return NextResponse.json({ success: true, message: "Evento ja processado (idempotente)" })
     }
@@ -200,7 +200,7 @@ export async function POST(request: NextRequest) {
   // ---------------------------------------------------------------------------
   try {
     if (!isKnownEvent(eventType)) {
-      // Evento nao mapeado (com sale_id — sem sale_id foi tratado antes do INSERT):
+      // Evento nao mapeado (com sale_id -- sem sale_id foi tratado antes do INSERT):
       // apenas registra status tecnico, sem Telegram, sem PII.
       // saleId aqui e sempre uma string nao-vazia (garantido pelos guards acima).
       await supabase
@@ -214,7 +214,7 @@ export async function POST(request: NextRequest) {
       console.error(
         `[Kirvano Webhook] Evento nao mapeado: "${eventType}". Adicionar ao mapa KIRVANO_EVENTS se confirmado.`
       )
-      // Retorna imediatamente — nao executa o UPDATE para "processed" abaixo
+      // Retorna imediatamente -- nao executa o UPDATE para "processed" abaixo
       return NextResponse.json({ success: true, message: "Evento registrado como nao mapeado" })
     }
 
@@ -266,7 +266,7 @@ export async function POST(request: NextRequest) {
         break
 
       default:
-        // TypeScript exhaustiveness — nunca deve chegar aqui
+        // TypeScript exhaustiveness -- nunca deve chegar aqui
         telegramMsg = `<b>Evento:</b> ${eventType}`
     }
 
@@ -287,7 +287,7 @@ export async function POST(request: NextRequest) {
     const errorMessage = error instanceof Error ? error.message : "Erro desconhecido"
     console.error("[Kirvano Webhook] Erro ao processar:", errorMessage)
 
-    // Atualizar log com erro — sem expor dados da requisicao.
+    // Atualizar log com erro -- sem expor dados da requisicao.
     // saleId e garantidamente nao-vazio neste ponto (guards acima).
     await supabase
       .from("webhook_logs")
@@ -304,7 +304,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// GET — verificar se endpoint esta ativo (sem expor detalhes internos)
+// GET -- verificar se endpoint esta ativo (sem expor detalhes internos)
 export async function GET() {
   return NextResponse.json({ status: "ok" })
 }
