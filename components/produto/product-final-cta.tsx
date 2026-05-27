@@ -1,7 +1,7 @@
 import { ArrowRight, ShieldCheck, Clock, Award, Zap } from "lucide-react"
-import type { Curso } from "@/lib/cursos-data"
+import type { CursoSerializavel } from "@/lib/cursos-data"
 
-export default function ProductFinalCTA({ curso }: { curso: Curso }) {
+export default function ProductFinalCTA({ curso }: { curso: CursoSerializavel }) {
   const headline =
     curso.ctaHeadline ||
     `Pronto para evoluir com ${curso.titulo}?`

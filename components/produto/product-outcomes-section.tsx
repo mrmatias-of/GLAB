@@ -1,7 +1,7 @@
 import { CheckCircle, TrendingUp } from "lucide-react"
-import type { Curso } from "@/lib/cursos-data"
+import type { CursoSerializavel } from "@/lib/cursos-data"
 
-export default function ProductOutcomesSection({ curso }: { curso: Curso }) {
+export default function ProductOutcomesSection({ curso }: { curso: CursoSerializavel }) {
   const aprendizados = curso.aprendizados
 
   if (!aprendizados || aprendizados.length === 0) return null

@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation"
-import { getCursoBySlug, getCursoSlugs, getCursos } from "@/lib/cursos-data"
+import { getCursoBySlug, getCursoSlugs, getCursos, type CursoSerializavel } from "@/lib/cursos-data"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import WhatsAppButton from "@/components/whatsapp-button"
@@ -41,39 +41,45 @@ export default async function PaginaCurso({ params }: Props) {
 
   if (!curso) notFound()
 
+  // Remove o campo `icon` (LucideIcon function) para evitar erro de serialização
+  // ao passar de Server Component para Client Components
+  const { icon: _icon, ...cursoSerializavel } = curso
+  const cs = cursoSerializavel as CursoSerializavel
+  const todosCursosSerializaveis = todosCursos.map(({ icon: _i, ...rest }) => rest as CursoSerializavel)
+
   return (
     <>
       <Header />
       <main>
         {/* 1. Hero do produto */}
-        <ProductHero curso={curso} />
+        <ProductHero curso={cs} />
 
         {/* 2. Faixa de informações rápidas */}
-        <ProductQuickInfo curso={curso} />
+        <ProductQuickInfo curso={cs} />
 
         {/* 3. Identificação do problema — "Este guia é para você se:" */}
-        <ProductAudienceSection curso={curso} />
+        <ProductAudienceSection curso={cs} />
 
         {/* 4. Resultado técnico — "Ao estudar este guia, você poderá:" */}
-        <ProductOutcomesSection curso={curso} />
+        <ProductOutcomesSection curso={cs} />
 
         {/* 5. Conteúdo do guia — módulos e tópicos */}
-        <ProductCurriculumSection curso={curso} />
+        <ProductCurriculumSection curso={cs} />
 
         {/* 6. O que você recebe */}
-        <ProductDeliverablesSection curso={curso} />
+        <ProductDeliverablesSection curso={cs} />
 
         {/* 7. Oferta intermediária */}
-        <ProductOfferCard curso={curso} />
+        <ProductOfferCard curso={cs} />
 
         {/* 8. FAQ */}
-        <ProductFaqSection curso={curso} />
+        <ProductFaqSection curso={cs} />
 
         {/* 9. CTA final */}
-        <ProductFinalCTA curso={curso} />
+        <ProductFinalCTA curso={cs} />
 
         {/* 10. Produtos relacionados */}
-        <RelatedProductsSection curso={curso} todosCursos={todosCursos} />
+        <RelatedProductsSection curso={cs} todosCursos={todosCursosSerializaveis} />
       </main>
       <Footer />
       <WhatsAppButton />

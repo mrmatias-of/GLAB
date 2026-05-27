@@ -36,6 +36,9 @@ export type Curso = {
   relacionados?: string[]
 }
 
+// Versão sem `icon` para uso em Client Components (evita erro de serialização)
+export type CursoSerializavel = Omit<Curso, "icon">
+
 const getIconByTag = (tag: string): LucideIcon => {
   if (tag.includes("iPhone")) return Apple
   if (tag.includes("Android")) return Smartphone

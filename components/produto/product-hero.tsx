@@ -1,7 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, BookOpen, Zap, Clock, Award, Layers } from "lucide-react"
-import type { Curso } from "@/lib/cursos-data"
+import type { CursoSerializavel } from "@/lib/cursos-data"
 import BackButton from "@/components/back-button"
 
 const nivelColorMap: Record<string, { bg: string; text: string; border: string }> = {
@@ -18,7 +18,7 @@ function getNivelColors(nivel?: string) {
   return nivelColorMap[key] ?? nivelColorMap["iniciante"]
 }
 
-export default function ProductHero({ curso }: { curso: Curso }) {
+export default function ProductHero({ curso }: { curso: CursoSerializavel }) {
   const totalTopicos = curso.modulos.reduce((acc, m) => acc + m.topicos.length, 0)
   const nivelColors = getNivelColors(curso.nivel)
   const headline = curso.headline || curso.titulo
@@ -163,7 +163,7 @@ export default function ProductHero({ curso }: { curso: Curso }) {
   )
 }
 
-function PriceCard({ curso }: { curso: Curso }) {
+function PriceCard({ curso }: { curso: CursoSerializavel }) {
   const ctaLabel = curso.cta && curso.cta !== "COMPRAR AGORA" && curso.cta !== "Comprar Agora"
     ? curso.cta
     : `Quero acessar este guia por ${curso.preco}`

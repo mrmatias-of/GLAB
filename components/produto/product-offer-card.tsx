@@ -1,7 +1,7 @@
 import { ArrowRight, Clock, Award, Zap, ShieldCheck } from "lucide-react"
-import type { Curso } from "@/lib/cursos-data"
+import type { CursoSerializavel } from "@/lib/cursos-data"
 
-export default function ProductOfferCard({ curso }: { curso: Curso }) {
+export default function ProductOfferCard({ curso }: { curso: CursoSerializavel }) {
   const ctaLabel = `Quero acessar este guia por ${curso.preco}`
 
   return (

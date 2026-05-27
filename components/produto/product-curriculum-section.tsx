@@ -2,9 +2,9 @@
 
 import { useState } from "react"
 import { BookOpen, ChevronDown, Play } from "lucide-react"
-import type { Curso } from "@/lib/cursos-data"
+import type { CursoSerializavel } from "@/lib/cursos-data"
 
-export default function ProductCurriculumSection({ curso }: { curso: Curso }) {
+export default function ProductCurriculumSection({ curso }: { curso: CursoSerializavel }) {
   const [abertos, setAbertos] = useState<number[]>([0])
   const totalTopicos = curso.modulos.reduce((acc, m) => acc + m.topicos.length, 0)
 

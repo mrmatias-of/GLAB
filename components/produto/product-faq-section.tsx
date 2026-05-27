@@ -2,11 +2,11 @@
 
 import { useState } from "react"
 import { HelpCircle, ChevronDown } from "lucide-react"
-import type { Curso } from "@/lib/cursos-data"
+import type { CursoSerializavel } from "@/lib/cursos-data"
 
 type FaqItem = { pergunta: string; resposta: string }
 
-function getFaqItems(curso: Curso): FaqItem[] {
+function getFaqItems(curso: CursoSerializavel): FaqItem[] {
   const isAvancado =
     curso.nivel === "avançado" || curso.nivel === "intermediário"
 
@@ -67,7 +67,7 @@ function getFaqItems(curso: Curso): FaqItem[] {
   return base
 }
 
-export default function ProductFaqSection({ curso }: { curso: Curso }) {
+export default function ProductFaqSection({ curso }: { curso: CursoSerializavel }) {
   const faqItems = getFaqItems(curso)
   const [aberto, setAberto] = useState<number | null>(null)
 

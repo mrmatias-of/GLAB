@@ -1,7 +1,7 @@
 import { Gift, BookOpen, Award, Clock, Zap, Headphones } from "lucide-react"
-import type { Curso } from "@/lib/cursos-data"
+import type { CursoSerializavel } from "@/lib/cursos-data"
 
-export default function ProductDeliverablesSection({ curso }: { curso: Curso }) {
+export default function ProductDeliverablesSection({ curso }: { curso: CursoSerializavel }) {
   const totalTopicos = curso.modulos.reduce((acc, m) => acc + m.topicos.length, 0)
 
   const items = [

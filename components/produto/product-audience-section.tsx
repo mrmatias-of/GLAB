@@ -1,7 +1,7 @@
 import { AlertCircle } from "lucide-react"
-import type { Curso } from "@/lib/cursos-data"
+import type { CursoSerializavel } from "@/lib/cursos-data"
 
-export default function ProductAudienceSection({ curso }: { curso: Curso }) {
+export default function ProductAudienceSection({ curso }: { curso: CursoSerializavel }) {
   const dores = curso.dores
 
   if (!dores || dores.length === 0) return null

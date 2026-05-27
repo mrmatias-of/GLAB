@@ -1,22 +1,22 @@
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, Layers } from "lucide-react"
-import type { Curso } from "@/lib/cursos-data"
+import type { CursoSerializavel } from "@/lib/cursos-data"
 
 export default function RelatedProductsSection({
   curso,
   todosCursos,
 }: {
-  curso: Curso
-  todosCursos: Curso[]
+  curso: CursoSerializavel
+  todosCursos: CursoSerializavel[]
 }) {
   // Busca relacionados: usa a lista de slugs se disponível, senão usa mesma trilha
-  let relacionados: Curso[] = []
+  let relacionados: CursoSerializavel[] = []
 
   if (curso.relacionados && curso.relacionados.length > 0) {
     relacionados = curso.relacionados
       .map((slug) => todosCursos.find((c) => c.slug === slug))
-      .filter((c): c is Curso => !!c)
+      .filter((c): c is CursoSerializavel => !!c)
       .slice(0, 3)
   } else if (curso.trilha) {
     relacionados = todosCursos
