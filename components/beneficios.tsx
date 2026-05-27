@@ -128,13 +128,11 @@ export default function Beneficios() {
                   </div>
                   
                   <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 leading-tight">
-                    Comece a
-                    <br />
                     <span style={{ background: 'linear-gradient(135deg, #00d4c8 0%, #7c3aed 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                      Faturar ja
+                      Seja mais
                     </span>
                     <br />
-                    no Primeiro Curso.
+                    reconhecido
                   </h2>
                   
                   <p className="text-base md:text-lg text-white/50 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed">
