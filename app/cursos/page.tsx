@@ -3,6 +3,8 @@ import Header from "@/components/header"
 import CursosCatalogo from "@/components/cursos-catalogo"
 import Footer from "@/components/footer"
 
+export const dynamic = "force-dynamic"
+
 interface Curso {
   id: string
   slug: string

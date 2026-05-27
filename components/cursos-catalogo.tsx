@@ -14,7 +14,16 @@ interface Curso {
   tag?: string
 }
 
+function normalizeSlug(value: string): string {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+}
+
 export default function CursosCatalogo({ cursos }: { cursos: Curso[] }) {
+
   // Organizar por trilhas — slugs verificados contra os valores reais do Supabase
   const trilhas = [
     {
@@ -61,20 +70,18 @@ export default function CursosCatalogo({ cursos }: { cursos: Curso[] }) {
     },
   ]
 
-  // Mapear cursos às trilhas e filtrar apenas os encontrados
+  // Mapear cursos às trilhas usando normalizeSlug em ambos os lados
   const trilhasComProdutos = trilhas.map(trilha => ({
     ...trilha,
     produtos: trilha.slugs
-      .map(slug => cursos.find(c => c.slug.trim().toLowerCase() === slug.trim().toLowerCase()))
+      .map(slug => cursos.find(c => normalizeSlug(c.slug) === normalizeSlug(slug)))
       .filter((c): c is Curso => !!c),
   }))
 
   // Fallback: produtos que não foram classificados em nenhuma trilha
-  const slugsClassificados = new Set(trilhas.flatMap(t => t.slugs.map(s => s.trim().toLowerCase())))
-  const naoClassificados = cursos.filter(c => !slugsClassificados.has(c.slug.trim().toLowerCase()))
-  if (naoClassificados.length > 0) {
-    console.log("[CursosCatalogo] Slugs não classificados em nenhuma trilha:", naoClassificados.map(c => c.slug))
-  }
+  const slugsClassificados = new Set(trilhas.flatMap(t => t.slugs.map(s => normalizeSlug(s))))
+  const naoClassificados = cursos.filter(c => !slugsClassificados.has(normalizeSlug(c.slug)))
+
 
   return (
     <section className="relative py-8 pt-0" style={{ backgroundColor: '#050510' }}>
@@ -82,7 +89,7 @@ export default function CursosCatalogo({ cursos }: { cursos: Curso[] }) {
         {cursos.length === 0 && (
           <div className="flex flex-col items-center justify-center py-20 text-white/40 gap-3">
             <Package size={40} />
-            <p className="text-sm">Nenhum curso disponível no momento.</p>
+            <p className="text-sm">Nenhum guia foi carregado. Verifique a consulta ao catálogo.</p>
           </div>
         )}
 
