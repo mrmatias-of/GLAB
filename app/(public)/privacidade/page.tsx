@@ -5,91 +5,237 @@ import { ArrowLeft } from "lucide-react"
 
 export default function PrivacidadePage() {
   return (
-    <main className="min-h-screen py-20 px-4" style={{ backgroundColor: '#0B0B0C' }}>
+    <main className="min-h-screen py-20 px-4" style={{ backgroundColor: "#0B0B0C" }}>
       <div className="max-w-3xl mx-auto">
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           className="inline-flex items-center gap-2 mb-8 text-sm transition-colors"
-          style={{ color: '#71717a' }}
+          style={{ color: "#71717a" }}
         >
           <ArrowLeft size={16} />
           Voltar ao inicio
         </Link>
 
-        <h1 className="text-3xl font-bold mb-8" style={{ color: '#fff' }}>
+        <h1 className="text-3xl font-bold mb-2" style={{ color: "#fff" }}>
           Politica de Privacidade
         </h1>
+        <p className="text-xs mb-10" style={{ color: "#52525b" }}>
+          Ultima atualizacao: maio de 2026
+        </p>
 
-        <div className="space-y-6 text-sm leading-relaxed" style={{ color: '#a1a1aa' }}>
+        <div className="space-y-8 text-sm leading-relaxed" style={{ color: "#a1a1aa" }}>
+
+          {/* 1 */}
           <section>
-            <h2 className="text-lg font-semibold mb-3" style={{ color: '#fff' }}>1. Informacoes Coletadas</h2>
+            <h2 className="text-lg font-semibold mb-3" style={{ color: "#fff" }}>
+              1. Quem somos
+            </h2>
             <p>
-              O G-Lab coleta informacoes que voce fornece diretamente, como nome, email e telefone 
-              ao preencher formularios de contato ou realizar compras. Tambem coletamos dados de 
-              navegacao para melhorar sua experiencia.
+              O <strong style={{ color: "#fff" }}>G Lab Cursos</strong> e um negocio digital que
+              apresenta e comercializa guias tecnicos de assistencia mobile. O site e hospedado na{" "}
+              <strong style={{ color: "#fff" }}>Vercel</strong>. Dados operacionais sao armazenados
+              no <strong style={{ color: "#fff" }}>Supabase</strong> (banco PostgreSQL na AWS).
+            </p>
+            <p className="mt-2">
+              A compra, o pagamento e a entrega dos guias sao processados exclusivamente pela{" "}
+              <strong style={{ color: "#fff" }}>Kirvano</strong>, plataforma externa de checkout e
+              entrega digital. O G Lab Cursos nao processa pagamentos nem libera acessos
+              diretamente.
+            </p>
+            <p className="mt-2">
+              Para duvidas sobre privacidade, utilize a{" "}
+              <Link
+                href="/contato"
+                className="underline hover:opacity-80 transition-opacity"
+                style={{ color: "#00D4C8" }}
+              >
+                pagina de contato
+              </Link>{" "}
+              ou envie e-mail para{" "}
+              <a
+                href="mailto:contato@glabcursos.com.br"
+                className="underline hover:opacity-80 transition-opacity"
+                style={{ color: "#00D4C8" }}
+              >
+                contato@glabcursos.com.br
+              </a>
+              .
             </p>
           </section>
 
+          {/* 2 */}
           <section>
-            <h2 className="text-lg font-semibold mb-3" style={{ color: '#fff' }}>2. Uso das Informacoes</h2>
-            <p>Utilizamos suas informacoes para:</p>
+            <h2 className="text-lg font-semibold mb-3" style={{ color: "#fff" }}>
+              2. Dados coletados e suas finalidades
+            </h2>
+
+            <h3 className="font-medium mb-1 mt-3" style={{ color: "#e4e4e7" }}>
+              2.1 Formulario de contato
+            </h3>
+            <p>
+              Quando voce preenche o formulario de contato, coletamos nome, e-mail e mensagem, com
+              base no seu consentimento expresso (checkbox obrigatorio). Esses dados sao usados
+              exclusivamente para responder a sua solicitacao e encaminhados ao proprietario via
+              mensagem privada.
+            </p>
+
+            <h3 className="font-medium mb-1 mt-4" style={{ color: "#e4e4e7" }}>
+              2.2 Dados de navegacao (somente com consentimento)
+            </h3>
+            <p>
+              Se voce clicar em <em>"Permitir metricas"</em> no banner de consentimento, o site
+              registra dados anonimos de navegacao (pagina visitada, horario aproximado, tipo de
+              dispositivo) para analise interna de uso. Esses dados sao armazenados no Supabase e
+              processados pela Vercel Analytics. Nenhum dado e coletado se voce escolher{" "}
+              <em>"Somente essenciais"</em>.
+            </p>
+            <p className="mt-2">
+              Voce pode alterar sua preferencia a qualquer momento pelo link{" "}
+              <strong style={{ color: "#fff" }}>Preferencias de privacidade</strong> no rodape do
+              site.
+            </p>
+
+            <h3 className="font-medium mb-1 mt-4" style={{ color: "#e4e4e7" }}>
+              2.3 Notificacoes operacionais de venda (webhook Kirvano)
+            </h3>
+            <p>
+              Quando uma venda, reembolso ou chargeback e confirmado pela Kirvano, ela envia uma
+              notificacao automatica para o site. O site registra somente as seguintes informacoes
+              operacionais minimas:
+            </p>
             <ul className="list-disc pl-5 mt-2 space-y-1">
-              <li>Processar suas compras e fornecer acesso aos cursos</li>
-              <li>Enviar comunicacoes sobre atualizacoes e novos conteudos</li>
-              <li>Responder suas duvidas e solicitacoes de suporte</li>
-              <li>Melhorar nossos servicos e experiencia do usuario</li>
+              <li>Tipo do evento (venda aprovada, reembolso, chargeback)</li>
+              <li>Identificador da venda (sale_id), fornecido pela Kirvano</li>
+              <li>Nome do produto</li>
+              <li>Valor da transacao</li>
+              <li>Forma de pagamento</li>
+              <li>Data e hora do processamento</li>
+            </ul>
+            <p className="mt-2">
+              <strong style={{ color: "#fff" }}>Nao sao armazenados</strong> pelo site: nome do
+              comprador, e-mail, CPF, telefone, endereco, dados bancarios, QR Code PIX, linha
+              digitavel de boleto, payload completo da notificacao ou qualquer outro dado pessoal
+              do comprador. Esses dados permanecem exclusivamente na Kirvano.
+            </p>
+          </section>
+
+          {/* 3 */}
+          <section>
+            <h2 className="text-lg font-semibold mb-3" style={{ color: "#fff" }}>
+              3. Bases legais (LGPD — Lei 13.709/2018)
+            </h2>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>
+                <strong style={{ color: "#fff" }}>Consentimento</strong> — formulario de contato e
+                dados de navegacao (voce pode revogar a qualquer momento)
+              </li>
+              <li>
+                <strong style={{ color: "#fff" }}>Execucao de contrato</strong> — notificacoes
+                operacionais de venda recebidas da Kirvano
+              </li>
+              <li>
+                <strong style={{ color: "#fff" }}>Obrigacao legal</strong> — retencao de registros
+                quando exigido por lei
+              </li>
             </ul>
           </section>
 
+          {/* 4 */}
           <section>
-            <h2 className="text-lg font-semibold mb-3" style={{ color: '#fff' }}>3. Compartilhamento de Dados</h2>
-            <p>
-              Nao vendemos ou compartilhamos suas informacoes pessoais com terceiros, exceto quando 
-              necessario para processamento de pagamentos atraves da Kirvano ou quando exigido por lei.
+            <h2 className="text-lg font-semibold mb-3" style={{ color: "#fff" }}>
+              4. Compartilhamento de dados
+            </h2>
+            <p>Os dados coletados pelo site sao processados pelos seguintes prestadores:</p>
+            <ul className="list-disc pl-5 mt-2 space-y-1">
+              <li>
+                <strong style={{ color: "#fff" }}>Vercel</strong> — hospedagem do site e analytics
+                de navegacao (quando autorizado)
+              </li>
+              <li>
+                <strong style={{ color: "#fff" }}>Supabase / AWS</strong> — armazenamento do banco
+                de dados
+              </li>
+              <li>
+                <strong style={{ color: "#fff" }}>Kirvano</strong> — plataforma de checkout e
+                entrega; responsavel pelos dados completos de pagamento e cadastro do comprador
+              </li>
+            </ul>
+            <p className="mt-2">
+              Nao vendemos, cedemos ou compartilhamos dados pessoais com terceiros para fins
+              comerciais ou de marketing.
             </p>
           </section>
 
+          {/* 5 */}
           <section>
-            <h2 className="text-lg font-semibold mb-3" style={{ color: '#fff' }}>4. Seguranca</h2>
+            <h2 className="text-lg font-semibold mb-3" style={{ color: "#fff" }}>
+              5. Retencao dos dados
+            </h2>
             <p>
-              Implementamos medidas de seguranca para proteger suas informacoes contra acesso nao 
-              autorizado, alteracao ou destruicao. Utilizamos criptografia SSL em todas as transmissoes 
-              de dados sensiveis.
+              Dados de navegacao coletados com consentimento sao mantidos pelo periodo necessario
+              para analise interna. Registros operacionais de venda sao mantidos pelo periodo
+              necessario para fins contabeis e legais. Dados do formulario de contato sao usados
+              apenas para responder a solicitacao e nao sao retidos apos o atendimento.
             </p>
           </section>
 
+          {/* 6 */}
           <section>
-            <h2 className="text-lg font-semibold mb-3" style={{ color: '#fff' }}>5. Cookies</h2>
-            <p>
-              Utilizamos cookies para melhorar sua experiencia de navegacao, lembrar suas preferencias 
-              e analisar o trafego do site. Voce pode configurar seu navegador para recusar cookies.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-lg font-semibold mb-3" style={{ color: '#fff' }}>6. Seus Direitos</h2>
+            <h2 className="text-lg font-semibold mb-3" style={{ color: "#fff" }}>
+              6. Seus direitos (LGPD)
+            </h2>
             <p>Voce tem direito a:</p>
             <ul className="list-disc pl-5 mt-2 space-y-1">
-              <li>Acessar seus dados pessoais</li>
-              <li>Corrigir informacoes incorretas</li>
-              <li>Solicitar a exclusao dos seus dados</li>
-              <li>Revogar consentimento para comunicacoes</li>
+              <li>Confirmar se seus dados sao tratados pelo site</li>
+              <li>Acessar os dados que temos sobre voce</li>
+              <li>Corrigir dados incompletos, inexatos ou desatualizados</li>
+              <li>Solicitar a exclusao de dados coletados com base em consentimento</li>
+              <li>Revogar o consentimento para coleta de metricas a qualquer momento</li>
+              <li>Obter informacao sobre com quem seus dados foram compartilhados</li>
             </ul>
-          </section>
-
-          <section>
-            <h2 className="text-lg font-semibold mb-3" style={{ color: '#fff' }}>7. Contato</h2>
-            <p>
-              Para questoes sobre privacidade, entre em contato atraves da nossa{" "}
-              <Link href="/contato" className="underline" style={{ color: '#818cf8' }}>
-                pagina de contato
-              </Link>.
+            <p className="mt-2">
+              Para exercer qualquer desses direitos, utilize o canal de contato indicado na secao 1
+              desta politica.
             </p>
           </section>
 
-          <p className="pt-4 text-xs" style={{ color: '#52525b' }}>
-            Ultima atualizacao: Janeiro de 2025
-          </p>
+          {/* 7 */}
+          <section>
+            <h2 className="text-lg font-semibold mb-3" style={{ color: "#fff" }}>
+              7. Cookies e armazenamento local
+            </h2>
+            <p>
+              O site utiliza o <code style={{ color: "#e4e4e7" }}>localStorage</code> do navegador
+              para salvar sua preferencia de consentimento (chave:{" "}
+              <code style={{ color: "#e4e4e7" }}>glab_privacy_consent</code>). Nenhum cookie de
+              rastreamento de terceiros e instalado sem seu consentimento previo.
+            </p>
+          </section>
+
+          {/* 8 */}
+          <section>
+            <h2 className="text-lg font-semibold mb-3" style={{ color: "#fff" }}>
+              8. Seguranca
+            </h2>
+            <p>
+              O trafego entre seu navegador e o site e protegido por TLS (HTTPS). O banco de dados
+              e acessado exclusivamente por chaves de servico com escopo restrito. Dados pessoais
+              dos compradores nao sao armazenados no site.
+            </p>
+          </section>
+
+          {/* 9 */}
+          <section>
+            <h2 className="text-lg font-semibold mb-3" style={{ color: "#fff" }}>
+              9. Alteracoes nesta politica
+            </h2>
+            <p>
+              Esta politica pode ser atualizada para refletir mudancas operacionais ou legais. A
+              data de "Ultima atualizacao" no topo da pagina indica a versao vigente. Alteracoes
+              relevantes serao comunicadas no proprio site.
+            </p>
+          </section>
+
         </div>
       </div>
     </main>

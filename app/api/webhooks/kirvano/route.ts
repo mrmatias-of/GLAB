@@ -2,6 +2,50 @@ import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
 import { sendMessage } from "@/lib/telegram"
 
+// ---------------------------------------------------------------------------
+// Eventos Kirvano confirmados pela documentacao oficial
+// Ref: https://help.kirvano.com/hc/central-de-ajuda/articles/1765385505
+// ---------------------------------------------------------------------------
+const KIRVANO_EVENTS = {
+  SALE_APPROVED: "SALE_APPROVED",
+  SALE_REFUNDED: "SALE_REFUNDED",
+  SALE_CHARGEBACK: "SALE_CHARGEBACK",
+} as const
+
+type KirvanoEvent = (typeof KIRVANO_EVENTS)[keyof typeof KIRVANO_EVENTS]
+
+function isKnownEvent(eventType: string): eventType is KirvanoEvent {
+  return Object.values(KIRVANO_EVENTS).includes(eventType as KirvanoEvent)
+}
+
+// ---------------------------------------------------------------------------
+// Validacao de token — INATIVA ate confirmacao do formato real da Kirvano.
+// O campo "Token" da Kirvano nao especifica publicamente o nome do header
+// nem o formato (Bearer, direto, HMAC).
+// Manter funcao preparada; ativar somente apos confirmacao nos logs da Kirvano.
+// ---------------------------------------------------------------------------
+function validateKirvanoToken(request: NextRequest): boolean {
+  const token = process.env.KIRVANO_WEBHOOK_TOKEN
+  if (!token) {
+    // Permissivo enquanto token nao estiver configurado — nao bloqueia eventos reais
+    return true
+  }
+
+  const authHeader = request.headers.get("authorization") ?? ""
+  const received = authHeader.startsWith("Bearer ")
+    ? authHeader.slice(7)
+    : authHeader
+
+  if (received.length !== token.length) return false
+
+  // Comparacao timing-safe
+  let diff = 0
+  for (let i = 0; i < token.length; i++) {
+    diff |= received.charCodeAt(i) ^ token.charCodeAt(i)
+  }
+  return diff === 0
+}
+
 function getSupabase() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -9,157 +53,210 @@ function getSupabase() {
   )
 }
 
+// ---------------------------------------------------------------------------
+// Extrair somente os campos necessarios do payload Kirvano.
+// Nenhum dado pessoal (nome, email, CPF, telefone, dados de pagamento)
+// e armazenado no banco ou enviado ao Telegram.
+// ---------------------------------------------------------------------------
+function extractMinimalFields(body: Record<string, unknown>) {
+  const sale = (body.sale ?? body.data ?? {}) as Record<string, unknown>
+  const products = (body.products ?? sale.products ?? []) as Array<Record<string, unknown>>
+
+  const eventType = (body.event ?? body.type ?? body.event_type ?? "") as string
+  const saleId = (
+    body.sale_id ??
+    sale.sale_id ??
+    body.order_id ??
+    sale.order_id ??
+    body.id ??
+    ""
+  ) as string
+
+  const firstProduct = products[0] ?? {}
+  const productName = (
+    firstProduct.name ?? firstProduct.offer_name ?? body.product_name ?? ""
+  ) as string
+  const productId = (firstProduct.id ?? firstProduct.product_id ?? "") as string
+
+  const rawAmount =
+    (sale.total_price ?? sale.amount ?? body.total_price ?? body.amount ?? 0) as number | string
+  const amountCents =
+    typeof rawAmount === "number" ? rawAmount : parseFloat(String(rawAmount)) || 0
+
+  const paymentMethod = (
+    sale.payment_method ??
+    body.payment_method ??
+    ""
+  ) as string
+
+  const status = (sale.status ?? body.status ?? "") as string
+
+  return { eventType, saleId, productName, productId, amountCents, paymentMethod, status }
+}
+
+function formatCurrency(amountCents: number): string {
+  // Kirvano envia valores em centavos
+  return `R$ ${(amountCents / 100).toFixed(2).replace(".", ",")}`
+}
+
+// ---------------------------------------------------------------------------
+// POST — processar eventos Kirvano
+// ---------------------------------------------------------------------------
 export async function POST(request: NextRequest) {
   const supabase = getSupabase()
-  
+
+  // Validar token (permissivo enquanto KIRVANO_WEBHOOK_TOKEN nao estiver definida)
+  if (!validateKirvanoToken(request)) {
+    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
+  }
+
+  let body: Record<string, unknown>
   try {
-    const body = await request.json()
-    
-    // Log do webhook recebido
-    await supabase.from("webhook_logs").insert({
-      provider: "kirvano",
-      event: body.event || body.type || "unknown",
-      payload: body,
-      status: "received"
-    })
+    body = await request.json()
+  } catch {
+    return NextResponse.json({ success: false, error: "Invalid JSON" }, { status: 400 })
+  }
 
-    // Extrair dados do payload Kirvano
-    const {
-      event,
-      type,
-      data,
-      customer,
-      product,
-      transaction,
-      order,
-      sale,
-    } = body
+  const { eventType, saleId, productName, productId, amountCents, paymentMethod, status } =
+    extractMinimalFields(body)
 
-    // Determinar tipo de evento
-    const eventType = event || type || ""
-    
-    // Dados do cliente
-    const clienteNome = customer?.name || data?.customer?.name || data?.buyer?.name || "Cliente"
-    const clienteEmail = customer?.email || data?.customer?.email || data?.buyer?.email || ""
-    const clienteTelefone = customer?.phone || data?.customer?.phone || data?.buyer?.phone || ""
-    
-    // Dados do produto
-    const produtoNome = product?.name || data?.product?.name || data?.offer?.name || "Produto"
-    const produtoId = product?.id || data?.product?.id || ""
-    
-    // Dados da transacao
-    const valor = transaction?.amount || data?.amount || data?.value || sale?.amount || order?.amount || 0
-    const valorFormatado = typeof valor === "number" 
-      ? `R$ ${(valor / 100).toFixed(2).replace(".", ",")}`
-      : `R$ ${valor}`
-    const metodoPagamento = transaction?.payment_method || data?.payment_method || "N/A"
-    const transactionId = transaction?.id || data?.transaction_id || order?.id || ""
-    const status = transaction?.status || data?.status || sale?.status || ""
+  // ---------------------------------------------------------------------------
+  // Idempotencia: ignorar reenvios do mesmo evento para o mesmo sale_id
+  // ---------------------------------------------------------------------------
+  if (saleId) {
+    const { data: existing } = await supabase
+      .from("webhook_logs")
+      .select("id")
+      .eq("source", "kirvano")
+      .eq("event_type", eventType)
+      .eq("sale_id", saleId)
+      .maybeSingle()
 
-    // Processar eventos
-    if (eventType.includes("approved") || eventType.includes("paid") || eventType.includes("confirmed") || status === "approved" || status === "paid") {
-      // Venda aprovada
-      const mensagem = [
-        "<b>💰 NOVA VENDA APROVADA!</b>",
-        "",
-        `<b>Produto:</b> ${produtoNome}`,
-        `<b>Valor:</b> ${valorFormatado}`,
-        "",
-        `<b>Cliente:</b> ${clienteNome}`,
-        `<b>Email:</b> ${clienteEmail}`,
-        clienteTelefone ? `<b>Telefone:</b> ${clienteTelefone}` : "",
-        "",
-        `<b>Pagamento:</b> ${metodoPagamento}`,
-        transactionId ? `<b>ID:</b> <code>${transactionId}</code>` : "",
-        "",
-        `<i>Via Kirvano</i>`,
-      ].filter(Boolean).join("\n")
+    if (existing) {
+      return NextResponse.json({ success: true, message: "Evento ja processado (idempotente)" })
+    }
+  }
 
-      await sendMessage(mensagem)
+  // ---------------------------------------------------------------------------
+  // Registrar log minimo ANTES de processar — sem payload bruto, sem PII
+  // ---------------------------------------------------------------------------
+  const logRecord: Record<string, unknown> = {
+    source: "kirvano",
+    event_type: eventType,
+    sale_id: saleId || null,
+    status: "received",
+    processed_at: new Date().toISOString(),
+  }
 
-      // Registrar venda no banco
-      await supabase.from("purchases").insert({
-        customer_email: clienteEmail,
-        customer_name: clienteNome,
-        product_name: produtoNome,
-        product_id: produtoId,
-        amount: typeof valor === "number" ? valor : parseFloat(valor) || 0,
-        status: "approved",
-        provider: "kirvano",
-        transaction_id: transactionId,
-        payment_method: metodoPagamento,
-        raw_data: body,
-      }).select().single()
+  const { error: logErr } = await supabase.from("webhook_logs").insert(logRecord)
+  if (logErr) {
+    console.error("[Kirvano Webhook] Erro ao inserir log:", logErr.message)
+  }
 
-    } else if (eventType.includes("refund") || status === "refunded") {
-      // Reembolso
-      const mensagem = [
-        "<b>⚠️ REEMBOLSO SOLICITADO</b>",
-        "",
-        `<b>Produto:</b> ${produtoNome}`,
-        `<b>Valor:</b> ${valorFormatado}`,
-        `<b>Cliente:</b> ${clienteNome}`,
-        `<b>Email:</b> ${clienteEmail}`,
-        "",
-        `<i>Via Kirvano</i>`,
-      ].join("\n")
+  // ---------------------------------------------------------------------------
+  // Processar por evento mapeado
+  // ---------------------------------------------------------------------------
+  try {
+    if (isKnownEvent(eventType)) {
+      switch (eventType) {
+        case KIRVANO_EVENTS.SALE_APPROVED: {
+          const msg = [
+            "<b>VENDA APROVADA</b>",
+            "",
+            `<b>Produto:</b> ${productName || "N/A"}`,
+            `<b>Valor:</b> ${formatCurrency(amountCents)}`,
+            `<b>Pagamento:</b> ${paymentMethod || "N/A"}`,
+            saleId ? `<b>ID da venda:</b> <code>${saleId}</code>` : "",
+            "",
+            "<i>Via Kirvano</i>",
+          ]
+            .filter(Boolean)
+            .join("\n")
 
-      await sendMessage(mensagem)
+          await sendMessage(msg)
 
-    } else if (eventType.includes("pending") || eventType.includes("waiting") || status === "pending") {
-      // Pagamento pendente (boleto, pix)
-      const mensagem = [
-        "<b>⏳ PAGAMENTO PENDENTE</b>",
-        "",
-        `<b>Produto:</b> ${produtoNome}`,
-        `<b>Valor:</b> ${valorFormatado}`,
-        `<b>Cliente:</b> ${clienteNome}`,
-        `<b>Metodo:</b> ${metodoPagamento}`,
-        "",
-        `<i>Aguardando confirmacao</i>`,
-      ].join("\n")
+          // Registrar no banco somente campos operacionais minimos
+          // Colunas existentes no schema real: kiwify_order_id, kiwify_product_id,
+          // status, valor, metodo_pagamento, email_comprador, approved_at
+          // user_id e curso_id sao NOT NULL no schema original — usamos valores
+          // placeholder neutros ate que o schema seja migrado para Kirvano.
+          // Por ora, gravamos apenas em webhook_logs (ja feito acima) e nao em
+          // purchases, pois o schema exige user_id e curso_id que nao existem
+          // no contexto do webhook externo. Ver nota de migracao no PR.
+          break
+        }
 
-      await sendMessage(mensagem)
+        case KIRVANO_EVENTS.SALE_REFUNDED: {
+          const msg = [
+            "<b>REEMBOLSO</b>",
+            "",
+            `<b>Produto:</b> ${productName || "N/A"}`,
+            `<b>Valor:</b> ${formatCurrency(amountCents)}`,
+            saleId ? `<b>ID da venda:</b> <code>${saleId}</code>` : "",
+            "",
+            "<i>Via Kirvano</i>",
+          ]
+            .filter(Boolean)
+            .join("\n")
 
-    } else if (eventType.includes("abandoned") || eventType.includes("cart")) {
-      // Carrinho abandonado
-      const mensagem = [
-        "<b>🛒 CARRINHO ABANDONADO</b>",
-        "",
-        `<b>Produto:</b> ${produtoNome}`,
-        `<b>Cliente:</b> ${clienteNome}`,
-        `<b>Email:</b> ${clienteEmail}`,
-        clienteTelefone ? `<b>Telefone:</b> ${clienteTelefone}` : "",
-      ].filter(Boolean).join("\n")
+          await sendMessage(msg)
+          break
+        }
 
-      await sendMessage(mensagem)
+        case KIRVANO_EVENTS.SALE_CHARGEBACK: {
+          const msg = [
+            "<b>CHARGEBACK</b>",
+            "",
+            `<b>Produto:</b> ${productName || "N/A"}`,
+            `<b>Valor:</b> ${formatCurrency(amountCents)}`,
+            saleId ? `<b>ID da venda:</b> <code>${saleId}</code>` : "",
+            "",
+            "<i>Via Kirvano</i>",
+          ]
+            .filter(Boolean)
+            .join("\n")
 
+          await sendMessage(msg)
+          break
+        }
+      }
     } else {
-      // Evento desconhecido - notificar mesmo assim
-      const mensagem = [
-        `<b>📩 Webhook Kirvano: ${eventType || "evento"}</b>`,
-        "",
-        `<b>Produto:</b> ${produtoNome}`,
-        `<b>Cliente:</b> ${clienteNome}`,
-        `<b>Status:</b> ${status || "N/A"}`,
-      ].join("\n")
+      // Evento nao mapeado — registra apenas info tecnica minima, sem PII, sem Telegram pessoal
+      await supabase
+        .from("webhook_logs")
+        .update({ status: "unmapped_event" })
+        .eq("source", "kirvano")
+        .eq("event_type", eventType)
+        .eq("sale_id", saleId || null)
+        .eq("status", "received")
 
-      await sendMessage(mensagem)
+      console.error(
+        `[Kirvano Webhook] Evento nao mapeado recebido: "${eventType}". Adicionar ao mapa KIRVANO_EVENTS se confirmado.`
+      )
     }
 
-    // Atualizar log como processado
-    await supabase.from("webhook_logs")
+    // Marcar log como processado
+    await supabase
+      .from("webhook_logs")
       .update({ status: "processed" })
-      .eq("provider", "kirvano")
-      .eq("payload", body)
+      .eq("source", "kirvano")
+      .eq("event_type", eventType)
+      .eq("sale_id", saleId || null)
+      .eq("status", "received")
 
     return NextResponse.json({ success: true, message: "Webhook processado" })
-
   } catch (error) {
-    console.error("[Kirvano Webhook] Erro:", error)
-    
-    // Notificar erro no Telegram
-    await sendMessage(`<b>❌ Erro no webhook Kirvano</b>\n\n<code>${error instanceof Error ? error.message : "Erro desconhecido"}</code>`)
+    const errorMessage = error instanceof Error ? error.message : "Erro desconhecido"
+    console.error("[Kirvano Webhook] Erro ao processar:", errorMessage)
+
+    // Atualizar log com erro — sem expor dados da requisicao
+    await supabase
+      .from("webhook_logs")
+      .update({ status: "error", error_message: errorMessage })
+      .eq("source", "kirvano")
+      .eq("event_type", eventType)
+      .eq("sale_id", saleId || null)
+      .eq("status", "received")
 
     return NextResponse.json(
       { success: false, error: "Erro ao processar webhook" },
@@ -168,11 +265,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// GET para verificar se o endpoint esta ativo
+// GET — verificar se endpoint esta ativo (sem expor detalhes internos)
 export async function GET() {
-  return NextResponse.json({ 
-    status: "ok", 
-    message: "Webhook Kirvano ativo",
-    endpoint: "/api/webhooks/kirvano"
-  })
+  return NextResponse.json({ status: "ok" })
 }
