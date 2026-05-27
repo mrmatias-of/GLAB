@@ -40,7 +40,7 @@ export default function Beneficios() {
         <div className="text-center mb-10">
           <p className="text-[10px] uppercase tracking-widest font-bold mb-3" style={{ color: '#00d4c8' }}>Quem ja passou por aqui</p>
           <h2 className="text-3xl md:text-4xl font-black text-white">
-            O que os <span style={{ background: 'linear-gradient(135deg, #00d4c8 0%, #7c3aed 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>alunos falam</span>
+            Depoimento dos <span style={{ background: 'linear-gradient(135deg, #00d4c8 0%, #7c3aed 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>alunos</span>
           </h2>
         </div>
 
