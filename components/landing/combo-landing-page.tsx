@@ -6,24 +6,35 @@ import {
   ArrowRight,
   BookOpen,
   CheckCircle2,
+  Download,
+  Headphones,
+  Infinity,
+  Play,
   ShieldCheck,
   Smartphone,
   Wrench,
-  Zap,
 } from "lucide-react"
 import type { CursoSerializavel } from "@/lib/cursos-data"
 import ComboAuthoritySection from "./combo-authority-section"
 import ComboPurchaseSteps from "./combo-purchase-steps"
 import ComboFaq from "./combo-faq"
 
-type Props = {
-  curso: CursoSerializavel
-}
+type Props = { curso: CursoSerializavel }
 
-const trustItems = [
-  { icon: BookOpen, label: "Guias técnicos" },
-  { icon: Wrench, label: "Conteúdo prático" },
-  { icon: ShieldCheck, label: "Pagamento seguro" },
+const benefitsStrip = [
+  { icon: Play, label: "Aulas práticas passo a passo" },
+  { icon: BookOpen, label: "Materiais de apoio exclusivos" },
+  { icon: Download, label: "Arquivos para download" },
+  { icon: Headphones, label: "Suporte nos conteúdos" },
+  { icon: Infinity, label: "Acesso digital imediato" },
+]
+
+const ofertaChecklist = [
+  "Do básico ao avançado",
+  "Aulas práticas e diretas",
+  "Materiais de apoio exclusivos",
+  "Acesso digital imediato após a confirmação",
+  "Suporte nos conteúdos",
 ]
 
 const fallbackAprendizados = [
@@ -44,74 +55,94 @@ export default function ComboLandingPage({ curso }: Props) {
     curso.headlineSub ||
     curso.descricaoLonga ||
     curso.descricao ||
-    "Conteúdos organizados para quem deseja iniciar nos procedimentos essenciais da assistência mobile."
+    "O combo completo para você dominar os procedimentos essenciais e atuar com segurança na assistência mobile."
 
   return (
     <main className="min-h-screen bg-[#05070c] text-white">
-      <section className="relative overflow-hidden border-b border-white/10">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -left-40 top-10 h-96 w-96 rounded-full bg-cyan-500/10 blur-3xl" />
-          <div className="absolute right-0 top-14 h-96 w-96 rounded-full bg-fuchsia-600/10 blur-3xl" />
+
+      {/* ── HERO ─────────────────────────────────────────────────────── */}
+      <section className="relative overflow-hidden pb-14 pt-10 sm:pb-20 sm:pt-14">
+        {/* ambient glows */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute -left-32 top-0 h-[500px] w-[500px] rounded-full bg-cyan-500/10 blur-[120px]" />
+          <div className="absolute -right-32 top-10 h-[500px] w-[500px] rounded-full bg-fuchsia-600/10 blur-[120px]" />
         </div>
 
-        <div className="relative mx-auto grid max-w-7xl gap-12 px-5 py-12 sm:px-8 sm:py-16 lg:grid-cols-[1fr_0.9fr] lg:items-center">
+        <div className="relative mx-auto grid max-w-6xl gap-10 px-5 sm:px-8 lg:grid-cols-2 lg:items-center">
+
+          {/* coluna de texto */}
           <div>
-            <p className="inline-flex rounded-full border border-cyan-400/40 bg-cyan-400/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-cyan-300">
+            <span className="inline-flex rounded-full border border-cyan-400/40 bg-cyan-400/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-cyan-300">
               Combo Iniciante Mobile
-            </p>
-            <h1 className="mt-6 max-w-2xl text-4xl font-black leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-              {headline}
+            </span>
+
+            <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.4rem]">
+              <span className="text-white">{headline.split(" ").slice(0, Math.ceil(headline.split(" ").length / 2)).join(" ")}{" "}</span>
+              <span className="bg-gradient-to-r from-cyan-400 to-fuchsia-500 bg-clip-text text-transparent">
+                {headline.split(" ").slice(Math.ceil(headline.split(" ").length / 2)).join(" ")}
+              </span>
             </h1>
+
             <p className="mt-5 max-w-xl text-base leading-relaxed text-zinc-300 sm:text-lg">
               {descricao}
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              {trustItems.map(({ icon: Icon, label }) => (
+            {/* trust badges */}
+            <div className="mt-6 flex flex-wrap gap-3">
+              {[
+                { icon: BookOpen, label: "Guias técnicos" },
+                { icon: Wrench, label: "Conteúdo prático" },
+                { icon: Infinity, label: "Acesso digital" },
+                { icon: ShieldCheck, label: "Pagamento seguro" },
+              ].map(({ icon: Icon, label }) => (
                 <span
                   key={label}
-                  className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-zinc-200"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-zinc-300"
                 >
-                  <Icon className="h-4 w-4 text-cyan-400" aria-hidden="true" />
+                  <Icon className="h-3.5 w-3.5 text-cyan-400" aria-hidden="true" />
                   {label}
                 </span>
               ))}
             </div>
 
-            <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+            {/* CTA */}
+            <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
               <Link
                 href={curso.ctaHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-fuchsia-500 px-7 py-4 font-bold text-[#05070c] shadow-[0_0_34px_rgba(0,212,200,0.28)] transition hover:brightness-110"
+                className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-fuchsia-500 px-7 py-3.5 text-sm font-black uppercase tracking-wide text-[#05070c] shadow-[0_0_32px_rgba(0,212,200,0.3)] transition hover:brightness-110"
               >
-                {curso.cta || "Quero meu Combo"}
-                <ArrowRight className="h-5 w-5" aria-hidden="true" />
+                {curso.cta || "Quero garantir meu combo agora"}
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
-              <div className="text-sm text-zinc-400">
-                <p className="font-semibold text-white">{curso.preco}</p>
-                <p>Pagamento seguro • Conteúdo digital</p>
-              </div>
             </div>
+            <p className="mt-3 flex items-center gap-1.5 text-xs text-zinc-500">
+              <ShieldCheck className="h-3.5 w-3.5 text-zinc-600" aria-hidden="true" />
+              Pagamento seguro • Acesso digital imediato
+            </p>
           </div>
 
-          <div className="relative mx-auto w-full max-w-lg">
-            <div className="absolute -inset-1 rounded-[30px] bg-gradient-to-br from-cyan-400 to-fuchsia-500 opacity-70 blur-sm" />
-            <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-[#0b0e16] p-4">
+          {/* coluna visual */}
+          <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+            {/* glow frame */}
+            <div className="absolute -inset-[2px] rounded-[22px] bg-gradient-to-br from-cyan-400 via-fuchsia-500 to-cyan-400 opacity-75 blur-[3px]" />
+            <div className="relative overflow-hidden rounded-[20px] border border-white/10 bg-[#0b0e16] p-3">
               {curso.imagem ? (
                 <Image
                   src={curso.imagem}
-                  alt={curso.titulo}
+                  alt={`Capa do produto ${curso.titulo}`}
                   width={700}
                   height={700}
-                  className="aspect-square w-full rounded-2xl object-cover"
+                  className="w-full rounded-2xl object-cover"
+                  style={{ aspectRatio: "1/1" }}
                   priority
                 />
               ) : (
-                <div className="flex aspect-square flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-500/10 to-fuchsia-500/10 p-8 text-center">
-                  <Smartphone className="h-16 w-16 text-cyan-400" aria-hidden="true" />
-                  <p className="mt-5 text-xl font-bold">Combo Iniciante Mobile</p>
-                  <p className="mt-2 text-sm text-zinc-400">Conteúdo digital para assistência mobile</p>
+                <div className="flex flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-500/10 to-fuchsia-500/10 p-10 text-center" style={{ aspectRatio: "1/1" }}>
+                  <Smartphone className="h-14 w-14 text-cyan-400" aria-hidden="true" />
+                  <p className="mt-4 text-lg font-black">Combo Iniciante Mobile</p>
+                  <p className="mt-1 text-sm text-zinc-400">Conteúdo digital para assistência mobile</p>
                 </div>
               )}
             </div>
@@ -119,26 +150,37 @@ export default function ComboLandingPage({ curso }: Props) {
         </div>
       </section>
 
-      <section aria-labelledby="conteudo-combo" className="py-14 sm:py-20">
-        <div className="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 lg:grid-cols-[0.86fr_1.14fr]">
-          <div>
-            <p className="text-sm font-bold uppercase tracking-[0.22em] text-cyan-400">O que você recebe</p>
-            <h2 id="conteudo-combo" className="mt-3 text-3xl font-bold text-white">
-              Uma base organizada para começar
-            </h2>
-            <p className="mt-4 text-base leading-relaxed text-zinc-400">
-              Estude os principais conceitos e procedimentos apresentados no combo, com uma
-              experiência digital objetiva e pensada para a prática.
-            </p>
+      {/* ── BENEFITS STRIP ───────────────────────────────────────────── */}
+      <div className="border-y border-white/10 bg-[#080b12]">
+        <div className="mx-auto max-w-6xl px-5 sm:px-8">
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 py-6">
+            {benefitsStrip.map(({ icon: Icon, label }) => (
+              <span key={label} className="flex items-center gap-2 text-sm text-zinc-300">
+                <Icon className="h-4 w-4 shrink-0 text-cyan-400" aria-hidden="true" />
+                {label}
+              </span>
+            ))}
           </div>
+        </div>
+      </div>
 
-          <div className="grid gap-3 sm:grid-cols-2">
+      {/* ── O QUE VOCÊ VAI RECEBER ───────────────────────────────────── */}
+      <section aria-labelledby="o-que-voce-recebe" className="py-14 sm:py-20">
+        <div className="mx-auto max-w-6xl px-5 sm:px-8">
+          <p className="text-center text-sm font-bold uppercase tracking-[0.22em] text-cyan-400">
+            O que você vai receber
+          </p>
+          <h2 id="o-que-voce-recebe" className="mt-2 text-center text-3xl font-black text-white">
+            Uma base organizada para começar
+          </h2>
+
+          <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {aprendizados.map((item) => (
               <div
                 key={item}
-                className="flex gap-3 rounded-2xl border border-white/10 bg-white/[0.025] p-4"
+                className="flex gap-3 rounded-xl border border-white/10 bg-[#080b12] p-4"
               >
-                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-cyan-400" aria-hidden="true" />
+                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-400" aria-hidden="true" />
                 <p className="text-sm leading-relaxed text-zinc-200">{item}</p>
               </div>
             ))}
@@ -146,71 +188,131 @@ export default function ComboLandingPage({ curso }: Props) {
         </div>
       </section>
 
+      {/* ── AUTHORITY (GJ) ───────────────────────────────────────────── */}
       <ComboAuthoritySection />
+
+      {/* ── COMO FUNCIONA ────────────────────────────────────────────── */}
       <ComboPurchaseSteps />
 
-      <section aria-labelledby="oferta-combo" className="bg-[#05070c] pb-16 sm:pb-20">
+      {/* ── OFERTA PRINCIPAL ─────────────────────────────────────────── */}
+      <section aria-labelledby="oferta-principal" className="bg-[#05070c] py-14 sm:py-20">
         <div className="mx-auto max-w-5xl px-5 sm:px-8">
-          <div className="relative overflow-hidden rounded-[30px] border border-cyan-400/25 bg-[#0a0e16] p-7 sm:p-10">
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/[0.07] to-fuchsia-500/[0.08]" />
-            <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
-              <div>
-                <p className="text-sm font-bold uppercase tracking-[0.22em] text-cyan-400">Comece por aqui</p>
-                <h2 id="oferta-combo" className="mt-3 text-3xl font-bold text-white">
-                  {curso.titulo}
-                </h2>
-                <p className="mt-3 max-w-xl text-zinc-300">
-                  Conteúdo digital para desenvolver sua base na assistência mobile com
-                  procedimentos organizados e linguagem direta.
-                </p>
-                <div className="mt-5 flex flex-wrap gap-4 text-sm text-zinc-300">
-                  <span className="inline-flex items-center gap-2">
-                    <Zap className="h-4 w-4 text-cyan-400" /> Acesso digital
+          <div className="relative overflow-hidden rounded-2xl border border-cyan-400/20 bg-[#080b12]">
+            {/* subtle gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-fuchsia-500/5" />
+
+            <div className="relative flex flex-col gap-0 lg:flex-row">
+
+              {/* left: product info */}
+              <div className="flex flex-1 flex-col justify-center gap-5 p-8 lg:p-10">
+                <span className="w-fit rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.15em] text-cyan-300">
+                  Oferta especial
+                </span>
+                <div>
+                  <h2 id="oferta-principal" className="text-2xl font-black text-white sm:text-3xl">
+                    {curso.titulo}
+                  </h2>
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-400">
+                    Acesso a todo o conteúdo do combo na plataforma digital.
+                  </p>
+                </div>
+                <ul className="space-y-2">
+                  {ofertaChecklist.map((item) => (
+                    <li key={item} className="flex items-center gap-2.5 text-sm text-zinc-200">
+                      <CheckCircle2 className="h-4 w-4 shrink-0 text-cyan-400" aria-hidden="true" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex flex-wrap gap-5 pt-1 text-sm text-zinc-400">
+                  <span className="flex items-center gap-1.5">
+                    <ShieldCheck className="h-4 w-4 text-cyan-400" /> Pagamento 100% seguro
                   </span>
-                  <span className="inline-flex items-center gap-2">
-                    <ShieldCheck className="h-4 w-4 text-cyan-400" /> Pagamento seguro
+                  <span className="flex items-center gap-1.5">
+                    <Infinity className="h-4 w-4 text-cyan-400" /> Acesso digital imediato
                   </span>
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-[#05070c]/70 p-6 text-center lg:min-w-[295px]">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-zinc-400">Investimento</p>
-                <p className="mt-2 text-4xl font-black text-white">{curso.preco}</p>
+              {/* divider */}
+              <div className="hidden w-px self-stretch bg-white/10 lg:block" />
+
+              {/* right: price + CTA */}
+              <div className="flex flex-col items-center justify-center gap-5 border-t border-white/10 p-8 text-center lg:w-72 lg:border-l-0 lg:border-t-0 lg:p-10">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-500">Investimento</p>
+                  <p className="mt-1.5 text-5xl font-black text-white">{curso.preco}</p>
+                </div>
                 <Link
                   href={curso.ctaHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-fuchsia-500 px-5 py-4 font-bold text-[#05070c] transition hover:brightness-110"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-fuchsia-500 px-6 py-4 text-sm font-black uppercase tracking-wide text-[#05070c] shadow-[0_0_28px_rgba(0,212,200,0.25)] transition hover:brightness-110"
                 >
-                  Comprar agora
-                  <ArrowRight className="h-5 w-5" aria-hidden="true" />
+                  Quero garantir meu acesso
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
-                <p className="mt-3 text-xs text-zinc-400">Pagamento seguro</p>
+                <div className="flex flex-wrap justify-center gap-2">
+                  {["Visa", "Mastercard", "Pix", "Boleto Bancário"].map((m) => (
+                    <span key={m} className="rounded border border-white/10 px-2 py-0.5 text-[10px] font-semibold text-zinc-500">
+                      {m}
+                    </span>
+                  ))}
+                </div>
+                <p className="text-xs text-zinc-600">Pagamento seguro</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
+      {/* ── FAQ ──────────────────────────────────────────────────────── */}
       <ComboFaq />
 
-      <section className="border-t border-white/10 bg-[#070a10] py-12 text-center">
-        <div className="mx-auto max-w-3xl px-5 sm:px-8">
-          <h2 className="text-3xl font-bold text-white">Pronto para começar?</h2>
-          <p className="mt-3 text-zinc-400">
-            Conheça o Combo Iniciante Mobile e comece a estudar conteúdos práticos de assistência mobile.
+      {/* ── CTA FINAL ────────────────────────────────────────────────── */}
+      <section className="bg-[#05070c] py-16 sm:py-20">
+        <div className="mx-auto max-w-3xl px-5 text-center sm:px-8">
+          <h2 className="text-3xl font-black text-white sm:text-4xl">
+            Pronto para <span className="bg-gradient-to-r from-cyan-400 to-fuchsia-500 bg-clip-text text-transparent">começar?</span>
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-zinc-400">
+            Conheça o Combo Iniciante Mobile e estude conteúdos práticos de assistência mobile.
           </p>
           <Link
             href={curso.ctaHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-7 inline-flex min-h-14 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-fuchsia-500 px-8 py-4 font-bold text-[#05070c] transition hover:brightness-110"
+            className="mt-8 inline-flex min-h-[52px] items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-fuchsia-500 px-9 py-3.5 text-sm font-black uppercase tracking-wide text-[#05070c] shadow-[0_0_32px_rgba(0,212,200,0.3)] transition hover:brightness-110"
           >
-            Quero meu Combo
-            <ArrowRight className="h-5 w-5" aria-hidden="true" />
+            {curso.cta || "Quero meu Combo"}
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
+          <p className="mt-3 text-xs text-zinc-600">Pagamento seguro • Conteúdo digital</p>
         </div>
       </section>
+
+      {/* ── FOOTER MÍNIMO ────────────────────────────────────────────── */}
+      <footer className="border-t border-white/10 bg-[#05070c] py-8">
+        <div className="mx-auto max-w-6xl px-5 sm:px-8">
+          <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:justify-between sm:text-left">
+            <p className="text-sm font-bold text-white">G•Lab Cursos</p>
+            <div className="flex flex-wrap justify-center gap-5 text-xs text-zinc-500 sm:justify-end">
+              <Link href="https://www.instagram.com/_gjuliao/" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 transition-colors">
+                Instagram @_gjuliao
+              </Link>
+              <Link href="https://app.kirvano.com" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 transition-colors">
+                Acessar meu conteúdo
+              </Link>
+              <Link href="/privacidade" className="hover:text-cyan-400 transition-colors">
+                Privacidade
+              </Link>
+              <Link href="/termos" className="hover:text-cyan-400 transition-colors">
+                Termos
+              </Link>
+            </div>
+          </div>
+        </div>
+      </footer>
     </main>
   )
 }

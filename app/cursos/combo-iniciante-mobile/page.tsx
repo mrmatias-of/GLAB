@@ -3,7 +3,6 @@ import { notFound } from "next/navigation"
 import { getCursoBySlug, type CursoSerializavel } from "@/lib/cursos-data"
 import ComboLandingHeader from "@/components/landing/combo-landing-header"
 import ComboLandingPage from "@/components/landing/combo-landing-page"
-import Footer from "@/components/footer"
 
 const SITE_URL = "https://www.glabcursos.com.br"
 const SLUG = "combo-iniciante-mobile"
@@ -43,7 +42,6 @@ export default async function ComboInicianteMobilePage() {
     <>
       <ComboLandingHeader />
       <ComboLandingPage curso={cursoSerializavel as CursoSerializavel} />
-      <Footer />
     </>
   )
 }
