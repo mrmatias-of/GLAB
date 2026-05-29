@@ -1,6 +1,6 @@
 const ITEMS = [
-  { value: '30',    label: 'Cursos disponíveis',    wide: false },
-  { value: '1.000+', label: 'Alunos ativos',       wide: false },
+  { value: '+10 anos', label: 'De experiência',    wide: false },
+  { value: 'Direto',   label: 'Sem enrolação, conteúdo objetivo', wide: false },
   { value: 'Trabalhamos\ncirurgicamente', label: 'Precisão técnica em cada guia. Sem atalhos, sem achismos.', wide: true },
   { value: '+10 anos', label: 'De experiência',      wide: false },
   { value: '2 horas', label: 'Tempo médio por módulo', wide: false },
@@ -15,14 +15,14 @@ export default function Stats() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {/* Stat 1 */}
           <div className="card p-6 rounded-2xl">
-            <p className="text-4xl sm:text-5xl font-extrabold text-white mb-2 tracking-tight">30</p>
-            <p className="text-xs font-medium tracking-wide" style={{ color: '#71717a' }}>Cursos disponíveis</p>
+            <p className="text-4xl sm:text-5xl font-extrabold text-white mb-2 tracking-tight">+10 anos</p>
+            <p className="text-xs font-medium tracking-wide" style={{ color: '#71717a' }}>De experiência</p>
           </div>
 
           {/* Stat 2 */}
           <div className="card p-6 rounded-2xl">
-            <p className="text-4xl sm:text-5xl font-extrabold text-white mb-2 tracking-tight">1.000+</p>
-            <p className="text-xs font-medium tracking-wide" style={{ color: '#71717a' }}>Alunos ativos</p>
+            <p className="text-4xl sm:text-5xl font-extrabold text-white mb-2 tracking-tight">Direto</p>
+            <p className="text-xs font-medium tracking-wide" style={{ color: '#71717a' }}>Sem enrolação, conteúdo objetivo</p>
           </div>
 
           {/* Bloco texto — ocupa 1 coluna mobile, 2 cols em sm+, 2 em lg */}

@@ -1,4 +1,4 @@
-import { BookOpen, Zap, Award, Clock, BarChart2 } from "lucide-react"
+import { BookOpen, Zap, Clock, BarChart2 } from "lucide-react"
 import type { CursoSerializavel } from "@/lib/cursos-data"
 
 export default function ProductQuickInfo({ curso }: { curso: CursoSerializavel }) {
@@ -11,8 +11,7 @@ export default function ProductQuickInfo({ curso }: { curso: CursoSerializavel }
     { icon: BarChart2, label: "Nível", value: nivelLabel },
     { icon: BookOpen, label: "Módulos", value: String(curso.modulos.length) },
     { icon: Zap, label: "Tópicos", value: String(totalTopicos) },
-    { icon: Clock, label: "Acesso", value: "Vitalício" },
-    { icon: Award, label: "Certificado", value: "Digital" },
+    { icon: Clock, label: "Acesso", value: "Imediato" },
   ].filter((item) => item.value && item.value !== "0")
 
   return (

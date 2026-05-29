@@ -95,7 +95,7 @@ export default function AuthPage() {
             <div className="flex items-start gap-3">
               <div className="w-1 h-1 rounded-full mt-2" style={{ background: '#818cf8' }}></div>
               <p className="text-sm text-left" style={{ color: '#a1a1aa' }}>
-                Acesso vitalício aos conteúdos
+                Acesso ao conteúdo via Kirvano
               </p>
             </div>
           </div>

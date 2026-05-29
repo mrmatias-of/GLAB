@@ -1,4 +1,4 @@
-import { ArrowRight, ShieldCheck, Clock, Award, Zap } from "lucide-react"
+import { ArrowRight, ShieldCheck, Clock, Zap } from "lucide-react"
 import type { CursoSerializavel } from "@/lib/cursos-data"
 
 export default function ProductFinalCTA({ curso }: { curso: CursoSerializavel }) {
@@ -107,9 +107,9 @@ export default function ProductFinalCTA({ curso }: { curso: CursoSerializavel })
             {/* Trust badges */}
             <div className="flex flex-wrap items-center justify-center gap-5 mt-8">
               {[
-                { icon: ShieldCheck, label: "Pagamento seguro" },
-                { icon: Clock, label: "Acesso vitalício" },
-                { icon: Award, label: "Certificado incluso" },
+                { icon: ShieldCheck, label: "Pagamento seguro via Kirvano" },
+                { icon: Clock, label: "Acesso imediato" },
+                { icon: Zap, label: "Pagamento único" },
               ].map((b) => (
                 <div key={b.label} className="flex items-center gap-2 text-xs text-white/35">
                   <b.icon size={14} className="text-cyan-400/50" />

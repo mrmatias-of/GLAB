@@ -52,19 +52,12 @@ export default function TermosPage() {
             <h2 className="text-lg font-semibold mb-3" style={{ color: '#fff' }}>3. Acesso ao conteudo</h2>
             <p>
               Apos a confirmacao do pagamento pela <strong style={{ color: '#fff' }}>Kirvano</strong>,
-              voce recebe acesso ao conteudo adquirido pela propria plataforma da Kirvano.
+              o acesso ao produto adquirido e disponibilizado pela propria plataforma da Kirvano.
+              O G•Lab Cursos nao mantém painel de aluno proprio.
             </p>
-            <p className="mt-2 text-xs italic" style={{ color: '#71717a' }}>
-              Pendencia: confirmar com o proprietario se o acesso e vitalicio, por prazo determinado,
-              ou por assinatura, e atualizar este item de acordo.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-lg font-semibold mb-3" style={{ color: '#fff' }}>4. Certificado digital</h2>
-            <p className="text-xs italic" style={{ color: '#71717a' }}>
-              Pendencia: confirmar com o proprietario se os guias oferecem certificado digital. Este
-              item sera preenchido ou removido de acordo com a confirmacao.
+            <p className="mt-2">
+              Condicoes especificas de acesso, quando aplicaveis, constam na oferta correspondente
+              ou no ambiente da Kirvano.
             </p>
           </section>
 

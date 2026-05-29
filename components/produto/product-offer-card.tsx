@@ -1,4 +1,4 @@
-import { ArrowRight, Clock, Award, Zap, ShieldCheck } from "lucide-react"
+import { ArrowRight, Clock, Zap, ShieldCheck } from "lucide-react"
 import type { CursoSerializavel } from "@/lib/cursos-data"
 
 export default function ProductOfferCard({ curso }: { curso: CursoSerializavel }) {
@@ -66,14 +66,14 @@ export default function ProductOfferCard({ curso }: { curso: CursoSerializavel }
                 {curso.preco}
               </span>
             </div>
-            <p className="text-xs text-white/40 mb-7">pagamento único · acesso vitalício</p>
+            <p className="text-xs text-white/40 mb-7">pagamento único via Kirvano</p>
 
             {/* Benefícios resumidos */}
             <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 mb-7">
               {[
                 { icon: Zap, label: "Acesso imediato" },
-                { icon: Award, label: "Certificado digital" },
-                { icon: Clock, label: "Acesso vitalício" },
+                { icon: ShieldCheck, label: "Pagamento seguro" },
+                { icon: Clock, label: "Pagamento único" },
               ].map((b) => (
                 <div key={b.label} className="flex items-center gap-1.5 text-xs text-white/45">
                   <b.icon size={13} className="text-cyan-400/70" />
