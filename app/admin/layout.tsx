@@ -3,7 +3,12 @@ import { redirect } from "next/navigation"
 import AdminSidebar from "@/components/admin/sidebar"
 
 export const metadata = {
-  title: "Admin — G•Lab",
+  title: "Acesso Administrativo — G•Lab",
+  robots: {
+    index: false,
+    follow: false,
+    googleBot: { index: false, follow: false },
+  },
 }
 
 // Segunda camada de proteção: verifica role diretamente no servidor

@@ -1,4 +1,4 @@
-import { ArrowRight, ShieldCheck, Zap, Clock, Award } from "lucide-react"
+import { ArrowRight, ShieldCheck, Zap, Clock } from "lucide-react"
 import type { Curso } from "@/lib/cursos-data"
 
 export default function CursoCTA({ curso }: { curso: Curso }) {
@@ -78,11 +78,11 @@ export default function CursoCTA({ curso }: { curso: Curso }) {
               </div>
               <div className="flex items-center gap-2 text-xs text-white/40">
                 <Clock size={14} className="text-cyan-400/50" />
-                Acesso vitalício
+                Acesso imediato
               </div>
               <div className="flex items-center gap-2 text-xs text-white/40">
-                <Award size={14} className="text-cyan-400/50" />
-                Certificado incluso
+                <Zap size={14} className="text-cyan-400/50" />
+                Pagamento único
               </div>
             </div>
           </div>

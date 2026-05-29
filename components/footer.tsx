@@ -88,13 +88,13 @@ export default function Footer() {
                 <div className="w-10 h-10 rounded-lg border border-cyan-500/30 bg-cyan-500/5 flex items-center justify-center">
                   <Settings size={18} className="text-cyan-400" />
                 </div>
-                <span className="text-[8px] text-white/40 text-center font-medium leading-tight">ACESSO<br/>VITALÍCIO</span>
+                <span className="text-[8px] text-white/40 text-center font-medium leading-tight">ACESSO<br/>VIA KIRVANO</span>
               </div>
               <div className="flex flex-col items-center gap-1.5">
                 <div className="w-10 h-10 rounded-lg border border-cyan-500/30 bg-cyan-500/5 flex items-center justify-center">
                   <Zap size={18} className="text-cyan-400" />
                 </div>
-                <span className="text-[8px] text-white/40 text-center font-medium leading-tight">CERTIFICADO<br/>DIGITAL</span>
+                <span className="text-[8px] text-white/40 text-center font-medium leading-tight">PAGAMENTO<br/>SEGURO</span>
               </div>
             </div>
           </div>

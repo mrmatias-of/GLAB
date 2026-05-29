@@ -65,7 +65,7 @@ export default function CursoHero({ curso }: { curso: Curso }) {
               </div>
               <div className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5">
                 <Clock size={16} className="text-cyan-400" />
-                <span className="text-sm text-white/50">Acesso vitalício</span>
+                <span className="text-sm text-white/50">Acesso imediato</span>
               </div>
             </div>
 
@@ -135,7 +135,7 @@ function PriceCard({ curso }: { curso: Curso }) {
 
         <p className="text-[11px] text-white/40 text-center mt-4 flex items-center justify-center gap-2">
           <Tag size={12} />
-          Pagamento único - Acesso vitalício
+          Pagamento único via Kirvano
         </p>
       </div>
     </div>

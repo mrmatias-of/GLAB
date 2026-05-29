@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, BookOpen, Zap, Clock, Award, Layers } from "lucide-react"
+import { ArrowRight, BookOpen, Zap, Clock, ShieldCheck, Layers } from "lucide-react"
 import type { CursoSerializavel } from "@/lib/cursos-data"
 import BackButton from "@/components/back-button"
 
@@ -124,7 +124,7 @@ export default function ProductHero({ curso }: { curso: CursoSerializavel }) {
               )}
               <div className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5">
                 <Clock size={15} className="text-cyan-400" />
-                <span className="text-sm text-white/60">Acesso vitalício</span>
+                <span className="text-sm text-white/60">Acesso imediato</span>
               </div>
             </div>
 
@@ -226,8 +226,8 @@ function PriceCard({ curso }: { curso: CursoSerializavel }) {
         <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 justify-center">
           {[
             { icon: Clock, label: "Acesso imediato" },
-            { icon: Award, label: "Certificado digital" },
             { icon: Zap, label: "Pagamento único" },
+            { icon: ShieldCheck, label: "Kirvano seguro" },
           ].map((item) => (
             <div key={item.label} className="flex items-center gap-1.5">
               <item.icon size={12} className="text-cyan-400/60" />

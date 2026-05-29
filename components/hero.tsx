@@ -64,7 +64,7 @@ export default function Hero() {
 
             {/* Linha de confiança */}
             <p className="text-[11px] text-white/40 mb-10">
-              Conteúdo prático • Acesso imediato • Certificado digital
+              Conteúdo prático • Compra segura via Kirvano • Acesso pela Kirvano
             </p>
             
             {/* Badges - Cards de Valor */}
@@ -73,16 +73,16 @@ export default function Hero() {
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center mb-3 transition-all duration-300" style={{ background: 'rgba(0,212,200,0.1)', borderColor: '#00d4c8', borderWidth: '1px' }}>
                   <Zap size={16} style={{ color: '#00d4c8' }} />
                 </div>
-                <span className="font-black text-white text-lg">30+</span>
-                <span className="text-xs text-white/60 leading-tight">Guias técnicos</span>
+                <span className="font-black text-white text-lg">Guias técnicos</span>
+                <span className="text-xs text-white/60 leading-tight">Para assistência mobile</span>
               </div>
               
               <div className="flex flex-col items-start p-4 rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-105 hover:border-violet-500/50 hover:bg-violet-500/10">
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center mb-3 transition-all duration-300" style={{ background: 'rgba(168, 85, 247, 0.1)', borderColor: '#a855f7', borderWidth: '1px' }}>
                   <Users size={16} style={{ color: '#a855f7' }} />
                 </div>
-                <span className="font-black text-white text-lg">1.000+</span>
-                <span className="text-xs text-white/60 leading-tight">Alunos ativos</span>
+                <span className="font-black text-white text-lg">Comunidade GJ</span>
+                <span className="text-xs text-white/60 leading-tight">Aprenda com quem pratica</span>
               </div>
               
               <div className="flex flex-col items-start p-4 rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-105 hover:border-orange-500/50 hover:bg-orange-500/10">

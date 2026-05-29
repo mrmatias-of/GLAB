@@ -1,4 +1,4 @@
-import { Gift, BookOpen, Award, Clock, Zap, Headphones } from "lucide-react"
+import { Gift, BookOpen, Clock, Zap } from "lucide-react"
 import type { CursoSerializavel } from "@/lib/cursos-data"
 
 export default function ProductDeliverablesSection({ curso }: { curso: CursoSerializavel }) {
@@ -11,19 +11,14 @@ export default function ProductDeliverablesSection({ curso }: { curso: CursoSeri
       descricao: `Acesso a todos os ${curso.modulos.length} módulos e ${totalTopicos} tópicos do conteúdo.`,
     },
     {
-      icon: Award,
-      titulo: "Certificado digital",
-      descricao: "Certificado de conclusão ao finalizar o conteúdo.",
-    },
-    {
       icon: Clock,
-      titulo: "Acesso vitalício",
-      descricao: "Estude no seu ritmo, sem prazo de expiração.",
+      titulo: "Acesso imediato",
+      descricao: "Acesso liberado pela Kirvano após a confirmação do pagamento.",
     },
     {
       icon: Zap,
       titulo: "Pagamento único",
-      descricao: "Sem mensalidade. Pague uma vez e acesse para sempre.",
+      descricao: "Sem mensalidade. Pagamento processado pela Kirvano.",
     },
   ]
 

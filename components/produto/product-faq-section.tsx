@@ -32,12 +32,7 @@ function getFaqItems(curso: CursoSerializavel): FaqItem[] {
       {
         pergunta: "O acesso é vitalício?",
         resposta:
-          "Sim. Após a compra, você tem acesso ao conteúdo sem prazo de expiração.",
-      },
-      {
-        pergunta: "Recebo certificado digital?",
-        resposta:
-          "Sim. Ao concluir o combo, você recebe um certificado digital de conclusão.",
+          "As condições de acesso são definidas pela Kirvano, onde o conteúdo é disponibilizado após a confirmação do pagamento.",
       },
       {
         pergunta: "Preciso ter experiência anterior?",
@@ -56,12 +51,7 @@ function getFaqItems(curso: CursoSerializavel): FaqItem[] {
     {
       pergunta: "O acesso é vitalício?",
       resposta:
-        "Sim. Após a compra, você tem acesso ao conteúdo sem prazo de expiração.",
-    },
-    {
-      pergunta: "Recebo certificado?",
-      resposta:
-        "Sim. Ao concluir o guia, você recebe um certificado digital de conclusão.",
+        "As condições de acesso são definidas pela Kirvano, onde o conteúdo é disponibilizado após a confirmação do pagamento.",
     },
     {
       pergunta: "Preciso ter ferramentas para acompanhar?",
