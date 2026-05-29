@@ -1,115 +1,66 @@
 'use client'
 
 import Image from "next/image"
-import { Instagram } from "lucide-react"
+import Link from "next/link"
+import { ExternalLink, Wrench, BookOpen, Target } from "lucide-react"
+
+const badges = [
+  { icon: Wrench, title: "+10 anos", text: "de experiência" },
+  { icon: BookOpen, title: "Prático", text: "para a bancada" },
+  { icon: Target, title: "Direto", text: "ao ponto" },
+]
 
 export default function ComboAuthoritySection() {
-  const badges = [
-    { top: "+10 anos", bottom: "de experiência" },
-    { top: "Prático", bottom: "para a bancada" },
-    { top: "Direto", bottom: "ao ponto" },
-  ]
-
   return (
-    <section
-      className="py-20 px-6"
-      style={{ backgroundColor: "#080b12" }}
-      aria-labelledby="authority-heading"
-    >
-      <div className="max-w-5xl mx-auto">
-        {/* Eyebrow */}
-        <p
-          className="text-center text-xs font-bold tracking-widest uppercase mb-12"
-          style={{ color: "#00d4c8" }}
-        >
-          Quem é o GJ
-        </p>
+    <section aria-labelledby="quem-e-o-gj" className="border-y border-white/10 bg-[#080b12] py-16 sm:py-20">
+      <div className="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 lg:grid-cols-[350px_1fr] lg:items-center">
+        <div className="relative mx-auto w-full max-w-[350px]">
+          <div className="absolute -inset-1 rounded-[30px] bg-gradient-to-br from-cyan-400 via-blue-500 to-fuchsia-500 opacity-80 blur-sm" />
+          <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-zinc-900">
+            <Image
+              src="/images/gj/guilherme-juliao.jpg"
+              alt="Guilherme Julião, criador da G•Lab Cursos"
+              width={700}
+              height={1040}
+              className="aspect-[2/2.65] w-full object-cover object-top grayscale"
+            />
+          </div>
+        </div>
 
-        <div className="flex flex-col md:flex-row gap-12 items-center">
-          {/* Foto */}
-          <div className="flex-shrink-0 flex flex-col items-center gap-6">
-            <div
-              className="relative w-56 h-56 rounded-2xl overflow-hidden"
-              style={{
-                border: "1px solid rgba(0,212,200,0.3)",
-                boxShadow:
-                  "0 0 32px rgba(0,212,200,0.1), 0 0 64px rgba(139,92,246,0.06)",
-              }}
-            >
-              <Image
-                src="/images/gj/guilherme-juliao.jpg"
-                alt="Guilherme Julião, criador da G•Lab Cursos"
-                fill
-                className="object-cover grayscale"
-                sizes="224px"
-                priority
-              />
-            </div>
+        <div>
+          <p className="mb-3 text-sm font-bold uppercase tracking-[0.22em] text-cyan-400">Quem é o GJ</p>
+          <h2 id="quem-e-o-gj" className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            Guilherme Julião <span className="text-cyan-400">(GJ)</span>
+          </h2>
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-zinc-300 sm:text-lg">
+            Guilherme Julião é o criador da G•Lab Cursos. Com 10 anos de experiência,
+            desenvolve conteúdos técnicos voltados para quem deseja aprender procedimentos
+            práticos e evoluir na rotina de assistência técnica.
+          </p>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-zinc-400">
+            O foco dos materiais é apresentar conteúdos organizados, objetivos e aplicáveis
+            à bancada, ajudando o aluno a construir sua base técnica com clareza.
+          </p>
 
-            {/* Badges de autoridade */}
-            <div className="flex gap-3">
-              {badges.map((b) => (
-                <div
-                  key={b.top}
-                  className="flex flex-col items-center px-3 py-2 rounded-lg text-center"
-                  style={{
-                    backgroundColor: "#0a0e16",
-                    border: "1px solid rgba(0,212,200,0.15)",
-                  }}
-                >
-                  <span
-                    className="text-sm font-black leading-tight"
-                    style={{ color: "#00d4c8" }}
-                  >
-                    {b.top}
-                  </span>
-                  <span
-                    className="text-[10px] font-medium leading-tight mt-0.5"
-                    style={{ color: "#71717a" }}
-                  >
-                    {b.bottom}
-                  </span>
-                </div>
-              ))}
-            </div>
+          <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            {badges.map(({ icon: Icon, title, text }) => (
+              <div key={title} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                <Icon className="mb-3 h-5 w-5 text-cyan-400" aria-hidden="true" />
+                <p className="font-bold text-white">{title}</p>
+                <p className="text-sm text-zinc-400">{text}</p>
+              </div>
+            ))}
           </div>
 
-          {/* Texto */}
-          <div className="flex-1 space-y-5">
-            <h2
-              id="authority-heading"
-              className="text-2xl md:text-3xl font-black tracking-tight text-white"
-            >
-              Guilherme Julião{" "}
-              <span style={{ color: "#00d4c8" }}>(GJ)</span>
-            </h2>
-
-            <p className="text-base leading-relaxed" style={{ color: "#a1a1aa" }}>
-              Guilherme Julião é o criador da G•Lab Cursos. Com 10 anos de
-              experiência, desenvolve conteúdos técnicos voltados para quem
-              deseja aprender procedimentos práticos e evoluir na rotina de
-              assistência técnica.
-            </p>
-
-            <p className="text-base leading-relaxed" style={{ color: "#a1a1aa" }}>
-              O foco dos materiais é apresentar conteúdos organizados, objetivos
-              e aplicáveis à bancada, ajudando o aluno a construir sua base
-              técnica com clareza.
-            </p>
-
-            <a
-              href="https://www.instagram.com/_gjuliao/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm font-semibold transition-colors mt-2"
-              style={{ color: "#00d4c8" }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#00d4c8")}
-            >
-              <Instagram size={16} />
-              Acompanhar @_gjuliao no Instagram
-            </a>
-          </div>
+          <Link
+            href="https://www.instagram.com/_gjuliao/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-cyan-400 transition hover:text-cyan-300"
+          >
+            Acompanhar @_gjuliao no Instagram
+            <ExternalLink className="h-4 w-4" aria-hidden="true" />
+          </Link>
         </div>
       </div>
     </section>

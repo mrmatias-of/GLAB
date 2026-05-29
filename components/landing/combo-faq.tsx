@@ -1,9 +1,8 @@
-"use client"
+'use client'
 
-import { useState } from "react"
 import { ChevronDown } from "lucide-react"
 
-const faqItems = [
+const faqs = [
   {
     pergunta: "Como recebo acesso ao conteúdo após a compra?",
     resposta:
@@ -22,85 +21,33 @@ const faqItems = [
   {
     pergunta: "Onde acesso um conteúdo que já comprei?",
     resposta:
-      'Use o link "Acessar conteúdo" disponível no topo ou no rodapé desta página.',
+      "Use o link "Acessar conteúdo" disponível no topo ou no rodapé desta página.",
   },
 ]
 
 export default function ComboFaq() {
-  const [aberto, setAberto] = useState<number | null>(null)
-
-  const toggle = (i: number) => setAberto(aberto === i ? null : i)
-
   return (
-    <section
-      className="py-20 px-6"
-      style={{ backgroundColor: "#080b12" }}
-      aria-labelledby="faq-heading"
-    >
-      <div className="max-w-2xl mx-auto">
-        {/* Cabeçalho */}
-        <div className="text-center mb-12">
-          <p
-            className="text-xs font-bold tracking-widest uppercase mb-3"
-            style={{ color: "#00d4c8" }}
-          >
-            Dúvidas frequentes
-          </p>
-          <h2
-            id="faq-heading"
-            className="text-2xl md:text-3xl font-black tracking-tight text-white"
-          >
-            Perguntas frequentes
-          </h2>
-        </div>
+    <section aria-labelledby="faq-combo" className="bg-[#05070c] py-16 sm:py-20">
+      <div className="mx-auto max-w-4xl px-5 sm:px-8">
+        <p className="text-center text-sm font-bold uppercase tracking-[0.22em] text-cyan-400">
+          Dúvidas frequentes
+        </p>
+        <h2 id="faq-combo" className="mt-3 text-center text-3xl font-bold text-white">
+          Antes de começar
+        </h2>
 
-        {/* Itens */}
-        <div className="space-y-3">
-          {faqItems.map((item, i) => (
-            <div
-              key={i}
-              className="rounded-xl overflow-hidden"
-              style={{
-                backgroundColor: "#0a0e16",
-                border: `1px solid ${
-                  aberto === i
-                    ? "rgba(0,212,200,0.25)"
-                    : "rgba(255,255,255,0.07)"
-                }`,
-                transition: "border-color 0.2s",
-              }}
+        <div className="mt-9 space-y-3">
+          {faqs.map((faq) => (
+            <details
+              key={faq.pergunta}
+              className="group rounded-2xl border border-white/10 bg-white/[0.025] p-5 open:border-cyan-400/30"
             >
-              <button
-                type="button"
-                onClick={() => toggle(i)}
-                className="w-full flex items-center justify-between px-5 py-4 text-left"
-                aria-expanded={aberto === i}
-              >
-                <span className="text-sm font-semibold text-white pr-4">
-                  {item.pergunta}
-                </span>
-                <ChevronDown
-                  size={16}
-                  className="flex-shrink-0 transition-transform duration-200"
-                  style={{
-                    color: "#00d4c8",
-                    transform:
-                      aberto === i ? "rotate(180deg)" : "rotate(0deg)",
-                  }}
-                />
-              </button>
-
-              {aberto === i && (
-                <div className="px-5 pb-4">
-                  <p
-                    className="text-sm leading-relaxed"
-                    style={{ color: "#a1a1aa" }}
-                  >
-                    {item.resposta}
-                  </p>
-                </div>
-              )}
-            </div>
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-white">
+                {faq.pergunta}
+                <ChevronDown className="h-5 w-5 shrink-0 text-cyan-400 transition group-open:rotate-180" />
+              </summary>
+              <p className="mt-4 max-w-3xl text-sm leading-relaxed text-zinc-400">{faq.resposta}</p>
+            </details>
           ))}
         </div>
       </div>

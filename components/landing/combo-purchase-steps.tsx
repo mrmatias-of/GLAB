@@ -1,92 +1,60 @@
 'use client'
 
-export default function ComboPurchaseSteps() {
-  const passos = [
-    {
-      numero: "01",
-      titulo: "Escolha o combo",
-      texto: "Veja os conteúdos incluídos e clique no botão de compra.",
-    },
-    {
-      numero: "02",
-      titulo: "Finalize com segurança",
-      texto: "Conclua o pagamento em ambiente seguro de checkout.",
-    },
-    {
-      numero: "03",
-      titulo: "Acesse seu conteúdo",
-      texto: "Após a confirmação da compra, consulte seu material digital.",
-    },
-  ]
+import Link from "next/link"
+import { ArrowRight, CreditCard, BookOpenCheck, MousePointerClick } from "lucide-react"
 
+const steps = [
+  {
+    icon: MousePointerClick,
+    title: "Escolha o combo",
+    text: "Veja os conteúdos incluídos e clique no botão de compra.",
+  },
+  {
+    icon: CreditCard,
+    title: "Finalize com segurança",
+    text: "Conclua o pagamento em ambiente seguro de checkout.",
+  },
+  {
+    icon: BookOpenCheck,
+    title: "Acesse seu conteúdo",
+    text: "Após a confirmação da compra, consulte seu material digital.",
+  },
+]
+
+export default function ComboPurchaseSteps() {
   return (
-    <section
-      className="py-20 px-6"
-      style={{ backgroundColor: "#05070c" }}
-      aria-labelledby="steps-heading"
-    >
-      <div className="max-w-5xl mx-auto">
-        {/* Cabeçalho */}
-        <div className="text-center mb-14">
-          <p
-            className="text-xs font-bold tracking-widest uppercase mb-3"
-            style={{ color: "#00d4c8" }}
-          >
-            Simples assim
-          </p>
-          <h2
-            id="steps-heading"
-            className="text-2xl md:text-3xl font-black tracking-tight text-white"
-          >
+    <section aria-labelledby="como-funciona" className="bg-[#05070c] py-14 sm:py-20">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-sm font-bold uppercase tracking-[0.22em] text-cyan-400">Compra simples</p>
+          <h2 id="como-funciona" className="mt-3 text-3xl font-bold text-white">
             Como funciona
           </h2>
         </div>
 
-        {/* Cards de passos */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-          {passos.map((passo) => (
-            <div
-              key={passo.numero}
-              className="relative rounded-2xl p-6"
-              style={{
-                backgroundColor: "#080b12",
-                border: "1px solid rgba(255,255,255,0.07)",
-              }}
-            >
-              {/* Número decorativo */}
-              <span
-                className="block text-5xl font-black leading-none mb-4"
-                style={{ color: "rgba(0,212,200,0.15)" }}
-                aria-hidden="true"
-              >
-                {passo.numero}
+        <div className="mt-10 grid gap-4 md:grid-cols-3">
+          {steps.map(({ icon: Icon, title, text }, index) => (
+            <article key={title} className="relative rounded-3xl border border-white/10 bg-white/[0.025] p-6">
+              <span className="absolute right-5 top-5 text-4xl font-black text-white/[0.05]">
+                0{index + 1}
               </span>
-              <h3 className="text-base font-bold text-white mb-2">
-                {passo.titulo}
-              </h3>
-              <p
-                className="text-sm leading-relaxed"
-                style={{ color: "#71717a" }}
-              >
-                {passo.texto}
-              </p>
-            </div>
+              <Icon className="h-7 w-7 text-cyan-400" aria-hidden="true" />
+              <h3 className="mt-5 text-lg font-bold text-white">{title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-zinc-400">{text}</p>
+            </article>
           ))}
         </div>
 
-        {/* Link discreto para alunos */}
-        <div className="text-center">
-          <a
+        <div className="mt-8 text-center">
+          <Link
             href="https://app.kirvano.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm transition-colors"
-            style={{ color: "#52525b" }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#00d4c8")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "#52525b")}
+            className="inline-flex items-center gap-2 text-sm font-semibold text-zinc-300 transition hover:text-cyan-300"
           >
-            Já comprou? Acessar meu conteúdo →
-          </a>
+            Já comprou? Acessar meu conteúdo
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
         </div>
       </div>
     </section>
