@@ -21,7 +21,7 @@ const faqs = [
   {
     pergunta: "Onde acesso um conteúdo que já comprei?",
     resposta:
-      "Use o link "Acessar conteúdo" disponível no topo ou no rodapé desta página.",
+      'Use o link "Acessar conteúdo" disponível no topo ou no rodapé desta página.',
   },
 ]
 
