@@ -37,8 +37,8 @@ function CtaButton({
 }) {
   const cls =
     size === "lg"
-      ? "inline-flex items-center justify-center gap-2 rounded-xl px-8 py-4 text-sm font-black tracking-wide text-white transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-      : "inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-bold tracking-wide text-white transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+      ? "inline-flex items-center justify-center gap-2 rounded-xl px-8 py-4 text-sm font-black tracking-wide transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+      : "inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-bold tracking-wide transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
 
   return (
     <a
@@ -46,9 +46,7 @@ function CtaButton({
       target="_blank"
       rel="noopener noreferrer"
       className={cls}
-      style={{
-        background: "linear-gradient(135deg, #00d4c8 0%, #a855f7 100%)",
-      }}
+      style={{ backgroundColor: "#00d4c8", color: "#05070c" }}
     >
       {label}
     </a>
