@@ -17,21 +17,17 @@ function readStoredConsent(): PrivacyConsent {
 }
 
 export function usePrivacyConsent() {
-  // Inicializador lazy: executa uma única vez no cliente, de forma síncrona,
-  // antes do primeiro render. Isso evita o flash do banner em usuários que
-  // já fizeram a escolha, pois o estado já começa com o valor correto.
-  const [consent, setConsent] = useState<PrivacyConsent>(() => {
-    if (typeof window === "undefined") return null
-    return readStoredConsent()
-  })
+  // Inicializamos com null no servidor e no cliente para evitar hydration mismatch.
+  // O valor real é lido no useEffect após a hidratação.
+  const [consent, setConsent] = useState<PrivacyConsent>(null)
 
-  // loaded: true imediatamente no cliente (useState lazy já leu o valor),
-  // false apenas durante SSR onde window não existe.
-  const [loaded, setLoaded] = useState(() => typeof window !== "undefined")
+  // loaded começa como false para que servidor e cliente renderizem a mesma coisa.
+  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
-    // Garante que loaded seja true no cliente mesmo em ambientes
-    // onde o inicializador do useState não executou (ex: StrictMode duplo).
+    // Lê o valor do localStorage apenas no cliente, após a hidratação.
+    const storedConsent = readStoredConsent()
+    setConsent(storedConsent)
     setLoaded(true)
   }, [])
 
