@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
-import WhatsAppButton from '@/components/whatsapp-button'
 import { VisitorTracker } from '@/components/visitor-tracker'
-import { SocialProofPopup } from '@/components/social-proof-popup'
+import { SiteOverlays } from '@/components/site-overlays'
 import { PrivacyConsentBanner } from '@/components/privacy-consent-banner'
 import { ConditionalAnalytics } from '@/components/conditional-analytics'
 import './globals.css'
@@ -91,9 +90,8 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased">
         <VisitorTracker />
-        <SocialProofPopup />
+        <SiteOverlays />
         {children}
-        <WhatsAppButton />
         <PrivacyConsentBanner />
         {process.env.NODE_ENV === 'production' && <ConditionalAnalytics />}
       </body>
