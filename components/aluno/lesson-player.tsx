@@ -1,8 +1,9 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useMemo } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { CheckCircle, FileText, Download, Play, Pause } from "lucide-react"
+import DOMPurify from "dompurify"
 
 type Lesson = {
   id: string
@@ -69,6 +70,16 @@ export default function LessonPlayer({ lesson, cursoId, userId, isCompleted: ini
     }
   }
 
+  // Sanitizar HTML para prevenir XSS
+  const sanitizedContent = useMemo(() => {
+    if (!lesson.conteudo) return null
+    return DOMPurify.sanitize(lesson.conteudo, {
+      ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'img', 'blockquote', 'code', 'pre'],
+      ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'target', 'rel'],
+      ALLOW_DATA_ATTR: false
+    })
+  }, [lesson.conteudo])
+
   return (
     <div className="flex-1 flex flex-col">
       {/* Video area */}
@@ -85,7 +96,7 @@ export default function LessonPlayer({ lesson, cursoId, userId, isCompleted: ini
         <div className="aspect-video bg-surface flex items-center justify-center">
           <div className="text-center">
             <FileText size={48} className="mx-auto text-muted-foreground/30 mb-4" />
-            <p className="text-muted-foreground">Esta aula não possui vídeo</p>
+            <p className="text-muted-foreground">Esta aula nao possui video</p>
           </div>
         </div>
       )}
@@ -123,16 +134,16 @@ export default function LessonPlayer({ lesson, cursoId, userId, isCompleted: ini
                 }`}
               >
                 <CheckCircle size={16} />
-                {isCompleted ? "Concluída" : marking ? "Salvando..." : "Marcar como concluída"}
+                {isCompleted ? "Concluida" : marking ? "Salvando..." : "Marcar como concluida"}
               </button>
             </div>
           </div>
 
-          {/* Content */}
-          {lesson.conteudo && (
+          {/* Content - sanitizado com DOMPurify */}
+          {sanitizedContent && (
             <div 
               className="prose prose-invert prose-sm max-w-none"
-              dangerouslySetInnerHTML={{ __html: lesson.conteudo }}
+              dangerouslySetInnerHTML={{ __html: sanitizedContent }}
             />
           )}
         </div>

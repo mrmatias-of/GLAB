@@ -12,7 +12,12 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 async function resetAdminPassword() {
   const email = "admin@glabcursos.com.br";
-  const newPassword = "E7OJiZmQfsuFqzx7";
+  const newPassword = process.env.NEW_ADMIN_PASSWORD;
+
+  if (!newPassword) {
+    console.error("❌ Defina NEW_ADMIN_PASSWORD no ambiente");
+    process.exit(1);
+  }
 
   try {
     const { data, error } = await supabase.auth.admin.updateUserById(

@@ -2,6 +2,12 @@ import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+const adminPassword = process.env.ADMIN_PASSWORD
+
+if (!adminPassword) {
+  console.error('❌ Defina ADMIN_PASSWORD no ambiente')
+  process.exit(1)
+}
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey, {
   auth: {
@@ -23,7 +29,7 @@ async function createAdmin() {
   // Criar novo usuario admin
   const { data, error } = await supabase.auth.admin.createUser({
     email: 'admin@glabcursos.com.br',
-    password: 'Admin123!',
+    password: adminPassword,
     email_confirm: true,
     user_metadata: {
       name: 'Administrador G-LAB',
