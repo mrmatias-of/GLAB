@@ -1,4 +1,4 @@
-import { createClient, createAnonClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/server"
 import { Smartphone, Monitor, Apple, Layers, type LucideIcon } from "lucide-react"
 
 export type Modulo = {
@@ -57,7 +57,7 @@ export async function getCursos(): Promise<Curso[]> {
   }
 
   try {
-    const supabase = await createClient()
+    const supabase = createAdminClient()
     const { data, error } = await supabase
       .from("cursos")
       .select("slug, tag, titulo, subtitulo, descricao, descricao_longa, imagem, preco, preco_original, cta, cta_href, destaque, modulos, aprendizados, ordem, nivel, categoria, headline, headline_sub, para_quem, dores, cta_headline, cta_headline_sub, trilha, relacionados")
@@ -114,7 +114,7 @@ export async function getCursoBySlug(slug: string): Promise<Curso | undefined> {
 // Função para geração estática (sem cookies)
 export async function getCursoSlugs(): Promise<string[]> {
   try {
-    const supabase = createAnonClient()
+    const supabase = createAdminClient()
     const { data, error } = await supabase
       .from("cursos")
       .select("slug")
