@@ -32,13 +32,18 @@ const getIconByTag = (tag: string) => {
 
 export default async function Cursos({ showComunidade = false }: { showComunidade?: boolean }) {
   const supabase = createAdminClient()
-  const { data, error } = await supabase
-    .from("cursos")
-    .select("id, slug, tag, titulo, descricao, preco, preco_original, cta_href, destaque, modulos, imagem, ordem")
-    .eq("ativo", true)
-    .order("ordem", { ascending: true })
+  
+  let cursos: CursoDB[] = []
+  
+  if (supabase) {
+    const { data, error } = await supabase
+      .from("cursos")
+      .select("id, slug, tag, titulo, descricao, preco, preco_original, cta_href, destaque, modulos, imagem, ordem")
+      .eq("ativo", true)
+      .order("ordem", { ascending: true })
 
-  const cursos: CursoDB[] = error || !data ? [] : data
+    cursos = error || !data ? [] : data
+  }
 
   // Organizar por trilhas e categorias
   const trilhas = {

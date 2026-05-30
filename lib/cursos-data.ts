@@ -58,6 +58,11 @@ export async function getCursos(): Promise<Curso[]> {
 
   try {
     const supabase = createAdminClient()
+    if (!supabase) {
+      console.warn("[v0] Supabase não configurado, retornando lista vazia")
+      return []
+    }
+    
     const { data, error } = await supabase
       .from("cursos")
       .select("slug, tag, titulo, subtitulo, descricao, descricao_longa, imagem, preco, preco_original, cta, cta_href, destaque, modulos, aprendizados, ordem, nivel, categoria, headline, headline_sub, para_quem, dores, cta_headline, cta_headline_sub, trilha, relacionados")
@@ -115,6 +120,11 @@ export async function getCursoBySlug(slug: string): Promise<Curso | undefined> {
 export async function getCursoSlugs(): Promise<string[]> {
   try {
     const supabase = createAdminClient()
+    if (!supabase) {
+      console.warn("[v0] Supabase não configurado para slugs, retornando lista vazia")
+      return []
+    }
+    
     const { data, error } = await supabase
       .from("cursos")
       .select("slug")

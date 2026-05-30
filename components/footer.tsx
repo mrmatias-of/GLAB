@@ -88,7 +88,7 @@ export default function Footer() {
                 <div className="w-10 h-10 rounded-lg border border-cyan-500/30 bg-cyan-500/5 flex items-center justify-center">
                   <Settings size={18} className="text-cyan-400" />
                 </div>
-                <span className="text-[8px] text-white/40 text-center font-medium leading-tight">ACESSO<br/>VIA KIRVANO</span>
+                <span className="text-[8px] text-white/40 text-center font-medium leading-tight">ACESSO<br/>DIGITAL</span>
               </div>
               <div className="flex flex-col items-center gap-1.5">
                 <div className="w-10 h-10 rounded-lg border border-cyan-500/30 bg-cyan-500/5 flex items-center justify-center">
@@ -163,7 +163,7 @@ export default function Footer() {
                   href="/privacidade"
                   className="flex items-center gap-2 text-sm text-white/50 hover:text-cyan-400 transition-colors group"
                 >
-                  <span className="text-cyan-500/50 group-hover:text-cyan-400">▸</span>
+                  <span className="text-cyan-500/50 group-hover:text-cyan-400">��</span>
                   Política de Privacidade
                 </Link>
               </li>

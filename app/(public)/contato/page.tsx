@@ -39,7 +39,7 @@ export default function ContatoPage() {
                 Pronto para começar sua evolução?
               </h2>
               <p style={{ color: '#a1a1aa' }} className="text-sm mb-4">
-                Explore nossos guias técnicos e tenha acesso vitalício a conteúdo prático de assistência mobile, diagnóstico avançado e gestão de bancada.
+                Explore nossos guias técnicos com conteúdo prático de assistência mobile, diagnóstico avançado e gestão de bancada.
               </p>
               <div className="flex gap-3 flex-wrap">
                 <a 

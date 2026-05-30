@@ -227,7 +227,7 @@ function PriceCard({ curso }: { curso: CursoSerializavel }) {
           {[
             { icon: Clock, label: "Acesso imediato" },
             { icon: Zap, label: "Pagamento único" },
-            { icon: ShieldCheck, label: "Kirvano seguro" },
+            { icon: ShieldCheck, label: "Pagamento seguro" },
           ].map((item) => (
             <div key={item.label} className="flex items-center gap-1.5">
               <item.icon size={12} className="text-cyan-400/60" />

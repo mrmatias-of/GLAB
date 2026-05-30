@@ -27,12 +27,7 @@ function getFaqItems(curso: CursoSerializavel): FaqItem[] {
       {
         pergunta: "Como recebo acesso após a compra?",
         resposta:
-          "O acesso é liberado imediatamente após a confirmação do pagamento. Você receberá um e-mail com as instruções para acessar a plataforma.",
-      },
-      {
-        pergunta: "O acesso é vitalício?",
-        resposta:
-          "As condições de acesso são definidas pela Kirvano, onde o conteúdo é disponibilizado após a confirmação do pagamento.",
+          "O acesso é liberado imediatamente após a confirmação do pagamento. Você receberá um e-mail com as instruções para acessar o conteúdo.",
       },
       {
         pergunta: "Preciso ter experiência anterior?",
@@ -46,12 +41,7 @@ function getFaqItems(curso: CursoSerializavel): FaqItem[] {
     {
       pergunta: "Como recebo acesso após a compra?",
       resposta:
-        "O acesso é liberado imediatamente após a confirmação do pagamento. Você receberá um e-mail com as instruções para acessar a plataforma.",
-    },
-    {
-      pergunta: "O acesso é vitalício?",
-      resposta:
-        "As condições de acesso são definidas pela Kirvano, onde o conteúdo é disponibilizado após a confirmação do pagamento.",
+        "O acesso é liberado imediatamente após a confirmação do pagamento. Você receberá um e-mail com as instruções para acessar o conteúdo.",
     },
     {
       pergunta: "Preciso ter ferramentas para acompanhar?",
