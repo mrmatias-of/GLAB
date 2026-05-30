@@ -1,7 +1,7 @@
 import { ArrowRight, Package, Smartphone, Monitor, Cpu, Layers, Zap, Radio, Settings, Wrench, MessageCircle } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/server"
 
 type Modulo = { titulo: string; topicos: string[] }
 
@@ -31,7 +31,7 @@ const getIconByTag = (tag: string) => {
 }
 
 export default async function Cursos({ showComunidade = false }: { showComunidade?: boolean }) {
-  const supabase = await createClient()
+  const supabase = createAdminClient()
   const { data, error } = await supabase
     .from("cursos")
     .select("id, slug, tag, titulo, descricao, preco, preco_original, cta_href, destaque, modulos, imagem, ordem")
