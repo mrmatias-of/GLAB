@@ -1,18 +1,48 @@
+"use client"
+
 import Link from "next/link"
 import Image from "next/image"
 
 export default function ComboLandingHeader() {
   return (
-    <header className="sticky top-0 bg-[#05070c]/95 border-b border-white/10 backdrop-blur-xl z-50">
-      <div className="mx-auto flex max-w-7xl h-16 items-center justify-between px-5">
-        <Link href="/">
-          <Image src="/logo-glab-neon-transparent.png" width={132} height={44} alt="G•Lab Cursos" />
+    <header
+      className="sticky top-0 z-50 backdrop-blur-md"
+      style={{
+        backgroundColor: "rgba(5,7,12,0.92)",
+        borderBottom: "1px solid rgba(255,255,255,0.06)",
+      }}
+    >
+      <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+        {/* Logo */}
+        <Link
+          href="/"
+          className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
+          aria-label="G•Lab Cursos — Página inicial"
+        >
+          <Image
+            src="/logo-glab-neon-transparent.png"
+            alt="G•Lab Cursos"
+            width={36}
+            height={36}
+            className="w-9 h-9"
+          />
+          <span
+            className="text-sm font-bold tracking-tight hidden sm:block"
+            style={{ color: "#ffffff" }}
+          >
+            G•Lab Cursos
+          </span>
         </Link>
+
+        {/* Ação direita — link discreto para alunos */}
         <a
-          href="https://pay.kirvano.com/d910bfe5-d8cb-460c-97a6-4af98346b660"
+          href="https://app.kirvano.com"
           target="_blank"
           rel="noopener noreferrer"
-          className="px-4 py-2 border border-white/10 text-xs font-semibold text-zinc-300 rounded-full hover:bg-white/5 transition-colors"
+          className="text-xs font-medium transition-colors"
+          style={{ color: "#71717a" }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = "#00d4c8")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "#71717a")}
         >
           Acessar conteúdo
         </a>
