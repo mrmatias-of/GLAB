@@ -1,12 +1,12 @@
-import { ArrowRight, Package, Smartphone, Monitor, Cpu, Layers, Zap, Radio, Settings, Wrench, MessageCircle } from "lucide-react"
+import { ArrowRight, Package, Smartphone, Monitor, Cpu, Layers, Zap, Radio, Settings, Wrench, MessageCircle, Users } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { createAdminClient } from "@/lib/supabase/server"
+import { getCursos, getTrilhas } from "@/lib/db"
 
-type Modulo = { titulo: string; topicos: string[] }
+type Modulo = { titulo: string; topicos: number }
 
 type CursoDB = {
-  id: string
+  id: number
   slug: string
   tag: string
   titulo: string
@@ -17,7 +17,8 @@ type CursoDB = {
   destaque: boolean
   modulos: Modulo[]
   imagem: string | null
-  ordem: number
+  trilha_id: number
+  posicao: number
 }
 
 const getIconByTag = (tag: string) => {
@@ -30,63 +31,42 @@ const getIconByTag = (tag: string) => {
   return Cpu
 }
 
+const trilhaMap: Record<number, { titulo: string; descricao: string }> = {
+  1: {
+    titulo: "Começando na assistência",
+    descricao: "Do primeiro reparo ao diagnóstico básico"
+  },
+  2: {
+    titulo: "Diagnóstico avançado",
+    descricao: "Técnicas profissionais de resolução de problemas"
+  },
+  3: {
+    titulo: "Gestão da bancada",
+    descricao: "Administração e organização de uma oficina profissional"
+  },
+  4: {
+    titulo: "PC & Performance",
+    descricao: "Manutenção e otimização de computadores"
+  }
+}
+
 export default async function Cursos({ showComunidade = false }: { showComunidade?: boolean }) {
-  const supabase = createAdminClient()
-  
   let cursos: CursoDB[] = []
-  
-  if (supabase) {
-    const { data, error } = await supabase
-      .from("cursos")
-      .select("id, slug, tag, titulo, descricao, preco, preco_original, cta_href, destaque, modulos, imagem, ordem")
-      .eq("ativo", true)
-      .order("ordem", { ascending: true })
+  let trilhas: any[] = []
 
-    cursos = error || !data ? [] : data
+  try {
+    cursos = await getCursos()
+    trilhas = await getTrilhas()
+  } catch (error) {
+    console.error("[v0] Database error:", error)
   }
 
-  // Organizar por trilhas e categorias
-  const trilhas = {
-    iniciantes: {
-      id: "iniciantes",
-      titulo: "Começando na assistência mobile",
-      descricao: "Guias indicados para quem quer construir uma base prática nos serviços mais comuns da bancada.",
-      produtos: cursos.filter(c => {
-        const slugs = ["combo-iniciante-mobile", "guia-troca-de-tela", "guia-troca-de-bateria", "guia-conectores-carga", "guia-software-celular"];
-        return slugs.includes(c.slug);
-      })
-    },
-    diagnostico: {
-      id: "diagnostico",
-      titulo: "Diagnóstico e reparo avançado",
-      descricao: "Conteúdos para técnicos que desejam evoluir em medições, análise e investigação de falhas mais complexas.",
-      produtos: cursos.filter(c => {
-        const slugs = ["guia-diagnostico-avancado", "guia-consumo-eletrico", "guia-curto-em-placa", "guia-esquema-eletrico", "guia-pmic-alimentacao", "guia-radiofrequencia", "guia-falhas-intermitentes", "guia-perifericos"];
-        return slugs.includes(c.slug);
-      })
-    },
-    gestao: {
-      id: "gestao",
-      titulo: "Gestão e profissionalização da bancada",
-      descricao: "Organize processos, precifique melhor e desenvolva uma rotina mais profissional na assistência.",
-      produtos: cursos.filter(c => {
-        const slugs = ["guia-precificacao-profissional", "guia-padronizacao-bancada"];
-        return slugs.includes(c.slug);
-      })
-    },
-    pc: {
-      id: "pc-performance",
-      titulo: "PC & Performance",
-      descricao: "Conteúdo específico para otimização e desempenho de computadores.",
-      produtos: cursos.filter(c => {
-        const slugs = ["guia-otimizacao-pc-gamer"];
-        return slugs.includes(c.slug);
-      })
-    }
-  }
-
-  // Filter trilhas com produtos
-  const trilhasAtivas = Object.values(trilhas).filter(t => t.produtos.length > 0)
+  // Organizar cursos por trilha
+  const trilhasCursos = trilhas.map(trilha => ({
+    ...trilha,
+    info: trilhaMap[trilha.id] || { titulo: trilha.titulo, descricao: "" },
+    produtos: cursos.filter(c => c.trilha_id === trilha.id)
+  })).filter(t => t.produtos.length > 0)
 
   return (
     <section id="cursos" className="relative py-8 pt-16" style={{ backgroundColor: '#ffffff' }}>
@@ -148,17 +128,17 @@ export default async function Cursos({ showComunidade = false }: { showComunidad
             )}
 
             {/* Trilhas */}
-            {trilhasAtivas.map((trilha, trilhaIndex) => (
-              <div key={trilhaIndex} id={trilha.id} className="mb-16 scroll-mt-20">
+            {trilhasCursos.map((trilha, trilhaIndex) => (
+              <div key={trilha.id} id={`trilha-${trilha.id}`} className="mb-16 scroll-mt-20">
                 <div className="mb-8">
-                  <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-2">{trilha.titulo}</h2>
-                  <p className="text-sm text-gray-600">{trilha.descricao}</p>
+                  <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-2">{trilha.info.titulo}</h2>
+                  <p className="text-sm text-gray-600">{trilha.info.descricao}</p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-                  {trilha.produtos.map((curso, index) => {
+                  {trilha.produtos.map((curso: CursoDB, index: number) => {
                     const Icon = getIconByTag(curso.tag)
-                    const isCombo = curso.slug === "combo-iniciante-mobile"
+                    const isCombo = curso.slug?.includes("combo")
                     return (
                       <Link
                         key={curso.id}
@@ -238,6 +218,3 @@ export default async function Cursos({ showComunidade = false }: { showComunidad
     </section>
   )
 }
-
-// Import Users icon at top level for Grupo VIP card
-import { Users } from "lucide-react"
