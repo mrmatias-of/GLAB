@@ -70,7 +70,7 @@ export default function ContactForm() {
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Nome */}
       <div>
-        <label htmlFor="nome" className="block text-sm font-medium mb-2" style={{ color: '#fff' }}>
+        <label htmlFor="nome" className="block text-sm font-medium mb-2 text-gray-900">
           Nome *
         </label>
         <input
@@ -80,24 +80,13 @@ export default function ContactForm() {
           value={formData.nome}
           onChange={handleChange}
           placeholder="Seu nome"
-          className="w-full px-4 py-3 rounded-lg border transition-colors"
-          style={{
-            backgroundColor: '#1a1a1d',
-            borderColor: '#27272a',
-            color: '#fff',
-          }}
-          onFocus={(e) => {
-            e.currentTarget.style.borderColor = '#818cf8'
-          }}
-          onBlur={(e) => {
-            e.currentTarget.style.borderColor = '#27272a'
-          }}
+          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
         />
       </div>
 
       {/* Email */}
       <div>
-        <label htmlFor="email" className="block text-sm font-medium mb-2" style={{ color: '#fff' }}>
+        <label htmlFor="email" className="block text-sm font-medium mb-2 text-gray-900">
           Email *
         </label>
         <input
@@ -107,24 +96,13 @@ export default function ContactForm() {
           value={formData.email}
           onChange={handleChange}
           placeholder="seu@email.com"
-          className="w-full px-4 py-3 rounded-lg border transition-colors"
-          style={{
-            backgroundColor: '#1a1a1d',
-            borderColor: '#27272a',
-            color: '#fff',
-          }}
-          onFocus={(e) => {
-            e.currentTarget.style.borderColor = '#818cf8'
-          }}
-          onBlur={(e) => {
-            e.currentTarget.style.borderColor = '#27272a'
-          }}
+          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
         />
       </div>
 
       {/* Assunto */}
       <div>
-        <label htmlFor="assunto" className="block text-sm font-medium mb-2" style={{ color: '#fff' }}>
+        <label htmlFor="assunto" className="block text-sm font-medium mb-2 text-gray-900">
           Assunto
         </label>
         <input
@@ -134,24 +112,13 @@ export default function ContactForm() {
           value={formData.assunto}
           onChange={handleChange}
           placeholder="Assunto da mensagem"
-          className="w-full px-4 py-3 rounded-lg border transition-colors"
-          style={{
-            backgroundColor: '#1a1a1d',
-            borderColor: '#27272a',
-            color: '#fff',
-          }}
-          onFocus={(e) => {
-            e.currentTarget.style.borderColor = '#818cf8'
-          }}
-          onBlur={(e) => {
-            e.currentTarget.style.borderColor = '#27272a'
-          }}
+          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
         />
       </div>
 
       {/* Mensagem */}
       <div>
-        <label htmlFor="mensagem" className="block text-sm font-medium mb-2" style={{ color: '#fff' }}>
+        <label htmlFor="mensagem" className="block text-sm font-medium mb-2 text-gray-900">
           Mensagem *
         </label>
         <textarea
@@ -161,35 +128,24 @@ export default function ContactForm() {
           onChange={handleChange}
           placeholder="Sua mensagem aqui..."
           rows={6}
-          className="w-full px-4 py-3 rounded-lg border transition-colors resize-none"
-          style={{
-            backgroundColor: '#1a1a1d',
-            borderColor: '#27272a',
-            color: '#fff',
-          }}
-          onFocus={(e) => {
-            e.currentTarget.style.borderColor = '#818cf8'
-          }}
-          onBlur={(e) => {
-            e.currentTarget.style.borderColor = '#27272a'
-          }}
+          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors resize-none"
         />
       </div>
 
-      {/* Mensagens de status */}
+      {/* Status Messages */}
       {error && (
-        <div className="p-4 rounded-lg" style={{ backgroundColor: '#fee2e2', color: '#991b1b' }}>
+        <div className="p-4 rounded-lg bg-red-50 border border-red-200 text-red-700">
           {error}
         </div>
       )}
 
       {success && (
-        <div className="p-4 rounded-lg" style={{ backgroundColor: '#dcfce7', color: '#166534' }}>
+        <div className="p-4 rounded-lg bg-green-50 border border-green-200 text-green-700">
           ✓ Mensagem enviada com sucesso! Responderemos em breve.
         </div>
       )}
 
-      {/* Consentimento de privacidade */}
+      {/* Privacy consent */}
       <div className="flex items-start gap-3">
         <input
           type="checkbox"
@@ -197,16 +153,15 @@ export default function ContactForm() {
           checked={privacyAccepted}
           onChange={(e) => setPrivacyAccepted(e.target.checked)}
           className="mt-0.5 flex-shrink-0 w-4 h-4 rounded cursor-pointer"
-          style={{ accentColor: '#00D4C8' }}
+          style={{ accentColor: '#2563eb' }}
         />
-        <label htmlFor="privacy-consent" className="text-xs leading-relaxed cursor-pointer" style={{ color: '#a1a1aa' }}>
+        <label htmlFor="privacy-consent" className="text-xs leading-relaxed cursor-pointer text-gray-600">
           Li a{' '}
           <Link
             href="/privacidade"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline underline-offset-2 hover:text-cyan-400 transition-colors"
-            style={{ color: '#00D4C8' }}
+            className="underline underline-offset-2 hover:text-blue-600 transition-colors text-blue-600"
           >
             Política de Privacidade
           </Link>{' '}
@@ -214,23 +169,20 @@ export default function ContactForm() {
         </label>
       </div>
 
-      {/* Botão */}
+      {/* Submit Button */}
       <button
         type="submit"
         disabled={loading}
-        className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all"
+        className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         style={{
-          backgroundColor: loading ? '#52525b' : '#818cf8',
-          color: '#fff',
-          cursor: loading ? 'not-allowed' : 'pointer',
-          opacity: loading ? 0.7 : 1,
+          backgroundColor: loading ? '#93c5fd' : '#2563eb',
         }}
       >
         <Send size={18} />
         {loading ? 'Enviando...' : 'Enviar Mensagem'}
       </button>
 
-      <p className="text-sm text-center" style={{ color: '#71717a' }}>
+      <p className="text-sm text-center text-gray-600">
         Responderemos sua mensagem em breve via email.
       </p>
     </form>

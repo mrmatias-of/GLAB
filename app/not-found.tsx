@@ -7,7 +7,7 @@ export default function NotFound() {
   return (
     <>
       <Header />
-      <main className="min-h-[calc(100vh-112px)] flex items-center justify-center px-6 py-20" style={{ backgroundColor: '#0B0B0C' }}>
+      <main className="min-h-[calc(100vh-112px)] flex items-center justify-center px-6 py-20" style={{ backgroundColor: '#ffffff' }}>
         <div className="max-w-md w-full text-center">
 
           {/* Número 404 */}

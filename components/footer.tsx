@@ -1,7 +1,6 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect, useState } from "react"
 import {
   MapPin, Mail, Clock, Headphones, CheckCircle,
   LayoutGrid, Wrench, Users, Shield, Settings, Zap,
@@ -38,21 +37,11 @@ export default function Footer() {
     const slug = cursoSlugsMap[label.toLowerCase()]
     return slug ? `/cursos/${slug}` : '/cursos'
   }
+  
   return (
-    <footer className="relative" style={{ backgroundColor: '#050510' }}>
-      {/* Top decorative line */}
-      <div className="h-px w-full" style={{ 
-        background: 'linear-gradient(90deg, transparent, rgba(0,212,200,0.5) 20%, rgba(0,212,200,0.8) 50%, rgba(0,212,200,0.5) 80%, transparent)'
-      }} />
-      
-      {/* Circuit pattern decoration */}
-      <div className="absolute top-0 left-0 right-0 h-1 overflow-hidden">
-        <div className="flex justify-center gap-1">
-          {[...Array(7)].map((_, i) => (
-            <div key={i} className="w-1 h-1 rounded-full bg-cyan-500/50" />
-          ))}
-        </div>
-      </div>
+    <footer className="relative bg-white">
+      {/* Top border */}
+      <div className="h-px w-full bg-gray-200" />
 
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6">
@@ -61,17 +50,17 @@ export default function Footer() {
           <div className="space-y-4">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity w-fit">
-              <div className="w-10 h-10 rounded-lg border border-cyan-500/30 bg-cyan-500/10 flex items-center justify-center">
-                <Cpu size={22} className="text-cyan-400" />
+              <div className="w-10 h-10 rounded-lg border border-blue-200 bg-blue-50 flex items-center justify-center">
+                <Cpu size={22} className="text-blue-600" />
               </div>
               <div>
-                <h3 className="text-lg font-black text-white tracking-tight">G•Lab Cursos</h3>
-                <p className="text-[10px] text-cyan-400 font-medium tracking-widest">GUIAS TÉCNICOS</p>
+                <h3 className="text-lg font-black text-gray-900 tracking-tight">G•Lab Cursos</h3>
+                <p className="text-[10px] text-blue-600 font-medium tracking-widest">GUIAS TÉCNICOS</p>
               </div>
             </Link>
             
             {/* Description */}
-            <p className="text-sm text-white/50 leading-relaxed">
+            <p className="text-sm text-gray-600 leading-relaxed">
               Guias técnicos para assistência mobile, diagnóstico e profissionalização da bancada.<br />
               Conteúdo prático para quem quer começar ou evoluir na assistência técnica.
             </p>
@@ -79,22 +68,22 @@ export default function Footer() {
             {/* Trust badges */}
             <div className="flex gap-3 pt-2">
               <div className="flex flex-col items-center gap-1.5">
-                <div className="w-10 h-10 rounded-lg border border-cyan-500/30 bg-cyan-500/5 flex items-center justify-center">
-                  <Shield size={18} className="text-cyan-400" />
+                <div className="w-10 h-10 rounded-lg border border-blue-200 bg-blue-50 flex items-center justify-center">
+                  <Shield size={18} className="text-blue-600" />
                 </div>
-                <span className="text-[8px] text-white/40 text-center font-medium leading-tight">CONTEÚDO<br/>PRÁTICO</span>
+                <span className="text-[8px] text-gray-600 text-center font-medium leading-tight">CONTEÚDO<br/>PRÁTICO</span>
               </div>
               <div className="flex flex-col items-center gap-1.5">
-                <div className="w-10 h-10 rounded-lg border border-cyan-500/30 bg-cyan-500/5 flex items-center justify-center">
-                  <Settings size={18} className="text-cyan-400" />
+                <div className="w-10 h-10 rounded-lg border border-blue-200 bg-blue-50 flex items-center justify-center">
+                  <Settings size={18} className="text-blue-600" />
                 </div>
-                <span className="text-[8px] text-white/40 text-center font-medium leading-tight">ACESSO<br/>DIGITAL</span>
+                <span className="text-[8px] text-gray-600 text-center font-medium leading-tight">ACESSO<br/>DIGITAL</span>
               </div>
               <div className="flex flex-col items-center gap-1.5">
-                <div className="w-10 h-10 rounded-lg border border-cyan-500/30 bg-cyan-500/5 flex items-center justify-center">
-                  <Zap size={18} className="text-cyan-400" />
+                <div className="w-10 h-10 rounded-lg border border-blue-200 bg-blue-50 flex items-center justify-center">
+                  <Zap size={18} className="text-blue-600" />
                 </div>
-                <span className="text-[8px] text-white/40 text-center font-medium leading-tight">PAGAMENTO<br/>SEGURO</span>
+                <span className="text-[8px] text-gray-600 text-center font-medium leading-tight">PAGAMENTO<br/>SEGURO</span>
               </div>
             </div>
           </div>
@@ -102,10 +91,10 @@ export default function Footer() {
           {/* Column 2 - Navegação */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-6 h-6 rounded border border-cyan-500/30 bg-cyan-500/10 flex items-center justify-center">
-                <LayoutGrid size={12} className="text-cyan-400" />
+              <div className="w-6 h-6 rounded border border-blue-200 bg-blue-50 flex items-center justify-center">
+                <LayoutGrid size={12} className="text-blue-600" />
               </div>
-              <h4 className="text-sm font-bold text-white tracking-wide">NAVEGAÇÃO</h4>
+              <h4 className="text-sm font-bold text-gray-900 tracking-wide">NAVEGAÇÃO</h4>
             </div>
             <ul className="space-y-2.5">
               {[
@@ -116,9 +105,9 @@ export default function Footer() {
                 <li key={item.label}>
                   <Link
                     href={item.href}
-                    className="flex items-center gap-2 text-sm text-white/50 hover:text-cyan-400 transition-colors group"
+                    className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 transition-colors group"
                   >
-                    <span className="text-cyan-500/50 group-hover:text-cyan-400">▸</span>
+                    <span className="text-gray-400 group-hover:text-blue-600">▸</span>
                     {item.label}
                   </Link>
                 </li>
@@ -126,22 +115,22 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 3 - Serviços/Cursos */}
+          {/* Column 3 - Cursos */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-6 h-6 rounded border border-cyan-500/30 bg-cyan-500/10 flex items-center justify-center">
-                <Wrench size={12} className="text-cyan-400" />
+              <div className="w-6 h-6 rounded border border-blue-200 bg-blue-50 flex items-center justify-center">
+                <Wrench size={12} className="text-blue-600" />
               </div>
-              <h4 className="text-sm font-bold text-white tracking-wide">CURSOS</h4>
+              <h4 className="text-sm font-bold text-gray-900 tracking-wide">CURSOS</h4>
             </div>
             <ul className="space-y-2.5">
               {cursosFooter.map((item) => (
                 <li key={item.label}>
                   <Link
                     href={getCursoHref(item.label)}
-                    className="flex items-center gap-2 text-sm text-white/50 hover:text-cyan-400 transition-colors group"
+                    className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 transition-colors group"
                   >
-                    <item.icon size={12} className="text-cyan-500/50 group-hover:text-cyan-400" />
+                    <item.icon size={12} className="text-gray-400 group-hover:text-blue-600" />
                     {item.label}
                   </Link>
                 </li>
@@ -152,57 +141,57 @@ export default function Footer() {
           {/* Column 4 - Legal */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-6 h-6 rounded border border-cyan-500/30 bg-cyan-500/10 flex items-center justify-center">
-                <Scale size={12} className="text-cyan-400" />
+              <div className="w-6 h-6 rounded border border-blue-200 bg-blue-50 flex items-center justify-center">
+                <Scale size={12} className="text-blue-600" />
               </div>
-              <h4 className="text-sm font-bold text-white tracking-wide">LEGAL</h4>
+              <h4 className="text-sm font-bold text-gray-900 tracking-wide">LEGAL</h4>
             </div>
             <ul className="space-y-2.5">
               <li>
                 <Link
                   href="/privacidade"
-                  className="flex items-center gap-2 text-sm text-white/50 hover:text-cyan-400 transition-colors group"
+                  className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 transition-colors group"
                 >
-                  <span className="text-cyan-500/50 group-hover:text-cyan-400">��</span>
+                  <span className="text-gray-400 group-hover:text-blue-600">▸</span>
                   Política de Privacidade
                 </Link>
               </li>
               <li>
                 <Link
                   href="/termos"
-                  className="flex items-center gap-2 text-sm text-white/50 hover:text-cyan-400 transition-colors group"
+                  className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 transition-colors group"
                 >
-                  <span className="text-cyan-500/50 group-hover:text-cyan-400">▸</span>
+                  <span className="text-gray-400 group-hover:text-blue-600">▸</span>
                   Termos de Uso
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 5 - Contato & Redes Sociais */}
+          {/* Column 5 - Contato & Redes */}
           <div className="space-y-5">
             {/* Contato */}
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-6 h-6 rounded border border-cyan-500/30 bg-cyan-500/10 flex items-center justify-center">
-                  <Users size={12} className="text-cyan-400" />
+                <div className="w-6 h-6 rounded border border-blue-200 bg-blue-50 flex items-center justify-center">
+                  <Users size={12} className="text-blue-600" />
                 </div>
-                <h4 className="text-sm font-bold text-white tracking-wide">CONTATO</h4>
+                <h4 className="text-sm font-bold text-gray-900 tracking-wide">CONTATO</h4>
               </div>
               <ul className="space-y-2">
                 <li className="flex items-start gap-2">
-                  <MapPin size={14} className="text-cyan-400 mt-0.5 shrink-0" />
-                  <span className="text-xs text-white/50">Paulínia, SP<br/>Brasil</span>
+                  <MapPin size={14} className="text-blue-600 mt-0.5 shrink-0" />
+                  <span className="text-xs text-gray-600">Paulínia, SP<br/>Brasil</span>
                 </li>
                 <li>
-                  <a href="mailto:contato@glabcursos.com.br" className="flex items-center gap-2 text-xs text-white/50 hover:text-cyan-400 transition-colors">
-                    <Mail size={14} className="text-cyan-400 shrink-0" />
+                  <a href="mailto:contato@glabcursos.com.br" className="flex items-center gap-2 text-xs text-gray-600 hover:text-blue-600 transition-colors">
+                    <Mail size={14} className="text-blue-600 shrink-0" />
                     contato@glabcursos.com.br
                   </a>
                 </li>
                 <li className="flex items-start gap-2">
-                  <Clock size={14} className="text-cyan-400 mt-0.5 shrink-0" />
-                  <span className="text-xs text-white/50">Seg a Sex: 08h às 18h<br/>Sábado: 08h às 13h</span>
+                  <Clock size={14} className="text-blue-600 mt-0.5 shrink-0" />
+                  <span className="text-xs text-gray-600">Seg a Sex: 08h às 18h<br/>Sábado: 08h às 13h</span>
                 </li>
               </ul>
             </div>
@@ -210,9 +199,8 @@ export default function Footer() {
             {/* Redes Sociais */}
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <h4 className="text-xs font-bold text-white/70 tracking-wide">SIGA-NOS</h4>
+                <h4 className="text-xs font-bold text-gray-900 tracking-wide">SIGA-NOS</h4>
               </div>
-              {/* Apenas WhatsApp e Instagram ativos — outros perfis serão adicionados conforme URLs forem fornecidas */}
               <div className="flex gap-2">
                 <a
                   href="https://wa.me/5519989398294?text=Ol%C3%A1%21+Vim+pelo+site+da+G%E2%80%A2Lab+Cursos+e+tenho+uma+d%C3%BAvida+sobre+os+guias."
@@ -237,14 +225,14 @@ export default function Footer() {
             </div>
 
             {/* Help card */}
-            <div className="rounded-lg border border-cyan-500/30 bg-cyan-500/5 p-3">
+            <div className="rounded-lg border border-blue-200 bg-blue-50 p-3">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg border border-cyan-500/30 bg-cyan-500/10 flex items-center justify-center">
-                  <Headphones size={14} className="text-cyan-400" />
+                <div className="w-8 h-8 rounded-lg border border-blue-200 bg-blue-100 flex items-center justify-center">
+                  <Headphones size={14} className="text-blue-600" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-white">Precisa de ajuda?</p>
-                  <p className="text-[10px] text-white/50">Fale com nossa equipe!</p>
+                  <p className="text-xs font-bold text-gray-900">Precisa de ajuda?</p>
+                  <p className="text-[10px] text-gray-600">Fale com nossa equipe!</p>
                 </div>
               </div>
             </div>
@@ -253,20 +241,20 @@ export default function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-cyan-500/20">
+      <div className="border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <CheckCircle size={16} className="text-cyan-400" />
-              <span className="text-xs font-medium text-white/50 tracking-widest">TECNOLOGIA. PRECISÃO. CONFIANÇA.</span>
+              <CheckCircle size={16} className="text-blue-600" />
+              <span className="text-xs font-medium text-gray-600 tracking-widest">TECNOLOGIA. PRECISÃO. CONFIANÇA.</span>
             </div>
             <div className="flex items-center gap-4">
-              <p className="text-xs text-white/30">
+              <p className="text-xs text-gray-500">
                 &copy; {new Date().getFullYear()} G•Lab Cursos. Todos os direitos reservados.
               </p>
               <button
                 onClick={reset}
-                className="text-xs text-white/30 hover:text-cyan-400 transition-colors underline underline-offset-2"
+                className="text-xs text-gray-500 hover:text-blue-600 transition-colors underline underline-offset-2"
                 type="button"
               >
                 Preferências de privacidade
@@ -275,10 +263,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-
-      {/* Bottom decorative corners */}
-      <div className="absolute bottom-0 left-6 w-8 h-8 border-l-2 border-b-2 border-cyan-500/20 rounded-bl-lg" />
-      <div className="absolute bottom-0 right-6 w-8 h-8 border-r-2 border-b-2 border-cyan-500/20 rounded-br-lg" />
     </footer>
   )
 }

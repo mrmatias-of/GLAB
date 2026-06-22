@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function TermosPage() {
   return (
-    <main className="min-h-screen py-20 px-4" style={{ backgroundColor: '#0B0B0C' }}>
+    <main className="min-h-screen py-20 px-4" style={{ backgroundColor: '#ffffff' }}>
       <div className="max-w-3xl mx-auto">
         <Link
           href="/"
