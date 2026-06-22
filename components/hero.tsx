@@ -7,10 +7,10 @@ export default function Hero() {
     <section className="relative w-full overflow-hidden py-16 md:py-24" style={{ backgroundColor: '#ffffff', minHeight: '600px' }}>
       
       <div className="max-w-7xl mx-auto px-6 py-16 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 items-start lg:items-center">
           
           {/* Left Content */}
-          <div className="flex flex-col">
+          <div className="flex flex-col justify-center">
             <p className="text-xs uppercase tracking-widest mb-4 font-semibold inline-flex items-center gap-2 px-4 py-2 rounded-full border border-blue-200" style={{ background: '#eff6ff', color: '#2563eb' }}>
               <span className="w-2 h-2 rounded-full bg-blue-500" />
               ASSISTÊNCIA TÉCNICA MOBILE
@@ -89,8 +89,8 @@ export default function Hero() {
           </div>
           
           {/* Right Visual - Tech Setup with Image */}
-          <div className="relative hidden lg:flex items-center justify-center h-[600px]">
-            <div className="relative w-full h-full rounded-xl border border-gray-200 overflow-hidden bg-gray-50">
+          <div className="relative hidden lg:flex items-center justify-center">
+            <div className="relative w-full rounded-xl border border-gray-200 overflow-hidden bg-gray-50 aspect-[3/2]">
               <Image
                 src="/hero-tech-pcb.jpg"
                 alt="Ferramentas técnicas profissionais - PCB com sonda laser"
