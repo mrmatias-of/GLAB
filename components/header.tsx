@@ -20,7 +20,7 @@ export default function Header() {
     <>
       <header
         className="sticky top-0 z-50"
-        style={{ backgroundColor: '#0B0B0C', borderBottom: '1px solid #27272a' }}
+        style={{ backgroundColor: '#ffffff', borderBottom: '1px solid #e5e7eb' }}
       >
         <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
           {/* Logo */}
@@ -41,9 +41,9 @@ export default function Header() {
                 key={n.href}
                 href={n.href}
                 className="text-xs font-semibold tracking-widest uppercase transition-colors"
-                style={{ color: '#71717a' }}
-                onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
-                onMouseLeave={e => (e.currentTarget.style.color = '#71717a')}
+                style={{ color: '#6b7280' }}
+                onMouseEnter={e => (e.currentTarget.style.color = '#2563eb')}
+                onMouseLeave={e => (e.currentTarget.style.color = '#6b7280')}
               >
                 {n.label}
               </Link>
@@ -55,8 +55,8 @@ export default function Header() {
             <button
               onClick={() => setSearchOpen(true)}
               aria-label="Buscar"
-              style={{ color: '#71717a' }}
-              className="hover:text-white transition-colors cursor-pointer"
+              style={{ color: '#6b7280' }}
+              className="hover:text-blue-600 transition-colors cursor-pointer"
             >
               <Search size={18} />
             </button>
@@ -70,7 +70,7 @@ export default function Header() {
               onClick={() => setOpen(!open)}
               aria-label={open ? 'Fechar menu' : 'Abrir menu'}
               className="md:hidden transition-colors cursor-pointer"
-              style={{ color: '#71717a' }}
+              style={{ color: '#6b7280' }}
             >
               {open ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -81,7 +81,7 @@ export default function Header() {
         {open && (
           <nav
             className="md:hidden px-6 py-4 space-y-1"
-            style={{ borderTop: '1px solid #27272a', backgroundColor: '#0B0B0C' }}
+            style={{ borderTop: '1px solid #e5e7eb', backgroundColor: '#ffffff' }}
           >
             {NAV.map((n) => (
               <Link
@@ -89,12 +89,12 @@ export default function Header() {
                 href={n.href}
                 onClick={() => setOpen(false)}
                 className="block py-2 text-sm font-semibold tracking-wider uppercase transition-colors"
-                style={{ color: '#71717a' }}
+                style={{ color: '#6b7280' }}
               >
                 {n.label}
               </Link>
             ))}
-            <div className="pt-4 border-t border-white/10">
+            <div className="pt-4 border-t border-gray-200">
               <Link href="/cursos" className="btn-primary w-full justify-center text-xs py-2.5" onClick={() => setOpen(false)}>
                 Ver Cursos
               </Link>

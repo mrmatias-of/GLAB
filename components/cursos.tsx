@@ -89,11 +89,11 @@ export default async function Cursos({ showComunidade = false }: { showComunidad
   const trilhasAtivas = Object.values(trilhas).filter(t => t.produtos.length > 0)
 
   return (
-    <section id="cursos" className="relative py-8 pt-16" style={{ backgroundColor: '#050510' }}>
+    <section id="cursos" className="relative py-8 pt-16" style={{ backgroundColor: '#ffffff' }}>
       <div className="max-w-7xl mx-auto px-6">
 
         {cursos.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-20 text-white/40 gap-3">
+          <div className="flex flex-col items-center justify-center py-20 text-gray-400 gap-3">
             <Package size={40} />
             <p className="text-sm">Nenhum curso disponível no momento.</p>
           </div>
@@ -108,7 +108,7 @@ export default async function Cursos({ showComunidade = false }: { showComunidad
                   href="https://chat.whatsapp.com/KiK2TDOf1HzGlkgH8IEL4B"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative rounded-xl overflow-hidden border border-green-500/30 bg-gradient-to-b from-green-950/30 to-[#050510] hover:border-green-400/50 transition-all duration-300 hover:scale-105 max-w-xs"
+                  className="group relative rounded-xl overflow-hidden border border-green-200 bg-green-50 hover:border-green-400 transition-all duration-300 hover:scale-105 max-w-xs"
                 >
                   {/* Image */}
                   <div className="relative aspect-[3/2] overflow-hidden bg-black flex-shrink-0">
@@ -121,24 +121,24 @@ export default async function Cursos({ showComunidade = false }: { showComunidad
                     />
 
                     {/* Number badge */}
-                    <div className="absolute top-3 left-3 w-7 h-7 rounded-md bg-green-500/20 border border-green-500/30 flex items-center justify-center">
-                      <span className="text-[11px] font-bold text-green-400">00</span>
+                    <div className="absolute top-3 left-3 w-7 h-7 rounded-md bg-green-100 border border-green-300 flex items-center justify-center">
+                      <span className="text-[11px] font-bold text-green-700">00</span>
                     </div>
                   </div>
 
                   {/* Content */}
                   <div className="p-3 flex flex-col gap-3">
                     <div>
-                      <h3 className="text-sm font-bold text-white leading-tight mb-1 group-hover:text-green-400 transition-colors">
+                      <h3 className="text-sm font-bold text-gray-900 leading-tight mb-1 group-hover:text-green-700 transition-colors">
                         Comunidade GJ
                       </h3>
-                      <p className="text-xs text-white/40">
+                      <p className="text-xs text-gray-600">
                         Conecte-se com técnicos, compartilhe experiências e evolua juntos.
                       </p>
                     </div>
 
                     {/* WhatsApp Button */}
-                    <button className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2.5 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 text-sm">
+                    <button className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 text-sm">
                       <MessageCircle size={16} />
                       Quero participar
                     </button>
@@ -151,8 +151,8 @@ export default async function Cursos({ showComunidade = false }: { showComunidad
             {trilhasAtivas.map((trilha, trilhaIndex) => (
               <div key={trilhaIndex} id={trilha.id} className="mb-16 scroll-mt-20">
                 <div className="mb-8">
-                  <h2 className="text-2xl md:text-3xl font-black text-white mb-2">{trilha.titulo}</h2>
-                  <p className="text-sm text-white/50">{trilha.descricao}</p>
+                  <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-2">{trilha.titulo}</h2>
+                  <p className="text-sm text-gray-600">{trilha.descricao}</p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
@@ -163,10 +163,10 @@ export default async function Cursos({ showComunidade = false }: { showComunidad
                       <Link
                         key={curso.id}
                         href={`/cursos/${curso.slug}`}
-                        className="group relative rounded-xl overflow-hidden border border-white/10 bg-gradient-to-b from-[#0a0a14] to-[#050510] hover:border-cyan-500/30 transition-all duration-300 hover:scale-105 h-fit"
+                        className="group relative rounded-xl overflow-hidden border border-gray-200 bg-gray-50 hover:border-blue-400 transition-all duration-300 hover:scale-105 h-fit"
                       >
                         {/* Image */}
-                        <div className="relative aspect-[3/2] bg-zinc-900/50">
+                        <div className="relative aspect-[3/2] bg-gray-100">
                           {curso.imagem ? (
                             <Image
                               src={curso.imagem}
@@ -177,28 +177,28 @@ export default async function Cursos({ showComunidade = false }: { showComunidad
                               loading="lazy"
                             />
                           ) : (
-                            <div className="w-full h-full bg-gradient-to-br from-cyan-600/20 to-blue-600/10 flex items-center justify-center">
-                              <Icon size={28} className="text-cyan-400/30" />
+                            <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center">
+                              <Icon size={28} className="text-blue-300" />
                             </div>
                           )}
-                          <div className="absolute inset-0 bg-gradient-to-t from-[#050510] via-transparent to-transparent" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-30" />
                           
                           {/* Number badge */}
-                          <div className="absolute top-3 left-3 w-7 h-7 rounded-md bg-black/60 border border-white/10 flex items-center justify-center">
+                          <div className="absolute top-3 left-3 w-7 h-7 rounded-md bg-gray-900/60 border border-gray-700 flex items-center justify-center">
                             <span className="text-[11px] font-bold text-white">{String(index + 1).padStart(2, '0')}</span>
                           </div>
 
                           {/* Badges especiais */}
                           {isCombo && (
                             <div className="absolute top-3 right-3">
-                              <span className="px-2.5 py-1 rounded text-[9px] font-bold text-white bg-gradient-to-r from-green-600 to-emerald-600">
+                              <span className="px-2.5 py-1 rounded text-[9px] font-bold text-white bg-green-600">
                                 Melhor para começar
                               </span>
                             </div>
                           )}
                           {curso.destaque && !isCombo && (
                             <div className="absolute top-3 right-3">
-                              <span className="px-2.5 py-1 rounded text-[9px] font-bold text-white bg-gradient-to-r from-violet-600 to-purple-600">
+                              <span className="px-2.5 py-1 rounded text-[9px] font-bold text-white bg-blue-600">
                                 Popular
                               </span>
                             </div>
@@ -207,22 +207,22 @@ export default async function Cursos({ showComunidade = false }: { showComunidad
 
                         {/* Content */}
                         <div className="p-3">
-                          <h3 className="text-sm font-bold text-white leading-tight mb-1 line-clamp-2 group-hover:text-cyan-400 transition-colors">
+                          <h3 className="text-sm font-bold text-gray-900 leading-tight mb-1 line-clamp-2 group-hover:text-blue-600 transition-colors">
                             {curso.titulo}
                           </h3>
-                          <p className="text-xs text-white/40 line-clamp-2 mb-2">
+                          <p className="text-xs text-gray-600 line-clamp-2 mb-2">
                             {curso.descricao}
                           </p>
                           
                           <div className="flex items-center justify-between">
                             <div className="flex items-baseline gap-1">
                               {curso.preco_original && (
-                                <span className="text-[10px] text-white/30 line-through">{curso.preco_original}</span>
+                                <span className="text-[10px] text-gray-400 line-through">{curso.preco_original}</span>
                               )}
-                              <span className="text-sm font-black text-cyan-400">{curso.preco}</span>
+                              <span className="text-sm font-black text-blue-600">{curso.preco}</span>
                             </div>
-                            <div className="w-5 h-5 rounded border border-white/10 bg-white/5 flex items-center justify-center">
-                              <Icon size={11} className="text-cyan-400" />
+                            <div className="w-5 h-5 rounded border border-gray-200 bg-gray-100 flex items-center justify-center">
+                              <Icon size={11} className="text-blue-600" />
                             </div>
                           </div>
                         </div>

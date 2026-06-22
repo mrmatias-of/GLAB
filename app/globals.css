@@ -3,15 +3,15 @@
 @theme inline {
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 
-  /* Paleta principal */
-  --color-bg:        #0B0B0C;
-  --color-surface:   #111113;
-  --color-surface-2: #18181b;
-  --color-border:    #27272a;
-  --color-text:      #ffffff;
-  --color-muted:     #71717a;
-  --color-accent:    #4f46e5;   /* Indigo — cor de destaque sólida */
-  --color-accent-2:  #7c3aed;   /* Violeta — segundo tom do gradiente */
+  /* Paleta principal - limpa e profissional */
+  --color-bg:        #ffffff;
+  --color-surface:   #f9f9fb;
+  --color-surface-2: #f3f4f6;
+  --color-border:    #e5e7eb;
+  --color-text:      #1f2937;
+  --color-muted:     #6b7280;
+  --color-accent:    #2563eb;   /* Azul profissional */
+  --color-accent-2:  #1e40af;   /* Azul mais escuro */
 }
 
 @layer base {
@@ -22,8 +22,8 @@
   }
 
   html {
-    background-color: #0B0B0C;
-    color: #ffffff;
+    background-color: #ffffff;
+    color: #1f2937;
     scroll-behavior: smooth;
   }
 
@@ -31,64 +31,71 @@
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #0B0B0C;
-    color: #ffffff;
+    background-color: #ffffff;
+    color: #1f2937;
   }
 
-  /* Scrollbar discreta */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: #0B0B0C; }
-  ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 9999px; }
+  /* Scrollbar padrão e leve */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #f9f9fb; }
+  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
 }
 
-/* Botão CTA principal — gradiente azul→roxo sem glow */
+/* Botão CTA principal — azul sólido profissional */
 @layer components {
   .btn-primary {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 2rem;
-    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    background-color: #2563eb;
     color: #fff;
     font-size: 0.875rem;
     font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    letter-spacing: 0.05em;
     border-radius: 0.5rem;
-    transition: opacity 0.2s;
+    transition: background-color 0.2s, box-shadow 0.2s;
+    border: none;
   }
-  .btn-primary:hover { opacity: 0.88; }
+  .btn-primary:hover { 
+    background-color: #1d4ed8;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
 
   .btn-outline {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 2rem;
-    border: 1px solid #27272a;
-    color: #a1a1aa;
+    border: 1px solid #e5e7eb;
+    color: #6b7280;
     font-size: 0.875rem;
     font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    letter-spacing: 0.05em;
     border-radius: 0.5rem;
-    transition: border-color 0.2s, color 0.2s;
+    transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+    background-color: transparent;
   }
-  .btn-outline:hover { border-color: #52525b; color: #fff; }
+  .btn-outline:hover { 
+    border-color: #2563eb;
+    color: #2563eb;
+    background-color: #eff6ff;
+  }
 
   /* Card padrão */
   .card {
-    background-color: #111113;
-    border: 1px solid #27272a;
-    border-radius: 1rem;
+    background-color: #f9f9fb;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
   }
 
   /* Eyebrow — label acima dos títulos */
   .eyebrow {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 700;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #71717a;
+    color: #6b7280;
   }
 
   /* Título de seção padrão */
@@ -96,8 +103,7 @@
     font-size: clamp(1.75rem, 4vw, 3rem);
     font-weight: 800;
     letter-spacing: -0.02em;
-    text-transform: uppercase;
-    color: #ffffff;
+    color: #1f2937;
     line-height: 1.1;
   }
 
