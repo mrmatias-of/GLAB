@@ -90,7 +90,7 @@ export default function Hero() {
           
           {/* Right Visual - Tech Setup with Image */}
           <div className="relative hidden lg:flex items-center justify-center">
-            <div className="relative w-full rounded-xl border border-gray-200 overflow-hidden bg-gray-50 aspect-[3/2]">
+            <div className="relative w-full rounded-xl border border-gray-200 overflow-hidden bg-gray-50 aspect-[3/2] -mt-20">
               <Image
                 src="/hero-tech-pcb.jpg"
                 alt="Ferramentas técnicas profissionais - PCB com sonda laser"
