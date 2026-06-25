@@ -1,92 +1,20 @@
-'use client'
+export const dynamic = 'force-dynamic'
 
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-
-interface Ticket {
-  id: number
-  titulo: string
-  status: string
-  prioridade: string
-  criado_em: string
-  usuario_id: string
-  responsavel_id?: string
-}
-
-const statusBadgeColors = {
-  aberto: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-  em_andamento: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-  resolvido: 'bg-green-500/20 text-green-400 border-green-500/30',
-  fechado: 'bg-gray-500/20 text-gray-400 border-gray-500/30',
-}
-
-const prioridadeBadgeColors = {
-  baixa: 'bg-blue-500/10 text-blue-300',
-  media: 'bg-cyan-500/10 text-cyan-300',
-  alta: 'bg-orange-500/10 text-orange-300',
-  urgente: 'bg-red-500/10 text-red-300',
-}
 
 export default function SupportAdminDashboard() {
-  const router = useRouter()
-  const [tickets, setTickets] = useState<Ticket[]>([])
-  const [filteredTickets, setFilteredTickets] = useState<Ticket[]>([])
-  const [loading, setLoading] = useState(true)
-  const [filter, setFilter] = useState<string>('todos')
-  const [user, setUser] = useState<any>(null)
-  const [stats, setStats] = useState({
+  const tickets: any[] = []
+  const filteredTickets: any[] = []
+  const loading = false
+  const filter = 'todos'
+  const stats = {
     total: 0,
     aberto: 0,
     em_andamento: 0,
     resolvido: 0,
-  })
+  }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) {
-          router.push('/login')
-          return
-        }
-        setUser(user)
 
-        const isAdmin = user.user_metadata?.is_admin === true
-
-        // Buscar tickets (admin vê todos, vendedor vê seus atribuídos)
-        const url = isAdmin ? '/api/support/tickets?type=all' : '/api/support/tickets?type=assigned'
-        const response = await fetch(url)
-        if (!response.ok) throw new Error('Erro ao carregar tickets')
-
-        const data = await response.json()
-        setTickets(data)
-
-        // Calcular stats
-        setStats({
-          total: data.length,
-          aberto: data.filter((t: Ticket) => t.status === 'aberto').length,
-          em_andamento: data.filter((t: Ticket) => t.status === 'em_andamento').length,
-          resolvido: data.filter((t: Ticket) => t.status === 'resolvido').length,
-        })
-      } catch (error) {
-        console.error('Erro ao buscar tickets:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [supabase, router])
-
-  // Aplicar filtro
-  useEffect(() => {
-    if (filter === 'todos') {
-      setFilteredTickets(tickets)
-    } else {
-      setFilteredTickets(tickets.filter(t => t.status === filter))
-    }
-  }, [tickets, filter])
 
   return (
     <div className="space-y-6">
