@@ -16,9 +16,12 @@ export default function AdminSidebar({ userEmail }: { userEmail: string }) {
   const router = useRouter()
 
   async function handleLogout() {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    router.push("/")
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' })
+    } catch (err) {
+      console.error('Erro ao fazer logout:', err)
+    }
+    router.push("/login")
     router.refresh()
   }
 

@@ -4,7 +4,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Menu, X, Search } from 'lucide-react'
 import { useState } from 'react'
-import SearchModal from './search-modal'
 
 const NAV = [
   { label: 'Home',   href: '/' },
@@ -52,14 +51,6 @@ export default function Header() {
 
           {/* Ações direita */}
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => setSearchOpen(true)}
-              aria-label="Buscar"
-              style={{ color: '#6b7280' }}
-              className="hover:text-blue-600 transition-colors cursor-pointer"
-            >
-              <Search size={18} />
-            </button>
             <Link
               href="/cursos"
               className="hidden md:inline-flex btn-primary text-xs py-2 px-5"
@@ -102,8 +93,6 @@ export default function Header() {
           </nav>
         )}
       </header>
-
-      <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   )
 }
