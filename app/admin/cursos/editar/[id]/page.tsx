@@ -1,10 +1,14 @@
-import { createClient } from "@/lib/supabase/server"
 import { notFound } from "next/navigation"
+import { prisma } from "@/lib/db"
 import CursoForm from "@/components/admin/curso-form"
 
 export default async function EditarCursoPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const { data: curso } = await supabase.from("cursos").select("*").eq("id", id).single()
+  
+  // Buscar curso do MySQL via Prisma
+  const curso = await prisma.cursos.findUnique({
+    where: { id: parseInt(id) },
+  })
 
   if (!curso) notFound()
 
