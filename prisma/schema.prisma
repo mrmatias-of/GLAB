@@ -1,11 +1,11 @@
-// Prisma schema for MySQL Locaweb
+// Prisma schema for PostgreSQL (Neon)
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
