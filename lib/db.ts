@@ -1,28 +1,31 @@
-import { Pool } from 'pg'
+import { PrismaClient } from '@prisma/client'
 
-export const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-})
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
+
+export const prisma =
+  globalForPrisma.prisma ||
+  new PrismaClient({
+    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+  })
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
 // Query functions for courses
 export async function getCursos() {
-  const result = await pool.query(
-    'SELECT * FROM cursos ORDER BY trilha_id, posicao'
-  )
-  return result.rows
+  return prisma.curso.findMany({
+    orderBy: [{ trilha_id: 'asc' }, { posicao: 'asc' }],
+  })
 }
 
 export async function getTrilhas() {
-  const result = await pool.query(
-    'SELECT * FROM trilhas ORDER BY posicao'
-  )
-  return result.rows
+  return prisma.trilha.findMany({
+    orderBy: { nome: 'asc' },
+  })
 }
 
 export async function getCursosByTrilha(trilhaId: number) {
-  const result = await pool.query(
-    'SELECT * FROM cursos WHERE trilha_id = $1 ORDER BY posicao',
-    [trilhaId]
-  )
-  return result.rows
+  return prisma.curso.findMany({
+    where: { trilha_id: trilhaId },
+    orderBy: { posicao: 'asc' },
+  })
 }

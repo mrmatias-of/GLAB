@@ -12,17 +12,17 @@ export async function middleware(request: NextRequest) {
   const response = NextResponse.next()
 
   // Check if route is public
-  const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route)) && !adminRoutes.some(route => pathname.startsWith(route))
+  const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route))
   const isAdminRoute = adminRoutes.some(route => pathname.startsWith(route))
   const isSupportAdminRoute = supportAdminRoutes.some(route => pathname.startsWith(route))
   const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route))
 
-  if (isPublicRoute) {
-    return response
-  }
-
   // Get JWT token from cookie
   const token = request.cookies.get('auth_token')?.value
+
+  if (isPublicRoute && !isAdminRoute && !isProtectedRoute) {
+    return response
+  }
 
   if (!token) {
     if (isAdminRoute || isProtectedRoute) {
@@ -35,6 +35,7 @@ export async function middleware(request: NextRequest) {
   const userId = await verifySession(token)
 
   if (!userId) {
+    // Token is invalid/expired
     const res = NextResponse.redirect(new URL('/login?next=' + pathname, request.url))
     res.cookies.delete('auth_token')
     return res
@@ -56,12 +57,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
-  // Check support admin routes
+  // Check support admin routes (admin or vendedor)
   if (isSupportAdminRoute && !user.is_admin && !user.is_vendedor) {
     return NextResponse.redirect(new URL('/suporte/meus-tickets', request.url))
   }
 
-  // Set user info in response headers
+  // Set user info in response headers for server components
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set('x-user-id', userId)
   requestHeaders.set('x-user-email', user.email)
@@ -77,6 +78,12 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
 }

@@ -1,0 +1,141 @@
+// Prisma schema for MySQL Locaweb
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Usuários
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String   // bcrypt hash
+  name      String?
+  is_admin  Boolean  @default(false)
+  is_vendedor Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tickets       SupportTicket[]
+  messages      SupportMessage[]
+  attachments   SupportAttachment[]
+}
+
+// Cursos
+model Curso {
+  id           Int      @id @default(autoincrement())
+  slug         String   @unique
+  titulo       String
+  descricao    String   @db.Text
+  subtitulo    String?
+  tag          String?
+  preco        String?
+  preco_original String?
+  imagem       String?
+  cta          String?
+  cta_href     String?
+  modulos      Json?    @db.Json
+  trilha_id    Int?
+  posicao      Int?     @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  trilha Trilha? @relation(fields: [trilha_id], references: [id])
+
+  @@index([trilha_id])
+}
+
+// Trilhas
+model Trilha {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  descricao String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cursos Curso[]
+}
+
+// Categorias de Suporte
+model SupportCategory {
+  id        Int       @id @default(autoincrement())
+  nome      String    @unique
+  descricao String?   @db.Text
+  icone     String?
+  ordem     Int       @default(0)
+  createdAt DateTime  @default(now())
+
+  tickets SupportTicket[]
+}
+
+// Tickets de Suporte
+model SupportTicket {
+  id           Int       @id @default(autoincrement())
+  titulo       String
+  descricao    String    @db.Text
+  categoria_id Int
+  status       String    @default("aberto")
+  prioridade   String    @default("media")
+  usuario_id   String
+  responsavel_id String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  fechado_em   DateTime?
+
+  categoria    SupportCategory @relation(fields: [categoria_id], references: [id])
+  usuario      User            @relation(fields: [usuario_id], references: [id])
+  mensagens    SupportMessage[]
+  attachments  SupportAttachment[]
+
+  @@index([categoria_id])
+  @@index([usuario_id])
+  @@index([responsavel_id])
+  @@index([status])
+}
+
+// Mensagens de Suporte
+model SupportMessage {
+  id        Int       @id @default(autoincrement())
+  ticket_id Int
+  autor_id  String
+  mensagem  String    @db.Text
+  tipo      String    @default("texto")
+  createdAt DateTime  @default(now())
+
+  ticket SupportTicket   @relation(fields: [ticket_id], references: [id], onDelete: Cascade)
+  autor  User            @relation(fields: [autor_id], references: [id])
+
+  @@index([ticket_id])
+  @@index([autor_id])
+}
+
+// Anexos de Suporte
+model SupportAttachment {
+  id              Int       @id @default(autoincrement())
+  ticket_id       Int
+  message_id      Int?
+  arquivo_url     String
+  tipo_arquivo    String?
+  tamanho         Int?
+  enviado_por_id  String
+  createdAt       DateTime  @default(now())
+
+  ticket SupportTicket @relation(fields: [ticket_id], references: [id], onDelete: Cascade)
+  enviado_por User     @relation(fields: [enviado_por_id], references: [id])
+
+  @@index([ticket_id])
+  @@index([message_id])
+}
+
+// Sessions
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}

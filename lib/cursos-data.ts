@@ -1,5 +1,5 @@
 import { Smartphone, Monitor, Apple, Layers, type LucideIcon } from "lucide-react"
-import { pool } from "@/lib/db"
+import { prisma } from "@/lib/db"
 
 export type Modulo = {
   titulo: string
