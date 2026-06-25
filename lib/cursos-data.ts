@@ -57,16 +57,16 @@ export async function getCursos(): Promise<Curso[]> {
   }
 
   try {
-    const result = await pool.query(
-      'SELECT * FROM cursos ORDER BY posicao'
-    )
+    const cursos = await prisma.curso.findMany({
+      orderBy: { posicao: 'asc' },
+    })
     
-    if (!result.rows || result.rows.length === 0) {
+    if (!cursos || cursos.length === 0) {
       console.warn("[v0] Nenhum curso encontrado no banco de dados")
       return []
     }
 
-    cursosCache = result.rows.map((curso: any) => ({
+    cursosCache = cursos.map((curso) => ({
       slug: curso.slug,
       tag: curso.tag || "Geral",
       titulo: curso.titulo,
@@ -75,10 +75,10 @@ export async function getCursos(): Promise<Curso[]> {
       descricaoLonga: curso.descricao || "",
       imagem: curso.imagem || undefined,
       icon: getIconByTag(curso.tag || "Geral"),
-      destaque: curso.destaque || false,
-      preco: curso.preco,
+      destaque: false,
+      preco: curso.preco || "",
       precoOriginal: curso.preco_original || undefined,
-      modulos: Array.isArray(curso.modulos) ? curso.modulos : [],
+      modulos: curso.modulos ? (Array.isArray(curso.modulos) ? curso.modulos : []) : [],
       aprendizados: [],
       cta: curso.cta || "Comprar Agora",
       ctaHref: curso.cta_href || "",
@@ -98,7 +98,7 @@ export async function getCursos(): Promise<Curso[]> {
     cursoCacheTime = now
     return cursosCache
   } catch (err) {
-    console.error("[v0] Erro ao conectar ao Neon:", err)
+    console.error("[v0] Erro ao buscar cursos:", err)
     return []
   }
 }
@@ -111,16 +111,18 @@ export async function getCursoBySlug(slug: string): Promise<Curso | undefined> {
 // Função para geração estática (sem cookies)
 export async function getCursoSlugs(): Promise<string[]> {
   try {
-    const result = await pool.query('SELECT slug FROM cursos')
+    const cursos = await prisma.curso.findMany({
+      select: { slug: true },
+    })
     
-    if (!result.rows || result.rows.length === 0) {
+    if (!cursos || cursos.length === 0) {
       console.warn("[v0] Nenhum slug encontrado no banco de dados")
       return []
     }
     
-    return result.rows.map((c: { slug: string }) => c.slug)
+    return cursos.map((c) => c.slug)
   } catch (err) {
-    console.error("[v0] Erro ao conectar ao Neon para slugs:", err)
+    console.error("[v0] Erro ao buscar slugs dos cursos:", err)
     return []
   }
 }

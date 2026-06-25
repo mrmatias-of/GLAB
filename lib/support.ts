@@ -1,4 +1,4 @@
-import { pool } from './db'
+import { prisma } from './db'
 
 export interface SupportCategory {
   id: number
@@ -43,18 +43,15 @@ export interface SupportAttachment {
 
 // CATEGORIAS
 export async function getCategories(): Promise<SupportCategory[]> {
-  const result = await pool.query(
-    'SELECT * FROM support_categories ORDER BY ordem'
-  )
-  return result.rows
+  return prisma.supportCategory.findMany({
+    orderBy: { ordem: 'asc' },
+  })
 }
 
 export async function getCategoryById(id: number): Promise<SupportCategory | null> {
-  const result = await pool.query(
-    'SELECT * FROM support_categories WHERE id = $1',
-    [id]
-  )
-  return result.rows[0] || null
+  return prisma.supportCategory.findUnique({
+    where: { id },
+  })
 }
 
 // TICKETS
@@ -65,44 +62,47 @@ export async function createTicket(
   usuario_id: string,
   prioridade: 'baixa' | 'media' | 'alta' | 'urgente' = 'media'
 ): Promise<SupportTicket> {
-  const result = await pool.query(
-    `INSERT INTO support_tickets (titulo, descricao, categoria_id, usuario_id, prioridade, status)
-     VALUES ($1, $2, $3, $4, $5, 'aberto')
-     RETURNING *`,
-    [titulo, descricao, categoria_id, usuario_id, prioridade]
-  )
-  return result.rows[0]
+  const ticket = await prisma.supportTicket.create({
+    data: {
+      titulo,
+      descricao,
+      categoria_id,
+      usuario_id,
+      prioridade,
+      status: 'aberto',
+    },
+  })
+  return ticket as SupportTicket
 }
 
 export async function getTicketsByUser(usuario_id: string): Promise<SupportTicket[]> {
-  const result = await pool.query(
-    'SELECT * FROM support_tickets WHERE usuario_id = $1 ORDER BY criado_em DESC',
-    [usuario_id]
-  )
-  return result.rows
+  const tickets = await prisma.supportTicket.findMany({
+    where: { usuario_id },
+    orderBy: { createdAt: 'desc' },
+  })
+  return tickets as SupportTicket[]
 }
 
 export async function getTicketsByResponsavel(responsavel_id: string): Promise<SupportTicket[]> {
-  const result = await pool.query(
-    'SELECT * FROM support_tickets WHERE responsavel_id = $1 ORDER BY criado_em DESC',
-    [responsavel_id]
-  )
-  return result.rows
+  const tickets = await prisma.supportTicket.findMany({
+    where: { responsavel_id },
+    orderBy: { createdAt: 'desc' },
+  })
+  return tickets as SupportTicket[]
 }
 
 export async function getAllTickets(): Promise<SupportTicket[]> {
-  const result = await pool.query(
-    'SELECT * FROM support_tickets ORDER BY criado_em DESC'
-  )
-  return result.rows
+  const tickets = await prisma.supportTicket.findMany({
+    orderBy: { createdAt: 'desc' },
+  })
+  return tickets as SupportTicket[]
 }
 
 export async function getTicketById(id: number): Promise<SupportTicket | null> {
-  const result = await pool.query(
-    'SELECT * FROM support_tickets WHERE id = $1',
-    [id]
-  )
-  return result.rows[0] || null
+  const ticket = await prisma.supportTicket.findUnique({
+    where: { id },
+  })
+  return ticket as SupportTicket | null
 }
 
 export async function updateTicket(
@@ -110,29 +110,22 @@ export async function updateTicket(
   updates: Partial<SupportTicket>
 ): Promise<SupportTicket | null> {
   const allowedFields = ['status', 'prioridade', 'responsavel_id']
-  const fields: string[] = []
-  const values: any[] = []
-  let paramCount = 1
+  const updateData: any = {}
 
   for (const [key, value] of Object.entries(updates)) {
     if (allowedFields.includes(key) && value !== undefined) {
-      fields.push(`${key} = $${paramCount}`)
-      values.push(value)
-      paramCount++
+      updateData[key] = value
     }
   }
 
-  if (fields.length === 0) return null
+  if (Object.keys(updateData).length === 0) return null
 
-  fields.push(`atualizado_em = CURRENT_TIMESTAMP`)
-  values.push(id)
+  const ticket = await prisma.supportTicket.update({
+    where: { id },
+    data: updateData,
+  })
 
-  const result = await pool.query(
-    `UPDATE support_tickets SET ${fields.join(', ')} WHERE id = $${paramCount} RETURNING *`,
-    values
-  )
-
-  return result.rows[0] || null
+  return ticket as SupportTicket
 }
 
 // MESSAGES
@@ -141,21 +134,23 @@ export async function createMessage(
   autor_id: string,
   mensagem: string
 ): Promise<SupportMessage> {
-  const result = await pool.query(
-    `INSERT INTO support_messages (ticket_id, autor_id, mensagem, tipo)
-     VALUES ($1, $2, $3, 'texto')
-     RETURNING *`,
-    [ticket_id, autor_id, mensagem]
-  )
-  return result.rows[0]
+  const message = await prisma.supportMessage.create({
+    data: {
+      ticket_id,
+      autor_id,
+      mensagem,
+      tipo: 'texto',
+    },
+  })
+  return message as SupportMessage
 }
 
 export async function getMessagesByTicket(ticket_id: number): Promise<SupportMessage[]> {
-  const result = await pool.query(
-    'SELECT * FROM support_messages WHERE ticket_id = $1 ORDER BY criado_em ASC',
-    [ticket_id]
-  )
-  return result.rows
+  const messages = await prisma.supportMessage.findMany({
+    where: { ticket_id },
+    orderBy: { createdAt: 'asc' },
+  })
+  return messages as SupportMessage[]
 }
 
 // ATTACHMENTS
@@ -167,19 +162,23 @@ export async function addAttachment(
   enviado_por_id: string,
   message_id?: number
 ): Promise<SupportAttachment> {
-  const result = await pool.query(
-    `INSERT INTO support_attachments (ticket_id, message_id, arquivo_url, tipo_arquivo, tamanho, enviado_por_id)
-     VALUES ($1, $2, $3, $4, $5, $6)
-     RETURNING *`,
-    [ticket_id, message_id || null, arquivo_url, tipo_arquivo, tamanho, enviado_por_id]
-  )
-  return result.rows[0]
+  const attachment = await prisma.supportAttachment.create({
+    data: {
+      ticket_id,
+      message_id,
+      arquivo_url,
+      tipo_arquivo,
+      tamanho,
+      enviado_por_id,
+    },
+  })
+  return attachment as SupportAttachment
 }
 
 export async function getAttachmentsByTicket(ticket_id: number): Promise<SupportAttachment[]> {
-  const result = await pool.query(
-    'SELECT * FROM support_attachments WHERE ticket_id = $1 ORDER BY criado_em DESC',
-    [ticket_id]
-  )
-  return result.rows
+  const attachments = await prisma.supportAttachment.findMany({
+    where: { ticket_id },
+    orderBy: { createdAt: 'desc' },
+  })
+  return attachments as SupportAttachment[]
 }
