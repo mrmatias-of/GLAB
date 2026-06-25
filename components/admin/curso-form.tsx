@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 import { Plus, Trash2, Save, ArrowLeft } from "lucide-react"
 import SimpleImageUpload from "@/components/admin/simple-image-upload"

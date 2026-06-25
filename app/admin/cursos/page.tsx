@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { createClient } from "@/lib/supabase/client"
 import Link from "next/link"
 import { Plus, Pencil, ExternalLink, Trash2, Copy, ChevronUp, ChevronDown, MoreHorizontal } from "lucide-react"
 
@@ -29,62 +28,54 @@ export default function AdminCursosPage() {
   }, [])
 
   async function loadCursos() {
-    const supabase = createClient()
-    const { data } = await supabase.from("cursos").select("*").order("ordem")
-    setCursos(data ?? [])
-    setLoading(false)
+    try {
+      const response = await fetch('/api/admin/cursos')
+      const data = await response.json()
+      setCursos(data ?? [])
+    } catch (error) {
+      console.error('[v0] Erro ao carregar cursos:', error)
+      alert('Erro ao carregar cursos')
+    } finally {
+      setLoading(false)
+    }
   }
 
   async function handleDelete(id: string, titulo: string) {
     if (!confirm(`Tem certeza que deseja excluir "${titulo}"? Esta ação não pode ser desfeita.`)) return
     
     setActionLoading(id)
-    const supabase = createClient()
-    const { error } = await supabase.from("cursos").delete().eq("id", id)
-    
-    if (error) {
-      alert("Erro ao excluir: " + error.message)
-    } else {
-      setCursos(cursos.filter(c => c.id !== id))
+    try {
+      const response = await fetch(`/api/admin/cursos/${id}`, { method: 'DELETE' })
+      if (response.ok) {
+        setCursos(cursos.filter(c => c.id !== id))
+      } else {
+        alert('Erro ao excluir curso')
+      }
+    } catch (error) {
+      console.error('[v0] Erro ao excluir:', error)
+      alert('Erro ao excluir curso')
+    } finally {
+      setActionLoading(null)
     }
-    setActionLoading(null)
     setMenuOpen(null)
   }
 
   async function handleDuplicate(curso: Curso) {
     setActionLoading(curso.id)
-    const supabase = createClient()
-    
-    // Buscar curso completo
-    const { data: cursoCompleto } = await supabase
-      .from("cursos")
-      .select("*")
-      .eq("id", curso.id)
-      .single()
-    
-    if (!cursoCompleto) {
-      alert("Erro ao duplicar curso")
+    try {
+      const response = await fetch(`/api/admin/cursos/${curso.id}/duplicate`, { method: 'POST' })
+      if (response.ok) {
+        loadCursos()
+      } else {
+        alert('Erro ao duplicar curso')
+      }
+    } catch (error) {
+      console.error('[v0] Erro ao duplicar:', error)
+      alert('Erro ao duplicar curso')
+    } finally {
       setActionLoading(null)
-      return
+      setMenuOpen(null)
     }
-
-    // Criar cópia
-    const { id, created_at, updated_at, ...cursoData } = cursoCompleto
-    const { error } = await supabase.from("cursos").insert({
-      ...cursoData,
-      titulo: `${cursoData.titulo} (Cópia)`,
-      slug: `${cursoData.slug}-copia-${Date.now()}`,
-      ativo: false,
-      ordem: (cursos.length + 1) * 10
-    })
-
-    if (error) {
-      alert("Erro ao duplicar: " + error.message)
-    } else {
-      loadCursos()
-    }
-    setActionLoading(null)
-    setMenuOpen(null)
   }
 
   async function handleReorder(id: string, direction: "up" | "down") {
@@ -98,24 +89,36 @@ export default function AdminCursosPage() {
     const [removed] = newCursos.splice(index, 1)
     newCursos.splice(newIndex, 0, removed)
 
-    // Atualizar ordem no banco
-    const supabase = createClient()
-    for (let i = 0; i < newCursos.length; i++) {
-      await supabase.from("cursos").update({ ordem: (i + 1) * 10 }).eq("id", newCursos[i].id)
+    try {
+      const response = await fetch('/api/admin/cursos/reorder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newCursos.map((c, i) => ({ id: c.id, ordem: (i + 1) * 10 })))
+      })
+      if (response.ok) {
+        setCursos(newCursos)
+      }
+    } catch (error) {
+      console.error('[v0] Erro ao reordenar:', error)
     }
-
-    setCursos(newCursos)
   }
 
   async function handleToggleAtivo(id: string, ativo: boolean) {
     setActionLoading(id)
-    const supabase = createClient()
-    const { error } = await supabase.from("cursos").update({ ativo: !ativo }).eq("id", id)
-    
-    if (!error) {
-      setCursos(cursos.map(c => c.id === id ? { ...c, ativo: !ativo } : c))
+    try {
+      const response = await fetch(`/api/admin/cursos/${id}/toggle`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ativo: !ativo })
+      })
+      if (response.ok) {
+        setCursos(cursos.map(c => c.id === id ? { ...c, ativo: !ativo } : c))
+      }
+    } catch (error) {
+      console.error('[v0] Erro ao atualizar:', error)
+    } finally {
+      setActionLoading(null)
     }
-    setActionLoading(null)
   }
 
   if (loading) {

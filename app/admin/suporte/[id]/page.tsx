@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
 
 interface Ticket {
   id: number
@@ -26,7 +25,6 @@ export default function AdminTicketDetailPage() {
   const router = useRouter()
   const params = useParams()
   const ticketId = params?.id as string
-  const supabase = createClient()
 
   const [ticket, setTicket] = useState<Ticket | null>(null)
   const [messages, setMessages] = useState<Message[]>([])

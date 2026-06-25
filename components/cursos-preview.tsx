@@ -1,7 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight } from "lucide-react"
-import { createClient } from "@/lib/supabase/server"
 
 export default async function CursosPreview() {
   const supabase = await createClient()

@@ -13,7 +13,6 @@ export const metadata = {
 
 // Segunda camada de proteção: verifica role diretamente no servidor
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
   // Bloqueia no servidor caso o middleware seja bypassado

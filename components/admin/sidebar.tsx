@@ -3,7 +3,6 @@
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
-import { createClient } from "@/lib/supabase/client"
 import { BookOpen, LogOut, Home, LayoutDashboard, Receipt, Plus } from "lucide-react"
 
 const navItems = [

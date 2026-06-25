@@ -8,7 +8,6 @@ export const metadata = {
 }
 
 export default async function SupportAdminLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
   // Apenas admins e vendedores podem acessar

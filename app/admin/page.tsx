@@ -3,7 +3,6 @@ import { BookOpen, Star, TrendingUp, Link as LinkIcon, Zap, Users, Eye, Shopping
 import Link from "next/link"
 
 export default async function AdminPage() {
-  const supabase = await createClient()
   const { data: cursos } = await supabase.from("cursos").select("*").order("ordem")
 
   const total = cursos?.length ?? 0

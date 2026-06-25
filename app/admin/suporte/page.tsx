@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -31,7 +30,6 @@ const prioridadeBadgeColors = {
 
 export default function SupportAdminDashboard() {
   const router = useRouter()
-  const supabase = createClient()
   const [tickets, setTickets] = useState<Ticket[]>([])
   const [filteredTickets, setFilteredTickets] = useState<Ticket[]>([])
   const [loading, setLoading] = useState(true)

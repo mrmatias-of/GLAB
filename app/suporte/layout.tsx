@@ -1,5 +1,3 @@
-import { createClient } from "@/lib/supabase/server"
-import { redirect } from "next/navigation"
 import Link from "next/link"
 
 export const metadata = {
@@ -7,14 +5,8 @@ export const metadata = {
   description: "Central de suporte para gerenciar seus tickets",
 }
 
-export default async function SupportLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-
-  // Apenas usuários logados podem acessar
-  if (!user) {
-    redirect('/login?next=/suporte/meus-tickets')
-  }
+export default function SupportLayout({ children }: { children: React.ReactNode }) {
+  // Middleware protege a rota com JWT - não precisa verificar aqui
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#050510' }}>

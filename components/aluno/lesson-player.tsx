@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useCallback, useMemo } from "react"
-import { createClient } from "@/lib/supabase/client"
 import { CheckCircle, FileText, Download, Play, Pause } from "lucide-react"
 import DOMPurify from "dompurify"
 

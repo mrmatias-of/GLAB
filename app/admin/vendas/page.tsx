@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { createClient } from "@/lib/supabase/client"
 import { Receipt, Search, Calendar, CreditCard, User, BookOpen, CheckCircle, XCircle, Clock } from "lucide-react"
 
 type Purchase = {
@@ -36,7 +35,6 @@ export default function VendasPage() {
   }, [])
 
   async function loadData() {
-    const supabase = createClient()
     
     const { data } = await supabase
       .from("purchases")

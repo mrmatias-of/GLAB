@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search, X, ArrowRight, BookOpen, FileText } from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
 
 type SearchResult = {
   type: 'curso' | 'pagina'

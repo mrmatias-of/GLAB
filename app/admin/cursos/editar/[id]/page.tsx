@@ -4,7 +4,6 @@ import CursoForm from "@/components/admin/curso-form"
 
 export default async function EditarCursoPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const supabase = await createClient()
   const { data: curso } = await supabase.from("cursos").select("*").eq("id", id).single()
 
   if (!curso) notFound()
