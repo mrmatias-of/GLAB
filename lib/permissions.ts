@@ -1,17 +1,15 @@
-import { User } from '@supabase/supabase-js'
+import { User } from '@prisma/client'
 
 export type UserRole = 'admin' | 'vendedor' | 'usuario'
 
 /**
- * Extrai o role do usuário baseado nos metadados
+ * Extrai o role do usuário baseado nos atributos
  */
 export function getUserRole(user: User | null): UserRole {
   if (!user) return 'usuario'
   
-  const metadata = user.user_metadata || {}
-  
-  if (metadata.is_admin === true) return 'admin'
-  if (metadata.is_vendedor === true) return 'vendedor'
+  if (user.is_admin === true) return 'admin'
+  if (user.is_vendedor === true) return 'vendedor'
   
   return 'usuario'
 }
@@ -20,14 +18,14 @@ export function getUserRole(user: User | null): UserRole {
  * Verifica se o usuário é admin
  */
 export function isAdmin(user: User | null): boolean {
-  return user?.user_metadata?.is_admin === true
+  return user?.is_admin === true
 }
 
 /**
  * Verifica se o usuário é vendedor
  */
 export function isVendedor(user: User | null): boolean {
-  return user?.user_metadata?.is_vendedor === true
+  return user?.is_vendedor === true
 }
 
 /**

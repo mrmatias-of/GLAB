@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase/client'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -19,47 +18,36 @@ export default function LoginPage() {
     setLoading(true)
 
     try {
-      const supabase = createClient()
       console.log('[v0] Tentando login com:', email)
       
-      const { error: signInError, data } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
       })
 
-      console.log('[v0] Resposta do Supabase:', { error: signInError, hasData: !!data })
+      const data = await response.json()
+      console.log('[v0] Resposta da API:', { status: response.status, hasToken: !!data.token })
 
-      if (signInError) {
-        console.log('[v0] Erro de autenticação:', signInError)
-        setError(signInError.message === 'Invalid login credentials' 
-          ? 'Email ou senha incorretos' 
-          : signInError.message)
+      if (!response.ok) {
+        console.log('[v0] Erro de autenticação:', data.error)
+        setError(data.error || 'Erro ao fazer login. Tente novamente.')
         setLoading(false)
         return
       }
 
-      // Obter dados do usuário para redirecionar corretamente
-      const { data: { user }, error: userError } = await supabase.auth.getUser()
+      // Token foi salvo em cookie pelo servidor
+      // Obter dados do usuário
+      const meResponse = await fetch('/api/auth/me')
+      const user = await meResponse.json()
 
-      console.log('[v0] Dados do usuário:', { user: user?.email, userError, metadata: user?.user_metadata })
-
-      if (userError || !user) {
-        console.log('[v0] Erro ao obter usuário:', userError)
-        setError('Erro ao obter dados do usuário')
-        setLoading(false)
-        return
-      }
+      console.log('[v0] Dados do usuário:', { email: user.email, isAdmin: user.is_admin, isVendedor: user.is_vendedor })
 
       // Redirecionar baseado no role do usuário
-      const isAdmin = user.user_metadata?.is_admin === true
-      const isVendedor = user.user_metadata?.is_vendedor === true
-
-      console.log('[v0] Roles do usuário:', { isAdmin, isVendedor })
-
-      if (isAdmin) {
+      if (user.is_admin) {
         console.log('[v0] Redirecionando para /admin')
         router.push('/admin')
-      } else if (isVendedor) {
+      } else if (user.is_vendedor) {
         console.log('[v0] Redirecionando para /admin/suporte')
         router.push('/admin/suporte')
       } else {
@@ -68,7 +56,8 @@ export default function LoginPage() {
       }
 
       router.refresh()
-    } catch {
+    } catch (err) {
+      console.error('[v0] Erro:', err)
       setError('Erro ao fazer login. Tente novamente.')
       setLoading(false)
     }

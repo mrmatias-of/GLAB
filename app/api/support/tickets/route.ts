@@ -1,12 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { prisma } from '@/lib/db'
 import { createTicket, getTicketsByUser, getTicketsByResponsavel, getAllTickets } from '@/lib/support'
 import { isVendedor, isAdmin } from '@/lib/permissions'
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const userId = request.headers.get('x-user-id')
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    })
 
     if (!user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
@@ -48,8 +55,15 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const userId = request.headers.get('x-user-id')
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    })
 
     if (!user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })

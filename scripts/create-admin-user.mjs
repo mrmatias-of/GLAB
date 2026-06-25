@@ -1,4 +1,4 @@
-import { prisma } from '../lib/db'
+import { prisma } from '../lib/db.js'
 import bcrypt from 'bcryptjs'
 import { randomUUID } from 'crypto'
 
@@ -25,7 +25,7 @@ async function createAdmin() {
     console.log('   Senha: @Monteiro21')
     console.log('\n🔗 Acesse: https://glabcursos.com.br/login')
     console.log('\nID do usuário:', userId)
-  } catch (error: any) {
+  } catch (error) {
     console.error('❌ Erro:', error.message)
     if (error.code === 'P2002') {
       console.log('\n⚠️  O usuário admin@glabcursos.com já existe!')
