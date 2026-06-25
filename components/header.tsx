@@ -13,7 +13,6 @@ const NAV = [
 
 export default function Header() {
   const [open, setOpen] = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
 
   return (
     <>
