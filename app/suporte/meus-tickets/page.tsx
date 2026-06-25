@@ -54,7 +54,7 @@ export default function MeusTicketsPage() {
     }
 
     fetchTickets()
-  }, [supabase, router])
+  }, [router])
 
   const filteredTickets = filter === 'todos' 
     ? tickets 
