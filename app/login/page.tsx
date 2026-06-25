@@ -33,7 +33,27 @@ export default function LoginPage() {
         return
       }
 
-      router.push('/admin')
+      // Obter dados do usuário para redirecionar corretamente
+      const { data: { user }, error: userError } = await supabase.auth.getUser()
+
+      if (userError || !user) {
+        setError('Erro ao obter dados do usuário')
+        setLoading(false)
+        return
+      }
+
+      // Redirecionar baseado no role do usuário
+      const isAdmin = user.user_metadata?.is_admin === true
+      const isVendedor = user.user_metadata?.is_vendedor === true
+
+      if (isAdmin) {
+        router.push('/admin')
+      } else if (isVendedor) {
+        router.push('/admin/suporte')
+      } else {
+        router.push('/suporte/meus-tickets')
+      }
+
       router.refresh()
     } catch {
       setError('Erro ao fazer login. Tente novamente.')
