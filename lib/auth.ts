@@ -62,30 +62,46 @@ export async function verifySession(token: string) {
 }
 
 export async function login(email: string, password: string) {
-  const user = await prisma.user.findUnique({
-    where: { email: email.toLowerCase() },
-  })
+  try {
+    console.log('[v0] Auth.login - Attempting to find user:', email)
+    
+    const user = await prisma.user.findUnique({
+      where: { email: email.toLowerCase() },
+    })
+    console.log('[v0] Auth.login - User lookup complete:', user ? 'FOUND' : 'NOT_FOUND')
 
-  if (!user) {
-    throw new Error('Email ou senha incorretos')
-  }
+    if (!user) {
+      console.log('[v0] Auth.login - User not found in database')
+      throw new Error('Email ou senha incorretos')
+    }
 
-  const passwordValid = await verifyPassword(password, user.password)
-  if (!passwordValid) {
-    throw new Error('Email ou senha incorretos')
-  }
+    console.log('[v0] Auth.login - Verifying password...')
+    const passwordValid = await verifyPassword(password, user.password)
+    if (!passwordValid) {
+      console.log('[v0] Auth.login - Password verification failed')
+      throw new Error('Email ou senha incorretos')
+    }
 
-  const token = await createSession(user.id)
+    console.log('[v0] Auth.login - Creating session...')
+    const token = await createSession(user.id)
+    console.log('[v0] Auth.login - Session created successfully')
 
-  return {
-    token,
-    user: {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      is_admin: user.is_admin,
-      is_vendedor: user.is_vendedor,
-    },
+    return {
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        is_admin: user.is_admin,
+        is_vendedor: user.is_vendedor,
+      },
+    }
+  } catch (error) {
+    console.error('[v0] Auth.login - Error:', {
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    })
+    throw error
   }
 }
 

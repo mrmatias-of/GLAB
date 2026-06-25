@@ -2,6 +2,10 @@ import { PrismaClient } from '@prisma/client'
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
 
+console.log('[v0] Initializing Prisma Client')
+console.log('[v0] NODE_ENV:', process.env.NODE_ENV)
+console.log('[v0] DATABASE_URL defined:', !!process.env.DATABASE_URL)
+
 export const prisma =
   globalForPrisma.prisma ||
   new PrismaClient({
@@ -9,6 +13,13 @@ export const prisma =
   })
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+
+// Test connection on startup (only in production)
+if (process.env.NODE_ENV === 'production') {
+  prisma.$queryRaw`SELECT 1`.catch((error) => {
+    console.error('[v0] CRITICAL: Prisma connection test failed on startup:', error)
+  })
+}
 
 // Query functions for courses
 export async function getCursos() {
