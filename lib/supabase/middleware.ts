@@ -4,8 +4,14 @@ import { NextResponse, type NextRequest } from 'next/server'
 // Rotas de admin — apenas usuários com is_admin = true
 const adminRoutes = ['/admin']
 
+// Rotas de suporte admin — apenas admins e vendedores
+const supportAdminRoutes = ['/admin/suporte']
+
 // Rotas de auth — usuários logados são redirecionados
 const authRoutes = ['/login']
+
+// Rotas protegidas por autenticação — qualquer usuário logado
+const protectedRoutes = ['/suporte']
 
 function addSecurityHeaders(response: NextResponse) {
   response.headers.set('X-Content-Type-Options', 'nosniff')
@@ -47,17 +53,19 @@ export async function updateSession(request: NextRequest) {
   addSecurityHeaders(response)
 
   const isAdminRoute = adminRoutes.some(r => pathname.startsWith(r))
+  const isSupportAdminRoute = supportAdminRoutes.some(r => pathname.startsWith(r))
   const isAuthRoute  = authRoutes.some(r => pathname.startsWith(r))
+  const isProtectedRoute = protectedRoutes.some(r => pathname.startsWith(r))
 
   // Rotas públicas — nenhuma verificação necessária
-  if (!isAdminRoute && !isAuthRoute) return response
+  if (!isAdminRoute && !isSupportAdminRoute && !isAuthRoute && !isProtectedRoute) return response
 
   // Verifica sessão
   const supabase = createSupabaseClient(request, response)
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Sem sessão tentando acessar área admin → login
-  if (isAdminRoute && !user) {
+  // Sem sessão tentando acessar áreas protegidas → login
+  if ((isAdminRoute || isSupportAdminRoute || isProtectedRoute) && !user) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     url.searchParams.set('next', pathname)
@@ -66,15 +74,27 @@ export async function updateSession(request: NextRequest) {
 
   if (user) {
     const isAdmin = user.user_metadata?.is_admin === true
+    const isVendedor = user.user_metadata?.is_vendedor === true
 
     // Não-admin tentando acessar /admin → redireciona para home
     if (isAdminRoute && !isAdmin) {
       return redirect(request, '/')
     }
 
-    // Usuário logado acessando /login → redireciona para admin se for admin, senão home
+    // Não-admin e não-vendedor tentando acessar /admin/suporte → redireciona para suporte
+    if (isSupportAdminRoute && !isAdmin && !isVendedor) {
+      return redirect(request, '/suporte/meus-tickets')
+    }
+
+    // Usuário logado acessando /login → redireciona apropriadamente
     if (isAuthRoute) {
-      return redirect(request, isAdmin ? '/admin' : '/')
+      if (isAdmin) {
+        return redirect(request, '/admin')
+      } else if (isVendedor) {
+        return redirect(request, '/admin/suporte')
+      } else {
+        return redirect(request, '/suporte/meus-tickets')
+      }
     }
   }
 
