@@ -31,7 +31,18 @@ export default function LoginPage() {
 
       if (!response.ok) {
         console.log('[v0] Erro de autenticação:', data.error)
-        setError(data.error || 'Erro ao fazer login. Tente novamente.')
+        
+        // Mensagens de erro específicas
+        if (response.status === 401) {
+          setError('Email ou senha incorretos. Verifique suas credenciais.')
+        } else if (data.error?.toLowerCase().includes('not found')) {
+          setError('Usuário não encontrado. Verifique o email.')
+        } else if (data.error?.toLowerCase().includes('password')) {
+          setError('Senha incorreta. Tente novamente.')
+        } else {
+          setError(data.error || 'Erro ao fazer login. Tente novamente.')
+        }
+        
         setLoading(false)
         return
       }
@@ -187,4 +198,4 @@ export default function LoginPage() {
     </div>
   )
 }
-// Cache bust: 1782417698
+// Cache bust: 1782417999 - Force new build without Supabase
