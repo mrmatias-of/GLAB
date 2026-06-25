@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifySession } from '@/lib/auth'
-import { prisma } from '@/lib/db'
 
 const publicRoutes = ['/', '/login', '/cursos', '/suporte']
 const adminRoutes = ['/admin']
@@ -31,7 +30,7 @@ export async function middleware(request: NextRequest) {
     return response
   }
 
-  // Verify token
+  // Verify token (lightweight JWT verification, no DB calls)
   const userId = await verifySession(token)
 
   if (!userId) {
@@ -40,33 +39,25 @@ export async function middleware(request: NextRequest) {
     return res
   }
 
-  // Get user details
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-  })
-
-  if (!user) {
-    const res = NextResponse.redirect(new URL('/login', request.url))
-    res.cookies.delete('auth_token')
-    return res
+  // For admin/support routes, let the route handler verify role via API
+  // This avoids using Prisma in Edge Middleware
+  if (isAdminRoute || isSupportAdminRoute) {
+    // Still block if not authenticated
+    const requestHeaders = new Headers(request.headers)
+    requestHeaders.set('x-user-id', String(userId))
+    requestHeaders.set('x-auth-token', token)
+    
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    })
   }
 
-  // Check admin routes
-  if (isAdminRoute && !user.is_admin) {
-    return NextResponse.redirect(new URL('/', request.url))
-  }
-
-  // Check support admin routes
-  if (isSupportAdminRoute && !user.is_admin && !user.is_vendedor) {
-    return NextResponse.redirect(new URL('/suporte/meus-tickets', request.url))
-  }
-
-  // Set user info in response headers
+  // Set user info in response headers for other protected routes
   const requestHeaders = new Headers(request.headers)
-  requestHeaders.set('x-user-id', userId)
-  requestHeaders.set('x-user-email', user.email)
-  requestHeaders.set('x-user-admin', String(user.is_admin))
-  requestHeaders.set('x-user-vendedor', String(user.is_vendedor))
+  requestHeaders.set('x-user-id', String(userId))
+  requestHeaders.set('x-auth-token', token)
 
   return NextResponse.next({
     request: {
