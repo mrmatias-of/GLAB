@@ -1,4 +1,3 @@
-import { createClient } from "@supabase/supabase-js";
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -20,7 +19,6 @@ async function resetAdminPassword() {
   }
 
   try {
-    const { data, error } = await supabase.auth.admin.updateUserById(
       "74257856-4f9b-4aa9-9bea-b21f60768b27", // ID do user admin@glabcursos.com.br
       { password: newPassword }
     );
