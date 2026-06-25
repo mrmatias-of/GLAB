@@ -20,12 +20,17 @@ export default function LoginPage() {
 
     try {
       const supabase = createClient()
-      const { error: signInError } = await supabase.auth.signInWithPassword({
+      console.log('[v0] Tentando login com:', email)
+      
+      const { error: signInError, data } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
+      console.log('[v0] Resposta do Supabase:', { error: signInError, hasData: !!data })
+
       if (signInError) {
+        console.log('[v0] Erro de autenticação:', signInError)
         setError(signInError.message === 'Invalid login credentials' 
           ? 'Email ou senha incorretos' 
           : signInError.message)
@@ -36,7 +41,10 @@ export default function LoginPage() {
       // Obter dados do usuário para redirecionar corretamente
       const { data: { user }, error: userError } = await supabase.auth.getUser()
 
+      console.log('[v0] Dados do usuário:', { user: user?.email, userError, metadata: user?.user_metadata })
+
       if (userError || !user) {
+        console.log('[v0] Erro ao obter usuário:', userError)
         setError('Erro ao obter dados do usuário')
         setLoading(false)
         return
@@ -46,11 +54,16 @@ export default function LoginPage() {
       const isAdmin = user.user_metadata?.is_admin === true
       const isVendedor = user.user_metadata?.is_vendedor === true
 
+      console.log('[v0] Roles do usuário:', { isAdmin, isVendedor })
+
       if (isAdmin) {
+        console.log('[v0] Redirecionando para /admin')
         router.push('/admin')
       } else if (isVendedor) {
+        console.log('[v0] Redirecionando para /admin/suporte')
         router.push('/admin/suporte')
       } else {
+        console.log('[v0] Redirecionando para /suporte/meus-tickets')
         router.push('/suporte/meus-tickets')
       }
 
