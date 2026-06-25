@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -31,7 +30,6 @@ const prioridadeBadgeColors = {
 
 export default function MeusTicketsPage() {
   const router = useRouter()
-  const supabase = createClient()
   const [tickets, setTickets] = useState<Ticket[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<string>('todos')
@@ -39,11 +37,7 @@ export default function MeusTicketsPage() {
   useEffect(() => {
     const fetchTickets = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) {
-          router.push('/login')
-          return
-        }
+        // Middleware protege a rota - usuário já está autenticado se chegou aqui
 
         const response = await fetch('/api/support/tickets?type=user')
         if (!response.ok) throw new Error('Erro ao carregar tickets')

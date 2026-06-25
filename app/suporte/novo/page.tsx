@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
 
 interface Category {
   id: number
@@ -12,7 +11,6 @@ interface Category {
 
 export default function NovoTicketPage() {
   const router = useRouter()
-  const supabase = createClient()
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string>('')

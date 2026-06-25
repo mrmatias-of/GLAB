@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
 
 interface Ticket {
   id: number
@@ -29,7 +28,6 @@ export default function TicketDetailPage() {
   const router = useRouter()
   const params = useParams()
   const ticketId = params?.id as string
-  const supabase = createClient()
 
   const [ticket, setTicket] = useState<Ticket | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
@@ -42,12 +40,8 @@ export default function TicketDetailPage() {
   useEffect(() => {
     const fetchTicketDetails = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) {
-          router.push('/login')
-          return
-        }
-        setUser(user)
+        // Middleware protege a rota - usuário já está autenticado se chegou aqui
+        // Obter dados do usuário do endpoint /api/auth/me
 
         // Buscar ticket
         const ticketResponse = await fetch(`/api/support/tickets/${ticketId}`)
