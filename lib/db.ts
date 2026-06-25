@@ -14,13 +14,6 @@ export const prisma =
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
-// Test connection on startup (only in production)
-if (process.env.NODE_ENV === 'production') {
-  prisma.$queryRaw`SELECT 1`.catch((error) => {
-    console.error('[v0] CRITICAL: Prisma connection test failed on startup:', error)
-  })
-}
-
 // Query functions for courses
 export async function getCursos() {
   return prisma.curso.findMany({
