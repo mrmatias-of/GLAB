@@ -1,5 +1,5 @@
-import { createAdminClient } from "@/lib/supabase/server"
 import { Smartphone, Monitor, Apple, Layers, type LucideIcon } from "lucide-react"
+import { pool } from "@/lib/db"
 
 export type Modulo = {
   titulo: string
@@ -57,56 +57,48 @@ export async function getCursos(): Promise<Curso[]> {
   }
 
   try {
-    const supabase = createAdminClient()
-    if (!supabase) {
-      console.warn("[v0] Supabase não configurado, retornando lista vazia")
-      return []
-    }
+    const result = await pool.query(
+      'SELECT * FROM cursos ORDER BY posicao'
+    )
     
-    const { data, error } = await supabase
-      .from("cursos")
-      .select("slug, tag, titulo, subtitulo, descricao, descricao_longa, imagem, preco, preco_original, cta, cta_href, destaque, modulos, aprendizados, ordem, nivel, categoria, headline, headline_sub, para_quem, dores, cta_headline, cta_headline_sub, trilha, relacionados")
-      .eq("ativo", true)
-      .order("ordem", { ascending: true })
-
-    if (error || !data) {
-      console.error("[v0] Erro ao buscar cursos:", error)
+    if (!result.rows || result.rows.length === 0) {
+      console.warn("[v0] Nenhum curso encontrado no banco de dados")
       return []
     }
 
-    cursosCache = data.map((curso: any) => ({
+    cursosCache = result.rows.map((curso: any) => ({
       slug: curso.slug,
-      tag: curso.tag,
+      tag: curso.tag || "Geral",
       titulo: curso.titulo,
       subtitulo: curso.subtitulo || "",
-      descricao: curso.descricao,
-      descricaoLonga: curso.descricao_longa || curso.descricao,
+      descricao: curso.descricao || "",
+      descricaoLonga: curso.descricao || "",
       imagem: curso.imagem || undefined,
-      icon: getIconByTag(curso.tag),
+      icon: getIconByTag(curso.tag || "Geral"),
       destaque: curso.destaque || false,
       preco: curso.preco,
       precoOriginal: curso.preco_original || undefined,
-      modulos: curso.modulos || [],
-      aprendizados: curso.aprendizados || [],
+      modulos: Array.isArray(curso.modulos) ? curso.modulos : [],
+      aprendizados: [],
       cta: curso.cta || "Comprar Agora",
       ctaHref: curso.cta_href || "",
-      accentColor: "#00d4c8",
-      nivel: curso.nivel || undefined,
-      categoria: curso.categoria || undefined,
-      headline: curso.headline || undefined,
-      headlineSub: curso.headline_sub || undefined,
-      paraQuem: curso.para_quem || undefined,
-      dores: curso.dores || undefined,
-      ctaHeadline: curso.cta_headline || undefined,
-      ctaHeadlineSub: curso.cta_headline_sub || undefined,
-      trilha: curso.trilha || undefined,
-      relacionados: curso.relacionados || undefined,
+      accentColor: "#2563eb",
+      nivel: undefined,
+      categoria: undefined,
+      headline: undefined,
+      headlineSub: undefined,
+      paraQuem: undefined,
+      dores: undefined,
+      ctaHeadline: undefined,
+      ctaHeadlineSub: undefined,
+      trilha: undefined,
+      relacionados: undefined,
     }))
 
     cursoCacheTime = now
     return cursosCache
   } catch (err) {
-    console.error("[v0] Erro ao conectar ao Supabase:", err)
+    console.error("[v0] Erro ao conectar ao Neon:", err)
     return []
   }
 }
@@ -119,25 +111,16 @@ export async function getCursoBySlug(slug: string): Promise<Curso | undefined> {
 // Função para geração estática (sem cookies)
 export async function getCursoSlugs(): Promise<string[]> {
   try {
-    const supabase = createAdminClient()
-    if (!supabase) {
-      console.warn("[v0] Supabase não configurado para slugs, retornando lista vazia")
+    const result = await pool.query('SELECT slug FROM cursos')
+    
+    if (!result.rows || result.rows.length === 0) {
+      console.warn("[v0] Nenhum slug encontrado no banco de dados")
       return []
     }
     
-    const { data, error } = await supabase
-      .from("cursos")
-      .select("slug")
-      .eq("ativo", true)
-    
-    if (error || !data) {
-      console.error("[v0] Erro ao buscar slugs:", error)
-      return []
-    }
-    
-    return data.map((c: { slug: string }) => c.slug)
+    return result.rows.map((c: { slug: string }) => c.slug)
   } catch (err) {
-    console.error("[v0] Erro ao conectar ao Supabase para slugs:", err)
+    console.error("[v0] Erro ao conectar ao Neon para slugs:", err)
     return []
   }
 }
