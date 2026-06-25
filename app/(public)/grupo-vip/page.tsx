@@ -276,7 +276,7 @@ export default function GrupoVIPPage() {
                 alt="G-LAB"
                 width={80}
                 height={80}
-                className="w-20 h-20"
+                className="w-16 h-16 sm:w-20 sm:h-20"
               />
               <div className="text-left">
                 <p className="text-white font-bold text-sm">GUILHERME JULIÃO</p>

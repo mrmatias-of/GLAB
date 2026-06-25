@@ -110,7 +110,7 @@ export default function PanicAnalysisPage() {
               alt="G-LAB Logo"
               width={64}
               height={64}
-              className="w-16 h-16"
+              className="w-12 h-12 sm:w-16 sm:h-16"
             />
             <span className="text-white font-bold text-sm">G-LAB</span>
           </Link>
