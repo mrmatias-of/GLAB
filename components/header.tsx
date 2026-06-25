@@ -26,9 +26,9 @@ export default function Header() {
             <Image
               src="/logo-glab-neon-transparent.png"
               alt="G-LAB Logo"
-              width={40}
-              height={40}
-              className="w-10 h-10"
+              width={80}
+              height={80}
+              className="w-20 h-20"
             />
           </Link>
 

@@ -85,9 +85,9 @@ export default function LoginPage() {
               <Image
                 src="/logo-glab-neon-transparent.png"
                 alt="G-LAB Logo"
-                width={80}
-                height={80}
-                className="w-20 h-20"
+                width={160}
+                height={160}
+                className="w-40 h-40"
               />
             </Link>
           </div>

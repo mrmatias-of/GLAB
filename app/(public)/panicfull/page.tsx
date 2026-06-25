@@ -108,9 +108,9 @@ export default function PanicAnalysisPage() {
             <Image
               src="/logo-glab-neon-transparent.png"
               alt="G-LAB Logo"
-              width={32}
-              height={32}
-              className="w-8 h-8"
+              width={64}
+              height={64}
+              className="w-16 h-16"
             />
             <span className="text-white font-bold text-sm">G-LAB</span>
           </Link>

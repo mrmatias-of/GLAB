@@ -274,9 +274,9 @@ export default function GrupoVIPPage() {
               <Image
                 src="/logo-glab-neon.png"
                 alt="G-LAB"
-                width={40}
-                height={40}
-                className="w-10 h-10"
+                width={80}
+                height={80}
+                className="w-20 h-20"
               />
               <div className="text-left">
                 <p className="text-white font-bold text-sm">GUILHERME JULIÃO</p>

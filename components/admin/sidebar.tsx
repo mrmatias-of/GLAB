@@ -49,7 +49,7 @@ export default function AdminSidebar({ userEmail }: { userEmail: string }) {
       <div className="p-6 border-b border-cyan-500/10 relative z-10">
         <div className="absolute top-0 left-0 w-32 h-32 bg-cyan-500/5 rounded-full blur-3xl" />
         <div className="flex items-center gap-3 relative">
-          <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-cyan-500/30 shadow-lg shadow-cyan-500/20">
+          <div className="relative w-20 h-20 rounded-xl overflow-hidden border border-cyan-500/30 shadow-lg shadow-cyan-500/20">
             <Image
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-glab-neon-transparent-2kFvS2C6hGbJR8B91q0a0cgSa9Uqxz.png"
               alt="G-Lab Logo"

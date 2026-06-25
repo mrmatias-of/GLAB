@@ -22,9 +22,9 @@ export default function ComboLandingHeader() {
           <Image
             src="/logo-glab-neon-transparent.png"
             alt="G•Lab Cursos"
-            width={36}
-            height={36}
-            className="w-9 h-9"
+            width={72}
+            height={72}
+            className="w-18 h-18"
           />
           <span
             className="text-sm font-bold tracking-tight hidden sm:block"
