@@ -154,23 +154,25 @@ export default function CursoForm({ initialData, id }: { initialData?: Partial<C
       aprendizados: form.aprendizados.map(a => sanitize(a)).filter(a => a.length > 0),
     }
 
-    const supabase = createClient()
+    try {
+      const endpoint = isEditing ? `/api/admin/cursos/${id}` : '/api/admin/cursos'
+      const method = isEditing ? 'PATCH' : 'POST'
+      
+      const response = await fetch(endpoint, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(sanitizedPayload),
+      })
 
-    let cursoId = id
-    let err
-    
-    if (isEditing) {
-      const { error } = await supabase.from("cursos").update(sanitizedPayload).eq("id", id)
-      err = error
-    } else {
-      const { data, error } = await supabase.from("cursos").insert(sanitizedPayload).select("id").single()
-      err = error
-      if (data) cursoId = data.id
-    }
-
-    if (err) {
+      if (!response.ok) {
+        const error = await response.json()
+        setLoading(false)
+        setError(error.error || 'Erro ao salvar curso')
+        return
+      }
+    } catch (err) {
       setLoading(false)
-      setError(err.message)
+      setError(err instanceof Error ? err.message : 'Erro ao salvar curso')
       return
     }
 

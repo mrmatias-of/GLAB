@@ -37,12 +37,14 @@ export default function AdminTicketDetailPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) {
+        // Obter dados do usuário via API
+        const userResponse = await fetch('/api/auth/me')
+        if (!userResponse.ok) {
           router.push('/login')
           return
         }
-        setUser(user)
+        const userData = await userResponse.json()
+        setUser(userData)
 
         // Buscar ticket
         const ticketResponse = await fetch(`/api/support/tickets/${ticketId}`)

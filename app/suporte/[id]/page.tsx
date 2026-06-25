@@ -72,7 +72,7 @@ export default function TicketDetailPage() {
     }
 
     if (ticketId) fetchTicketDetails()
-  }, [ticketId, supabase, router])
+  }, [ticketId, router])
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault()
