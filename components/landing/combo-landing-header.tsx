@@ -24,7 +24,7 @@ export default function ComboLandingHeader() {
             alt="G•Lab Cursos"
             width={72}
             height={72}
-            className="w-18 h-18"
+            className="w-14 h-14 sm:w-18 sm:h-18"
           />
           <span
             className="text-sm font-bold tracking-tight hidden sm:block"

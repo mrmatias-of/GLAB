@@ -28,7 +28,7 @@ export default function Header() {
               alt="G-LAB Logo"
               width={80}
               height={80}
-              className="w-20 h-20"
+              className="w-16 h-16 sm:w-20 sm:h-20"
             />
           </Link>
 
