@@ -19,16 +19,44 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
 
   const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment' },
-      })
+      console.log('[v0] Iniciando câmera...')
+      
+      // Tentar com facing mode 'environment' primeiro (câmera traseira)
+      // Se falhar, tentar sem especificar facing mode
+      let stream
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { 
+            facingMode: { ideal: 'environment' },
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          },
+        })
+      } catch (e) {
+        console.warn('[v0] Câmera traseira não disponível, tentando câmera frontal')
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { 
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          },
+        })
+      }
+      
       if (videoRef.current) {
         videoRef.current.srcObject = stream
+        // Garantir que o vídeo reproduz
+        videoRef.current.onloadedmetadata = () => {
+          videoRef.current?.play().catch(err => {
+            console.error('[v0] Erro ao reproduzir vídeo:', err)
+          })
+        }
         setCameraActive(true)
+        console.log('[v0] Câmera iniciada com sucesso')
       }
     } catch (error) {
       console.error('[v0] Erro ao acessar câmera:', error)
-      alert('Não foi possível acessar a câmera. Tente novamente.')
+      const errorMsg = error instanceof Error ? error.message : String(error)
+      alert(`Não foi possível acessar a câmera: ${errorMsg}\n\nPermita acesso à câmera nas configurações do navegador.`)
     }
   }
 

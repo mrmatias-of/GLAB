@@ -35,14 +35,14 @@ export function Modal({
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className={`bg-white rounded-lg shadow-xl p-6 ${sizeClasses[size]} max-h-[90vh] overflow-y-auto`}>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className={`bg-slate-900 rounded-lg shadow-xl p-6 ${sizeClasses[size]} max-h-[90vh] overflow-y-auto border border-slate-700`}>
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-slate-900">{title}</h2>
+          <h2 className="text-xl font-bold text-white">{title}</h2>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-slate-100 rounded transition"
+            className="p-1 hover:bg-slate-800 rounded transition text-slate-400"
           >
             <X className="w-5 h-5" />
           </button>
@@ -52,10 +52,10 @@ export function Modal({
         <div className="mb-6">{children}</div>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-3 pt-6 border-t border-slate-200">
+        <div className="flex items-center justify-end gap-3 pt-6 border-t border-slate-700">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-slate-700 border border-slate-300 rounded-lg hover:bg-slate-50 transition"
+            className="px-4 py-2 text-slate-300 border border-slate-600 rounded-lg hover:bg-slate-800 transition"
           >
             {cancelText}
           </button>
