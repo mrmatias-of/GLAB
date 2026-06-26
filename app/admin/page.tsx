@@ -9,79 +9,69 @@ export const metadata: Metadata = {
 
 export default function AdminDashboard() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-slate-900">G•Lab Cursos</h1>
-            <p className="text-slate-600">Painel Administrativo</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-slate-600">admin@glabcursos.com</span>
-            <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition">
-              Sair
-            </button>
-          </div>
-        </div>
+    <div className="space-y-8">
+      {/* Page Title */}
+      <div>
+        <h1 className="text-3xl font-bold text-white">Bem-vindo ao painel administrativo</h1>
+        <p className="text-slate-400 mt-2">Selecione uma seção abaixo para gerenciar cursos, suporte, vendas e configurações</p>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {/* Card Cursos */}
-          <Link href="/admin/cursos" className="block">
-            <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition p-6 cursor-pointer">
-              <div className="text-cyan-600 mb-4">
-                <BookOpen className="w-8 h-8" />
-              </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">Cursos</h3>
-              <p className="text-slate-600 text-sm">Gerenciar cursos e conteúdo</p>
+      {/* Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Card Cursos */}
+        <Link href="/admin/cursos" className="block">
+          <div className="card-elegant bg-slate-900/40 border border-slate-700 hover:border-cyan-500/50 transition-all p-6 cursor-pointer">
+            <div className="text-cyan-400 mb-4">
+              <BookOpen className="w-8 h-8" />
             </div>
-          </Link>
+            <h3 className="text-lg font-semibold text-white mb-2">Cursos</h3>
+            <p className="text-slate-400 text-sm">Gerenciar cursos e conteúdo</p>
+          </div>
+        </Link>
 
-          {/* Card Suporte */}
-          <Link href="/admin/suporte" className="block">
-            <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition p-6 cursor-pointer">
-              <div className="text-blue-600 mb-4">
-                <MessageSquare className="w-8 h-8" />
-              </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">Suporte</h3>
-              <p className="text-slate-600 text-sm">Gerenciar tickets de suporte</p>
+        {/* Card Suporte */}
+        <Link href="/admin/suporte" className="block">
+          <div className="card-elegant bg-slate-900/40 border border-slate-700 hover:border-blue-500/50 transition-all p-6 cursor-pointer">
+            <div className="text-blue-400 mb-4">
+              <MessageSquare className="w-8 h-8" />
             </div>
-          </Link>
+            <h3 className="text-lg font-semibold text-white mb-2">Suporte</h3>
+            <p className="text-slate-400 text-sm">Gerenciar tickets de suporte</p>
+          </div>
+        </Link>
 
-          {/* Card Vendas */}
-          <Link href="/admin/vendas" className="block">
-            <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition p-6 cursor-pointer">
-              <div className="text-green-600 mb-4">
-                <TrendingUp className="w-8 h-8" />
-              </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">Vendas</h3>
-              <p className="text-slate-600 text-sm">Relatórios e análises</p>
+        {/* Card Vendas */}
+        <Link href="/admin/vendas" className="block">
+          <div className="card-elegant bg-slate-900/40 border border-slate-700 hover:border-green-500/50 transition-all p-6 cursor-pointer">
+            <div className="text-green-400 mb-4">
+              <TrendingUp className="w-8 h-8" />
             </div>
-          </Link>
+            <h3 className="text-lg font-semibold text-white mb-2">Vendas</h3>
+            <p className="text-slate-400 text-sm">Relatórios e análises</p>
+          </div>
+        </Link>
 
-          {/* Card Configurações */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="text-purple-600 mb-4">
+        {/* Card Configurações */}
+        <Link href="/admin/configuracoes" className="block">
+          <div className="card-elegant bg-slate-900/40 border border-slate-700 hover:border-purple-500/50 transition-all p-6 cursor-pointer">
+            <div className="text-purple-400 mb-4">
               <Settings className="w-8 h-8" />
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">Configurações</h3>
-            <p className="text-slate-600 text-sm">Ajustes do sistema</p>
+            <h3 className="text-lg font-semibold text-white mb-2">Configurações</h3>
+            <p className="text-slate-400 text-sm">Ajustes do sistema</p>
           </div>
-        </div>
+        </Link>
+      </div>
 
-        {/* Recent Activity */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold text-slate-900 mb-4">Bem-vindo ao painel administrativo</h2>
-          <p className="text-slate-600 mb-4">
-            Selecione uma seção acima para gerenciar cursos, suporte, vendas e configurações.
-          </p>
-          <Link href="/" className="text-cyan-600 hover:text-cyan-700 font-medium">
-            ← Voltar para home
-          </Link>
-        </div>
+      {/* Info Card */}
+      <div className="card-elegant bg-slate-900/40 border border-slate-700 p-6">
+        <h2 className="text-xl font-semibold text-white mb-3">Dicas de navegação</h2>
+        <p className="text-slate-400 mb-4">
+          Use o menu lateral para acessar rapidamente as seções do painel. Clique em qualquer seção acima ou use o menu para gerenciar diferentes aspectos da plataforma.
+        </p>
+        <Link href="/" className="text-cyan-400 hover:text-cyan-300 font-medium transition">
+          ← Voltar para home
+        </Link>
       </div>
     </div>
   )
