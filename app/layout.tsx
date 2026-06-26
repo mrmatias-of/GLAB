@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import { VisitorTracker } from '@/components/visitor-tracker'
 import { SiteOverlays } from '@/components/site-overlays'
-import { PrivacyConsentBanner } from '@/components/privacy-consent-banner'
+import { PrivacyBannerWrapper } from '@/components/privacy-banner-wrapper'
 import { ConditionalAnalytics } from '@/components/conditional-analytics'
 import './globals.css'
 
@@ -92,7 +92,7 @@ export default function RootLayout({
         <VisitorTracker />
         <SiteOverlays />
         {children}
-        <PrivacyConsentBanner />
+        <PrivacyBannerWrapper />
         {process.env.NODE_ENV === 'production' && <ConditionalAnalytics />}
       </body>
     </html>

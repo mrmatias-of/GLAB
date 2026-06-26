@@ -29,20 +29,26 @@ export function usePrivacyConsent() {
     const storedConsent = readStoredConsent()
     setConsent(storedConsent)
     setLoaded(true)
-  }, [])
+  }, []) // Esta dependência vazia garante que roda apenas uma vez
 
   const allow = () => {
     try {
       localStorage.setItem(STORAGE_KEY, "analytics_allowed")
-    } catch {}
-    setConsent("analytics_allowed")
+      // Confirmar que foi salvo com sucesso
+      setConsent("analytics_allowed")
+    } catch (error) {
+      console.error("[v0] Failed to save analytics consent to localStorage:", error)
+    }
   }
 
   const essentialOnly = () => {
     try {
       localStorage.setItem(STORAGE_KEY, "essential_only")
-    } catch {}
-    setConsent("essential_only")
+      // Confirmar que foi salvo com sucesso
+      setConsent("essential_only")
+    } catch (error) {
+      console.error("[v0] Failed to save essential-only consent to localStorage:", error)
+    }
   }
 
   const reset = () => {

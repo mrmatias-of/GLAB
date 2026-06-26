@@ -8,7 +8,9 @@ export function PrivacyConsentBanner() {
   const { loaded, choiceMade, allow, essentialOnly } = usePrivacyConsent()
 
   // Não renderiza até o estado do localStorage ser lido (evita flash)
-  if (!loaded || choiceMade) return null
+  // Se choiceMade for true, o banner NÃO será mostrado (consentimento já dado)
+  if (!loaded) return null
+  if (choiceMade) return null
 
   return (
     <div
