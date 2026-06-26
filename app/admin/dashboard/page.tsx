@@ -99,28 +99,28 @@ export default function DashboardPage() {
         <StatCard
           title="Ordens Abertas"
           value={stats.osAberta}
-          icon="📋"
+          iconName="clipboard"
           color="blue"
           onClick={() => window.location.href = '/admin/ordens-servico?status=aberto'}
         />
         <StatCard
           title="Em Andamento"
           value={stats.osEmProgresso}
-          icon="⚙️"
+          iconName="cog"
           color="yellow"
           onClick={() => window.location.href = '/admin/ordens-servico?status=em_progresso'}
         />
         <StatCard
           title="Finalizadas"
           value={stats.osFinalizadas}
-          icon="✓"
+          iconName="check"
           color="green"
           onClick={() => window.location.href = '/admin/ordens-servico?status=finalizado'}
         />
         <StatCard
           title="Canceladas"
           value={stats.osCanceladas}
-          icon="✕"
+          iconName="x"
           color="red"
           onClick={() => window.location.href = '/admin/ordens-servico?status=cancelado'}
         />
@@ -131,21 +131,21 @@ export default function DashboardPage() {
         <StatCard
           title="Técnicos Cadastrados"
           value={stats.tecnicos}
-          icon="👨‍🔧"
+          iconName="wrench"
           color="cyan"
           onClick={() => window.location.href = '/admin/tecnicos'}
         />
         <StatCard
           title="Clientes Ativos"
           value={stats.clientes}
-          icon="👥"
+          iconName="users"
           color="blue"
           onClick={() => window.location.href = '/admin/clientes'}
         />
         <StatCard
           title="Receita do Mês"
           value={`R$ ${stats.receitaMes.toFixed(2)}`}
-          icon="💰"
+          iconName="dollar"
           color="green"
           trend={15}
           trendLabel="vs mês anterior"
@@ -153,7 +153,7 @@ export default function DashboardPage() {
         <StatCard
           title="Margem de Lucro"
           value={`${margemPercentual}%`}
-          icon="📈"
+          iconName="trending"
           color="green"
         />
       </div>

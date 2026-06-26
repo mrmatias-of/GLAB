@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
+import { BookOpen, MessageSquare, TrendingUp, Settings } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Painel Admin | G•Lab Cursos',
@@ -31,7 +32,9 @@ export default function AdminDashboard() {
           {/* Card Cursos */}
           <Link href="/admin/cursos" className="block">
             <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition p-6 cursor-pointer">
-              <div className="text-cyan-600 text-4xl mb-4">📚</div>
+              <div className="text-cyan-600 mb-4">
+                <BookOpen className="w-8 h-8" />
+              </div>
               <h3 className="text-lg font-semibold text-slate-900 mb-2">Cursos</h3>
               <p className="text-slate-600 text-sm">Gerenciar cursos e conteúdo</p>
             </div>
@@ -40,7 +43,9 @@ export default function AdminDashboard() {
           {/* Card Suporte */}
           <Link href="/admin/suporte" className="block">
             <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition p-6 cursor-pointer">
-              <div className="text-blue-600 text-4xl mb-4">💬</div>
+              <div className="text-blue-600 mb-4">
+                <MessageSquare className="w-8 h-8" />
+              </div>
               <h3 className="text-lg font-semibold text-slate-900 mb-2">Suporte</h3>
               <p className="text-slate-600 text-sm">Gerenciar tickets de suporte</p>
             </div>
@@ -49,7 +54,9 @@ export default function AdminDashboard() {
           {/* Card Vendas */}
           <Link href="/admin/vendas" className="block">
             <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition p-6 cursor-pointer">
-              <div className="text-green-600 text-4xl mb-4">💰</div>
+              <div className="text-green-600 mb-4">
+                <TrendingUp className="w-8 h-8" />
+              </div>
               <h3 className="text-lg font-semibold text-slate-900 mb-2">Vendas</h3>
               <p className="text-slate-600 text-sm">Relatórios e análises</p>
             </div>
@@ -57,7 +64,9 @@ export default function AdminDashboard() {
 
           {/* Card Configurações */}
           <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="text-purple-600 text-4xl mb-4">⚙️</div>
+            <div className="text-purple-600 mb-4">
+              <Settings className="w-8 h-8" />
+            </div>
             <h3 className="text-lg font-semibold text-slate-900 mb-2">Configurações</h3>
             <p className="text-slate-600 text-sm">Ajustes do sistema</p>
           </div>
