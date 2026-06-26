@@ -1,7 +1,8 @@
 'use client'
 
 import { useRef, useState, useEffect } from 'react'
-import { Camera, X, Check, Upload } from 'lucide-react'
+import { Camera, X, Check, Upload, Loader } from 'lucide-react'
+import Tesseract from 'tesseract.js'
 
 interface CameraCaptureProps {
   onCapture: (data: { equipment: string; serialNumber: string }) => void
@@ -18,6 +19,9 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
   const [equipment, setEquipment] = useState('')
   const [serial, setSerial] = useState('')
   const [stream, setStream] = useState<MediaStream | null>(null)
+  const [recognizedText, setRecognizedText] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [recognitionProgress, setRecognitionProgress] = useState(0)
 
   // Configurar video stream quando stream muda
   useEffect(() => {
@@ -82,6 +86,7 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
         const photoData = canvasRef.current.toDataURL('image/jpeg')
         setPhoto(photoData)
         setMode('preview')
+        performOCR(photoData)
         
         if (stream) {
           stream.getTracks().forEach((track) => track.stop())
@@ -101,9 +106,51 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
       if (typeof result === 'string') {
         setPhoto(result)
         setMode('preview')
+        performOCR(result)
       }
     }
     reader.readAsDataURL(file)
+  }
+
+  const performOCR = async (imageData: string) => {
+    try {
+      setLoading(true)
+      setRecognitionProgress(0)
+      console.log('[v0] Iniciando OCR com Tesseract...')
+      
+      const result = await Tesseract.recognize(imageData, 'eng', {
+        logger: (m) => {
+          if (m.status === 'recognizing') {
+            setRecognitionProgress(Math.round(m.progress * 100))
+            console.log(`[v0] OCR Progress: ${Math.round(m.progress * 100)}%`)
+          }
+        }
+      })
+
+      const text = result.data.text
+      console.log('[v0] Texto reconhecido:', text)
+      setRecognizedText(text)
+      
+      // Tentar extrair dados automaticamente
+      const lines = text.split('\n').filter((l) => l.trim().length > 0)
+      if (lines.length > 0) {
+        // Primeiro não-vazio como equipamento
+        setEquipment(lines[0].trim())
+        
+        // Procurar por padrão de série
+        for (const line of lines) {
+          if (line.match(/^[A-Z0-9]{8,}$|SN|S\/N|Serie/i)) {
+            setSerial(line.trim())
+            break
+          }
+        }
+      }
+    } catch (error) {
+      console.error('[v0] Erro OCR:', error)
+      alert('Erro ao reconhecer texto. Preencha manualmente.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleConfirm = () => {
@@ -124,17 +171,17 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[9999] p-4">
-      <div className="bg-slate-900 rounded-lg border border-slate-700 w-full max-w-md">
+      <div className="bg-slate-900 rounded-lg border border-slate-700 w-full max-w-lg max-h-[90vh] overflow-y-auto flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-slate-700">
+        <div className="flex items-center justify-between p-4 border-b border-slate-700 flex-shrink-0">
           <h2 className="text-lg font-bold text-white">Capturar Equipamento</h2>
-          <button onClick={handleCancel} className="text-slate-400 hover:text-white">
+          <button onClick={handleCancel} className="text-slate-400 hover:text-white flex-shrink-0">
             <X size={24} />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-4">
+        <div className="p-4 flex-1 overflow-y-auto">
           {mode === 'menu' && (
             <div className="space-y-3">
               <button
@@ -201,9 +248,37 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
 
           {mode === 'preview' && photo && (
             <div className="space-y-4">
-              <img src={photo} alt="Capturada" className="w-full rounded-lg border border-slate-700" />
+              {/* Foto capturada */}
+              <div className="max-h-48 overflow-hidden rounded-lg border border-slate-700">
+                <img src={photo} alt="Capturada" className="w-full object-cover" />
+              </div>
               
-              <div className="space-y-3">
+              {/* Indicador de OCR */}
+              {loading && (
+                <div className="p-3 bg-slate-800/50 rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Loader size={16} className="animate-spin text-cyan-500" />
+                    <span className="text-sm text-slate-300">Reconhecendo texto...</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-2">
+                    <div
+                      className="bg-cyan-600 h-2 rounded-full transition-all"
+                      style={{ width: `${recognitionProgress}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Texto reconhecido (debug) */}
+              {recognizedText && !loading && (
+                <div className="p-2 bg-slate-800/30 rounded-lg max-h-24 overflow-y-auto">
+                  <p className="text-xs text-slate-400">Texto reconhecido:</p>
+                  <p className="text-xs text-slate-300 font-mono whitespace-pre-wrap break-words">{recognizedText}</p>
+                </div>
+              )}
+
+              {/* Formulário */}
+              <div className="space-y-3 pt-2">
                 <div>
                   <label className="block text-sm font-medium text-slate-300 mb-1">
                     Equipamento
@@ -232,14 +307,20 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
 
                 <div className="flex gap-2 pt-2">
                   <button
-                    onClick={() => setMode('menu')}
+                    onClick={() => {
+                      setMode('menu')
+                      setRecognizedText('')
+                      setEquipment('')
+                      setSerial('')
+                    }}
                     className="flex-1 px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition font-medium"
                   >
                     Voltar
                   </button>
                   <button
                     onClick={handleConfirm}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition font-medium"
+                    disabled={loading}
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 disabled:opacity-50 text-white rounded-lg transition font-medium"
                   >
                     <Check size={18} />
                     Confirmar
