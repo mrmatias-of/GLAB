@@ -190,19 +190,8 @@ export default function OrdensServicoPage() {
   ]
 
   return (
-    <div className="space-y-4">
-      <DataTable<OrdemServico>
-        title="Gerenciamento de Ordens de Serviço"
-        columns={columns}
-        data={ordensServico}
-        loading={loading}
-        onAdd={handleAdd}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        searchPlaceholder="Pesquisar por número, descrição..."
-        searchableFields={['numero', 'descricao']}
-      />
-
+    <>
+      {/* Camera Capture - fora da modal para evitar conflitos */}
       {showCameraCapture && (
         <CameraCapture
           onCapture={handleCameraCapture}
@@ -210,30 +199,47 @@ export default function OrdensServicoPage() {
         />
       )}
 
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title={editingId ? 'Editar Ordem de Serviço' : 'Nova Ordem de Serviço'}
-        size="lg"
-        onSubmit={() => handleSubmit(formData)}
-      >
-        <div className="space-y-4 mb-4">
-          <button
-            type="button"
-            onClick={() => setShowCameraCapture(true)}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition font-medium"
-          >
-            <Camera size={18} />
-            Capturar Equipamento com Câmera
-          </button>
-        </div>
-        <Form
-          fields={formFields}
-          initialValues={formData}
-          onSubmit={handleSubmit}
-          onCancel={() => setIsModalOpen(false)}
+      <div className="space-y-4">
+        <DataTable<OrdemServico>
+          title="Gerenciamento de Ordens de Serviço"
+          columns={columns}
+          data={ordensServico}
+          loading={loading}
+          onAdd={handleAdd}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          searchPlaceholder="Pesquisar por número, descrição..."
+          searchableFields={['numero', 'descricao']}
         />
-      </Modal>
-    </div>
+
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          title={editingId ? 'Editar Ordem de Serviço' : 'Nova Ordem de Serviço'}
+          size="lg"
+          onSubmit={() => handleSubmit(formData)}
+        >
+          <div className="space-y-4 mb-4">
+            <button
+              type="button"
+              onClick={() => {
+                console.log('[v0] Camera button clicked, opening camera')
+                setShowCameraCapture(true)
+              }}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition font-medium"
+            >
+              <Camera size={18} />
+              Capturar Equipamento com Câmera
+            </button>
+          </div>
+          <Form
+            fields={formFields}
+            initialValues={formData}
+            onSubmit={handleSubmit}
+            onCancel={() => setIsModalOpen(false)}
+          />
+        </Modal>
+      </div>
+    </>
   )
 }
