@@ -125,7 +125,7 @@ export default function AdminLayout({
       {/* Main Content */}
       <div className="lg:ml-64">
         {/* Header */}
-        <header className="header-elegant">
+        <header className="bg-slate-900/50 backdrop-blur-sm border-b border-slate-800 sticky top-0 z-30">
           <div className="px-4 lg:px-8 py-4 flex items-center gap-4">
             <button
               onClick={() => setMobileOpen(true)}
@@ -141,11 +141,11 @@ export default function AdminLayout({
                 width={28}
                 height={28}
               />
-              <h2 className="text-xl lg:text-2xl font-bold text-white truncate">
+              <h2 className="text-xl lg:text-2xl font-bold text-slate-100 truncate">
                 {currentTitle}
               </h2>
             </div>
-            <p className="text-sm text-slate-500 hidden sm:block">
+            <p className="text-sm text-slate-400 hidden sm:block">
               {new Date().toLocaleDateString('pt-BR')}
             </p>
           </div>
