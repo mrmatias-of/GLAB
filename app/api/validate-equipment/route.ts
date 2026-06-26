@@ -15,23 +15,33 @@ export async function POST(req: Request) {
       )
     }
 
-    let prompt = `Você é um especialista em equipamentos eletrônicos (telefones, notebooks, tablets, etc).
+    const systemPrompt = `Você é um especialista em identificar equipamentos eletrônicos (telefones, notebooks, tablets, smartwatches, etc).
 
-Analise as informações fornecidas e identifique o equipamento corretamente.
+Responda SEMPRE em JSON válido com a seguinte estrutura exata (sem markdown, apenas JSON):
+{
+  "isValid": true/false,
+  "brand": "marca correta",
+  "model": "modelo correto",
+  "serialNumber": "número de série se identificável ou null",
+  "variant": "descrição de variação (cor, storage, etc) se identificável ou null",
+  "confidence": "high/medium/low",
+  "notes": "observações ou correções realizadas"
+}
 
-`
+Se o equipamento não for identificável ou parecer fraudulento, marque isValid como false.`
 
     const messages: any[] = []
 
-    // Se temos imagem, usar visão
+    // Se temos imagem, usar visão com Claude
     if (imageBase64) {
-      prompt += `A imagem mostra um equipamento. Identifique corretamente:
-1. Marca (Apple, Samsung, LG, etc)
-2. Modelo exato (iPhone 14 Pro, Galaxy S23, etc)
+      const imagePrompt = `Analise esta imagem de um equipamento e identifique:
+1. Marca (Apple, Samsung, LG, Xiaomi, etc)
+2. Modelo exato (iPhone 14 Pro, Galaxy S23 Ultra, etc)
 3. Número de série (se visível)
-4. Variação de cor/storage (se identificável)
+4. Variação (cor, capacidade de armazenamento, etc)
 
-`
+Seja preciso e seguro apenas em informações que conseguir identificar claramente da imagem.`
+
       messages.push({
         role: 'user',
         content: [
@@ -45,44 +55,29 @@ Analise as informações fornecidas e identifique o equipamento corretamente.
           },
           {
             type: 'text',
-            text: prompt,
+            text: imagePrompt,
           },
         ],
       })
     } else {
       // Se temos apenas texto do OCR
-      prompt += `Baseado no texto reconhecido do equipamento:
+      const textPrompt = `Baseado no texto reconhecido do equipamento, identifique corretamente:
 Texto reconhecido: "${recognizedText}"
-Equipamento informado: "${equipment}"
-Série informada: "${serial}"
+Equipamento informado: "${equipment || 'não informado'}"
+Série informada: "${serial || 'não informada'}"
 
-Valide se o modelo está correto e corrija se necessário.
-`
+Valide se o modelo está correto e corrija se necessário. Busque identificar a marca e modelo mesmo que o texto seja parcial.`
+
       messages.push({
         role: 'user',
-        content: prompt,
+        content: textPrompt,
       })
     }
-
-    prompt += `
-
-Responda em JSON com a seguinte estrutura (APENAS JSON válido, sem markdown):
-{
-  "isValid": true/false,
-  "brand": "marca correta",
-  "model": "modelo correto",
-  "serialNumber": "número de série se identificável ou null",
-  "variant": "descrição de variação (cor, storage, etc) se identificável",
-  "confidence": "high/medium/low",
-  "notes": "observações ou correções realizadas"
-}
-
-Se o equipamento não for identificável ou parecer fraudulento, marque isValid como false.
-`
 
     const response = await client.messages.create({
       model: 'claude-3-5-sonnet-20241022',
       max_tokens: 1024,
+      system: systemPrompt,
       messages: messages,
     })
 

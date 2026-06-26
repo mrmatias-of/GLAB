@@ -1,8 +1,7 @@
 'use client'
 
 import { useRef, useState, useEffect } from 'react'
-import { Camera, X, Check, Upload, Loader } from 'lucide-react'
-import Tesseract from 'tesseract.js'
+import { Camera, X, Check, Upload, Loader, AlertCircle } from 'lucide-react'
 
 interface CameraCaptureProps {
   onCapture: (data: { equipment: string; serialNumber: string }) => void
@@ -19,12 +18,9 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
   const [equipment, setEquipment] = useState('')
   const [serial, setSerial] = useState('')
   const [stream, setStream] = useState<MediaStream | null>(null)
-  const [recognizedText, setRecognizedText] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [recognitionProgress, setRecognitionProgress] = useState(0)
   const [validating, setValidating] = useState(false)
   const [validationResult, setValidationResult] = useState<any>(null)
-  const [photoBase64, setPhotoBase64] = useState<string>('')
+  const [aiSuggestion, setAiSuggestion] = useState<string>('')
 
   // Configurar video stream quando stream muda
   useEffect(() => {
@@ -121,7 +117,7 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
       setRecognitionProgress(0)
       console.log('[v0] Iniciando OCR com Tesseract...')
       
-      const result = await Tesseract.recognize(imageData, 'eng', {
+      const result = await Tesseract.recognize(imageData, 'eng+por', {
         logger: (m) => {
           if (m.status === 'recognizing') {
             setRecognitionProgress(Math.round(m.progress * 100))
@@ -162,20 +158,28 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
   const validateEquipment = async (imageBase64: string, recognizedText: string, equipmentText: string) => {
     try {
       setValidating(true)
-      console.log('[v0] Validando equipamento com IA...')
+      console.log('[v0] Validando equipamento com IA (usando imagem)...')
+      
+      // Extrair apenas o base64 se tiver o prefixo
+      let base64Data = imageBase64
+      if (imageBase64.includes(',')) {
+        base64Data = imageBase64.split(',')[1]
+      }
       
       const response = await fetch('/api/validate-equipment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          imageBase64: imageBase64.split(',')[1], // Remover prefix data:image/jpeg;base64,
-          recognizedText,
-          equipment: equipmentText,
+          imageBase64: base64Data,
+          recognizedText: recognizedText || '',
+          equipment: equipmentText || '',
         }),
       })
 
       if (!response.ok) {
-        console.error('[v0] Erro na validação')
+        const errorData = await response.json()
+        console.error('[v0] Erro na validação:', errorData)
+        alert(`Erro na validação: ${errorData.error || 'desconhecido'}`)
         return
       }
 
@@ -184,14 +188,27 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
       setValidationResult(data.validation)
       
       // Auto-preencher com dados validados
-      if (data.validation.isValid) {
-        setEquipment(`${data.validation.brand} ${data.validation.model}`)
+      if (data.validation && data.validation.isValid) {
+        const fullModel = data.validation.variant 
+          ? `${data.validation.brand} ${data.validation.model} ${data.validation.variant}`
+          : `${data.validation.brand} ${data.validation.model}`
+        
+        setEquipment(fullModel.trim())
+        
         if (data.validation.serialNumber) {
           setSerial(data.validation.serialNumber)
         }
+      } else if (data.validation) {
+        // Mesmo que não seja válido, preencher com o que Claude identificou
+        const fullModel = data.validation.variant 
+          ? `${data.validation.brand} ${data.validation.model} ${data.validation.variant}`
+          : `${data.validation.brand} ${data.validation.model}`
+        
+        setEquipment(fullModel.trim())
       }
     } catch (error) {
       console.error('[v0] Erro ao validar:', error)
+      alert('Erro ao validar equipamento. Preencha manualmente.')
     } finally {
       setValidating(false)
     }
