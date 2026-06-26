@@ -79,13 +79,13 @@ export function DataTable<T extends { id?: number | string }>(
   }
 
   return (
-    <div className="space-y-4">
-      {title && <h2 className="text-2xl font-bold text-slate-900">{title}</h2>}
+    <div className="space-y-6">
+      {title && <h2 className="text-2xl font-bold text-white">{title}</h2>}
 
       {/* Controls */}
       <div className="flex items-center justify-between gap-4">
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
           <input
             type="text"
             placeholder={searchPlaceholder}
@@ -94,13 +94,13 @@ export function DataTable<T extends { id?: number | string }>(
               setSearchTerm(e.target.value)
               setCurrentPage(1)
             }}
-            className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            className="w-full pl-10 pr-4 py-2.5 bg-slate-800 border border-slate-700 text-white rounded-lg placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition"
           />
         </div>
         {onAdd && (
           <button
             onClick={onAdd}
-            className="flex items-center gap-2 px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition"
+            className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-cyan-600 to-cyan-700 text-white rounded-lg hover:from-cyan-700 hover:to-cyan-800 transition transform hover:scale-105 font-medium"
           >
             <Plus className="w-4 h-4" />
             Novo
@@ -109,60 +109,61 @@ export function DataTable<T extends { id?: number | string }>(
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto border border-slate-300 rounded-lg">
+      <div className="overflow-x-auto rounded-lg border border-slate-700">
         <table className="w-full">
-          <thead className="bg-slate-50 border-b border-slate-300">
-            <tr>
+          <thead>
+            <tr className="bg-gradient-to-r from-slate-800/50 to-slate-700/30 border-b border-slate-700">
               {columns.map((col) => (
                 <th
                   key={String(col.key)}
                   onClick={() => col.sortable && toggleSort(col.key)}
-                  className={`px-4 py-3 text-left text-sm font-semibold text-slate-700 ${
+                  className={`px-4 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider ${
                     col.width || ''
-                  } ${col.sortable ? 'cursor-pointer hover:bg-slate-100' : ''}`}
+                  } ${col.sortable ? 'cursor-pointer hover:text-cyan-400 transition' : ''}`}
                 >
                   <div className="flex items-center gap-2">
                     {col.label}
                     {col.sortable && sortKey === col.key && (
-                      <span className="text-cyan-600">{sortDir === 'asc' ? '↑' : '↓'}</span>
+                      <span className="text-cyan-400 text-base">{sortDir === 'asc' ? '↑' : '↓'}</span>
                     )}
                   </div>
                 </th>
               ))}
-              {(onEdit || onDelete) && <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">Ações</th>}
+              {(onEdit || onDelete) && <th className="px-4 py-4 text-right text-xs font-semibold text-slate-300 uppercase tracking-wider">Ações</th>}
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={columns.length + 1} className="px-4 py-8 text-center text-slate-500">
+                <td colSpan={columns.length + 1} className="px-4 py-8 text-center text-slate-400">
                   Carregando...
                 </td>
               </tr>
             ) : paged.length === 0 ? (
               <tr>
-                <td colSpan={columns.length + 1} className="px-4 py-8 text-center text-slate-500">
+                <td colSpan={columns.length + 1} className="px-4 py-12 text-center text-slate-400">
                   Nenhum resultado encontrado
                 </td>
               </tr>
             ) : (
               paged.map((item, idx) => (
-                <tr key={item.id || idx} className="border-b border-slate-300 hover:bg-slate-50">
+                <tr key={item.id || idx} className="border-b border-slate-700/50 hover:bg-slate-800/50 transition">
                   {columns.map((col) => (
                     <td
                       key={String(col.key)}
-                      className={`px-4 py-3 text-sm text-slate-800 ${col.width || ''}`}
+                      className={`px-4 py-3.5 text-sm text-slate-300 ${col.width || ''}`}
                     >
                       {col.render ? col.render(item[col.key], item) : String(item[col.key] || '')}
                     </td>
                   ))}
                   {(onEdit || onDelete) && (
-                    <td className="px-4 py-3 text-right">
+                    <td className="px-4 py-3.5 text-right">
                       <div className="flex items-center justify-end gap-2">
                         {onEdit && (
                           <button
                             onClick={() => onEdit(item)}
-                            className="p-2 text-blue-600 hover:bg-blue-50 rounded transition"
+                            className="p-2 text-blue-400 hover:bg-blue-500/20 hover:text-blue-300 rounded-lg transition"
+                            title="Editar"
                           >
                             <Edit2 className="w-4 h-4" />
                           </button>
@@ -170,7 +171,8 @@ export function DataTable<T extends { id?: number | string }>(
                         {onDelete && (
                           <button
                             onClick={() => onDelete(item)}
-                            className="p-2 text-red-600 hover:bg-red-50 rounded transition"
+                            className="p-2 text-red-400 hover:bg-red-500/20 hover:text-red-300 rounded-lg transition"
+                            title="Deletar"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -187,25 +189,25 @@ export function DataTable<T extends { id?: number | string }>(
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between">
-          <div className="text-sm text-slate-600">
-            Mostrando {start + 1} de {sorted.length} ({totalPages} páginas)
+        <div className="flex items-center justify-between pt-2">
+          <div className="text-sm text-slate-400">
+            Mostrando <span className="text-cyan-400 font-medium">{start + 1}-{Math.min(start + itemsPerPage, sorted.length)}</span> de <span className="text-cyan-400 font-medium">{sorted.length}</span> ({totalPages} páginas)
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
               disabled={currentPage === 1}
-              className="p-2 hover:bg-slate-100 disabled:opacity-50 rounded"
+              className="p-2 hover:bg-slate-800 hover:text-cyan-400 disabled:opacity-30 disabled:hover:bg-transparent rounded-lg transition text-slate-400"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="text-sm">
-              {currentPage} / {totalPages}
+            <span className="text-sm text-slate-400 px-3">
+              <span className="text-cyan-400 font-medium">{currentPage}</span> / {totalPages}
             </span>
             <button
               onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
               disabled={currentPage === totalPages}
-              className="p-2 hover:bg-slate-100 disabled:opacity-50 rounded"
+              className="p-2 hover:bg-slate-800 hover:text-cyan-400 disabled:opacity-30 disabled:hover:bg-transparent rounded-lg transition text-slate-400"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
