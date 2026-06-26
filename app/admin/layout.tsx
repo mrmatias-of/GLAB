@@ -102,9 +102,9 @@ export default function AdminLayout({
   )
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-950">
       {/* Desktop Sidebar - fixed */}
-      <aside className="hidden lg:flex flex-col w-64 bg-gradient-to-b from-slate-900 to-slate-800 text-white fixed left-0 top-0 bottom-0 shadow-lg z-40">
+      <aside className="hidden lg:flex flex-col w-64 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white fixed left-0 top-0 bottom-0 shadow-2xl z-40 border-r border-slate-800">
         <SidebarContent />
       </aside>
 
@@ -112,11 +112,11 @@ export default function AdminLayout({
       {mobileOpen && (
         <>
           <div
-            className="lg:hidden fixed inset-0 bg-black/50 z-40"
+            className="lg:hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-40"
             onClick={() => setMobileOpen(false)}
             aria-hidden="true"
           />
-          <aside className="lg:hidden flex flex-col w-72 max-w-[80%] bg-gradient-to-b from-slate-900 to-slate-800 text-white fixed left-0 top-0 bottom-0 shadow-2xl z-50">
+          <aside className="lg:hidden flex flex-col w-72 max-w-[80%] bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white fixed left-0 top-0 bottom-0 shadow-2xl z-50 border-r border-slate-800">
             <SidebarContent />
           </aside>
         </>
@@ -125,34 +125,36 @@ export default function AdminLayout({
       {/* Main Content */}
       <div className="lg:ml-64">
         {/* Header */}
-        <header className="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-30">
+        <header className="header-elegant">
           <div className="px-4 lg:px-8 py-4 flex items-center gap-4">
             <button
               onClick={() => setMobileOpen(true)}
-              className="lg:hidden p-2 -ml-2 hover:bg-slate-100 rounded-lg transition"
+              className="lg:hidden p-2 -ml-2 hover:bg-slate-800 rounded-lg transition text-slate-300"
               aria-label="Abrir menu"
             >
-              <Menu className="h-6 w-6 text-slate-700" />
+              <Menu className="h-6 w-6" />
             </button>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3 flex-1">
               <Image
                 src="/logo-glab-neon.png"
                 alt="G•Lab"
                 width={28}
                 height={28}
               />
-              <h2 className="text-xl lg:text-2xl font-bold text-slate-900 truncate">
+              <h2 className="text-xl lg:text-2xl font-bold text-white truncate">
                 {currentTitle}
               </h2>
             </div>
-            <p className="text-sm text-slate-600 hidden sm:block">
+            <p className="text-sm text-slate-500 hidden sm:block">
               {new Date().toLocaleDateString('pt-BR')}
             </p>
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="p-4 lg:p-8">{children}</main>
+        <main className="p-4 lg:p-8 max-w-7xl mx-auto">
+          {children}
+        </main>
       </div>
     </div>
   )
