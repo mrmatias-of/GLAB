@@ -5,45 +5,40 @@ import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 export const metadata: Metadata = {
-  title: 'Entrar | G•Lab Cursos',
-  description: 'Área de acesso administrativo',
+  title: 'Login | G•Lab Cursos - Neon PostgreSQL Edition',
+  description: 'Faça login na plataforma de cursos G•Lab',
 }
 
-export default async function LoginPage() {
-  // Se usuário já está logado, redireciona para home
+export default async function SignInPage() {
+  // Verifica sessão existente
   const session = await auth.api.getSession({ headers: await headers() })
   if (session?.user) {
     redirect('/')
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
-      <div className="w-full max-w-md">
-        <div className="bg-white rounded-lg shadow-xl p-8">
-          <div className="flex justify-center mb-8">
-            <div className="text-3xl font-bold text-cyan-600">G•Lab</div>
-          </div>
-          
-          <h1 className="text-2xl font-bold text-center text-slate-900 mb-2">
-            Entrar
-          </h1>
-          <p className="text-center text-slate-600 mb-8">
-            Acesso à plataforma de cursos
-          </p>
+    <div className="w-full min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
+      <div className="w-full max-w-md space-y-8">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-slate-900 mb-2">G•Lab</h1>
+          <h2 className="text-xl font-semibold text-slate-700 mb-2">Fazer Login</h2>
+          <p className="text-slate-600">Plataforma de Cursos Online</p>
+        </div>
 
+        <div className="bg-white rounded-xl shadow-lg p-8 space-y-6">
           <AuthForm mode="sign-in" />
-
-          <div className="mt-6 text-center text-sm text-slate-600">
-            Não tem conta?{' '}
-            <a href="/sign-up" className="text-cyan-600 hover:text-cyan-700 font-medium">
+          
+          <div className="pt-4 border-t border-slate-200 text-center text-sm text-slate-600">
+            Não tem uma conta?{' '}
+            <a href="/sign-up" className="font-semibold text-blue-600 hover:text-blue-700">
               Criar conta
             </a>
           </div>
         </div>
 
-        <div className="mt-8 text-center text-xs text-slate-500">
-          <p>© 2024 G•Lab Cursos. Todos os direitos reservados.</p>
-        </div>
+        <p className="text-center text-xs text-slate-500">
+          Powered by Neon PostgreSQL + Better Auth
+        </p>
       </div>
     </div>
   )
