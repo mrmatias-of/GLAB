@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import Image from 'next/image'
+import { useActivityTracker } from '@/hooks/use-activity-tracker'
 import {
   LayoutDashboard,
   ClipboardList,
@@ -34,10 +35,23 @@ export default function AdminLayout({
 }) {
   const pathname = usePathname()
   const router = useRouter()
+  const [sidebarOpen, setSidebarOpen] = useState(true)
   const [mobileOpen, setMobileOpen] = useState(false)
 
-  const handleLogout = () => {
-    router.push('/login')
+  // Rastrear atividade do usuário para timeout
+  useActivityTracker()
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      })
+    } catch (err) {
+      console.error('[Logout] Erro:', err)
+    } finally {
+      router.push('/login')
+    }
   }
 
   const currentTitle =

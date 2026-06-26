@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
 
     // Para teste: aceitar admin@glabcursos.com / Larissa@123
     if (email === 'admin@glabcursos.com' && password === 'Larissa@123') {
-      // Criar cookie de sessão simples
+      // Criar cookie de sessão com rastreamento de atividade
       const response = NextResponse.json(
         { 
           success: true,
@@ -23,12 +23,22 @@ export async function POST(request: NextRequest) {
         { status: 200 }
       )
 
-      // Set cookie para manter login
-      response.cookies.set('auth', 'true', {
+      // Set session cookie (httpOnly para segurança)
+      const sessionId = `session_${Date.now()}_${Math.random().toString(36).slice(2)}`
+      response.cookies.set('auth_session', sessionId, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
-        maxAge: 7 * 24 * 60 * 60, // 7 dias
+        maxAge: 24 * 60 * 60, // 24 horas máximo
+        path: '/',
+      })
+
+      // Set activity timestamp
+      response.cookies.set('last_activity', Date.now().toString(), {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 24 * 60 * 60,
         path: '/',
       })
 
