@@ -28,7 +28,7 @@ export default function LoginPage() {
       }
 
       setSuccess(true)
-      setTimeout(() => router.push('/'), 1500)
+      setTimeout(() => router.push('/admin'), 1500)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao fazer login')
     } finally {
@@ -37,64 +37,77 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
-      <div className="w-full max-w-md">
-        <div className="bg-white rounded-lg shadow-xl p-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 bg-[radial-gradient(circle-at-20%-50%,rgba(6,182,212,0.3),transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle-at-80%-80%,rgba(59,130,246,0.3),transparent_50%)]"></div>
+      </div>
+
+      <div className="w-full max-w-md relative z-10">
+        <div className="bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-white/20">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-cyan-600 mb-2">G•Lab</h1>
-            <p className="text-slate-600">Plataforma de Cursos Online</p>
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl mb-4">
+              <span className="text-2xl font-bold text-white">G</span>
+            </div>
+            <h1 className="text-3xl font-bold text-white mb-2">G•Lab Cursos</h1>
+            <p className="text-slate-300 text-sm">Plataforma de Educação Online</p>
           </div>
 
           {success ? (
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-              <p className="text-green-800 font-semibold">✓ Login realizado com sucesso!</p>
+            <div className="bg-green-500/20 border border-green-400/50 rounded-xl p-4 text-center">
+              <p className="text-green-200 font-semibold">✓ Login realizado com sucesso!</p>
+              <p className="text-green-300/70 text-sm mt-2">Redirecionando para o painel...</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-slate-200 mb-2">
                   Email
                 </label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition"
+                  placeholder="seu@email.com"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-slate-200 mb-2">
                   Senha
                 </label>
                 <input
                   type="password"
                   value={password}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition"
+                  placeholder="••••••••"
                   required
                 />
               </div>
 
               {error && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-red-800 text-sm">
-                  {error}
+                <div className="bg-red-500/20 border border-red-400/50 rounded-lg p-3 text-red-200 text-sm">
+                  <p className="font-medium">Erro ao fazer login</p>
+                  <p className="text-sm mt-1">{error}</p>
                 </div>
               )}
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-cyan-600 hover:bg-cyan-700 disabled:bg-gray-400 text-white font-medium py-2 rounded-lg transition"
+                className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 disabled:opacity-50 text-white font-semibold py-3 rounded-lg transition transform hover:scale-105"
               >
-                {loading ? 'Entrando...' : 'Entrar'}
+                {loading ? '⏳ Entrando...' : '→ Entrar no Painel'}
               </button>
             </form>
           )}
 
-          <div className="mt-6 text-center text-sm text-slate-600">
-            <a href="/" className="text-cyan-600 hover:text-cyan-700 font-medium">
+          <div className="mt-8 text-center text-sm text-slate-300 border-t border-white/10 pt-6">
+            <a href="/" className="text-cyan-300 hover:text-cyan-200 font-medium transition">
               ← Voltar para home
             </a>
           </div>
