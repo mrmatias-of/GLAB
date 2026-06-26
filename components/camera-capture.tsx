@@ -22,6 +22,9 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
   const [recognizedText, setRecognizedText] = useState('')
   const [loading, setLoading] = useState(false)
   const [recognitionProgress, setRecognitionProgress] = useState(0)
+  const [validating, setValidating] = useState(false)
+  const [validationResult, setValidationResult] = useState<any>(null)
+  const [photoBase64, setPhotoBase64] = useState<string>('')
 
   // Configurar video stream quando stream muda
   useEffect(() => {
@@ -145,11 +148,52 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
           }
         }
       }
+      
+      // Após OCR, validar o equipamento
+      await validateEquipment(imageData, text, lines[0]?.trim() || '')
     } catch (error) {
       console.error('[v0] Erro OCR:', error)
       alert('Erro ao reconhecer texto. Preencha manualmente.')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const validateEquipment = async (imageBase64: string, recognizedText: string, equipmentText: string) => {
+    try {
+      setValidating(true)
+      console.log('[v0] Validando equipamento com IA...')
+      
+      const response = await fetch('/api/validate-equipment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          imageBase64: imageBase64.split(',')[1], // Remover prefix data:image/jpeg;base64,
+          recognizedText,
+          equipment: equipmentText,
+        }),
+      })
+
+      if (!response.ok) {
+        console.error('[v0] Erro na validação')
+        return
+      }
+
+      const data = await response.json()
+      console.log('[v0] Resultado da validação:', data.validation)
+      setValidationResult(data.validation)
+      
+      // Auto-preencher com dados validados
+      if (data.validation.isValid) {
+        setEquipment(`${data.validation.brand} ${data.validation.model}`)
+        if (data.validation.serialNumber) {
+          setSerial(data.validation.serialNumber)
+        }
+      }
+    } catch (error) {
+      console.error('[v0] Erro ao validar:', error)
+    } finally {
+      setValidating(false)
     }
   }
 
@@ -253,18 +297,48 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
                 <img src={photo} alt="Capturada" className="w-full object-cover" />
               </div>
               
-              {/* Indicador de OCR */}
-              {loading && (
+              {/* Indicador de OCR e Validação */}
+              {(loading || validating) && (
                 <div className="p-3 bg-slate-800/50 rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
                     <Loader size={16} className="animate-spin text-cyan-500" />
-                    <span className="text-sm text-slate-300">Reconhecendo texto...</span>
+                    <span className="text-sm text-slate-300">
+                      {loading ? 'Reconhecendo texto...' : 'Validando equipamento...'}
+                    </span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-2">
                     <div
                       className="bg-cyan-600 h-2 rounded-full transition-all"
-                      style={{ width: `${recognitionProgress}%` }}
+                      style={{ width: `${loading ? recognitionProgress : 75}%` }}
                     />
+                  </div>
+                </div>
+              )}
+
+              {/* Resultado da validação */}
+              {validationResult && !loading && !validating && (
+                <div className={`p-3 rounded-lg border ${validationResult.isValid ? 'bg-green-500/10 border-green-500/30' : 'bg-red-500/10 border-red-500/30'}`}>
+                  <div className="flex items-start gap-2">
+                    <div className={`text-${validationResult.isValid ? 'green' : 'red'}-400 font-bold`}>
+                      {validationResult.isValid ? '✓' : '✗'}
+                    </div>
+                    <div className="flex-1 text-sm">
+                      <p className={validationResult.isValid ? 'text-green-400' : 'text-red-400'}>
+                        {validationResult.isValid ? 'Equipamento validado' : 'Equipamento não validado'}
+                      </p>
+                      {validationResult.brand && (
+                        <p className="text-slate-300 text-xs mt-1">
+                          <span className="font-semibold">{validationResult.brand}</span> {validationResult.model}
+                          {validationResult.variant && ` (${validationResult.variant})`}
+                        </p>
+                      )}
+                      {validationResult.notes && (
+                        <p className="text-slate-400 text-xs mt-1 italic">{validationResult.notes}</p>
+                      )}
+                      <p className="text-slate-500 text-xs mt-1">
+                        Confiança: <span className="capitalize">{validationResult.confidence}</span>
+                      </p>
+                    </div>
                   </div>
                 </div>
               )}
