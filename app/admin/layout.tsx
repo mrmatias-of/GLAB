@@ -116,7 +116,7 @@ export default function AdminLayout({
   )
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-slate-950 flex flex-col">
       {/* Desktop Sidebar - fixed */}
       <aside className="hidden lg:flex flex-col w-64 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white fixed left-0 top-0 bottom-0 shadow-2xl z-40 border-r border-slate-800">
         <SidebarContent />
@@ -137,9 +137,9 @@ export default function AdminLayout({
       )}
 
       {/* Main Content */}
-      <div className="lg:ml-64">
+      <div className="lg:ml-64 flex-1 flex flex-col">
         {/* Header */}
-        <header className="bg-slate-900/50 backdrop-blur-sm border-b border-slate-800 sticky top-0 z-30">
+        <header className="bg-slate-900/50 backdrop-blur-sm border-b border-slate-800 sticky top-0 z-30 flex-shrink-0">
           <div className="px-4 lg:px-8 py-4 flex items-center gap-4">
             <button
               onClick={() => setMobileOpen(true)}
@@ -166,7 +166,7 @@ export default function AdminLayout({
         </header>
 
         {/* Page Content */}
-        <main className="p-3 lg:p-6 max-w-7xl mx-auto">
+        <main className="flex-1 p-3 lg:p-6 max-w-7xl mx-auto w-full">
           {children}
         </main>
       </div>
