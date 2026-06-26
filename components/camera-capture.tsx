@@ -85,7 +85,7 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
         const photoData = canvasRef.current.toDataURL('image/jpeg')
         setPhoto(photoData)
         setMode('preview')
-        performOCR(photoData)
+        analyzeWithAI(photoData)
         
         if (stream) {
           stream.getTracks().forEach((track) => track.stop())
@@ -105,121 +105,61 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
       if (typeof result === 'string') {
         setPhoto(result)
         setMode('preview')
-        performOCR(result)
+        analyzeWithAI(result)
       }
     }
     reader.readAsDataURL(file)
   }
 
-  const performOCR = async (imageData: string) => {
-    try {
-      setLoading(true)
-      setRecognitionProgress(0)
-      console.log('[v0] Iniciando OCR com Tesseract...')
-      
-      const result = await Tesseract.recognize(imageData, 'eng+por', {
-        logger: (m) => {
-          if (m.status === 'recognizing') {
-            setRecognitionProgress(Math.round(m.progress * 100))
-            console.log(`[v0] OCR Progress: ${Math.round(m.progress * 100)}%`)
-          }
-        }
-      })
-
-      const text = result.data.text
-      console.log('[v0] Texto reconhecido:', text)
-      setRecognizedText(text)
-      
-      // Tentar extrair dados automaticamente
-      const lines = text.split('\n').filter((l) => l.trim().length > 0)
-      if (lines.length > 0) {
-        // Primeiro não-vazio como equipamento
-        setEquipment(lines[0].trim())
-        
-        // Procurar por padrão de série
-        for (const line of lines) {
-          if (line.match(/^[A-Z0-9]{8,}$|SN|S\/N|Serie/i)) {
-            setSerial(line.trim())
-            break
-          }
-        }
-      }
-      
-      // Após OCR, validar o equipamento
-      await validateEquipment(imageData, text, lines[0]?.trim() || '')
-    } catch (error) {
-      console.error('[v0] Erro OCR:', error)
-      alert('Erro ao reconhecer texto. Preencha manualmente.')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const validateEquipment = async (imageBase64: string, recognizedText: string, equipmentText: string) => {
+  const analyzeWithAI = async (imageBase64: string) => {
     try {
       setValidating(true)
-      console.log('[v0] Validando equipamento com IA (usando imagem)...')
-      
-      // Extrair apenas o base64 se tiver o prefixo
-      let base64Data = imageBase64
-      if (imageBase64.includes(',')) {
-        base64Data = imageBase64.split(',')[1]
-      }
+      console.log('[v0] Analisando imagem com IA...')
       
       const response = await fetch('/api/validate-equipment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          imageBase64: base64Data,
-          recognizedText: recognizedText || '',
-          equipment: equipmentText || '',
+          imageBase64: imageBase64.split(',')[1],
+          recognizedText: '',
+          equipment: '',
         }),
       })
 
       if (!response.ok) {
-        const errorData = await response.json()
-        console.error('[v0] Erro na validação:', errorData)
-        alert(`Erro na validação: ${errorData.error || 'desconhecido'}`)
+        console.error('[v0] Erro na análise')
+        setAiSuggestion('Não foi possível analisar a imagem. Preencha manualmente.')
         return
       }
 
       const data = await response.json()
-      console.log('[v0] Resultado da validação:', data.validation)
+      console.log('[v0] Análise concluída:', data.validation)
       setValidationResult(data.validation)
       
-      // Auto-preencher com dados validados
-      if (data.validation && data.validation.isValid) {
-        const fullModel = data.validation.variant 
-          ? `${data.validation.brand} ${data.validation.model} ${data.validation.variant}`
-          : `${data.validation.brand} ${data.validation.model}`
-        
-        setEquipment(fullModel.trim())
-        
-        if (data.validation.serialNumber) {
-          setSerial(data.validation.serialNumber)
-        }
-      } else if (data.validation) {
-        // Mesmo que não seja válido, preencher com o que Claude identificou
-        const fullModel = data.validation.variant 
-          ? `${data.validation.brand} ${data.validation.model} ${data.validation.variant}`
-          : `${data.validation.brand} ${data.validation.model}`
-        
-        setEquipment(fullModel.trim())
+      if (data.validation.isValid && data.validation.brand) {
+        const suggestion = `${data.validation.brand} ${data.validation.model || ''}`.trim()
+        setAiSuggestion(suggestion)
+        setEquipment(suggestion)
+      } else {
+        setAiSuggestion('Equipamento não identificado. Preencha manualmente.')
       }
     } catch (error) {
-      console.error('[v0] Erro ao validar:', error)
-      alert('Erro ao validar equipamento. Preencha manualmente.')
+      console.error('[v0] Erro:', error)
+      setAiSuggestion('Erro ao analisar. Tente novamente.')
     } finally {
       setValidating(false)
     }
   }
 
   const handleConfirm = () => {
-    if (!equipment.trim() || !serial.trim()) {
-      alert('Preencha equipamento e série')
+    if (!equipment.trim()) {
+      alert('Preencha o equipamento')
       return
     }
-    onCapture({ equipment, serialNumber: serial })
+    onCapture({ 
+      equipment: equipment.trim(), 
+      serialNumber: serial.trim() 
+    })
   }
 
   const handleCancel = () => {
@@ -232,9 +172,9 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[9999] p-4">
-      <div className="bg-slate-900 rounded-lg border border-slate-700 w-full max-w-lg max-h-[90vh] overflow-y-auto flex flex-col">
+      <div className="bg-slate-900 rounded-lg border border-slate-700 w-full max-w-2xl max-h-[95vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-slate-700 flex-shrink-0">
+        <div className="flex items-center justify-between p-4 border-b border-slate-700 flex-shrink-0 bg-slate-950">
           <h2 className="text-lg font-bold text-white">Capturar Equipamento</h2>
           <button onClick={handleCancel} className="text-slate-400 hover:text-white flex-shrink-0">
             <X size={24} />
@@ -242,22 +182,30 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
         </div>
 
         {/* Content */}
-        <div className="p-4 flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto p-6 space-y-4">
           {mode === 'menu' && (
-            <div className="space-y-3">
+            <div className="space-y-3 flex flex-col h-full justify-center">
               <button
                 onClick={openCamera}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition font-medium"
+                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition font-medium text-lg"
               >
-                <Camera size={20} />
+                <Camera size={24} />
                 Abrir Câmera
               </button>
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-slate-700" />
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-slate-900 text-slate-400">ou</span>
+                </div>
+              </div>
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition font-medium"
+                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition font-medium text-lg"
               >
-                <Upload size={20} />
-                Carregar Foto
+                <Upload size={24} />
+                Carregar Foto da Galeria
               </button>
               <input
                 ref={fileInputRef}
@@ -270,24 +218,18 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
           )}
 
           {mode === 'camera' && (
-            <div className="space-y-3">
-              <div className="relative">
-                <video
-                  ref={videoRef}
-                  autoPlay
-                  playsInline
-                  muted
-                  crossOrigin="anonymous"
-                  className="w-full rounded-lg bg-black aspect-square object-cover"
-                  onLoadedMetadata={() => console.log('[v0] Video metadata carregada')}
-                  onPlay={() => console.log('[v0] Video começou a reproduzir')}
-                  onError={(e) => console.error('[v0] Erro no vídeo:', e)}
-                />
-              </div>
+            <div className="space-y-4 flex flex-col h-full">
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                muted
+                className="w-full rounded-lg bg-black flex-1 object-cover"
+              />
               <div className="flex gap-2">
                 <button
                   onClick={capturePhoto}
-                  className="flex-1 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition font-medium"
+                  className="flex-1 px-4 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition font-medium"
                 >
                   Capturar
                 </button>
@@ -299,7 +241,7 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
                     }
                     setMode('menu')
                   }}
-                  className="flex-1 px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition font-medium"
+                  className="flex-1 px-4 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition font-medium"
                 >
                   Voltar
                 </button>
@@ -308,112 +250,84 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
           )}
 
           {mode === 'preview' && photo && (
-            <div className="space-y-4">
-              {/* Foto capturada */}
-              <div className="max-h-48 overflow-hidden rounded-lg border border-slate-700">
-                <img src={photo} alt="Capturada" className="w-full object-cover" />
+            <div className="space-y-4 flex flex-col h-full">
+              {/* Imagem */}
+              <div className="w-full rounded-lg overflow-hidden border border-slate-700 bg-black">
+                <img src={photo} alt="Capturada" className="w-full h-auto max-h-48 object-cover" />
               </div>
-              
-              {/* Indicador de OCR e Validação */}
-              {(loading || validating) && (
-                <div className="p-3 bg-slate-800/50 rounded-lg">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Loader size={16} className="animate-spin text-cyan-500" />
-                    <span className="text-sm text-slate-300">
-                      {loading ? 'Reconhecendo texto...' : 'Validando equipamento...'}
-                    </span>
-                  </div>
-                  <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div
-                      className="bg-cyan-600 h-2 rounded-full transition-all"
-                      style={{ width: `${loading ? recognitionProgress : 75}%` }}
-                    />
-                  </div>
+
+              {/* Status de análise */}
+              {validating && (
+                <div className="p-4 bg-slate-800/50 rounded-lg flex items-center gap-3">
+                  <Loader size={20} className="animate-spin text-cyan-500" />
+                  <span className="text-sm text-slate-300">Analisando imagem...</span>
                 </div>
               )}
 
-              {/* Resultado da validação */}
-              {validationResult && !loading && !validating && (
-                <div className={`p-3 rounded-lg border ${validationResult.isValid ? 'bg-green-500/10 border-green-500/30' : 'bg-red-500/10 border-red-500/30'}`}>
-                  <div className="flex items-start gap-2">
-                    <div className={`text-${validationResult.isValid ? 'green' : 'red'}-400 font-bold`}>
-                      {validationResult.isValid ? '✓' : '✗'}
-                    </div>
+              {!validating && validationResult && (
+                <div className={`p-4 rounded-lg border ${validationResult.isValid ? 'bg-green-500/10 border-green-500/30' : 'bg-yellow-500/10 border-yellow-500/30'}`}>
+                  <div className="flex items-start gap-3">
+                    <AlertCircle size={20} className={validationResult.isValid ? 'text-green-400' : 'text-yellow-400'} />
                     <div className="flex-1 text-sm">
-                      <p className={validationResult.isValid ? 'text-green-400' : 'text-red-400'}>
-                        {validationResult.isValid ? 'Equipamento validado' : 'Equipamento não validado'}
+                      <p className={validationResult.isValid ? 'text-green-400 font-semibold' : 'text-yellow-400 font-semibold'}>
+                        {validationResult.isValid ? 'Equipamento identificado' : 'Verifique a imagem'}
                       </p>
-                      {validationResult.brand && (
-                        <p className="text-slate-300 text-xs mt-1">
-                          <span className="font-semibold">{validationResult.brand}</span> {validationResult.model}
-                          {validationResult.variant && ` (${validationResult.variant})`}
-                        </p>
+                      {aiSuggestion && (
+                        <p className="text-slate-300 text-xs mt-1">{aiSuggestion}</p>
                       )}
-                      {validationResult.notes && (
-                        <p className="text-slate-400 text-xs mt-1 italic">{validationResult.notes}</p>
-                      )}
-                      <p className="text-slate-500 text-xs mt-1">
-                        Confiança: <span className="capitalize">{validationResult.confidence}</span>
-                      </p>
                     </div>
                   </div>
-                </div>
-              )}
-
-              {/* Texto reconhecido (debug) */}
-              {recognizedText && !loading && (
-                <div className="p-2 bg-slate-800/30 rounded-lg max-h-24 overflow-y-auto">
-                  <p className="text-xs text-slate-400">Texto reconhecido:</p>
-                  <p className="text-xs text-slate-300 font-mono whitespace-pre-wrap break-words">{recognizedText}</p>
                 </div>
               )}
 
               {/* Formulário */}
               <div className="space-y-3 pt-2">
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">
-                    Equipamento
+                  <label className="block text-sm font-medium text-slate-300 mb-2">
+                    Equipamento *
                   </label>
                   <input
                     type="text"
                     value={equipment}
                     onChange={(e) => setEquipment(e.target.value)}
-                    placeholder="Ex: iPhone 14 Pro"
-                    className="w-full px-3 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600"
+                    placeholder="Ex: iPhone 14 Pro Max"
+                    className="w-full px-4 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600 text-base"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">
+                  <label className="block text-sm font-medium text-slate-300 mb-2">
                     Número de Série
                   </label>
                   <input
                     type="text"
                     value={serial}
                     onChange={(e) => setSerial(e.target.value)}
-                    placeholder="Ex: ABC123XYZ"
-                    className="w-full px-3 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600"
+                    placeholder="Ex: ABC123XYZ (opcional)"
+                    className="w-full px-4 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600 text-base"
                   />
                 </div>
 
-                <div className="flex gap-2 pt-2">
+                <div className="flex gap-2 pt-4">
                   <button
                     onClick={() => {
                       setMode('menu')
-                      setRecognizedText('')
+                      setPhoto(null)
                       setEquipment('')
                       setSerial('')
+                      setValidationResult(null)
+                      setAiSuggestion('')
                     }}
-                    className="flex-1 px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition font-medium"
+                    className="flex-1 px-4 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition font-medium"
                   >
                     Voltar
                   </button>
                   <button
                     onClick={handleConfirm}
-                    disabled={loading}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 disabled:opacity-50 text-white rounded-lg transition font-medium"
+                    disabled={validating}
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-cyan-600 hover:bg-cyan-700 disabled:opacity-50 text-white rounded-lg transition font-medium"
                   >
-                    <Check size={18} />
+                    <Check size={20} />
                     Confirmar
                   </button>
                 </div>
