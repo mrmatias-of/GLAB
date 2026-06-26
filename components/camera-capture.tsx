@@ -19,10 +19,27 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
   const [serial, setSerial] = useState('')
   const [stream, setStream] = useState<MediaStream | null>(null)
 
-  // Cleanup stream ao desmontar
+  // Configurar video stream quando stream muda
+  useEffect(() => {
+    if (stream && videoRef.current && mode === 'camera') {
+      console.log('[v0] Configurando stream no vídeo')
+      videoRef.current.srcObject = stream
+      
+      // Tentar reproduzir imediatamente
+      const playPromise = videoRef.current.play()
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => console.log('[v0] Vídeo reproduzindo'))
+          .catch((err) => console.error('[v0] Erro ao reproduzir:', err))
+      }
+    }
+  }, [stream, mode])
+
+  // Cleanup stream ao desmontar ou ao voltar
   useEffect(() => {
     return () => {
       if (stream) {
+        console.log('[v0] Limpando stream')
         stream.getTracks().forEach((track) => track.stop())
       }
     }
@@ -30,20 +47,28 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
 
   const openCamera = async () => {
     try {
-      console.log('[v0] Abrindo câmera...')
+      console.log('[v0] Solicitando acesso à câmera...')
       const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment' },
+        video: { 
+          facingMode: { ideal: 'environment' },
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        },
       })
+      console.log('[v0] Stream obtida com sucesso')
       setStream(mediaStream)
       setMode('camera')
-      
-      // Garantir que o video está pronto
-      if (videoRef.current) {
-        videoRef.current.srcObject = mediaStream
-      }
     } catch (error) {
-      console.error('[v0] Erro:', error)
-      alert('Não foi possível acessar a câmera. Verifique as permissões.')
+      console.error('[v0] Erro ao acessar câmera:', error)
+      if (error instanceof DOMException) {
+        if (error.name === 'NotAllowedError') {
+          alert('Você negou acesso à câmera. Permita nas configurações do navegador.')
+        } else if (error.name === 'NotFoundError') {
+          alert('Nenhuma câmera encontrada neste dispositivo.')
+        } else {
+          alert(`Erro da câmera: ${error.message}`)
+        }
+      }
     }
   }
 
@@ -138,12 +163,20 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
 
           {mode === 'camera' && (
             <div className="space-y-3">
-              <video
-                ref={videoRef}
-                autoPlay
-                playsInline
-                className="w-full rounded-lg bg-black aspect-square object-cover"
-              />
+              <div className="relative w-full rounded-lg overflow-hidden bg-black aspect-square">
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  playsInline
+                  muted
+                  className="w-full h-full object-cover"
+                />
+                {!stream && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/80">
+                    <p className="text-white text-sm">Abrindo câmera...</p>
+                  </div>
+                )}
+              </div>
               <div className="flex gap-2">
                 <button
                   onClick={capturePhoto}
