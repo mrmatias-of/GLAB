@@ -5,6 +5,8 @@ import { DataTable } from '@/components/shared/data-table'
 import { Modal } from '@/components/shared/modal'
 import { Form, type FormField } from '@/components/shared/form'
 import { StatusBadge, PriorityBadge } from '@/components/shared/badges'
+import { CameraCapture } from '@/components/camera-capture'
+import { Camera } from 'lucide-react'
 
 interface OrdemServico {
   id: number
@@ -28,6 +30,7 @@ export default function OrdensServicoPage() {
   const [formData, setFormData] = useState<Record<string, any>>({})
   const [clientes, setClientes] = useState<any[]>([])
   const [tecnicos, setTecnicos] = useState<any[]>([])
+  const [showCameraCapture, setShowCameraCapture] = useState(false)
 
   useEffect(() => {
     fetchData()
@@ -83,6 +86,15 @@ export default function OrdensServicoPage() {
     }
   }
 
+  const handleCameraCapture = (data: { equipment: string; serialNumber: string }) => {
+    setFormData((prev) => ({
+      ...prev,
+      equipamento: data.equipment,
+      numero_serie: data.serialNumber,
+    }))
+    setShowCameraCapture(false)
+  }
+
   const handleSubmit = async (values: Record<string, any>) => {
     try {
       const method = editingId ? 'PUT' : 'POST'
@@ -126,8 +138,8 @@ export default function OrdensServicoPage() {
       options: tecnicos.map((t) => ({ label: t.nome, value: t.id })),
     },
     { name: 'descricao', label: 'Descrição', type: 'textarea', required: true, rows: 3 },
-    { name: 'equipamento', label: 'Equipamento' },
-    { name: 'numero_serie', label: 'Número de Série' },
+    { name: 'equipamento', label: 'Equipamento', required: true },
+    { name: 'numero_serie', label: 'Número de Série', required: true },
     {
       name: 'prioridade',
       label: 'Prioridade',
@@ -191,6 +203,13 @@ export default function OrdensServicoPage() {
         searchableFields={['numero', 'descricao']}
       />
 
+      {showCameraCapture && (
+        <CameraCapture
+          onCapture={handleCameraCapture}
+          onClose={() => setShowCameraCapture(false)}
+        />
+      )}
+
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -198,15 +217,21 @@ export default function OrdensServicoPage() {
         size="lg"
         onSubmit={() => handleSubmit(formData)}
       >
+        <div className="space-y-4 mb-4">
+          <button
+            type="button"
+            onClick={() => setShowCameraCapture(true)}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition font-medium"
+          >
+            <Camera size={18} />
+            Capturar Equipamento com Câmera
+          </button>
+        </div>
         <Form
           fields={formFields}
           initialValues={formData}
-          onSubmit={async (values) => {
-            setFormData(values)
-            await handleSubmit(values)
-          }}
+          onSubmit={handleSubmit}
           onCancel={() => setIsModalOpen(false)}
-          submitText={editingId ? 'Atualizar' : 'Criar'}
         />
       </Modal>
     </div>
