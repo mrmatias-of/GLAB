@@ -17,7 +17,11 @@ const LANDING_PATHS_WITHOUT_OVERLAYS = ["/cursos/combo-iniciante-mobile"]
 export function SiteOverlays() {
   const pathname = usePathname()
 
-  if (LANDING_PATHS_WITHOUT_OVERLAYS.includes(pathname)) {
+  // Remover overlays de landing pages específicas e do painel admin
+  const isLandingPage = LANDING_PATHS_WITHOUT_OVERLAYS.includes(pathname)
+  const isAdminPanel = pathname.startsWith("/admin") || pathname.startsWith("/login")
+
+  if (isLandingPage || isAdminPanel) {
     return null
   }
 
