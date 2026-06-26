@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { clientes } from '@/lib/db/schema'
+import { tecnicos } from '@/lib/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
@@ -17,11 +17,11 @@ export async function GET(
 
     const data = await db
       .select()
-      .from(clientes)
+      .from(tecnicos)
       .where(
         and(
-          eq(clientes.id, parseInt(params.id)),
-          eq(clientes.userId, session.user.id)
+          eq(tecnicos.id, parseInt(params.id)),
+          eq(tecnicos.userId, session.user.id)
         )
       )
 
@@ -31,7 +31,7 @@ export async function GET(
 
     return NextResponse.json(data[0])
   } catch (error) {
-    console.error('[v0] GET /api/clientes/[id]:', error)
+    console.error('[v0] GET /api/tecnicos/[id]:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -49,23 +49,20 @@ export async function PUT(
     const body = await req.json()
 
     const result = await db
-      .update(clientes)
+      .update(tecnicos)
       .set({
         nome: body.nome,
         email: body.email,
         telefone: body.telefone,
-        cpf_cnpj: body.cpf_cnpj,
-        endereco: body.endereco,
-        cidade: body.cidade,
-        estado: body.estado,
-        cep: body.cep,
-        observacoes: body.observacoes,
+        especialidade: body.especialidade,
+        status: body.status,
+        comissao_percentual: body.comissao_percentual,
         updatedAt: new Date(),
       })
       .where(
         and(
-          eq(clientes.id, parseInt(params.id)),
-          eq(clientes.userId, session.user.id)
+          eq(tecnicos.id, parseInt(params.id)),
+          eq(tecnicos.userId, session.user.id)
         )
       )
       .returning()
@@ -76,7 +73,7 @@ export async function PUT(
 
     return NextResponse.json(result[0])
   } catch (error) {
-    console.error('[v0] PUT /api/clientes/[id]:', error)
+    console.error('[v0] PUT /api/tecnicos/[id]:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -92,11 +89,11 @@ export async function DELETE(
     }
 
     const result = await db
-      .delete(clientes)
+      .delete(tecnicos)
       .where(
         and(
-          eq(clientes.id, parseInt(params.id)),
-          eq(clientes.userId, session.user.id)
+          eq(tecnicos.id, parseInt(params.id)),
+          eq(tecnicos.userId, session.user.id)
         )
       )
       .returning()
@@ -107,7 +104,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('[v0] DELETE /api/clientes/[id]:', error)
+    console.error('[v0] DELETE /api/tecnicos/[id]:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
