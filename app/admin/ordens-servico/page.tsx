@@ -178,7 +178,7 @@ export default function OrdensServicoPage() {
   ]
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <DataTable<OrdemServico>
         title="Gerenciamento de Ordens de Serviço"
         columns={columns}

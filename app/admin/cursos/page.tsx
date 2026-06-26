@@ -17,7 +17,7 @@ export default function CursosPage() {
         <h1 className="text-3xl font-bold text-slate-900 mb-2">Gerenciamento de Cursos</h1>
         <p className="text-slate-600 mb-8">Criar, editar e gerenciar cursos</p>
 
-        <div className="bg-white rounded-lg shadow-md p-8 text-center">
+        <div className="card-elegant bg-slate-900/40 p-4 text-center">
           <p className="text-slate-600 mb-4">Seção em desenvolvimento</p>
           <button className="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-2 rounded-lg transition">
             + Novo Curso

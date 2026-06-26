@@ -186,7 +186,7 @@ export default function FinanceiroPage() {
   const lucro = stats.receita - stats.despesa - stats.comissao
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Financial Summary */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="p-4 bg-green-50 border border-green-200 rounded-lg">

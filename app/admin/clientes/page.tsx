@@ -123,7 +123,7 @@ export default function ClientesPage() {
   ]
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <DataTable<Cliente>
         title="Gerenciamento de Clientes"
         columns={columns}

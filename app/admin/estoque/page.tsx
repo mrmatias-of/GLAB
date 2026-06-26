@@ -134,7 +134,7 @@ export default function EstoquePage() {
   ]
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Alertas */}
       {alertas.length > 0 && (
         <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
