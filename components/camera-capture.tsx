@@ -163,22 +163,18 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
 
           {mode === 'camera' && (
             <div className="space-y-3">
-              <video
-                ref={videoRef}
-                autoPlay
-                playsInline
-                muted
-                crossOrigin="anonymous"
-                className="w-full rounded-lg bg-black aspect-square object-cover"
-                onLoadedMetadata={() => console.log('[v0] Video metadata carregada')}
-                onPlay={() => console.log('[v0] Video começou a reproduzir')}
-                onError={(e) => console.error('[v0] Erro no vídeo:', e)}
-              />
-                {!stream && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/80">
-                    <p className="text-white text-sm">Abrindo câmera...</p>
-                  </div>
-                )}
+              <div className="relative">
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  playsInline
+                  muted
+                  crossOrigin="anonymous"
+                  className="w-full rounded-lg bg-black aspect-square object-cover"
+                  onLoadedMetadata={() => console.log('[v0] Video metadata carregada')}
+                  onPlay={() => console.log('[v0] Video começou a reproduzir')}
+                  onError={(e) => console.error('[v0] Erro no vídeo:', e)}
+                />
               </div>
               <div className="flex gap-2">
                 <button
