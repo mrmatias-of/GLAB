@@ -166,7 +166,7 @@ export default function AdminLayout({
         </header>
 
         {/* Page Content */}
-        <main className="p-4 lg:p-8 max-w-7xl mx-auto">
+        <main className="p-3 lg:p-6 max-w-7xl mx-auto">
           {children}
         </main>
       </div>

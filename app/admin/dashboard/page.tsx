@@ -87,11 +87,11 @@ export default function DashboardPage() {
   const margemPercentual = stats.receitaMes > 0 ? ((margem / stats.receitaMes) * 100).toFixed(1) : '0'
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4">
       {/* Page Title */}
       <div>
         <h1 className="text-3xl font-bold text-white">Painel de Controle</h1>
-        <p className="text-slate-400 mt-2">Bem-vindo ao painel administrativo de assistência técnica</p>
+        <p className="text-slate-400 mt-1 text-sm">Bem-vindo ao painel administrativo de assistência técnica</p>
       </div>
 
       {/* KPI Cards Row 1 */}
@@ -159,11 +159,11 @@ export default function DashboardPage() {
       </div>
 
       {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Status Distribution */}
         <div className="card-elegant bg-slate-900/30">
-          <h2 className="text-xl font-bold text-white mb-4">Distribuição de Status</h2>
-          <ResponsiveContainer width="100%" height={300}>
+          <h2 className="text-lg font-bold text-white mb-2">Distribuição de Status</h2>
+          <ResponsiveContainer width="100%" height={220}>
             <BarChart data={statusChartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#404040" />
               <XAxis dataKey="name" stroke="#94a3b8" />
@@ -176,19 +176,19 @@ export default function DashboardPage() {
 
         {/* Financial Overview */}
         <div className="card-elegant bg-slate-900/30">
-          <h2 className="text-xl font-bold text-white mb-4">Visão Financeira</h2>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-3 bg-green-500/10 rounded-lg border border-green-500/20">
-              <span className="text-green-400 font-medium">Receita do Mês</span>
-              <span className="text-xl font-bold text-green-400">R$ {stats.receitaMes.toFixed(2)}</span>
+          <h2 className="text-lg font-bold text-white mb-2">Visão Financeira</h2>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between p-2 bg-green-500/10 rounded-lg border border-green-500/20">
+              <span className="text-green-400 text-sm font-medium">Receita do Mês</span>
+              <span className="text-base font-bold text-green-400">R$ {stats.receitaMes.toFixed(2)}</span>
             </div>
-            <div className="flex items-center justify-between p-3 bg-red-500/10 rounded-lg border border-red-500/20">
-              <span className="text-red-400 font-medium">Despesa do Mês</span>
-              <span className="text-xl font-bold text-red-400">R$ {stats.despesaMes.toFixed(2)}</span>
+            <div className="flex items-center justify-between p-2 bg-red-500/10 rounded-lg border border-red-500/20">
+              <span className="text-red-400 text-sm font-medium">Despesa do Mês</span>
+              <span className="text-base font-bold text-red-400">R$ {stats.despesaMes.toFixed(2)}</span>
             </div>
-            <div className="flex items-center justify-between p-3 bg-blue-500/10 rounded-lg border border-blue-500/20">
-              <span className="text-blue-400 font-medium">Lucro Líquido</span>
-              <span className="text-xl font-bold text-blue-400">R$ {margem.toFixed(2)}</span>
+            <div className="flex items-center justify-between p-2 bg-blue-500/10 rounded-lg border border-blue-500/20">
+              <span className="text-blue-400 text-sm font-medium">Lucro Líquido</span>
+              <span className="text-base font-bold text-blue-400">R$ {margem.toFixed(2)}</span>
             </div>
           </div>
         </div>
@@ -196,35 +196,35 @@ export default function DashboardPage() {
 
       {/* Recent Activity */}
       <div className="card-elegant bg-slate-900/30">
-        <h2 className="text-xl font-bold text-white mb-4">Atalhos Rápidos</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+        <h2 className="text-lg font-bold text-white mb-2">Atalhos Rápidos</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
           <a
             href="/admin/ordens-servico"
-            className="p-4 bg-blue-500/10 hover:bg-blue-500/20 rounded-lg border border-blue-500/20 transition cursor-pointer"
+            className="p-3 bg-blue-500/10 hover:bg-blue-500/20 rounded-lg border border-blue-500/20 transition cursor-pointer"
           >
-            <div className="text-blue-400 font-semibold">Ordens de Serviço</div>
-            <div className="text-sm text-blue-500/70">Gerenciar OS</div>
+            <div className="text-blue-400 text-sm font-semibold">Ordens de Serviço</div>
+            <div className="text-xs text-blue-500/70">Gerenciar OS</div>
           </a>
           <a
             href="/admin/clientes"
-            className="p-4 bg-green-500/10 hover:bg-green-500/20 rounded-lg border border-green-500/20 transition cursor-pointer"
+            className="p-3 bg-green-500/10 hover:bg-green-500/20 rounded-lg border border-green-500/20 transition cursor-pointer"
           >
-            <div className="text-green-400 font-semibold">Clientes</div>
-            <div className="text-sm text-green-500/70">Gerenciar clientes</div>
+            <div className="text-green-400 text-sm font-semibold">Clientes</div>
+            <div className="text-xs text-green-500/70">Gerenciar clientes</div>
           </a>
           <a
             href="/admin/tecnicos"
-            className="p-4 bg-yellow-500/10 hover:bg-yellow-500/20 rounded-lg border border-yellow-500/20 transition cursor-pointer"
+            className="p-3 bg-yellow-500/10 hover:bg-yellow-500/20 rounded-lg border border-yellow-500/20 transition cursor-pointer"
           >
-            <div className="text-yellow-400 font-semibold">Técnicos</div>
-            <div className="text-sm text-yellow-500/70">Gerenciar técnicos</div>
+            <div className="text-yellow-400 text-sm font-semibold">Técnicos</div>
+            <div className="text-xs text-yellow-500/70">Gerenciar técnicos</div>
           </a>
           <a
             href="/admin/estoque"
-            className="p-4 bg-purple-500/10 hover:bg-purple-500/20 rounded-lg border border-purple-500/20 transition cursor-pointer"
+            className="p-3 bg-purple-500/10 hover:bg-purple-500/20 rounded-lg border border-purple-500/20 transition cursor-pointer"
           >
-            <div className="text-purple-400 font-semibold">Estoque</div>
-            <div className="text-sm text-purple-500/70">Gerenciar estoque</div>
+            <div className="text-purple-400 text-sm font-semibold">Estoque</div>
+            <div className="text-xs text-purple-500/70">Gerenciar estoque</div>
           </a>
         </div>
       </div>
