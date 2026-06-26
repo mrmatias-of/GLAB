@@ -2,6 +2,7 @@
 
 import { useState, FormEvent, ChangeEvent } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -47,8 +48,14 @@ export default function LoginPage() {
       <div className="w-full max-w-md relative z-10">
         <div className="bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-white/20">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl mb-4">
-              <span className="text-2xl font-bold text-white">G</span>
+            <div className="flex justify-center mb-6">
+              <Image
+                src="/logo-glab-neon.png"
+                alt="G•Lab Cursos"
+                width={80}
+                height={80}
+                className="drop-shadow-lg"
+              />
             </div>
             <h1 className="text-3xl font-bold text-white mb-2">G•Lab Cursos</h1>
             <p className="text-slate-300 text-sm">Plataforma de Educação Online</p>

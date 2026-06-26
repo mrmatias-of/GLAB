@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
+import Image from 'next/image'
 import {
   LayoutDashboard,
   ClipboardList,
@@ -46,7 +47,15 @@ export default function AdminLayout({
   const SidebarContent = () => (
     <>
       <div className="p-4 border-b border-slate-700 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-cyan-400">G•Lab</h1>
+        <div className="flex items-center gap-2">
+          <Image
+            src="/logo-glab-neon.png"
+            alt="G•Lab"
+            width={32}
+            height={32}
+          />
+          <h1 className="text-lg font-bold text-white">G•Lab</h1>
+        </div>
         <button
           onClick={() => setMobileOpen(false)}
           className="lg:hidden p-2 hover:bg-slate-700 rounded-lg transition"
@@ -117,7 +126,7 @@ export default function AdminLayout({
       <div className="lg:ml-64">
         {/* Header */}
         <header className="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-30">
-          <div className="px-4 lg:px-8 py-4 flex items-center gap-3">
+          <div className="px-4 lg:px-8 py-4 flex items-center gap-4">
             <button
               onClick={() => setMobileOpen(true)}
               className="lg:hidden p-2 -ml-2 hover:bg-slate-100 rounded-lg transition"
@@ -125,9 +134,17 @@ export default function AdminLayout({
             >
               <Menu className="h-6 w-6 text-slate-700" />
             </button>
-            <h2 className="text-xl lg:text-2xl font-bold text-slate-900 flex-1 truncate">
-              {currentTitle}
-            </h2>
+            <div className="flex items-center gap-2">
+              <Image
+                src="/logo-glab-neon.png"
+                alt="G•Lab"
+                width={28}
+                height={28}
+              />
+              <h2 className="text-xl lg:text-2xl font-bold text-slate-900 truncate">
+                {currentTitle}
+              </h2>
+            </div>
             <p className="text-sm text-slate-600 hidden sm:block">
               {new Date().toLocaleDateString('pt-BR')}
             </p>
