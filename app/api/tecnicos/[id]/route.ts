@@ -1,110 +1,54 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { tecnicos } from '@/lib/db/schema'
-import { eq, and } from 'drizzle-orm'
+import { NextRequest } from 'next/server'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
+import { tecnicoService } from '@/lib/services/tecnico.service'
+import { apiResponse, handleApiError } from '@/lib/utils/api-response'
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiResponse(null, 401, 'Unauthorized')
     }
 
-    const data = await db
-      .select()
-      .from(tecnicos)
-      .where(
-        and(
-          eq(tecnicos.id, parseInt(params.id)),
-          eq(tecnicos.userId, session.user.id)
-        )
-      )
+    const { id } = await params
+    const tecnico = await tecnicoService.obter(session.user.id, parseInt(id))
 
-    if (!data.length) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    }
-
-    return NextResponse.json(data[0])
+    return apiResponse(tecnico, 200, 'Técnico obtido com sucesso')
   } catch (error) {
-    console.error('[v0] GET /api/tecnicos/[id]:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return handleApiError(error)
   }
 }
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiResponse(null, 401, 'Unauthorized')
     }
 
-    const body = await req.json()
+    const { id } = await params
+    const dados = await req.json()
+    const tecnico = await tecnicoService.atualizar(session.user.id, parseInt(id), dados)
 
-    const result = await db
-      .update(tecnicos)
-      .set({
-        nome: body.nome,
-        email: body.email,
-        telefone: body.telefone,
-        especialidade: body.especialidade,
-        status: body.status,
-        comissao_percentual: body.comissao_percentual,
-        updatedAt: new Date(),
-      })
-      .where(
-        and(
-          eq(tecnicos.id, parseInt(params.id)),
-          eq(tecnicos.userId, session.user.id)
-        )
-      )
-      .returning()
-
-    if (!result.length) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    }
-
-    return NextResponse.json(result[0])
+    return apiResponse(tecnico, 200, 'Técnico atualizado com sucesso')
   } catch (error) {
-    console.error('[v0] PUT /api/tecnicos/[id]:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return handleApiError(error)
   }
 }
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiResponse(null, 401, 'Unauthorized')
     }
 
-    const result = await db
-      .delete(tecnicos)
-      .where(
-        and(
-          eq(tecnicos.id, parseInt(params.id)),
-          eq(tecnicos.userId, session.user.id)
-        )
-      )
-      .returning()
+    const { id } = await params
+    await tecnicoService.deletar(session.user.id, parseInt(id))
 
-    if (!result.length) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    }
-
-    return NextResponse.json({ success: true })
+    return apiResponse(null, 200, 'Técnico desativado com sucesso')
   } catch (error) {
-    console.error('[v0] DELETE /api/tecnicos/[id]:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return handleApiError(error)
   }
 }

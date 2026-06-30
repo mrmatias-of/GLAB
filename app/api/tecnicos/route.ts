@@ -1,27 +1,34 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { tecnicos } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { NextRequest } from 'next/server'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
+import { tecnicoService } from '@/lib/services/tecnico.service'
+import { apiResponse, handleApiError } from '@/lib/utils/api-response'
 
 export async function GET(req: NextRequest) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiResponse(null, 401, 'Unauthorized')
     }
 
-    const data = await db
-      .select()
-      .from(tecnicos)
-      .where(eq(tecnicos.userId, session.user.id))
-      .orderBy(tecnicos.createdAt)
+    const { searchParams } = new URL(req.url)
+    const status = searchParams.get('status')
+    const especialidade = searchParams.get('especialidade')
+    const ativos = searchParams.get('ativos')
 
-    return NextResponse.json(data)
+    let result
+    if (ativos === 'true') {
+      result = await tecnicoService.listarAtivos(session.user.id)
+    } else {
+      const filtros: any = {}
+      if (status) filtros.status = status
+      if (especialidade) filtros.especialidade = especialidade
+      result = await tecnicoService.listar(session.user.id, filtros)
+    }
+
+    return apiResponse(result, 200, 'Técnicos listados com sucesso')
   } catch (error) {
-    console.error('[v0] GET /api/tecnicos:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return handleApiError(error)
   }
 }
 
@@ -29,28 +36,14 @@ export async function POST(req: NextRequest) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiResponse(null, 401, 'Unauthorized')
     }
 
-    const body = await req.json()
+    const dados = await req.json()
+    const tecnico = await tecnicoService.criar(session.user.id, dados)
 
-    const result = await db
-      .insert(tecnicos)
-      .values({
-        userId: session.user.id,
-        nome: body.nome,
-        email: body.email,
-        telefone: body.telefone,
-        cpf: body.cpf,
-        especialidade: body.especialidade,
-        status: body.status || 'ativo',
-        comissao_percentual: body.comissao_percentual || '10',
-      })
-      .returning()
-
-    return NextResponse.json(result[0], { status: 201 })
+    return apiResponse(tecnico, 201, 'Técnico criado com sucesso')
   } catch (error) {
-    console.error('[v0] POST /api/tecnicos:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return handleApiError(error)
   }
 }
