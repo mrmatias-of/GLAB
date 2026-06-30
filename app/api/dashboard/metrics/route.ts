@@ -2,11 +2,11 @@ import { NextRequest } from 'next/server'
 import { dashboardService } from '@/lib/services/dashboard.service'
 import { apiResponse, handleApiError } from '@/lib/utils/api-response'
 import { logger } from '@/lib/utils/logger'
-import { getSession } from '@/lib/auth'
+import { auth } from '@/lib/auth'
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getSession()
+    const session = await auth.api.getSession({ headers: request.headers })
     if (!session) {
       return apiResponse(null, 401, 'Unauthorized')
     }
