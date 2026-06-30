@@ -18,17 +18,17 @@ interface OrdersKanbanProps {
 }
 
 const STATUSES = [
-  { id: 'aberta', label: 'Aberta', color: 'bg-blue-100 border-blue-300' },
-  { id: 'andamento', label: 'Em Andamento', color: 'bg-yellow-100 border-yellow-300' },
-  { id: 'pendente', label: 'Pendente', color: 'bg-orange-100 border-orange-300' },
-  { id: 'concluida', label: 'Concluída', color: 'bg-green-100 border-green-300' },
+  { id: 'aberta', label: 'Aberta', color: 'bg-slate-900/50 border-blue-500/30' },
+  { id: 'andamento', label: 'Em Andamento', color: 'bg-slate-900/50 border-amber-500/30' },
+  { id: 'pendente', label: 'Pendente', color: 'bg-slate-900/50 border-orange-500/30' },
+  { id: 'concluida', label: 'Concluída', color: 'bg-slate-900/50 border-emerald-500/30' },
 ]
 
 const PRIORITY_COLORS: Record<string, string> = {
-  baixa: 'bg-green-200 text-green-800',
-  media: 'bg-blue-200 text-blue-800',
-  alta: 'bg-orange-200 text-orange-800',
-  urgente: 'bg-red-200 text-red-800',
+  baixa: 'bg-emerald-500/20 text-emerald-400',
+  media: 'bg-blue-500/20 text-blue-400',
+  alta: 'bg-orange-500/20 text-orange-400',
+  urgente: 'bg-red-500/20 text-red-400',
 }
 
 export function OrdersKanban({
@@ -59,7 +59,7 @@ export function OrdersKanban({
   })
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 bg-gray-50 p-4 rounded-lg">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
       {STATUSES.map((status) => (
         <div
           key={status.id}
@@ -67,9 +67,9 @@ export function OrdersKanban({
           onDragOver={handleDragOver}
           onDrop={() => handleDrop(status.id)}
         >
-          <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <h3 className="font-semibold text-slate-100 mb-4 flex items-center gap-2">
             <span className="text-sm">{status.label}</span>
-            <span className="bg-white px-2 py-0.5 rounded text-xs font-bold text-gray-700">
+            <span className="bg-slate-800/50 px-2 py-0.5 rounded text-xs font-bold text-slate-300">
               {ordersByStatus[status.id]?.length || 0}
             </span>
           </h3>
@@ -80,23 +80,23 @@ export function OrdersKanban({
                 key={order.id}
                 draggable
                 onDragStart={() => handleDragStart(order)}
-                className="bg-white rounded-lg p-4 cursor-move hover:shadow-md transition-shadow border border-gray-200 group"
+                className="bg-slate-800/50 rounded-lg p-4 cursor-move hover:bg-slate-800 transition-all border border-slate-700/50 hover:border-slate-600/50 group"
               >
                 <div className="flex items-start justify-between mb-2">
-                  <GripHorizontal className="w-4 h-4 text-gray-400 group-hover:text-gray-600" />
+                  <GripHorizontal className="w-4 h-4 text-slate-500 group-hover:text-slate-400" />
                   <button
                     onClick={() => onDeleteOrder?.(order.id)}
-                    className="text-red-500 hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="text-red-400 hover:text-red-300 opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
 
-                <h4 className="font-semibold text-gray-900 text-sm mb-1">
+                <h4 className="font-semibold text-slate-100 text-sm mb-1">
                   {order.titulo}
                 </h4>
 
-                <p className="text-xs text-gray-600 mb-3">{order.cliente}</p>
+                <p className="text-xs text-slate-400 mb-3">{order.cliente}</p>
 
                 <div className="flex items-center justify-between">
                   <span
@@ -108,7 +108,7 @@ export function OrdersKanban({
                       order.prioridade.slice(1)}
                   </span>
                   {order.tecnico && (
-                    <span className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                    <span className="text-xs text-slate-300 bg-slate-700/50 px-2 py-1 rounded">
                       {order.tecnico}
                     </span>
                   )}
@@ -118,7 +118,7 @@ export function OrdersKanban({
           </div>
 
           {ordersByStatus[status.id]?.length === 0 && (
-            <div className="text-center py-8 text-gray-500">
+            <div className="text-center py-8 text-slate-500">
               <p className="text-xs">Nenhuma ordem aqui</p>
             </div>
           )}
