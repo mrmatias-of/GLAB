@@ -15,7 +15,7 @@ export default function SupportLayout({ children }: { children: React.ReactNode 
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold text-cyan-400">Suporte G•Lab</h1>
-            <p className="text-sm text-gray-400">Gerencie seus tickets de suporte</p>
+            <p className="text-sm text-slate-400">Gerencie seus tickets de suporte</p>
           </div>
           <div className="flex gap-4">
             <Link

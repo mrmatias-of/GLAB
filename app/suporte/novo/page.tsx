@@ -82,7 +82,7 @@ export default function NovoTicketPage() {
     <div className="max-w-2xl">
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-white mb-2">Criar Novo Ticket</h2>
-        <p className="text-gray-400">Descreva seu problema para que nossa equipe possa ajudar</p>
+        <p className="text-slate-400">Descreva seu problema para que nossa equipe possa ajudar</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -94,7 +94,7 @@ export default function NovoTicketPage() {
 
         {/* Título */}
         <div>
-          <label htmlFor="titulo" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="titulo" className="block text-sm font-medium text-slate-300 mb-2">
             Título do Ticket *
           </label>
           <input
@@ -105,13 +105,13 @@ export default function NovoTicketPage() {
             onChange={handleChange}
             placeholder="Descreva brevemente o problema"
             required
-            className="w-full px-4 py-2 rounded bg-gray-900/50 border border-cyan-500/20 text-white placeholder-gray-500 focus:border-cyan-500/50 focus:outline-none"
+            className="w-full px-4 py-2 rounded bg-slate-800/50 border border-blue-500/20 text-white placeholder-slate-500 focus:border-blue-500/50 focus:outline-none"
           />
         </div>
 
         {/* Descrição */}
         <div>
-          <label htmlFor="descricao" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="descricao" className="block text-sm font-medium text-slate-300 mb-2">
             Descrição Detalhada *
           </label>
           <textarea
@@ -122,13 +122,13 @@ export default function NovoTicketPage() {
             placeholder="Forneça o máximo de detalhes possível sobre o problema"
             required
             rows={6}
-            className="w-full px-4 py-2 rounded bg-gray-900/50 border border-cyan-500/20 text-white placeholder-gray-500 focus:border-cyan-500/50 focus:outline-none resize-none"
+            className="w-full px-4 py-2 rounded bg-slate-800/50 border border-blue-500/20 text-white placeholder-slate-500 focus:border-blue-500/50 focus:outline-none resize-none"
           />
         </div>
 
         {/* Categoria */}
         <div>
-          <label htmlFor="categoria_id" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="categoria_id" className="block text-sm font-medium text-slate-300 mb-2">
             Categoria *
           </label>
           <select
@@ -137,7 +137,7 @@ export default function NovoTicketPage() {
             value={formData.categoria_id}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 rounded bg-gray-900/50 border border-cyan-500/20 text-white focus:border-cyan-500/50 focus:outline-none"
+            className="w-full px-4 py-2 rounded bg-slate-800/50 border border-blue-500/20 text-white focus:border-blue-500/50 focus:outline-none"
           >
             {categories.map(cat => (
               <option key={cat.id} value={cat.id}>
@@ -149,7 +149,7 @@ export default function NovoTicketPage() {
 
         {/* Prioridade */}
         <div>
-          <label htmlFor="prioridade" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="prioridade" className="block text-sm font-medium text-slate-300 mb-2">
             Prioridade
           </label>
           <select
@@ -157,7 +157,7 @@ export default function NovoTicketPage() {
             name="prioridade"
             value={formData.prioridade}
             onChange={handleChange}
-            className="w-full px-4 py-2 rounded bg-gray-900/50 border border-cyan-500/20 text-white focus:border-cyan-500/50 focus:outline-none"
+            className="w-full px-4 py-2 rounded bg-slate-800/50 border border-blue-500/20 text-white focus:border-blue-500/50 focus:outline-none"
           >
             <option value="baixa">Baixa</option>
             <option value="media">Média</option>
@@ -171,14 +171,14 @@ export default function NovoTicketPage() {
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-2 rounded bg-cyan-500/20 text-cyan-400 border border-cyan-500/50 hover:bg-cyan-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="px-6 py-2 rounded bg-blue-500/20 text-cyan-400 border border-blue-500/50 hover:bg-blue-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {loading ? 'Criando...' : 'Criar Ticket'}
           </button>
           <button
             type="button"
             onClick={() => router.back()}
-            className="px-6 py-2 rounded border border-cyan-500/20 text-gray-400 hover:border-cyan-500/50 hover:text-gray-300 transition-colors"
+            className="px-6 py-2 rounded border border-blue-500/20 text-slate-400 hover:border-blue-500/50 hover:text-slate-300 transition-colors"
           >
             Cancelar
           </button>

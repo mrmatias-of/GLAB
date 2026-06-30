@@ -20,7 +20,7 @@ const statusBadgeColors = {
   aberto: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
   em_andamento: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
   resolvido: 'bg-green-500/20 text-green-400 border-green-500/30',
-  fechado: 'bg-gray-500/20 text-gray-400 border-gray-500/30',
+  fechado: 'bg-slate-9500/20 text-slate-400 border-slate-500/30',
 }
 
 const prioridadeBadgeColors = {
@@ -64,7 +64,7 @@ export default function MeusTicketsPage() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-white mb-2">Meus Tickets</h2>
-        <p className="text-gray-400">Acompanhe seus tickets de suporte</p>
+        <p className="text-slate-400">Acompanhe seus tickets de suporte</p>
       </div>
 
       {/* Filtros */}
@@ -76,7 +76,7 @@ export default function MeusTicketsPage() {
             className={`px-4 py-2 rounded border transition-colors ${
               filter === status
                 ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-400'
-                : 'border-cyan-500/20 text-gray-400 hover:border-cyan-500/30'
+                : 'border-cyan-500/20 text-slate-400 hover:border-cyan-500/30'
             }`}
           >
             {status === 'todos' ? 'Todos' : status.replace('_', ' ')}
@@ -87,9 +87,9 @@ export default function MeusTicketsPage() {
       {/* Lista de Tickets */}
       <div className="space-y-3">
         {loading ? (
-          <div className="text-center py-8 text-gray-400">Carregando...</div>
+          <div className="text-center py-8 text-slate-400">Carregando...</div>
         ) : filteredTickets.length === 0 ? (
-          <div className="text-center py-8 text-gray-400">
+          <div className="text-center py-8 text-slate-400">
             Nenhum ticket encontrado
           </div>
         ) : (
@@ -107,13 +107,13 @@ export default function MeusTicketsPage() {
                       {ticket.status.replace('_', ' ')}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-400 line-clamp-1">{ticket.descricao}</p>
+                  <p className="text-sm text-slate-400 line-clamp-1">{ticket.descricao}</p>
                 </div>
                 <div className="text-right">
                   <span className={`inline-block px-2 py-1 rounded text-xs ${prioridadeBadgeColors[ticket.prioridade as keyof typeof prioridadeBadgeColors]}`}>
                     {ticket.prioridade}
                   </span>
-                  <p className="text-xs text-gray-500 mt-2">
+                  <p className="text-xs text-slate-500 mt-2">
                     {new Date(ticket.criado_em).toLocaleDateString('pt-BR')}
                   </p>
                 </div>

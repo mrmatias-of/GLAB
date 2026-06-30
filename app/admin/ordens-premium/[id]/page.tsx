@@ -134,14 +134,14 @@ export default function PremiumOrderDetailPage() {
   }
 
   return (
-    <main className="flex-1 overflow-auto bg-gray-50">
+    <main className="flex-1 overflow-auto bg-slate-950">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">{mockOrder.numero}</h1>
-              <p className="text-gray-600 mt-1">{mockOrder.cliente}</p>
+              <h1 className="text-3xl font-bold text-slate-100">{mockOrder.numero}</h1>
+              <p className="text-slate-400 mt-1">{mockOrder.cliente}</p>
             </div>
             <div className="text-right">
               <span className="inline-block px-4 py-2 bg-orange-100 text-orange-800 rounded-lg font-medium text-sm">
@@ -151,26 +151,26 @@ export default function PremiumOrderDetailPage() {
           </div>
 
           {/* Order Info */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-white rounded-lg border border-gray-200 p-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-slate-900/50 rounded-lg border border-slate-200 p-4">
             <div>
-              <p className="text-xs font-medium text-gray-600 uppercase">Equipamento</p>
-              <p className="text-sm font-semibold text-gray-900 mt-1">
+              <p className="text-xs font-medium text-slate-400 uppercase">Equipamento</p>
+              <p className="text-sm font-semibold text-slate-100 mt-1">
                 {mockOrder.equipamento}
               </p>
             </div>
             <div>
-              <p className="text-xs font-medium text-gray-600 uppercase">Técnico</p>
-              <p className="text-sm font-semibold text-gray-900 mt-1">{mockOrder.tecnico}</p>
+              <p className="text-xs font-medium text-slate-400 uppercase">Técnico</p>
+              <p className="text-sm font-semibold text-slate-100 mt-1">{mockOrder.tecnico}</p>
             </div>
             <div>
-              <p className="text-xs font-medium text-gray-600 uppercase">Valor</p>
-              <p className="text-sm font-semibold text-gray-900 mt-1">
+              <p className="text-xs font-medium text-slate-400 uppercase">Valor</p>
+              <p className="text-sm font-semibold text-slate-100 mt-1">
                 R$ {mockOrder.valor.toFixed(2)}
               </p>
             </div>
             <div>
-              <p className="text-xs font-medium text-gray-600 uppercase">Tempo</p>
-              <p className="text-sm font-semibold text-gray-900 mt-1">
+              <p className="text-xs font-medium text-slate-400 uppercase">Tempo</p>
+              <p className="text-sm font-semibold text-slate-100 mt-1">
                 {Math.floor(executionTime / 3600)}h {Math.floor((executionTime % 3600) / 60)}m
               </p>
             </div>
@@ -213,7 +213,7 @@ export default function PremiumOrderDetailPage() {
 
         {/* Action Buttons */}
         <div className="flex gap-3 justify-end">
-          <button className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium transition-colors">
+          <button className="px-6 py-2 border border-slate-300 rounded-lg text-slate-300 hover:bg-slate-950 font-medium transition-colors">
             Salvar Rascunho
           </button>
           <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors">

@@ -19,7 +19,7 @@ import Image from 'next/image'
 
 const menuItems = [
   { label: 'Dashboard', href: '/admin/dashboard-intelligence', icon: LayoutDashboard },
-  { label: 'Ordens de Serviço', href: '/admin/ordens-kanban', icon: ClipboardList },
+  { label: 'Ordens de Serviço', href: '/admin/ordens', icon: ClipboardList },
   { label: 'Clientes', href: '/admin/clientes', icon: Users },
   { label: 'Técnicos', href: '/admin/tecnicos', icon: Zap },
   { label: 'Financeiro', href: '/admin/financeiro-avancado', icon: BarChart3 },
@@ -61,9 +61,9 @@ export function PremiumSidebar() {
         }`}
       >
         {/* Logo Section */}
-        <div className="p-6 border-b border-slate-700/50">
-          <div className="flex items-center gap-3">
-            <div className="relative w-10 h-10 rounded-lg overflow-hidden border border-blue-500/30 shadow-lg">
+        <div className="p-4 lg:p-6 border-b border-slate-700/50 flex-shrink-0">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="relative w-9 h-9 lg:w-10 lg:h-10 rounded-lg overflow-hidden border border-blue-500/30 shadow-lg flex-shrink-0">
               <Image
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-glab-neon-transparent-2kFvS2C6hGbJR8B91q0a0cgSa9Uqxz.png"
                 alt="G-Lab Logo"
@@ -71,9 +71,9 @@ export function PremiumSidebar() {
                 className="object-cover"
               />
             </div>
-            <div>
-              <h1 className="font-bold text-white text-lg">G•LAB</h1>
-              <p className="text-xs text-slate-500">Admin Panel</p>
+            <div className="min-w-0 flex-1">
+              <h1 className="font-bold text-white text-base lg:text-lg truncate">G•LAB</h1>
+              <p className="text-xs text-slate-500 truncate">Admin Panel</p>
             </div>
           </div>
         </div>

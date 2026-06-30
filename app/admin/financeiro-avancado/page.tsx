@@ -231,12 +231,12 @@ export default function FinanceiroAvancadoPage() {
   ]
 
   return (
-    <main className="flex-1 overflow-auto bg-gray-50">
+    <main className="flex-1 overflow-auto bg-slate-950">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Financeiro Avançado</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="text-3xl font-bold text-slate-100">Financeiro Avançado</h1>
+          <p className="text-slate-400 mt-2">
             Gestão completa de contas a pagar/receber e fluxo de caixa
           </p>
         </div>
@@ -246,10 +246,10 @@ export default function FinanceiroAvancadoPage() {
           {kpis.map((kpi) => (
             <div
               key={kpi.label}
-              className="bg-white rounded-lg border border-gray-200 p-6"
+              className="bg-slate-900/50 rounded-lg border border-slate-200 p-6"
             >
-              <p className="text-gray-600 text-sm font-medium">{kpi.label}</p>
-              <p className="text-2xl font-bold text-gray-900 mt-2">{kpi.value}</p>
+              <p className="text-slate-400 text-sm font-medium">{kpi.label}</p>
+              <p className="text-2xl font-bold text-slate-100 mt-2">{kpi.value}</p>
               <p
                 className={`text-sm font-medium mt-2 ${
                   kpi.trend === 'up' ? 'text-green-600' : 'text-red-600'
@@ -292,49 +292,49 @@ export default function FinanceiroAvancadoPage() {
         </div>
 
         {/* DRE Summary */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">
+        <div className="bg-slate-900/50 rounded-lg border border-slate-200 p-6">
+          <h3 className="text-lg font-semibold text-slate-100 mb-6">
             Demonstração de Resultado do Exercício (DRE) - Junho 2024
           </h3>
 
           <div className="space-y-4">
-            <div className="flex items-center justify-between pb-2 border-b border-gray-200">
-              <p className="text-gray-700">Receita Total</p>
-              <p className="font-semibold text-gray-900">R$ 42.000,00</p>
+            <div className="flex items-center justify-between pb-2 border-b border-slate-200">
+              <p className="text-slate-300">Receita Total</p>
+              <p className="font-semibold text-slate-100">R$ 42.000,00</p>
             </div>
 
             <div className="ml-4 space-y-2">
               <div className="flex items-center justify-between">
-                <p className="text-gray-600">(-) Custo de Vendas</p>
-                <p className="text-gray-900">R$ 16.800,00</p>
+                <p className="text-slate-400">(-) Custo de Vendas</p>
+                <p className="text-slate-100">R$ 16.800,00</p>
               </div>
-              <div className="flex items-center justify-between pb-2 border-b border-gray-200">
-                <p className="text-gray-600">(-) Despesas Operacionais</p>
-                <p className="text-gray-900">R$ 9.200,00</p>
+              <div className="flex items-center justify-between pb-2 border-b border-slate-200">
+                <p className="text-slate-400">(-) Despesas Operacionais</p>
+                <p className="text-slate-100">R$ 9.200,00</p>
               </div>
             </div>
 
             <div className="flex items-center justify-between bg-blue-50 p-4 rounded-lg">
-              <p className="font-semibold text-gray-900">Lucro Operacional</p>
+              <p className="font-semibold text-slate-100">Lucro Operacional</p>
               <p className="font-bold text-blue-600">R$ 16.000,00</p>
             </div>
 
             <div className="ml-4 space-y-2">
               <div className="flex items-center justify-between">
-                <p className="text-gray-600">(-) Comissões</p>
-                <p className="text-gray-900">
+                <p className="text-slate-400">(-) Comissões</p>
+                <p className="text-slate-100">
                   R${' '}
                   {totalComissoes.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                 </p>
               </div>
-              <div className="flex items-center justify-between pb-2 border-b border-gray-200">
-                <p className="text-gray-600">(-) Outras Despesas</p>
-                <p className="text-gray-900">R$ 2.000,00</p>
+              <div className="flex items-center justify-between pb-2 border-b border-slate-200">
+                <p className="text-slate-400">(-) Outras Despesas</p>
+                <p className="text-slate-100">R$ 2.000,00</p>
               </div>
             </div>
 
             <div className="flex items-center justify-between bg-green-50 p-4 rounded-lg">
-              <p className="font-bold text-gray-900">Lucro Líquido</p>
+              <p className="font-bold text-slate-100">Lucro Líquido</p>
               <p className="font-bold text-green-600">R$ 12.825,00</p>
             </div>
           </div>

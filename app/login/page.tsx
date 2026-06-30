@@ -46,7 +46,7 @@ export default function LoginPage() {
       </div>
 
       <div className="w-full max-w-md relative z-10">
-        <div className="bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-white/20">
+        <div className="bg-slate-900/50 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-white/20">
           <div className="text-center mb-8">
             <div className="flex justify-center mb-6">
               <Image
@@ -76,7 +76,7 @@ export default function LoginPage() {
                   type="email"
                   value={email}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition"
+                  className="w-full px-4 py-3 bg-slate-900/50 border border-white/20 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
                   placeholder="seu@email.com"
                   required
                 />
@@ -90,7 +90,7 @@ export default function LoginPage() {
                   type="password"
                   value={password}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition"
+                  className="w-full px-4 py-3 bg-slate-900/50 border border-white/20 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
                   placeholder="••••••••"
                   required
                 />
@@ -106,7 +106,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 disabled:opacity-50 text-white font-semibold py-3 rounded-lg transition transform hover:scale-105"
+                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:opacity-50 text-white font-semibold py-3 rounded-lg transition transform hover:scale-105"
               >
                 {loading ? '⏳ Entrando...' : '→ Entrar no Painel'}
               </button>
@@ -114,7 +114,7 @@ export default function LoginPage() {
           )}
 
           <div className="mt-8 text-center text-sm text-slate-300 border-t border-white/10 pt-6">
-            <a href="/" className="text-cyan-300 hover:text-cyan-200 font-medium transition">
+            <a href="/" className="text-blue-300 hover:text-blue-200 font-medium transition">
               ← Voltar para home
             </a>
           </div>
