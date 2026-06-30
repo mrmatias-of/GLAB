@@ -1,76 +1,54 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { financeiro } from '@/lib/db/schema'
-import { eq, and } from 'drizzle-orm'
+import { NextRequest } from 'next/server'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
+import { financeiroService } from '@/lib/services/financeiro.service'
+import { apiResponse, handleApiError } from '@/lib/utils/api-response'
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiResponse(null, 401, 'Unauthorized')
     }
 
-    const body = await req.json()
+    const { id } = await params
+    const transacao = await financeiroService.obter(session.user.id, parseInt(id))
 
-    const result = await db
-      .update(financeiro)
-      .set({
-        status: body.status,
-        data_pagamento: body.status === 'pago' ? new Date() : body.data_pagamento,
-        observacoes: body.observacoes,
-        updatedAt: new Date(),
-      })
-      .where(
-        and(
-          eq(financeiro.id, parseInt(params.id)),
-          eq(financeiro.userId, session.user.id)
-        )
-      )
-      .returning()
-
-    if (!result.length) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    }
-
-    return NextResponse.json(result[0])
+    return apiResponse(transacao, 200, 'Transação obtida com sucesso')
   } catch (error) {
-    console.error('[v0] PUT /api/financeiro/[id]:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return handleApiError(error)
   }
 }
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiResponse(null, 401, 'Unauthorized')
     }
 
-    const result = await db
-      .delete(financeiro)
-      .where(
-        and(
-          eq(financeiro.id, parseInt(params.id)),
-          eq(financeiro.userId, session.user.id)
-        )
-      )
-      .returning()
+    const { id } = await params
+    const dados = await req.json()
+    const transacao = await financeiroService.atualizar(session.user.id, parseInt(id), dados)
 
-    if (!result.length) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    }
-
-    return NextResponse.json({ success: true })
+    return apiResponse(transacao, 200, 'Transação atualizada com sucesso')
   } catch (error) {
-    console.error('[v0] DELETE /api/financeiro/[id]:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return handleApiError(error)
+  }
+}
+
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session?.user) {
+      return apiResponse(null, 401, 'Unauthorized')
+    }
+
+    const { id } = await params
+    await financeiroService.deletar(session.user.id, parseInt(id))
+
+    return apiResponse(null, 200, 'Transação deletada com sucesso')
+  } catch (error) {
+    return handleApiError(error)
   }
 }

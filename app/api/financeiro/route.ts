@@ -1,39 +1,40 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { financeiro } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { NextRequest } from 'next/server'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
+import { financeiroService } from '@/lib/services/financeiro.service'
+import { apiResponse, handleApiError } from '@/lib/utils/api-response'
 
 export async function GET(req: NextRequest) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiResponse(null, 401, 'Unauthorized')
     }
 
-    const searchParams = req.nextUrl.searchParams
+    const { searchParams } = new URL(req.url)
     const tipo = searchParams.get('tipo')
     const status = searchParams.get('status')
+    const dataInicio = searchParams.get('dataInicio')
+    const dataFim = searchParams.get('dataFim')
+    const dashboard = searchParams.get('dashboard')
 
-    let query = db
-      .select()
-      .from(financeiro)
-      .where(eq(financeiro.userId, session.user.id))
-
-    if (tipo) {
-      query = db
-        .select()
-        .from(financeiro)
-        .where(eq(financeiro.tipo, tipo))
+    if (dashboard === 'true') {
+      const result = await financeiroService.obterDashboard(session.user.id)
+      return apiResponse(result, 200, 'Dashboard obtido com sucesso')
     }
 
-    const data = await query.orderBy(financeiro.createdAt)
+    const filtros: any = {}
+    if (tipo) filtros.tipo = tipo
+    if (status) filtros.status = status
+    if (dataInicio && dataFim) {
+      filtros.dataInicio = new Date(dataInicio)
+      filtros.dataFim = new Date(dataFim)
+    }
 
-    return NextResponse.json(data)
+    const transacoes = await financeiroService.listar(session.user.id, filtros)
+    return apiResponse(transacoes, 200, 'Transações listadas com sucesso')
   } catch (error) {
-    console.error('[v0] GET /api/financeiro:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return handleApiError(error)
   }
 }
 
@@ -41,31 +42,14 @@ export async function POST(req: NextRequest) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiResponse(null, 401, 'Unauthorized')
     }
 
-    const body = await req.json()
+    const dados = await req.json()
+    const transacao = await financeiroService.criar(session.user.id, dados)
 
-    const result = await db
-      .insert(financeiro)
-      .values({
-        userId: session.user.id,
-        os_id: body.os_id,
-        tecnico_id: body.tecnico_id,
-        tipo: body.tipo, // receita, despesa, comissao
-        descricao: body.descricao,
-        valor: body.valor,
-        categoria: body.categoria,
-        status: body.status || 'pendente',
-        data_vencimento: body.data_vencimento ? new Date(body.data_vencimento) : undefined,
-        forma_pagamento: body.forma_pagamento,
-        observacoes: body.observacoes,
-      })
-      .returning()
-
-    return NextResponse.json(result[0], { status: 201 })
+    return apiResponse(transacao, 201, 'Transação criada com sucesso')
   } catch (error) {
-    console.error('[v0] POST /api/financeiro:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return handleApiError(error)
   }
 }

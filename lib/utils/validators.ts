@@ -137,3 +137,14 @@ export const validateEstoqueData = (dados: any, isUpdate = false) => {
   if (dados.valor_unitario && dados.valor_unitario < 0) throw new Error('Valor unitário não pode ser negativo')
   return true
 }
+
+export const validateFinanceiroData = (dados: any, isUpdate = false) => {
+  if (!isUpdate) {
+    if (!dados.tipo || !['receita', 'despesa'].includes(dados.tipo)) throw new Error('Tipo de transação inválido')
+    if (!dados.descricao) throw new Error('Descrição é obrigatória')
+    if (!dados.valor || dados.valor <= 0) throw new Error('Valor deve ser maior que zero')
+  }
+  if (dados.valor && dados.valor < 0) throw new Error('Valor não pode ser negativo')
+  if (dados.status && !['pendente', 'pago', 'atrasado'].includes(dados.status)) throw new Error('Status inválido')
+  return true
+}
