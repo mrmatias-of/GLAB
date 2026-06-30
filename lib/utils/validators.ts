@@ -128,3 +128,12 @@ export const validateTecnicoData = (dados: any, isUpdate = false) => {
   if (dados.cpf && !validateCPF(dados.cpf)) throw new Error('CPF inválido')
   return true
 }
+
+export const validateEstoqueData = (dados: any, isUpdate = false) => {
+  if (!isUpdate && !dados.nome) throw new Error('Nome do item é obrigatório')
+  if (dados.categoria && typeof dados.categoria !== 'string') throw new Error('Categoria inválida')
+  if (dados.quantidade_minima && dados.quantidade_minima < 0) throw new Error('Quantidade mínima não pode ser negativa')
+  if (dados.quantidade_atual !== undefined && dados.quantidade_atual < 0) throw new Error('Quantidade atual não pode ser negativa')
+  if (dados.valor_unitario && dados.valor_unitario < 0) throw new Error('Valor unitário não pode ser negativo')
+  return true
+}

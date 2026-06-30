@@ -1,40 +1,40 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { estoque } from '@/lib/db/schema'
-import { eq, lt } from 'drizzle-orm'
+import { NextRequest } from 'next/server'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
+import { estoqueService } from '@/lib/services/estoque.service'
+import { apiResponse, handleApiError } from '@/lib/utils/api-response'
 
 export async function GET(req: NextRequest) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiResponse(null, 401, 'Unauthorized')
     }
 
-    const searchParams = req.nextUrl.searchParams
-    const showAlertas = searchParams.get('alertas') === 'true'
+    const { searchParams } = new URL(req.url)
+    const categoria = searchParams.get('categoria')
+    const ativo = searchParams.get('ativo')
+    const estoqueBaixo = searchParams.get('estoqueBaixo')
+    const resumo = searchParams.get('resumo')
 
-    let query = db
-      .select()
-      .from(estoque)
-      .where(eq(estoque.userId, session.user.id))
-
-    if (showAlertas) {
-      query = db
-        .select()
-        .from(estoque)
-        .where(
-          lt(estoque.quantidade_atual, estoque.quantidade_minima)
-        )
+    if (resumo === 'true') {
+      const result = await estoqueService.obterResumo(session.user.id)
+      return apiResponse(result, 200, 'Resumo obtido com sucesso')
     }
 
-    const data = await query.orderBy(estoque.createdAt)
+    let result
+    if (estoqueBaixo === 'true') {
+      result = await estoqueService.obterEstoqueBaixo(session.user.id)
+    } else {
+      const filtros: any = {}
+      if (categoria) filtros.categoria = categoria
+      if (ativo !== null) filtros.ativo = ativo === 'true'
+      result = await estoqueService.listar(session.user.id, filtros)
+    }
 
-    return NextResponse.json(data)
+    return apiResponse(result, 200, 'Itens listados com sucesso')
   } catch (error) {
-    console.error('[v0] GET /api/estoque:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return handleApiError(error)
   }
 }
 
@@ -42,29 +42,14 @@ export async function POST(req: NextRequest) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiResponse(null, 401, 'Unauthorized')
     }
 
-    const body = await req.json()
+    const dados = await req.json()
+    const item = await estoqueService.criar(session.user.id, dados)
 
-    const result = await db
-      .insert(estoque)
-      .values({
-        userId: session.user.id,
-        nome: body.nome,
-        descricao: body.descricao,
-        categoria: body.categoria,
-        quantidade_atual: body.quantidade_atual || '0',
-        quantidade_minima: body.quantidade_minima || '5',
-        valor_unitario: body.valor_unitario,
-        localizacao: body.localizacao,
-        garantia_meses: body.garantia_meses,
-      })
-      .returning()
-
-    return NextResponse.json(result[0], { status: 201 })
+    return apiResponse(item, 201, 'Item criado com sucesso')
   } catch (error) {
-    console.error('[v0] POST /api/estoque:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return handleApiError(error)
   }
 }
