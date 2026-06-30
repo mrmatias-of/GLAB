@@ -1,7 +1,7 @@
 {
-  "name": "mobile",
+  "name": "glab-mobile",
   "version": "1.0.0",
-  "description": "",
+  "description": "G•LAB - Mobile App for Field Service Management",
   "main": "index.js",
   "scripts": {
     "dev": "expo start",
@@ -12,23 +12,31 @@
     "build:ios": "eas build --platform ios",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
+  "keywords": [
+    "glab",
+    "mobile",
+    "expo",
+    "react-native"
+  ],
+  "author": "G•LAB",
+  "license": "MIT",
   "dependencies": {
-    "@react-navigation/bottom-tabs": "^7.18.3",
-    "@react-navigation/native": "^7.3.4",
-    "@react-navigation/stack": "^7.10.6",
-    "axios": "^1.18.1",
-    "expo": "51.0.28",
-    "expo-camera": "^14.1.0",
-    "expo-location": "^17.1.0",
+    "@react-navigation/bottom-tabs": "^6.5.0",
+    "@react-navigation/native": "^6.1.0",
+    "@react-navigation/native-stack": "^6.9.0",
+    "axios": "^1.6.0",
+    "expo": "54.0.12",
+    "expo-camera": "^15.0.0",
+    "expo-location": "^16.1.0",
     "react": "18.2.0",
-    "react-native": "0.74.0",
-    "react-native-safe-area-context": "^5.8.0",
-    "react-native-screens": "^4.25.2",
-    "typescript": "^6.0.3",
-    "zustand": "^5.0.14"
+    "react-native": "0.76.0",
+    "react-native-safe-area-context": "^4.8.0",
+    "react-native-screens": "^3.29.0",
+    "zustand": "^4.4.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-native": "^0.73.0",
+    "typescript": "^5.3.3"
   }
 }
