@@ -1,11 +1,24 @@
 import Image from "next/image"
 import { Tag, BookOpen, Clock, Zap } from "lucide-react"
-import type { Curso } from "@/lib/cursos-data"
 import BackButton from "@/components/back-button"
+
+interface Curso {
+  titulo: string
+  subtitulo?: string
+  descricao: string
+  modulos: Array<{ topicos: string[] }>
+  tag: string
+  imagem?: string
+  preco: string
+  precoOriginal?: string
+  cta: string
+  ctaHref: string
+  icon?: any
+}
 
 export default function CursoHero({ curso }: { curso: Curso }) {
   const Icon = curso.icon
-  const totalTopicos = curso.modulos.reduce((acc, m) => acc + m.topicos.length, 0)
+  const totalTopicos = curso.modulos.reduce((acc: number, m: any) => acc + m.topicos.length, 0)
 
   return (
     <section className="relative min-h-[80vh] flex items-center pt-24 pb-16 bg-white">

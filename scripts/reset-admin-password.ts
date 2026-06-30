@@ -19,6 +19,7 @@ async function resetAdminPassword() {
   }
 
   try {
+    const { data, error } = await supabase.auth.admin.updateUserById(
       "74257856-4f9b-4aa9-9bea-b21f60768b27", // ID do user admin@glabcursos.com.br
       { password: newPassword }
     );

@@ -5,7 +5,7 @@ interface StatusBadgeProps {
   variant?: 'default' | 'success' | 'warning' | 'error' | 'info'
 }
 
-const statusVariants: Record<string, Record<string, string>> = {
+const statusVariants: Record<string, string> = {
   default: 'bg-slate-700 text-slate-200',
   success: 'bg-green-500/20 text-green-400 border border-green-500/30',
   warning: 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30',
