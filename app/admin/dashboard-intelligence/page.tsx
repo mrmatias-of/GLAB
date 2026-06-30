@@ -71,60 +71,60 @@ export default function DashboardIntelligencePage() {
   }, [])
 
   return (
-    <main className="flex-1 p-8 space-y-8">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard Inteligente</h1>
-          <p className="text-gray-600 mt-1">Visualize métricas e insights de seu negócio</p>
+    <main className="flex-1 space-y-6">
+      {/* Header - Responsive */}
+      <div className="px-4 lg:px-8 pt-4 flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4">
+        <div className="flex-1">
+          <h2 className="text-2xl lg:text-3xl font-bold text-slate-100">Dashboard Inteligente</h2>
+          <p className="text-slate-400 mt-1 text-sm lg:text-base">Visualize métricas e insights de seu negócio</p>
         </div>
 
-        {/* Filters and Actions */}
-        <div className="flex gap-2">
+        {/* Filters and Actions - Stack on mobile */}
+        <div className="flex gap-2 flex-wrap">
           <button
             onClick={handleExportPDF}
-            className="px-4 py-2 rounded-lg bg-red-100 text-red-700 hover:bg-red-200 font-medium transition-colors"
+            className="px-3 lg:px-4 py-2 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 font-medium transition-colors text-sm"
           >
-            Exportar PDF
+            PDF
           </button>
           <button
             onClick={handleExportExcel}
-            className="px-4 py-2 rounded-lg bg-green-100 text-green-700 hover:bg-green-200 font-medium transition-colors"
+            className="px-3 lg:px-4 py-2 rounded-lg bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 font-medium transition-colors text-sm"
           >
-            Exportar Excel
+            Excel
           </button>
         </div>
       </div>
 
-      {/* Period Selector */}
-      <div className="bg-white rounded-lg border border-gray-200 p-4 flex items-center gap-2">
-        <span className="text-sm font-medium text-gray-700">Período:</span>
+      {/* Period Selector - Mobile optimized */}
+      <div className="mx-4 lg:mx-8 bg-slate-900/50 rounded-lg border border-slate-700/50 p-3 lg:p-4 flex items-center gap-2 overflow-x-auto">
+        <span className="text-sm font-medium text-slate-400 whitespace-nowrap">Período:</span>
         <button
           onClick={() => setPeriod('month')}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+          className={`px-3 lg:px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap text-sm ${
             period === 'month'
               ? 'bg-blue-600 text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800'
           }`}
         >
           Mês
         </button>
         <button
           onClick={() => setPeriod('quarter')}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+          className={`px-3 lg:px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap text-sm ${
             period === 'quarter'
               ? 'bg-blue-600 text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800'
           }`}
         >
           Trimestre
         </button>
         <button
           onClick={() => setPeriod('year')}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+          className={`px-3 lg:px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap text-sm ${
             period === 'year'
               ? 'bg-blue-600 text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800'
           }`}
         >
           Ano
@@ -132,17 +132,17 @@ export default function DashboardIntelligencePage() {
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="px-4 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {kpis.map((kpi) => (
           <div
             key={kpi.label}
-            className="bg-white rounded-lg border border-gray-200 p-6"
+            className="bg-slate-900/50 rounded-lg border border-slate-700/50 p-4 lg:p-6 hover:border-slate-600 transition-colors"
           >
-            <p className="text-gray-600 text-sm font-medium">{kpi.label}</p>
-            <p className="text-2xl font-bold text-gray-900 mt-2">{kpi.value}</p>
+            <p className="text-slate-400 text-sm font-medium">{kpi.label}</p>
+            <p className="text-xl lg:text-2xl font-bold text-slate-100 mt-2">{kpi.value}</p>
             <p
               className={`text-sm font-medium mt-2 ${
-                kpi.trend === 'up' ? 'text-green-600' : 'text-red-600'
+                kpi.trend === 'up' ? 'text-emerald-400' : 'text-red-400'
               }`}
             >
               {kpi.trend === 'up' ? '↑' : '↓'} {kpi.change}%
@@ -152,7 +152,7 @@ export default function DashboardIntelligencePage() {
       </div>
 
       {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="px-4 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
         <RevenueChart period={period} />
         <OrdersStatusChart />
         <TechnicianPerformanceChart />
