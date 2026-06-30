@@ -79,111 +79,77 @@ export default function DashboardIntelligencePage() {
           <p className="text-gray-600 mt-1">Visualize métricas e insights de seu negócio</p>
         </div>
 
-        {/* Period Selector */}
+        {/* Filters and Actions */}
         <div className="flex gap-2">
           <button
-            onClick={() => setPeriod('month')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-              period === 'month'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
+            onClick={handleExportPDF}
+            className="px-4 py-2 rounded-lg bg-red-100 text-red-700 hover:bg-red-200 font-medium transition-colors"
           >
-            Último Mês
+            Exportar PDF
           </button>
           <button
-            onClick={() => setPeriod('quarter')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-              period === 'quarter'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
+            onClick={handleExportExcel}
+            className="px-4 py-2 rounded-lg bg-green-100 text-green-700 hover:bg-green-200 font-medium transition-colors"
           >
-            Último Trimestre
-          </button>
-          <button
-            onClick={() => setPeriod('year')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-              period === 'year'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
-          >
-            Último Ano
+            Exportar Excel
           </button>
         </div>
       </div>
 
-        {/* Filters and Actions */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4 mb-8 flex items-center justify-between flex-wrap gap-4">
-          <div className="flex gap-2">
-            <button
-              onClick={() => setPeriod('month')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                period === 'month'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Mês
-            </button>
-            <button
-              onClick={() => setPeriod('quarter')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                period === 'quarter'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Trimestre
-            </button>
-            <button
-              onClick={() => setPeriod('year')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                period === 'year'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Ano
-            </button>
-          </div>
+      {/* Period Selector */}
+      <div className="bg-white rounded-lg border border-gray-200 p-4 flex items-center gap-2">
+        <span className="text-sm font-medium text-gray-700">Período:</span>
+        <button
+          onClick={() => setPeriod('month')}
+          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            period === 'month'
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          Mês
+        </button>
+        <button
+          onClick={() => setPeriod('quarter')}
+          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            period === 'quarter'
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          Trimestre
+        </button>
+        <button
+          onClick={() => setPeriod('year')}
+          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            period === 'year'
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          Ano
+        </button>
+      </div>
 
-          <div className="flex gap-2">
-            <button
-              onClick={handleExportPDF}
-              className="px-4 py-2 rounded-lg bg-red-100 text-red-700 hover:bg-red-200 font-medium transition-colors"
+      {/* KPIs */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {kpis.map((kpi) => (
+          <div
+            key={kpi.label}
+            className="bg-white rounded-lg border border-gray-200 p-6"
+          >
+            <p className="text-gray-600 text-sm font-medium">{kpi.label}</p>
+            <p className="text-2xl font-bold text-gray-900 mt-2">{kpi.value}</p>
+            <p
+              className={`text-sm font-medium mt-2 ${
+                kpi.trend === 'up' ? 'text-green-600' : 'text-red-600'
+              }`}
             >
-              Exportar PDF
-            </button>
-            <button
-              onClick={handleExportExcel}
-              className="px-4 py-2 rounded-lg bg-green-100 text-green-700 hover:bg-green-200 font-medium transition-colors"
-            >
-              Exportar Excel
-            </button>
+              {kpi.trend === 'up' ? '↑' : '↓'} {kpi.change}%
+            </p>
           </div>
-        </div>
-
-        {/* KPIs */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          {kpis.map((kpi) => (
-            <div
-              key={kpi.label}
-              className="bg-white rounded-lg border border-gray-200 p-6"
-            >
-              <p className="text-gray-600 text-sm font-medium">{kpi.label}</p>
-              <p className="text-2xl font-bold text-gray-900 mt-2">{kpi.value}</p>
-              <p
-                className={`text-sm font-medium mt-2 ${
-                  kpi.trend === 'up' ? 'text-green-600' : 'text-red-600'
-                }`}
-              >
-                {kpi.trend === 'up' ? '↑' : '↓'} {kpi.change}%
-              </p>
-            </div>
-          ))}
-        </div>
+        ))}
+      </div>
 
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -191,7 +157,6 @@ export default function DashboardIntelligencePage() {
         <OrdersStatusChart />
         <TechnicianPerformanceChart />
         <MonthlyTrendChart />
-        </div>
       </div>
     </main>
   )
