@@ -10,7 +10,7 @@ export default function CursosPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Link href="/admin" className="text-cyan-600 hover:text-cyan-700 font-medium mb-6 inline-block">
+        <Link href="/admin" className="text-blue-600 hover:text-blue-700 font-medium mb-6 inline-block">
           ← Voltar para painel
         </Link>
         
@@ -19,7 +19,7 @@ export default function CursosPage() {
 
         <div className="card-elegant bg-slate-900/40 p-4 text-center">
           <p className="text-slate-600 mb-4">Seção em desenvolvimento</p>
-          <button className="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-2 rounded-lg transition">
+          <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition">
             + Novo Curso
           </button>
         </div>

@@ -187,7 +187,7 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
             <div className="space-y-3 flex flex-col h-full justify-center">
               <button
                 onClick={openCamera}
-                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition font-medium text-lg"
+                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-medium text-lg"
               >
                 <Camera size={24} />
                 Abrir Câmera
@@ -229,7 +229,7 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
               <div className="flex gap-2">
                 <button
                   onClick={capturePhoto}
-                  className="flex-1 px-4 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition font-medium"
+                  className="flex-1 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-medium"
                 >
                   Capturar
                 </button>
@@ -291,7 +291,7 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
                     value={equipment}
                     onChange={(e) => setEquipment(e.target.value)}
                     placeholder="Ex: iPhone 14 Pro Max"
-                    className="w-full px-4 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600 text-base"
+                    className="w-full px-4 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-base"
                   />
                 </div>
 
@@ -304,7 +304,7 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
                     value={serial}
                     onChange={(e) => setSerial(e.target.value)}
                     placeholder="Ex: ABC123XYZ (opcional)"
-                    className="w-full px-4 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600 text-base"
+                    className="w-full px-4 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-base"
                   />
                 </div>
 
@@ -325,7 +325,7 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
                   <button
                     onClick={handleConfirm}
                     disabled={validating}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-cyan-600 hover:bg-cyan-700 disabled:opacity-50 text-white rounded-lg transition font-medium"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-lg transition font-medium"
                   >
                     <Check size={20} />
                     Confirmar

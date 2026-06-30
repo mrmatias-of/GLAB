@@ -39,7 +39,7 @@ export default function ProductFinalCTA({ curso }: { curso: CursoSerializavel })
 
       <div className="relative z-10 max-w-3xl mx-auto px-6 text-center">
         <div
-          className="rounded-3xl border-2 border-cyan-500/25 p-10 md:p-14 relative overflow-hidden"
+          className="rounded-3xl border-2 border-blue-500/25 p-10 md:p-14 relative overflow-hidden"
           style={{
             background: "linear-gradient(180deg, rgba(0,212,200,0.07) 0%, rgba(5,5,16,0.98) 100%)",
           }}
@@ -60,9 +60,9 @@ export default function ProductFinalCTA({ curso }: { curso: CursoSerializavel })
 
           <div className="relative">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/25 bg-cyan-500/08 px-4 py-1.5 mb-6" style={{ background: "rgba(0,212,200,0.06)" }}>
-              <Zap size={13} className="text-cyan-400" />
-              <span className="text-[11px] font-bold tracking-wider text-cyan-400 uppercase">
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/25 bg-cyan-500/08 px-4 py-1.5 mb-6" style={{ background: "rgba(0,212,200,0.06)" }}>
+              <Zap size={13} className="text-blue-400" />
+              <span className="text-[11px] font-bold tracking-wider text-blue-400 uppercase">
                 Acesso imediato
               </span>
             </div>
@@ -81,7 +81,7 @@ export default function ProductFinalCTA({ curso }: { curso: CursoSerializavel })
                 <span className="text-white/30 line-through text-xl">{curso.precoOriginal}</span>
               )}
               <span
-                className="text-5xl md:text-6xl font-black text-cyan-400"
+                className="text-5xl md:text-6xl font-black text-blue-400"
                 style={{ textShadow: "0 0 40px rgba(0,212,200,0.5)" }}
               >
                 {curso.preco}
@@ -112,7 +112,7 @@ export default function ProductFinalCTA({ curso }: { curso: CursoSerializavel })
                 { icon: Zap, label: "Pagamento único" },
               ].map((b) => (
                 <div key={b.label} className="flex items-center gap-2 text-xs text-white/35">
-                  <b.icon size={14} className="text-cyan-400/50" />
+                  <b.icon size={14} className="text-blue-400/50" />
                   {b.label}
                 </div>
               ))}

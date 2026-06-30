@@ -31,17 +31,17 @@ export default function ProductCurriculumSection({ curso }: { curso: CursoSerial
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-8">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/25 flex items-center justify-center">
-              <BookOpen size={18} className="text-cyan-400" />
+            <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-blue-500/25 flex items-center justify-center">
+              <BookOpen size={18} className="text-blue-400" />
             </div>
             <h2 className="text-xl md:text-2xl font-black text-white">Conteúdo do guia</h2>
           </div>
           <div className="sm:ml-auto flex items-center gap-4 text-sm text-white/40">
             <span>
-              <strong className="text-cyan-400">{curso.modulos.length}</strong> módulos
+              <strong className="text-blue-400">{curso.modulos.length}</strong> módulos
             </span>
             <span>
-              <strong className="text-cyan-400">{totalTopicos}</strong> tópicos
+              <strong className="text-blue-400">{totalTopicos}</strong> tópicos
             </span>
           </div>
         </div>
@@ -64,8 +64,8 @@ export default function ProductCurriculumSection({ curso }: { curso: CursoSerial
                   onClick={() => toggle(i)}
                   className="w-full flex items-center gap-4 px-5 py-4 text-left hover:bg-white/[0.02] transition-colors"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/15 flex items-center justify-center shrink-0">
-                    <span className="text-sm font-black text-cyan-400">
+                  <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-blue-500/15 flex items-center justify-center shrink-0">
+                    <span className="text-sm font-black text-blue-400">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                   </div>
@@ -89,7 +89,7 @@ export default function ProductCurriculumSection({ curso }: { curso: CursoSerial
                         className="flex items-center gap-3 px-5 py-3 border-b border-white/5 last:border-b-0 hover:bg-white/[0.015] transition-colors"
                       >
                         <div className="w-6 h-6 rounded-lg bg-white/4 border border-white/8 flex items-center justify-center shrink-0">
-                          <Play size={9} className="text-cyan-400/50 ml-0.5" />
+                          <Play size={9} className="text-blue-400/50 ml-0.5" />
                         </div>
                         <span className="text-sm text-white/60">{topico}</span>
                       </div>

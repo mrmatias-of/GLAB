@@ -106,8 +106,8 @@ export default function ProductFaqSection({ curso }: { curso: CursoSerializavel 
       <div className="max-w-3xl mx-auto px-6">
         {/* Header */}
         <div className="flex items-center gap-3 mb-8">
-          <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/25 flex items-center justify-center">
-            <HelpCircle size={18} className="text-cyan-400" />
+          <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-blue-500/25 flex items-center justify-center">
+            <HelpCircle size={18} className="text-blue-400" />
           </div>
           <h2 className="text-xl md:text-2xl font-black text-white">Perguntas frequentes</h2>
         </div>
@@ -131,7 +131,7 @@ export default function ProductFaqSection({ curso }: { curso: CursoSerializavel 
                   <span className="text-sm font-semibold text-white/85">{item.pergunta}</span>
                   <ChevronDown
                     size={16}
-                    className="text-cyan-400/60 shrink-0 transition-transform duration-200"
+                    className="text-blue-400/60 shrink-0 transition-transform duration-200"
                     style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0deg)" }}
                   />
                 </button>

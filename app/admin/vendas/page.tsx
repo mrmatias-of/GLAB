@@ -10,7 +10,7 @@ export default function VendasPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Link href="/admin" className="text-cyan-600 hover:text-cyan-700 font-medium mb-6 inline-block">
+        <Link href="/admin" className="text-blue-600 hover:text-blue-700 font-medium mb-6 inline-block">
           ← Voltar para painel
         </Link>
         

@@ -19,7 +19,7 @@ export default function ProductOfferCard({ curso }: { curso: CursoSerializavel }
     <section className="py-12 relative" style={{ backgroundColor: "#050510" }}>
       <div className="max-w-3xl mx-auto px-6">
         <div
-          className="rounded-3xl border-2 border-cyan-500/25 p-8 md:p-10 relative overflow-hidden"
+          className="rounded-3xl border-2 border-blue-500/25 p-8 md:p-10 relative overflow-hidden"
           style={{
             background: "linear-gradient(180deg, rgba(0,212,200,0.07) 0%, rgba(5,5,16,0.98) 100%)",
           }}
@@ -40,7 +40,7 @@ export default function ProductOfferCard({ curso }: { curso: CursoSerializavel }
 
           <div className="relative text-center">
             {isComboIniciante && (
-              <p className="text-xs font-black uppercase tracking-widest text-cyan-400 mb-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-cyan-500/25" style={{ background: "rgba(0,212,200,0.06)" }}>
+              <p className="text-xs font-black uppercase tracking-widest text-blue-400 mb-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-blue-500/25" style={{ background: "rgba(0,212,200,0.06)" }}>
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
                 {badgeText}
               </p>
@@ -60,7 +60,7 @@ export default function ProductOfferCard({ curso }: { curso: CursoSerializavel }
                 <span className="text-xl text-white/30 line-through">{curso.precoOriginal}</span>
               )}
               <span
-                className="text-5xl font-black text-cyan-400"
+                className="text-5xl font-black text-blue-400"
                 style={{ textShadow: "0 0 35px rgba(0,212,200,0.4)" }}
               >
                 {curso.preco}
@@ -76,7 +76,7 @@ export default function ProductOfferCard({ curso }: { curso: CursoSerializavel }
                 { icon: Clock, label: "Pagamento único" },
               ].map((b) => (
                 <div key={b.label} className="flex items-center gap-1.5 text-xs text-white/45">
-                  <b.icon size={13} className="text-cyan-400/70" />
+                  <b.icon size={13} className="text-blue-400/70" />
                   {b.label}
                 </div>
               ))}
@@ -99,7 +99,7 @@ export default function ProductOfferCard({ curso }: { curso: CursoSerializavel }
             </a>
 
             <div className="flex items-center justify-center gap-1.5 mt-4 text-xs text-white/30">
-              <ShieldCheck size={12} className="text-cyan-400/40" />
+              <ShieldCheck size={12} className="text-blue-400/40" />
               Pagamento seguro via Kirvano
             </div>
           </div>

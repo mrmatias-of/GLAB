@@ -132,7 +132,7 @@ export default function DashboardPage() {
           title="Técnicos Cadastrados"
           value={stats.tecnicos}
           iconName="wrench"
-          color="cyan"
+          color="blue"
           onClick={() => window.location.href = '/admin/tecnicos'}
         />
         <StatCard

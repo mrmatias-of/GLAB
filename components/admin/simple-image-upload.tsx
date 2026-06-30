@@ -92,7 +92,7 @@ export default function SimpleImageUpload({
         >
           {uploading ? (
             <>
-              <div className="w-8 h-8 border-2 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin" />
+              <div className="w-8 h-8 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
               <span className="text-sm text-slate-400">Enviando...</span>
             </>
           ) : (

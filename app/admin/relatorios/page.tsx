@@ -45,7 +45,7 @@ export default function RelatoriosPage() {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-        <StatCard title="Ordens Finalizadas" value="145" trend={12} trendLabel="vs mês anterior" color="cyan" />
+        <StatCard title="Ordens Finalizadas" value="145" trend={12} trendLabel="vs mês anterior" color="blue" />
         <StatCard title="Receita Total" value="R$ 28,5K" trend={8} trendLabel="vs mês anterior" color="green" />
         <StatCard title="Despesas" value="R$ 8,2K" trend={3} trendLabel="vs mês anterior" color="red" />
         <StatCard title="Lucro Líquido" value="R$ 20,3K" trend={15} trendLabel="vs mês anterior" color="blue" />
@@ -61,7 +61,7 @@ export default function RelatoriosPage() {
             <select
               value={reportType}
               onChange={(e) => setReportType(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 text-sm"
+              className="w-full px-3 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
             >
               <option value="ordens">Ordens de Serviço</option>
               <option value="financeiro">Financeiro</option>
@@ -76,7 +76,7 @@ export default function RelatoriosPage() {
             <select
               value={period}
               onChange={(e) => setPeriod(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 text-sm"
+              className="w-full px-3 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
             >
               <option value="dia">Hoje</option>
               <option value="semana">Esta Semana</option>
@@ -91,7 +91,7 @@ export default function RelatoriosPage() {
             <button
               onClick={handleGenerateReport}
               disabled={loading}
-              className="w-full bg-cyan-600 hover:bg-cyan-700 disabled:bg-slate-600 text-white font-medium py-2 rounded-lg transition text-sm"
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 text-white font-medium py-2 rounded-lg transition text-sm"
             >
               {loading ? 'Gerando...' : 'Gerar Relatório'}
             </button>

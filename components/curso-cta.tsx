@@ -20,7 +20,7 @@ export default function CursoCTA({ curso }: { curso: Curso }) {
 
       <div className="relative z-10 max-w-3xl mx-auto px-6 text-center">
         {/* CTA Card */}
-        <div className="rounded-3xl border-2 border-cyan-500/30 p-10 md:p-14 relative overflow-hidden" style={{ background: 'linear-gradient(180deg, rgba(0,212,200,0.08) 0%, rgba(5,5,16,0.98) 100%)' }}>
+        <div className="rounded-3xl border-2 border-blue-500/30 p-10 md:p-14 relative overflow-hidden" style={{ background: 'linear-gradient(180deg, rgba(0,212,200,0.08) 0%, rgba(5,5,16,0.98) 100%)' }}>
           {/* Glow */}
           <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-60 h-60 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0,212,200,0.2) 0%, transparent 70%)', filter: 'blur(60px)' }} />
           
@@ -32,14 +32,14 @@ export default function CursoCTA({ curso }: { curso: Curso }) {
 
           <div className="relative">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-4 py-1.5 mb-6">
-              <Zap size={14} className="text-cyan-400" />
-              <span className="text-xs font-bold tracking-wider text-cyan-400 uppercase">Acesso Imediato</span>
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-cyan-500/10 px-4 py-1.5 mb-6">
+              <Zap size={14} className="text-blue-400" />
+              <span className="text-xs font-bold tracking-wider text-blue-400 uppercase">Acesso Imediato</span>
             </div>
 
             <h2 className="text-3xl md:text-4xl font-black text-white leading-tight mb-4">
               Pronto para dominar{" "}
-              <span className="text-cyan-400" style={{ textShadow: '0 0 30px rgba(0,212,200,0.5)' }}>{curso.tag}?</span>
+              <span className="text-blue-400" style={{ textShadow: '0 0 30px rgba(0,212,200,0.5)' }}>{curso.tag}?</span>
             </h2>
             
             <p className="text-white/50 text-sm leading-relaxed mb-8 max-w-xl mx-auto">
@@ -51,7 +51,7 @@ export default function CursoCTA({ curso }: { curso: Curso }) {
               {curso.precoOriginal && (
                 <span className="text-white/30 line-through text-xl">{curso.precoOriginal}</span>
               )}
-              <span className="text-5xl md:text-6xl font-black text-cyan-400" style={{ textShadow: '0 0 40px rgba(0,212,200,0.5)' }}>{curso.preco}</span>
+              <span className="text-5xl md:text-6xl font-black text-blue-400" style={{ textShadow: '0 0 40px rgba(0,212,200,0.5)' }}>{curso.preco}</span>
             </div>
 
             {/* CTA Button */}
@@ -73,15 +73,15 @@ export default function CursoCTA({ curso }: { curso: Curso }) {
             {/* Trust badges */}
             <div className="flex flex-wrap items-center justify-center gap-4 mt-8">
               <div className="flex items-center gap-2 text-xs text-white/40">
-                <ShieldCheck size={14} className="text-cyan-400/50" />
+                <ShieldCheck size={14} className="text-blue-400/50" />
                 Pagamento seguro
               </div>
               <div className="flex items-center gap-2 text-xs text-white/40">
-                <Clock size={14} className="text-cyan-400/50" />
+                <Clock size={14} className="text-blue-400/50" />
                 Acesso imediato
               </div>
               <div className="flex items-center gap-2 text-xs text-white/40">
-                <Zap size={14} className="text-cyan-400/50" />
+                <Zap size={14} className="text-blue-400/50" />
                 Pagamento único
               </div>
             </div>

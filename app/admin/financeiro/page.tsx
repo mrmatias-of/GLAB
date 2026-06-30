@@ -217,7 +217,7 @@ export default function FinanceiroPage() {
             onClick={() => setFilterType(type as any)}
             className={`px-4 py-2 rounded-lg border transition ${
               filterType === type
-                ? 'bg-cyan-600 text-white border-cyan-600'
+                ? 'bg-blue-600 text-white border-blue-600'
                 : 'border-slate-300 text-slate-700 hover:bg-slate-50'
             }`}
           >

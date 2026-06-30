@@ -192,13 +192,13 @@ export default function CursoForm({ initialData, id }: { initialData?: Partial<C
     }, 1000)
   }
 
-  const inputClass = "w-full bg-input border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-cyan/50 focus:ring-1 focus:ring-cyan/30 transition-all"
+  const inputClass = "w-full bg-input border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-blue/50 focus:ring-1 focus:ring-blue/30 transition-all"
   const labelClass = "block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1.5"
 
   return (
     <form onSubmit={handleSubmit} className="p-8 max-w-4xl">
       <div className="flex items-center gap-4 mb-8">
-        <Link href="/admin/cursos" className="p-2 rounded-xl border border-border text-muted-foreground hover:text-foreground hover:border-cyan/30 transition-all">
+        <Link href="/admin/cursos" className="p-2 rounded-xl border border-border text-muted-foreground hover:text-foreground hover:border-blue/30 transition-all">
           <ArrowLeft size={16} />
         </Link>
         <div>
@@ -244,11 +244,11 @@ export default function CursoForm({ initialData, id }: { initialData?: Partial<C
 
           <div className="flex gap-6 mt-4">
             <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={form.destaque} onChange={(e) => set("destaque", e.target.checked)} className="w-4 h-4 accent-[#00d4c8]" />
+              <input type="checkbox" checked={form.destaque} onChange={(e) => set("destaque", e.target.checked)} className="w-4 h-4 accent-[#3B82F6]" />
               <span className="text-sm text-foreground">Destaque (Mais Popular)</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={form.ativo} onChange={(e) => set("ativo", e.target.checked)} className="w-4 h-4 accent-[#00d4c8]" />
+              <input type="checkbox" checked={form.ativo} onChange={(e) => set("ativo", e.target.checked)} className="w-4 h-4 accent-[#3B82F6]" />
               <span className="text-sm text-foreground">Ativo (visível no site)</span>
             </label>
           </div>
@@ -291,7 +291,7 @@ export default function CursoForm({ initialData, id }: { initialData?: Partial<C
         <section className="rounded-2xl border border-border bg-card p-6">
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-sm font-black text-foreground">Módulos & Tópicos</h2>
-            <button type="button" onClick={addModulo} className="inline-flex items-center gap-1.5 text-xs font-bold text-cyan border border-cyan/25 hover:bg-cyan/10 px-3 py-1.5 rounded-lg transition-all">
+            <button type="button" onClick={addModulo} className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 border border-blue/25 hover:bg-blue/10 px-3 py-1.5 rounded-lg transition-all">
               <Plus size={12} /> Módulo
             </button>
           </div>
@@ -312,7 +312,7 @@ export default function CursoForm({ initialData, id }: { initialData?: Partial<C
                 <div className="flex flex-col gap-2 pl-2">
                   {mod.topicos.map((topico, topIdx) => (
                     <div key={topIdx} className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-cyan/40 flex-shrink-0" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-blue-600/40 flex-shrink-0" />
                       <input
                         className={inputClass + " flex-1"}
                         value={topico}
@@ -324,7 +324,7 @@ export default function CursoForm({ initialData, id }: { initialData?: Partial<C
                       </button>
                     </div>
                   ))}
-                  <button type="button" onClick={() => addTopico(modIdx)} className="text-xs text-muted-foreground hover:text-cyan transition-colors text-left pl-3 mt-1">
+                  <button type="button" onClick={() => addTopico(modIdx)} className="text-xs text-muted-foreground hover:text-blue transition-colors text-left pl-3 mt-1">
                     + Adicionar tópico
                   </button>
                 </div>
@@ -340,14 +340,14 @@ export default function CursoForm({ initialData, id }: { initialData?: Partial<C
         <section className="rounded-2xl border border-border bg-card p-6">
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-sm font-black text-foreground">O que vai aprender</h2>
-            <button type="button" onClick={addAprendizado} className="inline-flex items-center gap-1.5 text-xs font-bold text-cyan border border-cyan/25 hover:bg-cyan/10 px-3 py-1.5 rounded-lg transition-all">
+            <button type="button" onClick={addAprendizado} className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 border border-blue/25 hover:bg-blue/10 px-3 py-1.5 rounded-lg transition-all">
               <Plus size={12} /> Item
             </button>
           </div>
           <div className="flex flex-col gap-2">
             {form.aprendizados.map((item, i) => (
               <div key={i} className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-cyan/40 flex-shrink-0" />
+                <div className="w-1.5 h-1.5 rounded-full bg-blue-600/40 flex-shrink-0" />
                 <input
                   className={inputClass + " flex-1"}
                   value={item}
@@ -376,7 +376,7 @@ export default function CursoForm({ initialData, id }: { initialData?: Partial<C
         <button
           type="submit"
           disabled={loading}
-          className="inline-flex items-center justify-center gap-2 bg-cyan text-background font-bold text-sm px-6 py-3.5 rounded-xl hover:bg-cyan/90 shadow-[0_0_24px_rgba(0,212,200,0.3)] transition-all disabled:opacity-50 w-full md:w-auto"
+          className="inline-flex items-center justify-center gap-2 bg-blue-600 text-background font-bold text-sm px-6 py-3.5 rounded-xl hover:bg-blue/90 shadow-[0_0_24px_rgba(0,212,200,0.3)] transition-all disabled:opacity-50 w-full md:w-auto"
         >
           <Save size={15} />
           {loading ? "Salvando..." : isEditing ? "Salvar Alterações" : "Criar Guia"}

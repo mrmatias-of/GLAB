@@ -91,14 +91,14 @@ export function Form({
               value={values[field.name] || ''}
               onChange={handleChange}
               rows={field.rows || 4}
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           ) : field.type === 'select' ? (
             <select
               name={field.name}
               value={values[field.name] || ''}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Selecione...</option>
               {field.options?.map((opt) => (
@@ -116,7 +116,7 @@ export function Form({
               onChange={handleChange}
               min={field.min}
               max={field.max}
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           )}
 
@@ -139,7 +139,7 @@ export function Form({
         <button
           type="submit"
           disabled={isSubmitting || loading}
-          className="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 disabled:opacity-50 transition"
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition"
         >
           {isSubmitting || loading ? 'Salvando...' : submitText}
         </button>

@@ -33,7 +33,7 @@ export default function Professor() {
 
         {/* Section header */}
         <div className="flex flex-col items-start mb-14">
-          <div className="inline-flex items-center gap-2 rounded-full border border-cyan/25 bg-cyan/8 px-4 py-1.5 mb-5">
+          <div className="inline-flex items-center gap-2 rounded-full border border-blue/25 bg-cyan/8 px-4 py-1.5 mb-5">
             <Award size={12} className="text-cyan" />
             <span className="text-xs font-semibold tracking-[0.18em] text-cyan uppercase">Sobre o Professor</span>
           </div>
@@ -67,7 +67,7 @@ export default function Professor() {
               {conquistas.map(({ icon: Icon, label, desc }) => (
                 <div
                   key={label}
-                  className="rounded-xl border border-[rgba(0,212,200,0.1)] bg-surface/40 p-5 flex flex-col gap-2 hover:border-cyan/25 hover:bg-surface transition-all duration-300 card-premium"
+                  className="rounded-xl border border-[rgba(0,212,200,0.1)] bg-surface/40 p-5 flex flex-col gap-2 hover:border-blue/25 hover:bg-surface transition-all duration-300 card-premium"
                 >
                   <Icon size={18} className="text-cyan" strokeWidth={1.5} />
                   <span className="text-xl font-black text-foreground">{label}</span>
@@ -79,9 +79,9 @@ export default function Professor() {
 
           {/* Right: what you learn */}
           <div className="lg:col-span-2">
-            <div className="rounded-2xl border border-cyan/15 bg-gradient-to-b from-surface to-[#0b1a2a] p-8 card-premium shadow-[0_0_40px_rgba(0,212,200,0.06)]">
+            <div className="rounded-2xl border border-blue/15 bg-gradient-to-b from-surface to-[#0b1a2a] p-8 card-premium shadow-[0_0_40px_rgba(0,212,200,0.06)]">
               <div className="flex items-center gap-2 mb-6">
-                <div className="w-8 h-8 rounded-lg bg-cyan/15 border border-cyan/25 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-lg bg-cyan/15 border border-blue/25 flex items-center justify-center">
                   <CheckCircle2 size={14} className="text-cyan" />
                 </div>
                 <span className="text-sm font-bold text-foreground tracking-wide">O que você domina</span>
@@ -90,7 +90,7 @@ export default function Professor() {
               <ul className="flex flex-col gap-5">
                 {aprendizados.map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
-                    <div className="mt-0.5 w-5 h-5 rounded-full bg-cyan/15 border border-cyan/30 flex items-center justify-center shrink-0">
+                    <div className="mt-0.5 w-5 h-5 rounded-full bg-cyan/15 border border-blue/30 flex items-center justify-center shrink-0">
                       <CheckCircle2 size={11} className="text-cyan" />
                     </div>
                     <span className="text-sm text-foreground/80 leading-relaxed">{item}</span>
@@ -101,7 +101,7 @@ export default function Professor() {
               <div className="mt-8 pt-6 border-t border-[rgba(0,212,200,0.1)]">
                 <a
                   href="#cursos"
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-cyan text-background font-bold text-sm px-5 py-3.5 hover:bg-cyan/90 transition-all duration-300 shadow-[0_0_24px_rgba(0,212,200,0.3)]"
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-cyan text-background font-bold text-sm px-5 py-3.5 hover:bg-blue/90 transition-all duration-300 shadow-[0_0_24px_rgba(0,212,200,0.3)]"
                 >
                   Ver Cursos Disponíveis
                 </a>

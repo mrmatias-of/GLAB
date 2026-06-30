@@ -140,7 +140,7 @@ export default function ImageCropUpload({
           <Image src={value} alt="Capa do curso" fill className="object-cover" />
         </div>
         <div className="flex gap-2 mt-3">
-          <label className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-cyan/30 bg-cyan/5 text-xs font-medium text-cyan hover:bg-cyan/10 cursor-pointer transition-all">
+          <label className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-blue/30 bg-blue-600/5 text-xs font-medium text-blue-600 hover:bg-blue/10 cursor-pointer transition-all">
             <Upload size={13} />
             Trocar imagem
             <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={onSelectFile} className="hidden" />
@@ -170,7 +170,7 @@ export default function ImageCropUpload({
           </button>
         </div>
 
-        <div className="flex justify-center bg-black/30 rounded-lg overflow-hidden border border-cyan/20">
+        <div className="flex justify-center bg-black/30 rounded-lg overflow-hidden border border-blue/20">
           <ReactCrop
             crop={crop}
             onChange={(c) => setCrop(c)}
@@ -191,7 +191,7 @@ export default function ImageCropUpload({
           </ReactCrop>
         </div>
 
-        <p className="text-[10px] text-muted-foreground text-center bg-cyan/5 border border-cyan/20 rounded px-2 py-1.5">
+        <p className="text-[10px] text-muted-foreground text-center bg-blue-600/5 border border-blue/20 rounded px-2 py-1.5">
           Arraste para reposicionar o recorte. Sem restrição de proporção.
         </p>
 
@@ -212,7 +212,7 @@ export default function ImageCropUpload({
             type="button"
             onClick={handleConfirmCrop}
             disabled={uploading || !completedCrop}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-cyan text-background text-xs font-bold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-cyan/90 transition-all"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 text-background text-xs font-bold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue/90 transition-all"
             style={{ color: "#050510" }}
           >
             {uploading ? (
@@ -235,7 +235,7 @@ export default function ImageCropUpload({
   // --- Estado: sem imagem, exibe zona de upload ---
   return (
     <div>
-      <label className="flex flex-col items-center justify-center aspect-video rounded-xl border-2 border-dashed border-border hover:border-cyan/50 bg-background cursor-pointer transition-all group">
+      <label className="flex flex-col items-center justify-center aspect-video rounded-xl border-2 border-dashed border-border hover:border-blue/50 bg-background cursor-pointer transition-all group">
         <input
           type="file"
           accept="image/jpeg,image/png,image/webp,image/gif"
@@ -243,8 +243,8 @@ export default function ImageCropUpload({
           className="hidden"
         />
         <div className="flex flex-col items-center gap-3">
-          <div className="w-14 h-14 rounded-xl bg-cyan/10 border border-cyan/20 flex items-center justify-center group-hover:bg-cyan/20 transition-colors">
-            <ImageIcon size={24} className="text-cyan" />
+          <div className="w-14 h-14 rounded-xl bg-blue-600/10 border border-blue/20 flex items-center justify-center group-hover:bg-blue/20 transition-colors">
+            <ImageIcon size={24} className="text-blue-600" />
           </div>
           <div className="text-center">
             <p className="text-sm font-medium text-foreground">Clique para fazer upload</p>

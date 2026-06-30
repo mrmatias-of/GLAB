@@ -22,6 +22,10 @@
   --color-warning:     #F59E0B;      /* Amber */
   --color-error:       #EF4444;      /* Red */
   --color-info:        #0EA5E9;      /* Sky blue */
+  
+  /* Legacy color names mapped to new palette */
+  --cyan:              #3B82F6;      /* Maps cyan to new blue primary */
+  --background:        #0B0F19;      /* Dark background */
 }
 
 @layer base {

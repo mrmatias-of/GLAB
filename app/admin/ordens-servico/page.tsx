@@ -226,7 +226,7 @@ export default function OrdensServicoPage() {
                 console.log('[v0] Camera button clicked, opening camera')
                 setShowCameraCapture(true)
               }}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition font-medium"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-medium"
             >
               <Camera size={18} />
               Capturar Equipamento com Câmera

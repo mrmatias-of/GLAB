@@ -48,7 +48,7 @@ export default function RelatedProductsSection({
             <Link
               key={rel.slug}
               href={`/cursos/${rel.slug}`}
-              className="group relative rounded-2xl border border-white/8 overflow-hidden transition-all duration-300 hover:border-cyan-500/30 hover:scale-[1.01]"
+              className="group relative rounded-2xl border border-white/8 overflow-hidden transition-all duration-300 hover:border-blue-500/30 hover:scale-[1.01]"
               style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.025) 0%, rgba(5,5,16,0.8) 100%)" }}
             >
               {rel.imagem ? (
@@ -69,14 +69,14 @@ export default function RelatedProductsSection({
 
               <div className="p-4">
                 {rel.categoria && (
-                  <p className="text-[10px] uppercase tracking-widest text-cyan-400/70 font-semibold mb-1">
+                  <p className="text-[10px] uppercase tracking-widest text-blue-400/70 font-semibold mb-1">
                     {rel.categoria}
                   </p>
                 )}
                 <h3 className="text-sm font-black text-white mb-2 leading-tight">{rel.titulo}</h3>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-black text-cyan-400">{rel.preco}</span>
-                  <span className="inline-flex items-center gap-1 text-[11px] text-white/40 group-hover:text-cyan-400 transition-colors">
+                  <span className="text-sm font-black text-blue-400">{rel.preco}</span>
+                  <span className="inline-flex items-center gap-1 text-[11px] text-white/40 group-hover:text-blue-400 transition-colors">
                     Ver guia <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
                   </span>
                 </div>

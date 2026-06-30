@@ -7,7 +7,7 @@ const depoimentos = [
     nome: "Rafael M.",
     cidade: "São Paulo, SP",
     curso: "Troca de Tela",
-    accent: "cyan",
+    accent: "blue",
   },
   {
     texto: "Fiz o de diagnóstico avançado e mudou completamente como eu atendo. Antes eu chutava o problema, hoje eu sigo um raciocínio. Semana passada resolvi um iPhone que dois outros técnicos já tinham devolvido pro cliente sem conserto. O cliente ficou em choque.",
@@ -26,7 +26,7 @@ const depoimentos = [
 ]
 
 const accentMap: Record<string, { border: string; text: string; bg: string; dot: string }> = {
-  cyan:   { border: "border-cyan-500/20",   text: "text-cyan-400",   bg: "rgba(0,212,200,0.04)",   dot: "#00d4c8" },
+  cyan:   { border: "border-blue-500/20",   text: "text-blue-400",   bg: "rgba(0,212,200,0.04)",   dot: "#00d4c8" },
   violet: { border: "border-violet-500/20", text: "text-violet-400", bg: "rgba(124,58,237,0.04)",  dot: "#7c3aed" },
   orange: { border: "border-orange-500/20", text: "text-orange-400", bg: "rgba(249,115,22,0.04)",  dot: "#f97316" },
 }

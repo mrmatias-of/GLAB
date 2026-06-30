@@ -31,10 +31,10 @@ export default function ProductQuickInfo({ curso }: { curso: CursoSerializavel }
                 className="flex items-center gap-3 px-6 py-5"
               >
                 <div
-                  className="w-8 h-8 rounded-lg flex items-center justify-center border border-cyan-500/20 shrink-0"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center border border-blue-500/20 shrink-0"
                   style={{ background: "rgba(0,212,200,0.06)" }}
                 >
-                  <item.icon size={15} className="text-cyan-400" />
+                  <item.icon size={15} className="text-blue-400" />
                 </div>
                 <div>
                   <p className="text-[10px] text-white/35 uppercase tracking-widest font-semibold">

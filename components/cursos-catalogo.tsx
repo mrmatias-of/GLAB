@@ -148,7 +148,7 @@ export default function CursosCatalogo({ cursos }: { cursos: Curso[] }) {
                       <Link
                         key={curso.id}
                         href={`/cursos/${curso.slug}`}
-                        className="group relative rounded-xl overflow-hidden border border-white/10 bg-gradient-to-b from-[#0a0a14] to-[#050510] hover:border-cyan-500/30 transition-all duration-300 hover:scale-105 h-fit"
+                        className="group relative rounded-xl overflow-hidden border border-white/10 bg-gradient-to-b from-[#0a0a14] to-[#050510] hover:border-blue-500/30 transition-all duration-300 hover:scale-105 h-fit"
                       >
                         <div className="relative aspect-[3/2] bg-zinc-900/50">
                           {curso.imagem ? (
@@ -162,7 +162,7 @@ export default function CursosCatalogo({ cursos }: { cursos: Curso[] }) {
                             />
                           ) : (
                             <div className="w-full h-full bg-gradient-to-br from-cyan-600/20 to-blue-600/10 flex items-center justify-center">
-                              <Package size={28} className="text-cyan-400/30" />
+                              <Package size={28} className="text-blue-400/30" />
                             </div>
                           )}
                           <div className="absolute inset-0 bg-gradient-to-t from-[#050510] via-transparent to-transparent" />
@@ -188,7 +188,7 @@ export default function CursosCatalogo({ cursos }: { cursos: Curso[] }) {
                         </div>
 
                         <div className="p-3">
-                          <h3 className="text-sm font-bold text-white leading-tight mb-1 line-clamp-2 group-hover:text-cyan-400 transition-colors">
+                          <h3 className="text-sm font-bold text-white leading-tight mb-1 line-clamp-2 group-hover:text-blue-400 transition-colors">
                             {curso.titulo}
                           </h3>
                           <p className="text-xs text-white/40 line-clamp-2 mb-2">
@@ -200,10 +200,10 @@ export default function CursosCatalogo({ cursos }: { cursos: Curso[] }) {
                               {curso.preco_original && (
                                 <span className="text-[10px] text-white/30 line-through">{curso.preco_original}</span>
                               )}
-                              <span className="text-sm font-black text-cyan-400">{curso.preco}</span>
+                              <span className="text-sm font-black text-blue-400">{curso.preco}</span>
                             </div>
                             <div className="w-5 h-5 rounded border border-white/10 bg-white/5 flex items-center justify-center">
-                              <Package size={11} className="text-cyan-400" />
+                              <Package size={11} className="text-blue-400" />
                             </div>
                           </div>
                         </div>
@@ -226,7 +226,7 @@ export default function CursosCatalogo({ cursos }: { cursos: Curso[] }) {
                     <Link
                       key={curso.id}
                       href={`/cursos/${curso.slug}`}
-                      className="group relative rounded-xl overflow-hidden border border-white/10 bg-gradient-to-b from-[#0a0a14] to-[#050510] hover:border-cyan-500/30 transition-all duration-300 hover:scale-105 h-fit"
+                      className="group relative rounded-xl overflow-hidden border border-white/10 bg-gradient-to-b from-[#0a0a14] to-[#050510] hover:border-blue-500/30 transition-all duration-300 hover:scale-105 h-fit"
                     >
                       <div className="relative aspect-[3/2] bg-zinc-900/50">
                         {curso.imagem ? (
@@ -240,7 +240,7 @@ export default function CursosCatalogo({ cursos }: { cursos: Curso[] }) {
                           />
                         ) : (
                           <div className="w-full h-full bg-gradient-to-br from-cyan-600/20 to-blue-600/10 flex items-center justify-center">
-                            <Package size={28} className="text-cyan-400/30" />
+                            <Package size={28} className="text-blue-400/30" />
                           </div>
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-[#050510] via-transparent to-transparent" />
@@ -249,7 +249,7 @@ export default function CursosCatalogo({ cursos }: { cursos: Curso[] }) {
                         </div>
                       </div>
                       <div className="p-3">
-                        <h3 className="text-sm font-bold text-white leading-tight mb-1 line-clamp-2 group-hover:text-cyan-400 transition-colors">
+                        <h3 className="text-sm font-bold text-white leading-tight mb-1 line-clamp-2 group-hover:text-blue-400 transition-colors">
                           {curso.titulo}
                         </h3>
                         <p className="text-xs text-white/40 line-clamp-2 mb-2">{curso.descricao}</p>
@@ -257,7 +257,7 @@ export default function CursosCatalogo({ cursos }: { cursos: Curso[] }) {
                           {curso.preco_original && (
                             <span className="text-[10px] text-white/30 line-through">{curso.preco_original}</span>
                           )}
-                          <span className="text-sm font-black text-cyan-400">{curso.preco}</span>
+                          <span className="text-sm font-black text-blue-400">{curso.preco}</span>
                         </div>
                       </div>
                     </Link>

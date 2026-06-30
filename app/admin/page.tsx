@@ -20,8 +20,8 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
         {/* Card Cursos */}
         <Link href="/admin/cursos" className="block">
-          <div className="card-elegant bg-slate-900/40 border border-slate-700 hover:border-cyan-500/50 transition-all p-4 cursor-pointer">
-            <div className="text-cyan-400 mb-2">
+          <div className="card-elegant bg-slate-900/40 border border-slate-700 hover:border-blue-500/50 transition-all p-4 cursor-pointer">
+            <div className="text-blue-400 mb-2">
               <BookOpen className="w-8 h-8" />
             </div>
             <h3 className="text-base font-semibold text-white mb-1">Cursos</h3>
@@ -69,7 +69,7 @@ export default function AdminDashboard() {
         <p className="text-slate-400 mb-3 text-sm">
           Use o menu lateral para acessar rapidamente as seções do painel. Clique em qualquer seção acima ou use o menu para gerenciar diferentes aspectos da plataforma.
         </p>
-        <Link href="/" className="text-cyan-400 hover:text-cyan-300 font-medium transition">
+        <Link href="/" className="text-blue-400 hover:text-blue-300 font-medium transition">
           ← Voltar para home
         </Link>
       </div>

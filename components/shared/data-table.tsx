@@ -94,7 +94,7 @@ export function DataTable<T extends { id?: number | string }>(
               setSearchTerm(e.target.value)
               setCurrentPage(1)
             }}
-            className="w-full pl-10 pr-4 py-2.5 bg-slate-800 border border-slate-700 text-white rounded-lg placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition"
+            className="w-full pl-10 pr-4 py-2.5 bg-slate-800 border border-slate-700 text-white rounded-lg placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition"
           />
         </div>
         {onAdd && (
@@ -119,12 +119,12 @@ export function DataTable<T extends { id?: number | string }>(
                   onClick={() => col.sortable && toggleSort(col.key)}
                   className={`px-4 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider ${
                     col.width || ''
-                  } ${col.sortable ? 'cursor-pointer hover:text-cyan-400 transition' : ''}`}
+                  } ${col.sortable ? 'cursor-pointer hover:text-blue-400 transition' : ''}`}
                 >
                   <div className="flex items-center gap-2">
                     {col.label}
                     {col.sortable && sortKey === col.key && (
-                      <span className="text-cyan-400 text-base">{sortDir === 'asc' ? '↑' : '↓'}</span>
+                      <span className="text-blue-400 text-base">{sortDir === 'asc' ? '↑' : '↓'}</span>
                     )}
                   </div>
                 </th>
@@ -191,23 +191,23 @@ export function DataTable<T extends { id?: number | string }>(
       {totalPages > 1 && (
         <div className="flex items-center justify-between pt-2">
           <div className="text-sm text-slate-400">
-            Mostrando <span className="text-cyan-400 font-medium">{start + 1}-{Math.min(start + itemsPerPage, sorted.length)}</span> de <span className="text-cyan-400 font-medium">{sorted.length}</span> ({totalPages} páginas)
+            Mostrando <span className="text-blue-400 font-medium">{start + 1}-{Math.min(start + itemsPerPage, sorted.length)}</span> de <span className="text-blue-400 font-medium">{sorted.length}</span> ({totalPages} páginas)
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
               disabled={currentPage === 1}
-              className="p-2 hover:bg-slate-800 hover:text-cyan-400 disabled:opacity-30 disabled:hover:bg-transparent rounded-lg transition text-slate-400"
+              className="p-2 hover:bg-slate-800 hover:text-blue-400 disabled:opacity-30 disabled:hover:bg-transparent rounded-lg transition text-slate-400"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <span className="text-sm text-slate-400 px-3">
-              <span className="text-cyan-400 font-medium">{currentPage}</span> / {totalPages}
+              <span className="text-blue-400 font-medium">{currentPage}</span> / {totalPages}
             </span>
             <button
               onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
               disabled={currentPage === totalPages}
-              className="p-2 hover:bg-slate-800 hover:text-cyan-400 disabled:opacity-30 disabled:hover:bg-transparent rounded-lg transition text-slate-400"
+              className="p-2 hover:bg-slate-800 hover:text-blue-400 disabled:opacity-30 disabled:hover:bg-transparent rounded-lg transition text-slate-400"
             >
               <ChevronRight className="w-4 h-4" />
             </button>

@@ -110,20 +110,20 @@ export default function ProductHero({ curso }: { curso: CursoSerializavel }) {
             <div className="flex flex-wrap gap-3 mb-8">
               {curso.modulos.length > 0 && (
                 <div className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5">
-                  <BookOpen size={15} className="text-cyan-400" />
+                  <BookOpen size={15} className="text-blue-400" />
                   <span className="text-sm font-bold text-white">{curso.modulos.length}</span>
                   <span className="text-sm text-white/50">módulos</span>
                 </div>
               )}
               {totalTopicos > 0 && (
                 <div className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5">
-                  <Zap size={15} className="text-cyan-400" />
+                  <Zap size={15} className="text-blue-400" />
                   <span className="text-sm font-bold text-white">{totalTopicos}</span>
                   <span className="text-sm text-white/50">tópicos</span>
                 </div>
               )}
               <div className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5">
-                <Clock size={15} className="text-cyan-400" />
+                <Clock size={15} className="text-blue-400" />
                 <span className="text-sm text-white/60">Acesso imediato</span>
               </div>
             </div>
@@ -138,7 +138,7 @@ export default function ProductHero({ curso }: { curso: CursoSerializavel }) {
           <div className="flex flex-col gap-5">
             {curso.imagem ? (
               <div
-                className="relative rounded-2xl border border-cyan-500/20 overflow-hidden"
+                className="relative rounded-2xl border border-blue-500/20 overflow-hidden"
                 style={{
                   background: "linear-gradient(135deg, rgba(0,212,200,0.04) 0%, rgba(139,92,246,0.04) 100%)",
                 }}
@@ -155,7 +155,7 @@ export default function ProductHero({ curso }: { curso: CursoSerializavel }) {
               </div>
             ) : (
               <div
-                className="relative rounded-2xl border border-cyan-500/20 flex items-center justify-center py-16"
+                className="relative rounded-2xl border border-blue-500/20 flex items-center justify-center py-16"
                 style={{ background: "linear-gradient(135deg, rgba(0,212,200,0.04) 0%, rgba(139,92,246,0.04) 100%)" }}
               >
                 <Layers size={64} className="text-cyan-500/30" />
@@ -179,7 +179,7 @@ function PriceCard({ curso }: { curso: CursoSerializavel }) {
 
   return (
     <div
-      className="rounded-2xl border-2 border-cyan-500/25 p-6 relative overflow-hidden"
+      className="rounded-2xl border-2 border-blue-500/25 p-6 relative overflow-hidden"
       style={{
         background: "linear-gradient(180deg, rgba(0,212,200,0.07) 0%, rgba(5,5,16,0.97) 100%)",
       }}
@@ -198,7 +198,7 @@ function PriceCard({ curso }: { curso: CursoSerializavel }) {
             <span className="text-lg text-white/30 line-through">{curso.precoOriginal}</span>
           )}
           <span
-            className="text-4xl md:text-5xl font-black text-cyan-400"
+            className="text-4xl md:text-5xl font-black text-blue-400"
             style={{ textShadow: "0 0 30px rgba(0,212,200,0.4)" }}
           >
             {curso.preco}
@@ -230,7 +230,7 @@ function PriceCard({ curso }: { curso: CursoSerializavel }) {
             { icon: ShieldCheck, label: "Pagamento seguro" },
           ].map((item) => (
             <div key={item.label} className="flex items-center gap-1.5">
-              <item.icon size={12} className="text-cyan-400/60" />
+              <item.icon size={12} className="text-blue-400/60" />
               <span className="text-[11px] text-white/40">{item.label}</span>
             </div>
           ))}

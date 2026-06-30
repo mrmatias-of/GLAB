@@ -34,7 +34,7 @@ export function PrivacyConsentBanner() {
             className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0"
             style={{ backgroundColor: "rgba(0,212,200,0.15)", border: "1px solid rgba(0,212,200,0.3)" }}
           >
-            <Shield size={14} className="text-cyan-400" />
+            <Shield size={14} className="text-blue-400" />
           </div>
           <h2 className="text-sm font-bold text-white">Privacidade e métricas</h2>
         </div>
@@ -46,7 +46,7 @@ export function PrivacyConsentBanner() {
           nossa{" "}
           <Link
             href="/privacidade"
-            className="underline underline-offset-2 hover:text-cyan-400 transition-colors"
+            className="underline underline-offset-2 hover:text-blue-400 transition-colors"
             style={{ color: "#00D4C8" }}
           >
             Política de Privacidade
