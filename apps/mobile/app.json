@@ -6,12 +6,17 @@
     "orientation": "portrait",
     "scheme": "glab",
     "userInterfaceStyle": "light",
+    "sdkVersion": "51.0.0",
     "ios": {
-      "bundleIdentifier": "com.glabcursos.mobile"
+      "bundleIdentifier": "com.glabcursos.mobile",
+      "supportsTabletMode": true
     },
     "android": {
       "package": "com.glabcursos.mobile",
-      "versionCode": 1
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff"
+      }
     }
   }
 }
