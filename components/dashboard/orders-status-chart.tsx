@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import useSWR from 'swr'
 import {
   PieChart,
   Pie,
@@ -10,16 +11,33 @@ import {
   Tooltip,
 } from 'recharts'
 
-interface OrdersStatusChartProps {
-  data: Array<{
-    name: string
-    value: number
-  }>
-}
+const fetcher = (url: string) => fetch(url).then(r => r.json())
 
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444']
+export function OrdersStatusChart() {
+  const { data: response, isLoading, error } = useSWR(
+    '/api/dashboard/orders-status',
+    fetcher,
+    { revalidateOnFocus: false }
+  )
 
-export function OrdersStatusChart({ data }: OrdersStatusChartProps) {
+  const data = response?.data || []
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-80 bg-white rounded-lg border border-gray-200 p-4 flex items-center justify-center">
+        <div className="text-gray-500">Carregando...</div>
+      </div>
+    )
+  }
+
+  if (error || !response?.success) {
+    return (
+      <div className="w-full h-80 bg-white rounded-lg border border-gray-200 p-4 flex items-center justify-center">
+        <div className="text-red-500">Erro ao carregar dados</div>
+      </div>
+    )
+  }
+
   return (
     <div className="w-full h-80 bg-white rounded-lg border border-gray-200 p-4">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">
@@ -37,8 +55,8 @@ export function OrdersStatusChart({ data }: OrdersStatusChartProps) {
             fill="#8884d8"
             dataKey="value"
           >
-            {data.map((_, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            {data.map((item: any, index: number) => (
+              <Cell key={`cell-${index}`} fill={item.fill} />
             ))}
           </Pie>
           <Tooltip formatter={(value) => value} />
