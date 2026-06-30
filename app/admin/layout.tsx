@@ -89,7 +89,7 @@ export default function AdminLayout({
               href={item.href}
               onClick={() => setMobileOpen(false)}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                isActive ? 'bg-cyan-600 text-white' : 'text-slate-300 hover:bg-slate-700'
+                isActive ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800'
               }`}
             >
               <Icon className="h-5 w-5 shrink-0" />
@@ -106,7 +106,7 @@ export default function AdminLayout({
         </div>
         <button
           onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white py-2.5 rounded-lg transition text-sm font-medium"
+          className="w-full flex items-center justify-center gap-2 bg-red-600/80 hover:bg-red-700 text-white py-2.5 rounded-lg transition text-sm font-medium"
         >
           <LogOut className="h-4 w-4" />
           Sair
@@ -118,7 +118,7 @@ export default function AdminLayout({
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col">
       {/* Desktop Sidebar - fixed */}
-      <aside className="hidden lg:flex flex-col w-64 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white fixed left-0 top-0 bottom-0 shadow-2xl z-40 border-r border-slate-800">
+      <aside className="hidden lg:flex flex-col w-64 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 text-white fixed left-0 top-0 bottom-0 shadow-2xl z-40 border-r border-slate-700/50">
         <SidebarContent />
       </aside>
 
@@ -130,7 +130,7 @@ export default function AdminLayout({
             onClick={() => setMobileOpen(false)}
             aria-hidden="true"
           />
-          <aside className="lg:hidden flex flex-col w-72 max-w-[80%] bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white fixed left-0 top-0 bottom-0 shadow-2xl z-50 border-r border-slate-800">
+          <aside className="lg:hidden flex flex-col w-72 max-w-[80%] bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 text-white fixed left-0 top-0 bottom-0 shadow-2xl z-50 border-r border-slate-700/50">
             <SidebarContent />
           </aside>
         </>
@@ -139,7 +139,7 @@ export default function AdminLayout({
       {/* Main Content */}
       <div className="lg:ml-64 flex-1 flex flex-col">
         {/* Header */}
-        <header className="bg-slate-900/50 backdrop-blur-sm border-b border-slate-800 sticky top-0 z-30 flex-shrink-0">
+        <header className="bg-slate-900/30 backdrop-blur-sm border-b border-slate-700/50 sticky top-0 z-30 flex-shrink-0">
           <div className="px-4 lg:px-8 py-4 flex items-center gap-4">
             <button
               onClick={() => setMobileOpen(true)}
