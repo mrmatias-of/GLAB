@@ -4,13 +4,26 @@ const ADMIN_ROUTES = ['/admin']
 const LOGIN_ROUTE = '/login'
 const INACTIVITY_TIMEOUT = 30 * 60 * 1000 // 30 minutos
 
+// Padrão para rotas de tenant: /{tenantSlug}/*
+const TENANT_ROUTE_PATTERN = /^\/([a-z0-9-]+)(?:\/|$)/
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Verificar se é uma rota protegida
-  const isProtectedRoute = ADMIN_ROUTES.some(route => pathname.startsWith(route))
+  // Verificar se é rota de admin (master)
+  const isAdminRoute = ADMIN_ROUTES.some(route => pathname.startsWith(route))
   
-  if (!isProtectedRoute) {
+  // Verificar se é rota de tenant: /{tenantSlug}/*
+  const tenantMatch = pathname.match(TENANT_ROUTE_PATTERN)
+  const isTenantRoute = tenantMatch && !isAdminRoute
+
+  // Rotas públicas (sem proteção)
+  const isPublicRoute = pathname === '/login' || 
+                       pathname === '/' || 
+                       pathname.startsWith('/api/auth') ||
+                       pathname.startsWith('/public')
+
+  if (isPublicRoute) {
     return NextResponse.next()
   }
 
@@ -35,8 +48,14 @@ export function middleware(request: NextRequest) {
     return response
   }
 
-  // Atualizar último tempo de atividade
+  // Para rotas de tenant, armazenar o slug no header para uso posterior
   const response = NextResponse.next()
+  
+  if (isTenantRoute && tenantMatch[1]) {
+    response.headers.set('x-tenant-slug', tenantMatch[1])
+  }
+
+  // Atualizar último tempo de atividade
   response.cookies.set('last_activity', Date.now().toString(), {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
@@ -49,5 +68,6 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/admin/:path*',
+    '/:tenant/:path*',
   ],
 }
