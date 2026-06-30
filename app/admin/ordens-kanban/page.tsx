@@ -1,62 +1,33 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import useSWR from 'swr'
 import { OrdersKanban, KanbanOrder } from '@/components/orders/orders-kanban'
 import { Plus } from 'lucide-react'
 
-const mockOrders: KanbanOrder[] = [
-  {
-    id: 'aberta-1',
-    titulo: 'Manutenção Ar Condicionado',
-    cliente: 'João Silva',
-    prioridade: 'alta',
-    tecnico: 'Pedro Santos',
-  },
-  {
-    id: 'aberta-2',
-    titulo: 'Reparo Geladeira',
-    cliente: 'Maria Santos',
-    prioridade: 'media',
-  },
-  {
-    id: 'andamento-1',
-    titulo: 'Instalação Ar Condicionado',
-    cliente: 'Carlos Oliveira',
-    prioridade: 'urgente',
-    tecnico: 'João Silva',
-  },
-  {
-    id: 'andamento-2',
-    titulo: 'Limpeza Refrigerador',
-    cliente: 'Ana Costa',
-    prioridade: 'baixa',
-    tecnico: 'Pedro Santos',
-  },
-  {
-    id: 'pendente-1',
-    titulo: 'Aguardando Peça',
-    cliente: 'Roberto Lima',
-    prioridade: 'alta',
-    tecnico: 'João Silva',
-  },
-  {
-    id: 'concluida-1',
-    titulo: 'Limpeza Ar Condicionado',
-    cliente: 'Fernanda Gomes',
-    prioridade: 'media',
-    tecnico: 'Pedro Santos',
-  },
-  {
-    id: 'concluida-2',
-    titulo: 'Reparo Fogão',
-    cliente: 'Lucas Martins',
-    prioridade: 'baixa',
-    tecnico: 'João Silva',
-  },
-]
+const fetcher = (url: string) => fetch(url).then(r => r.json())
 
 export default function OrdersKanbanPage() {
-  const [orders, setOrders] = useState(mockOrders)
+  const { data: response, isLoading, error } = useSWR(
+    '/api/ordens',
+    fetcher,
+    { revalidateOnFocus: false }
+  )
+
+  const [orders, setOrders] = useState<KanbanOrder[]>([])
+
+  useEffect(() => {
+    if (response?.data) {
+      const mappedOrders: KanbanOrder[] = response.data.map((order: any) => ({
+        id: order.id,
+        titulo: order.numero + ' - ' + order.descricao,
+        cliente: order.clienteNome || 'Sem cliente',
+        prioridade: 'media' as const,
+        tecnico: order.tecnicoNome,
+      }))
+      setOrders(mappedOrders)
+    }
+  }, [response])
 
   const handleMoveOrder = (orderId: string, newStatus: string) => {
     setOrders((prevOrders) =>
@@ -70,6 +41,22 @@ export default function OrdersKanbanPage() {
 
   const handleDeleteOrder = (orderId: string) => {
     setOrders((prevOrders) => prevOrders.filter((order) => order.id !== orderId))
+  }
+
+  if (isLoading) {
+    return (
+      <main className="flex-1 overflow-auto bg-gray-50 flex items-center justify-center">
+        <div className="text-gray-600">Carregando ordens...</div>
+      </main>
+    )
+  }
+
+  if (error || !response?.success) {
+    return (
+      <main className="flex-1 overflow-auto bg-gray-50 flex items-center justify-center">
+        <div className="text-red-600">Erro ao carregar ordens</div>
+      </main>
+    )
   }
 
   return (

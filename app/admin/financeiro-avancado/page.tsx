@@ -1,12 +1,15 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import useSWR from 'swr'
 import { Plus } from 'lucide-react'
 import { AccountsTable, Account } from '@/components/financeiro/accounts-table'
 import { CashFlowChart } from '@/components/financeiro/cash-flow-chart'
 import { CommissionsTable, Commission } from '@/components/financeiro/commissions-table'
 
-// Mock data
+const fetcher = (url: string) => fetch(url).then(r => r.json())
+
+// Mock fallback data
 const mockAccountsPagar: Account[] = [
   {
     id: '1',
@@ -109,13 +112,96 @@ interface FinanceiroKPI {
 }
 
 export default function FinanceiroAvancadoPage() {
+  const { data: pagarResponse, isLoading: loadingPagar } = useSWR(
+    '/api/financeiro/contas-pagar',
+    fetcher,
+    { revalidateOnFocus: false }
+  )
+
+  const { data: receberResponse, isLoading: loadingReceber } = useSWR(
+    '/api/financeiro/contas-receber',
+    fetcher,
+    { revalidateOnFocus: false }
+  )
+
+  const { data: commissionsResponse, isLoading: loadingCommissions } = useSWR(
+    '/api/financeiro/commissions',
+    fetcher,
+    { revalidateOnFocus: false }
+  )
+
+  const { data: cashFlowResponse, isLoading: loadingCashFlow } = useSWR(
+    '/api/financeiro/cash-flow',
+    fetcher,
+    { revalidateOnFocus: false }
+  )
+
   const [accountsPagar, setAccountsPagar] = useState(mockAccountsPagar)
   const [accountsReceber, setAccountsReceber] = useState(mockAccountsReceber)
+  const [commissions, setCommissions] = useState(mockCommissions)
+  const [cashFlowData, setCashFlowData] = useState(mockCashFlowData)
+
+  useEffect(() => {
+    if (pagarResponse?.data) {
+      const mapped = pagarResponse.data.map((item: any) => ({
+        id: item.id,
+        numero: item.numero,
+        descricao: item.descricao,
+        tipo: 'pagar' as const,
+        valor: parseFloat(item.total || 0),
+        dataVencimento: new Date(item.dataVencimento),
+        status: item.status === 'overdue' ? 'atrasado' : item.status,
+        beneficiario: item.fornecedor || 'Sem fornecedor',
+        categoria: 'Compra de Estoque',
+      }))
+      setAccountsPagar(mapped)
+    }
+  }, [pagarResponse])
+
+  useEffect(() => {
+    if (receberResponse?.data) {
+      const mapped = receberResponse.data.map((item: any) => ({
+        id: item.id,
+        numero: item.numero,
+        descricao: item.descricao,
+        tipo: 'receber' as const,
+        valor: parseFloat(item.total || 0),
+        dataVencimento: new Date(item.dataVencimento),
+        dataPagamento: item.dataPagamento ? new Date(item.dataPagamento) : undefined,
+        status: item.status,
+        beneficiario: item.clienteNome || 'Sem cliente',
+        categoria: 'Serviço',
+      }))
+      setAccountsReceber(mapped)
+    }
+  }, [receberResponse])
+
+  useEffect(() => {
+    if (commissionsResponse?.data) {
+      const mapped = commissionsResponse.data.map((item: any) => ({
+        id: item.tecnicoId,
+        tecnico: item.tecnicoNome,
+        periodo: 'Atual',
+        ordensCompletas: item.totalOrders,
+        valorTotal: parseFloat(item.totalRevenue || 0),
+        percentual: 10,
+        comissao: parseFloat(item.commission || 0),
+        status: item.pending > 0 ? 'pendente' : 'pago',
+      }))
+      setCommissions(mapped)
+    }
+  }, [commissionsResponse])
+
+  useEffect(() => {
+    if (cashFlowResponse?.data) {
+      setCashFlowData(cashFlowResponse.data)
+    }
+  }, [cashFlowResponse])
 
   const totalReceber = accountsReceber.reduce((sum, a) => sum + a.valor, 0)
   const totalPagar = accountsPagar.reduce((sum, a) => sum + a.valor, 0)
-  const saldoMes = mockCashFlowData[mockCashFlowData.length - 1].saldo
-  const totalComissoes = mockCommissions.reduce((sum, c) => sum + c.comissao, 0)
+  const saldoMes = cashFlowData[cashFlowData.length - 1]?.saldo || 0
+  const totalComissoes = commissions.reduce((sum, c) => sum + c.comissao, 0)
 
   const kpis: FinanceiroKPI[] = [
     {
@@ -177,7 +263,7 @@ export default function FinanceiroAvancadoPage() {
 
         {/* Cash Flow */}
         <div className="mb-8">
-          <CashFlowChart data={mockCashFlowData} />
+          <CashFlowChart data={cashFlowData} />
         </div>
 
         {/* Accounts Tables */}
@@ -202,7 +288,7 @@ export default function FinanceiroAvancadoPage() {
 
         {/* Commissions */}
         <div className="mb-8">
-          <CommissionsTable commissions={mockCommissions} />
+          <CommissionsTable commissions={commissions} />
         </div>
 
         {/* DRE Summary */}
