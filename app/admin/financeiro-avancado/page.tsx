@@ -109,7 +109,7 @@ interface FinanceiroKPI {
 }
 
 export default function FinanceiroAvancadoPage() {
-  const [accountsPagar, setAccountsPagar] = useState(accountsPagar)
+  const [accountsPagar, setAccountsPagar] = useState(mockAccountsPagar)
   const [accountsReceber, setAccountsReceber] = useState(mockAccountsReceber)
 
   const totalReceber = accountsReceber.reduce((sum, a) => sum + a.valor, 0)
