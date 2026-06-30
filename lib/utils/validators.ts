@@ -103,3 +103,28 @@ export const createFinancialEntrySchema = z.object({
   dueDate: z.date().optional(),
   paid: z.boolean().default(false),
 })
+
+// Validation functions for services
+export const validateClienteData = (dados: any, isUpdate = false) => {
+  if (!isUpdate && !dados.nome) throw new Error('Nome é obrigatório')
+  if (dados.email && !validateEmail(dados.email)) throw new Error('Email inválido')
+  if (dados.cpf_cnpj && !validateCPF(dados.cpf_cnpj) && !validateCNPJ(dados.cpf_cnpj)) {
+    throw new Error('CPF ou CNPJ inválido')
+  }
+  return true
+}
+
+export const validateOrdemData = (dados: any, isUpdate = false) => {
+  if (!isUpdate) {
+    if (!dados.cliente_id) throw new Error('Cliente é obrigatório')
+    if (!dados.descricao) throw new Error('Descrição é obrigatória')
+  }
+  return true
+}
+
+export const validateTecnicoData = (dados: any, isUpdate = false) => {
+  if (!isUpdate && !dados.nome) throw new Error('Nome é obrigatório')
+  if (dados.email && !validateEmail(dados.email)) throw new Error('Email inválido')
+  if (dados.cpf && !validateCPF(dados.cpf)) throw new Error('CPF inválido')
+  return true
+}

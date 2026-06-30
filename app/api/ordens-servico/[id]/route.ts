@@ -1,116 +1,54 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { ordens_servico } from '@/lib/db/schema'
-import { eq, and } from 'drizzle-orm'
+import { NextRequest } from 'next/server'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
+import { ordemService } from '@/lib/services/ordem.service'
+import { apiResponse, handleApiError } from '@/lib/utils/api-response'
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiResponse(null, 401, 'Unauthorized')
     }
 
-    const data = await db
-      .select()
-      .from(ordens_servico)
-      .where(
-        and(
-          eq(ordens_servico.id, parseInt(params.id)),
-          eq(ordens_servico.userId, session.user.id)
-        )
-      )
+    const { id } = await params
+    const ordem = await ordemService.obter(session.user.id, parseInt(id))
 
-    if (!data.length) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    }
-
-    return NextResponse.json(data[0])
+    return apiResponse(ordem, 200, 'Ordem obtida com sucesso')
   } catch (error) {
-    console.error('[v0] GET /api/ordens-servico/[id]:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return handleApiError(error)
   }
 }
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiResponse(null, 401, 'Unauthorized')
     }
 
-    const body = await req.json()
+    const { id } = await params
+    const dados = await req.json()
+    const ordem = await ordemService.atualizar(session.user.id, parseInt(id), dados)
 
-    const result = await db
-      .update(ordens_servico)
-      .set({
-        tecnico_id: body.tecnico_id,
-        status: body.status,
-        prioridade: body.prioridade,
-        descricao: body.descricao,
-        equipamento: body.equipamento,
-        data_prevista: body.data_prevista ? new Date(body.data_prevista) : undefined,
-        tempo_estimado_horas: body.tempo_estimado_horas,
-        valor_orcado: body.valor_orcado,
-        valor_final: body.valor_final,
-        status_orcamento: body.status_orcamento,
-        observacoes: body.observacoes,
-        data_conclusao: body.status === 'finalizado' && !body.data_conclusao ? new Date() : body.data_conclusao,
-        updatedAt: new Date(),
-      })
-      .where(
-        and(
-          eq(ordens_servico.id, parseInt(params.id)),
-          eq(ordens_servico.userId, session.user.id)
-        )
-      )
-      .returning()
-
-    if (!result.length) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    }
-
-    return NextResponse.json(result[0])
+    return apiResponse(ordem, 200, 'Ordem atualizada com sucesso')
   } catch (error) {
-    console.error('[v0] PUT /api/ordens-servico/[id]:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return handleApiError(error)
   }
 }
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiResponse(null, 401, 'Unauthorized')
     }
 
-    const result = await db
-      .delete(ordens_servico)
-      .where(
-        and(
-          eq(ordens_servico.id, parseInt(params.id)),
-          eq(ordens_servico.userId, session.user.id)
-        )
-      )
-      .returning()
+    const { id } = await params
+    await ordemService.deletar(session.user.id, parseInt(id))
 
-    if (!result.length) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    }
-
-    return NextResponse.json({ success: true })
+    return apiResponse(null, 200, 'Ordem cancelada com sucesso')
   } catch (error) {
-    console.error('[v0] DELETE /api/ordens-servico/[id]:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return handleApiError(error)
   }
 }

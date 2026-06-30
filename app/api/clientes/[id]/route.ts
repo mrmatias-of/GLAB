@@ -1,113 +1,63 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { clientes } from '@/lib/db/schema'
-import { eq, and } from 'drizzle-orm'
+import { NextRequest } from 'next/server'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
+import { clienteService } from '@/lib/services/cliente.service'
+import { apiResponse, handleApiError } from '@/lib/utils/api-response'
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiResponse(null, 401, 'Unauthorized')
     }
 
-    const data = await db
-      .select()
-      .from(clientes)
-      .where(
-        and(
-          eq(clientes.id, parseInt(params.id)),
-          eq(clientes.userId, session.user.id)
-        )
-      )
+    const { id } = await params
+    const cliente = await clienteService.obter(session.user.id, parseInt(id))
 
-    if (!data.length) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    }
-
-    return NextResponse.json(data[0])
+    return apiResponse(cliente, 200, 'Cliente obtido com sucesso')
   } catch (error) {
-    console.error('[v0] GET /api/clientes/[id]:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return handleApiError(error)
   }
 }
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiResponse(null, 401, 'Unauthorized')
     }
 
-    const body = await req.json()
+    const { id } = await params
+    const dados = await req.json()
+    const cliente = await clienteService.atualizar(session.user.id, parseInt(id), dados)
 
-    const result = await db
-      .update(clientes)
-      .set({
-        nome: body.nome,
-        email: body.email,
-        telefone: body.telefone,
-        cpf_cnpj: body.cpf_cnpj,
-        endereco: body.endereco,
-        cidade: body.cidade,
-        estado: body.estado,
-        cep: body.cep,
-        observacoes: body.observacoes,
-        updatedAt: new Date(),
-      })
-      .where(
-        and(
-          eq(clientes.id, parseInt(params.id)),
-          eq(clientes.userId, session.user.id)
-        )
-      )
-      .returning()
-
-    if (!result.length) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    }
-
-    return NextResponse.json(result[0])
+    return apiResponse(cliente, 200, 'Cliente atualizado com sucesso')
   } catch (error) {
-    console.error('[v0] PUT /api/clientes/[id]:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return handleApiError(error)
   }
 }
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiResponse(null, 401, 'Unauthorized')
     }
 
-    const result = await db
-      .delete(clientes)
-      .where(
-        and(
-          eq(clientes.id, parseInt(params.id)),
-          eq(clientes.userId, session.user.id)
-        )
-      )
-      .returning()
+    const { id } = await params
+    await clienteService.deletar(session.user.id, parseInt(id))
 
-    if (!result.length) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    }
-
-    return NextResponse.json({ success: true })
+    return apiResponse(null, 200, 'Cliente deletado com sucesso')
   } catch (error) {
-    console.error('[v0] DELETE /api/clientes/[id]:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return handleApiError(error)
   }
 }

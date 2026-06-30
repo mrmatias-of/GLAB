@@ -1,27 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { clientes } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
+import { clienteService } from '@/lib/services/cliente.service'
+import { apiResponse, handleApiError } from '@/lib/utils/api-response'
 
 export async function GET(req: NextRequest) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiResponse(null, 401, 'Unauthorized')
     }
 
-    const data = await db
-      .select()
-      .from(clientes)
-      .where(eq(clientes.userId, session.user.id))
-      .orderBy(clientes.createdAt)
+    const { searchParams } = new URL(req.url)
+    const ativo = searchParams.get('ativo')
+    const cidade = searchParams.get('cidade')
 
-    return NextResponse.json(data)
+    const filtros: any = {}
+    if (ativo !== null) filtros.ativo = ativo === 'true'
+    if (cidade) filtros.cidade = cidade
+
+    const clientes = await clienteService.listar(session.user.id, filtros)
+    return apiResponse(clientes, 200, 'Clientes listados com sucesso')
   } catch (error) {
-    console.error('[v0] GET /api/clientes:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return handleApiError(error)
   }
 }
 
@@ -29,30 +30,14 @@ export async function POST(req: NextRequest) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return apiResponse(null, 401, 'Unauthorized')
     }
 
-    const body = await req.json()
+    const dados = await req.json()
+    const cliente = await clienteService.criar(session.user.id, dados)
 
-    const result = await db
-      .insert(clientes)
-      .values({
-        userId: session.user.id,
-        nome: body.nome,
-        email: body.email,
-        telefone: body.telefone,
-        cpf_cnpj: body.cpf_cnpj,
-        endereco: body.endereco,
-        cidade: body.cidade,
-        estado: body.estado,
-        cep: body.cep,
-        observacoes: body.observacoes,
-      })
-      .returning()
-
-    return NextResponse.json(result[0], { status: 201 })
+    return apiResponse(cliente, 201, 'Cliente criado com sucesso')
   } catch (error) {
-    console.error('[v0] POST /api/clientes:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return handleApiError(error)
   }
 }
