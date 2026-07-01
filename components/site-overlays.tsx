@@ -28,7 +28,8 @@ export function SiteOverlays() {
   return (
     <>
       <SocialProofPopup />
-      <WhatsAppButton />
+      {/* TODO: Fix WhatsAppButton rendering - currently renders gigantic and occupies full viewport */}
+      {/* <WhatsAppButton /> */}
     </>
   )
 }
