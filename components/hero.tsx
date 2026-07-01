@@ -1,5 +1,4 @@
 import Link from "next/link"
-import Image from "next/image"
 import { ArrowRight, Zap, Headphones, Award, Users } from "lucide-react"
 
 export default function Hero() {
@@ -89,18 +88,7 @@ export default function Hero() {
             </div>
           </div>
           
-          {/* Right Visual - Tech Setup with Image - Hidden for now */}
-          <div className="hidden">
-            <div className="relative w-full max-w-sm rounded-xl overflow-hidden" style={{ maxHeight: '200px' }}>
-              <Image
-                src="/hero-tech-pcb.jpg"
-                alt="Ferramentas técnicas profissionais - PCB com sonda laser"
-                width={300}
-                height={200}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
+
         </div>
       </div>
     </section>
