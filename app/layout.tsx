@@ -83,13 +83,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR" className={`${inter.variable}`} style={{ backgroundColor: '#ffffff' }}>
+    <html lang="pt-BR" className={`${inter.variable}`}>
       <head>
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <meta name="format-detection" content="telephone=no" />
       </head>
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased bg-slate-950" style={{ backgroundColor: '#0B0F19' }}>
         <VisitorTracker />
         <SiteOverlays />
         {children}
