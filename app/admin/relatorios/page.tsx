@@ -54,10 +54,10 @@ export default function RelatoriosPage() {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-        <StatCard title="Ordens Finalizadas" value="145" trend={12} trendLabel="vs mês anterior" color="blue" />
-        <StatCard title="Receita Total" value="R$ 28,5K" trend={8} trendLabel="vs mês anterior" color="green" />
-        <StatCard title="Despesas" value="R$ 8,2K" trend={3} trendLabel="vs mês anterior" color="red" />
-        <StatCard title="Lucro Líquido" value="R$ 20,3K" trend={15} trendLabel="vs mês anterior" color="blue" />
+        <StatCard title="Ordens Finalizadas" value="145" />
+        <StatCard title="Receita Total" value="R$ 28,5K" />
+        <StatCard title="Despesas" value="R$ 8,2K" />
+        <StatCard title="Lucro Líquido" value="R$ 20,3K" />
       </div>
 
       {/* Report Configuration */}
