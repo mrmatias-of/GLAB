@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
-import { financeiroService } from '@/lib/services/financeiro.service'
+import { financeiroService } from '@/src/modules/financeiro'
 import { apiResponse, handleApiError } from '@/lib/utils/api-response'
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {

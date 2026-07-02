@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
-import { estoqueService } from '@/lib/services/estoque.service'
+import { estoqueService } from '@/src/modules/estoque'
 import { apiResponse, handleApiError } from '@/lib/utils/api-response'
 
 export async function GET(req: NextRequest) {

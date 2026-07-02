@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
-import { ordemService } from '@/lib/services/ordem.service'
+import { ordemService } from '@/src/modules/ordens'
 import { apiResponse, handleApiError } from '@/lib/utils/api-response'
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
