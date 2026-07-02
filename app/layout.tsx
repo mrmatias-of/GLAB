@@ -1,9 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
-import { VisitorTracker } from '@/components/visitor-tracker'
 import { SiteOverlays } from '@/components/site-overlays'
-import { PrivacyBannerWrapper } from '@/components/privacy-banner-wrapper'
-import { ConditionalAnalytics } from '@/components/conditional-analytics'
 import './globals.css'
 
 const inter = Inter({
@@ -101,11 +98,8 @@ export default function RootLayout({
         `}</style>
       </head>
       <body className="font-sans antialiased bg-slate-950" style={{ backgroundColor: '#0B0F19' }}>
-        <VisitorTracker />
         <SiteOverlays />
         {children}
-        <PrivacyBannerWrapper />
-        {process.env.NODE_ENV === 'production' && <ConditionalAnalytics />}
       </body>
     </html>
   )
