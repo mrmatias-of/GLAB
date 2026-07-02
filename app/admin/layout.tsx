@@ -53,7 +53,7 @@ export default function AdminLayout({
     'Painel'
 
   return (
-    <div className="min-h-screen bg-slate-950 flex">
+    <div className="min-h-screen bg-white flex" style={{ backgroundColor: '#ffffff' }}>
       {/* Premium Sidebar */}
       <PremiumSidebar />
 
