@@ -139,4 +139,26 @@ export class ComissaoService {
     
     return Object.values(grupos)
   }
+
+  async registrarPagamentoComissao(userId: string, tecnicoId: number, dataInicio: Date, dataFim: Date) {
+    try {
+      logger.info('ComissaoService', 'Registrando pagamento de comissão', { userId, tecnicoId })
+      
+      // TODO: Calculate commission based on work orders completed by tecnico between dates
+      // For now, return a placeholder result
+      const resultado = {
+        tecnicoId,
+        tecnicoNome: '',
+        valorTotal: 0,
+        quantidadeOS: 0,
+        comissaoPercentual: 0,
+        comissao: 0,
+      }
+      
+      return resultado
+    } catch (error) {
+      logger.error('ComissaoService', 'Erro ao registrar pagamento de comissão', error)
+      throw error
+    }
+  }
 }
