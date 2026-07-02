@@ -6,7 +6,7 @@ import { apiResponse, handleApiError } from '@/lib/utils/api-response'
 
 export async function GET(
   req: NextRequest,
-  { params } Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
@@ -25,7 +25,7 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  { params } Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
@@ -45,7 +45,7 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  { params } Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })

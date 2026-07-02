@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { StatCard } from '@/components/shared/stat-card'
+import { Clipboard, Cog, CheckCircle, XCircle } from 'lucide-react'
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
 interface DashboardStats {
@@ -99,15 +100,12 @@ export default function DashboardPage() {
         <StatCard
           title="Ordens Abertas"
           value={stats.osAberta}
-          iconName="clipboard"
-          color="blue"
-          onClick={() => window.location.href = '/admin/ordens-servico?status=aberto'}
+          icon={<Clipboard className="w-6 h-6 text-blue-400" />}
         />
         <StatCard
           title="Em Andamento"
           value={stats.osEmProgresso}
-          iconName="cog"
-          color="yellow"
+          icon={<Cog className="w-6 h-6 text-yellow-400" />}
           onClick={() => window.location.href = '/admin/ordens-servico?status=em_progresso'}
         />
         <StatCard
