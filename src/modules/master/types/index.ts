@@ -1,5 +1,6 @@
 /**
  * Master Module Types
+ * Centralized management types for multi-tenant SaaS
  */
 
 export interface Tenant {
@@ -7,38 +8,60 @@ export interface Tenant {
   slug: string
   name: string
   email: string
-  status: 'trial' | 'active' | 'suspended' | 'deleted'
+  logo?: string
+  status: 'active' | 'inactive' | 'trial' | 'suspended'
   planId: string
-  storageUsed: number
-  maxStorage: number
-  usersCount: number
-  createdAt: Date
+  databaseUrl?: string
   trialEndsAt?: Date
-  deletedAt?: Date
+  createdAt: Date
+  updatedAt: Date
 }
 
 export interface Plan {
   id: string
+  slug: string
   name: string
+  description?: string
   price: number
-  billingCycle: 'monthly' | 'yearly'
+  billingPeriod: 'monthly' | 'yearly'
   maxUsers: number
-  maxStorage: number
+  maxProjects: number
   features: string[]
+  status: 'active' | 'deprecated'
+  createdAt: Date
+  updatedAt: Date
 }
 
 export interface FeatureFlag {
   id: string
+  slug: string
   name: string
-  key: string
+  description?: string
+  module: string
   planIds: string[]
-  enabled: boolean
+  isActive: boolean
+  createdAt: Date
+  updatedAt: Date
 }
 
-export interface TenantStats {
-  totalTenants: number
-  activeTenants: number
-  trialTenants: number
-  totalRevenue: number
-  churnRate: number
+export interface Subscription {
+  id: string
+  tenantId: string
+  planId: string
+  status: 'active' | 'canceled' | 'expired'
+  currentPeriodStart: Date
+  currentPeriodEnd: Date
+  cancelAtPeriodEnd: boolean
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface MasterUser {
+  id: string
+  email: string
+  name?: string
+  role: 'super_admin' | 'admin' | 'support'
+  isActive: boolean
+  createdAt: Date
+  updatedAt: Date
 }
