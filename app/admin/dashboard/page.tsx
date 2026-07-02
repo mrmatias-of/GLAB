@@ -106,21 +106,14 @@ export default function DashboardPage() {
           title="Em Andamento"
           value={stats.osEmProgresso}
           icon={<Cog className="w-6 h-6 text-yellow-400" />}
-          onClick={() => window.location.href = '/admin/ordens-servico?status=em_progresso'}
         />
         <StatCard
           title="Finalizadas"
           value={stats.osFinalizadas}
-          iconName="check"
-          color="green"
-          onClick={() => window.location.href = '/admin/ordens-servico?status=finalizado'}
         />
         <StatCard
           title="Canceladas"
           value={stats.osCanceladas}
-          iconName="x"
-          color="red"
-          onClick={() => window.location.href = '/admin/ordens-servico?status=cancelado'}
         />
       </div>
 
@@ -129,30 +122,18 @@ export default function DashboardPage() {
         <StatCard
           title="Técnicos Cadastrados"
           value={stats.tecnicos}
-          iconName="wrench"
-          color="blue"
-          onClick={() => window.location.href = '/admin/tecnicos'}
         />
         <StatCard
           title="Clientes Ativos"
           value={stats.clientes}
-          iconName="users"
-          color="blue"
-          onClick={() => window.location.href = '/admin/clientes'}
         />
         <StatCard
           title="Receita do Mês"
           value={`R$ ${stats.receitaMes.toFixed(2)}`}
-          iconName="dollar"
-          color="green"
-          trend={15}
-          trendLabel="vs mês anterior"
         />
         <StatCard
           title="Margem de Lucro"
           value={`${margemPercentual}%`}
-          iconName="trending"
-          color="green"
         />
       </div>
 
