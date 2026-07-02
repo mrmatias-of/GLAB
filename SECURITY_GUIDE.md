@@ -1,7 +1,6 @@
 # Security Guide - GLAB ERP 3.0
 
 ## Overview
-
 Phase 1 Critical implements core security measures to protect against common web attacks.
 
 ## 1. CSRF (Cross-Site Request Forgery) Protection
