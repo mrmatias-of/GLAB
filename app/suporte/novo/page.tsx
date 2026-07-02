@@ -177,7 +177,6 @@ export default function NovoTicketPage() {
           </button>
           <button
             type="button"
-            onClick={() => router.back()}
             className="px-6 py-2 rounded border border-blue-500/20 text-slate-400 hover:border-blue-500/50 hover:text-slate-300 transition-colors"
           >
             Cancelar

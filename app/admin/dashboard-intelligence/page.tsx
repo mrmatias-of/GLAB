@@ -82,13 +82,11 @@ export default function DashboardIntelligencePage() {
         {/* Filters and Actions - Stack on mobile */}
         <div className="flex gap-2 flex-wrap">
           <button
-            onClick={handleExportPDF}
             className="px-3 lg:px-4 py-2 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 font-medium transition-colors text-sm"
           >
             PDF
           </button>
           <button
-            onClick={handleExportExcel}
             className="px-3 lg:px-4 py-2 rounded-lg bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 font-medium transition-colors text-sm"
           >
             Excel
@@ -100,7 +98,6 @@ export default function DashboardIntelligencePage() {
       <div className="mx-4 lg:mx-8 bg-slate-900/50 rounded-lg border border-slate-700/50 p-3 lg:p-4 flex items-center gap-2 overflow-x-auto">
         <span className="text-sm font-medium text-slate-400 whitespace-nowrap">Período:</span>
         <button
-          onClick={() => setPeriod('month')}
           className={`px-3 lg:px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap text-sm ${
             period === 'month'
               ? 'bg-blue-600 text-white'
@@ -110,7 +107,6 @@ export default function DashboardIntelligencePage() {
           Mês
         </button>
         <button
-          onClick={() => setPeriod('quarter')}
           className={`px-3 lg:px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap text-sm ${
             period === 'quarter'
               ? 'bg-blue-600 text-white'
@@ -120,7 +116,6 @@ export default function DashboardIntelligencePage() {
           Trimestre
         </button>
         <button
-          onClick={() => setPeriod('year')}
           className={`px-3 lg:px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap text-sm ${
             period === 'year'
               ? 'bg-blue-600 text-white'

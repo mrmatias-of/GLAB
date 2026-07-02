@@ -144,7 +144,6 @@ export default function EstoquePage() {
             <p className="text-red-700 text-sm">Quantidade abaixo do mínimo configurado</p>
           </div>
           <button
-            onClick={() => setShowAlertas(!showAlertas)}
             className="ml-auto px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700"
           >
             {showAlertas ? 'Ver Tudo' : 'Ver Alertas'}

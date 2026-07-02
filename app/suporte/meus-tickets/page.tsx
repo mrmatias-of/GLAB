@@ -72,7 +72,6 @@ export default function MeusTicketsPage() {
         {['todos', 'aberto', 'em_andamento', 'resolvido', 'fechado'].map(status => (
           <button
             key={status}
-            onClick={() => setFilter(status)}
             className={`px-4 py-2 rounded border transition-colors ${
               filter === status
                 ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-400'

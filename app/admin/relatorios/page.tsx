@@ -98,7 +98,6 @@ export default function RelatoriosPage() {
 
           <div className="flex items-end">
             <button
-              onClick={handleGenerateReport}
               disabled={loading}
               className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 text-white font-medium py-2 rounded-lg transition text-sm"
             >
@@ -110,19 +109,16 @@ export default function RelatoriosPage() {
         {/* Export Options */}
         <div className="flex gap-2 flex-wrap">
           <button
-            onClick={handleExportPDF}
             className="flex items-center gap-2 px-3 py-1.5 bg-red-500/20 text-red-400 hover:bg-red-500/30 rounded-lg transition font-medium text-sm border border-red-500/30"
           >
             Exportar PDF
           </button>
           <button
-            onClick={handleExportExcel}
             className="flex items-center gap-2 px-3 py-1.5 bg-green-500/20 text-green-400 hover:bg-green-500/30 rounded-lg transition font-medium text-sm border border-green-500/30"
           >
             Exportar Excel
           </button>
           <button
-            onClick={() => window.print()}
             className="flex items-center gap-2 px-3 py-1.5 bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 rounded-lg transition font-medium text-sm border border-blue-500/30"
           >
             Imprimir

@@ -78,7 +78,6 @@ export default function RelatoriosRHPage() {
         {relatorios.map(relatorio => (
           <button
             key={relatorio.id}
-            onClick={() => setTipoRelatorio(relatorio.id)}
             className={`p-4 border rounded-lg text-left transition ${
               tipoRelatorio === relatorio.id
                 ? 'bg-blue-500/20 border-blue-400'
@@ -103,7 +102,6 @@ export default function RelatoriosRHPage() {
         </div>
 
         <button
-          onClick={handleGerarRelatorio}
           disabled={loading}
           className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded font-medium"
         >
