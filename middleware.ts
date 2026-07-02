@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
+import { checkRateLimit, getRateLimitKey, RATE_LIMITS } from '@/lib/rate-limit'
+import { getCSRFTokenFromRequest, verifyCSRFToken, requiresCSRFValidation } from '@/lib/csrf'
 
 /**
  * Centralized Middleware for Phase 1 Critical Requirements:
  * 1. Authentication validation
  * 2. Tenant discovery and context
  * 3. CSRF protection (token validation)
- * 4. Rate limiting preparation
+ * 4. Rate limiting
  * 5. Request logging
  */
 
@@ -75,39 +77,129 @@ function isPublicRoute(pathname: string): boolean {
 /**
  * Validate CSRF token for state-changing requests
  */
-function validateCSRFToken(request: NextRequest): boolean {
-  // CSRF only needed for state-changing requests (POST, PUT, DELETE, PATCH)
+function validateCSRFToken(request: NextRequest, session: any): boolean {
   const method = request.method
-  if (!['POST', 'PUT', 'DELETE', 'PATCH'].includes(method)) {
+  
+  // CSRF only needed for state-changing requests
+  if (!requiresCSRFValidation(method)) {
     return true
   }
 
-  // For now, just check if header exists
-  // TODO: Implement proper token validation in Phase 5
-  const csrfToken = request.headers.get(CSRF_HEADER)
-  return !!csrfToken || process.env.NODE_ENV === 'development'
+  // In development, CSRF validation is optional
+  if (process.env.NODE_ENV === 'development') {
+    return true
+  }
+
+  // Get CSRF token from request
+  const providedToken = getCSRFTokenFromRequest(request.headers)
+  
+  // Token must be provided
+  if (!providedToken) {
+    console.warn('[CSRF] Token missing for state-changing request', {
+      method,
+      path: new URL(request.url).pathname,
+    })
+    return false
+  }
+
+  // Verify token matches session CSRF hash
+  // For now, we accept any token (full implementation requires session storage)
+  // TODO: Implement session-based CSRF token storage
+  return true
+}
+
+/**
+ * Get IP address from request
+ */
+function getIpAddress(request: NextRequest): string | null {
+  return (
+    request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
+    request.headers.get('x-real-ip') ||
+    request.headers.get('cf-connecting-ip') ||
+    null
+  )
+}
+
+/**
+ * Determine rate limit config based on request type
+ */
+function getRateLimitConfig(method: string, pathname: string): any {
+  if (pathname.includes('/auth/')) return RATE_LIMITS.auth
+  if (method === 'GET') return RATE_LIMITS.read
+  if (method === 'POST' && pathname.includes('/upload')) return RATE_LIMITS.upload
+  if (method === 'POST') return RATE_LIMITS.create
+  if (method === 'PUT' || method === 'PATCH') return RATE_LIMITS.update
+  if (method === 'DELETE') return RATE_LIMITS.delete
+  return RATE_LIMITS.read
+}
+
+/**
+ * Check rate limiting for request
+ */
+function checkRateLimiting(
+  request: NextRequest,
+  userId: string | null
+): { allowed: boolean; response?: NextResponse } {
+  const pathname = new URL(request.url).pathname
+  const method = request.method
+  const ipAddress = getIpAddress(request)
+  
+  const key = getRateLimitKey(userId, ipAddress)
+  const config = getRateLimitConfig(method, pathname)
+  const result = checkRateLimit(key, config)
+
+  if (!result.allowed) {
+    const resetTime = new Date(result.resetTime).toISOString()
+    console.warn('[RATE_LIMIT] Rate limit exceeded', {
+      key,
+      method,
+      pathname,
+      resetTime,
+    })
+    
+    const response = NextResponse.json(
+      {
+        error: 'Too many requests',
+        retryAfter: Math.ceil((result.resetTime - Date.now()) / 1000),
+      },
+      { status: 429 }
+    )
+    response.headers.set('Retry-After', Math.ceil((result.resetTime - Date.now()) / 1000).toString())
+    response.headers.set('X-RateLimit-Limit', config.maxRequests.toString())
+    response.headers.set('X-RateLimit-Remaining', result.remaining.toString())
+    response.headers.set('X-RateLimit-Reset', result.resetTime.toString())
+    
+    return { allowed: false, response }
+  }
+
+  return { allowed: true }
 }
 
 /**
  * Log request for monitoring
  */
-function logRequest(request: NextRequest, tenantId: string | null, authenticated: boolean) {
+function logRequest(
+  request: NextRequest,
+  tenantId: string | null,
+  authenticated: boolean,
+  userId: string | null
+) {
   const method = request.method
   const pathname = new URL(request.url).pathname
   const timestamp = new Date().toISOString()
 
   console.log(`[${timestamp}] ${method} ${pathname}`, {
+    userId,
     tenant: tenantId,
     authenticated,
-    headers: {
-      'user-agent': request.headers.get('user-agent'),
-      'cf-connecting-ip': request.headers.get('cf-connecting-ip'),
-    },
+    ip: getIpAddress(request),
+    userAgent: request.headers.get('user-agent'),
   })
 }
 
 export async function middleware(request: NextRequest) {
   const pathname = new URL(request.url).pathname
+  const method = request.method
 
   // Extract tenant ID
   const tenantId = extractTenantId(request)
@@ -116,29 +208,26 @@ export async function middleware(request: NextRequest) {
   const isAPI = pathname.startsWith(PROTECTED_API_ROUTES)
   const isPublic = isPublicRoute(pathname)
 
-  // Log request
   let authenticated = false
+  let userId: string | null = null
+  let session: any = null
 
-  // Validate CSRF for state-changing requests
-  if (isAPI && !isPublic) {
-    const csrfValid = validateCSRFToken(request)
-    if (!csrfValid) {
-      logRequest(request, tenantId, false)
-      return NextResponse.json(
-        { error: 'Invalid CSRF token' },
-        { status: 403 }
-      )
-    }
-  }
-
-  // For protected API routes, verify authentication
+  // For protected API routes, verify authentication first (needed for rate limiting)
   if (isAPI && !isPublic) {
     try {
-      const session = await auth.api.getSession({ headers: request.headers })
+      session = await auth.api.getSession({ headers: request.headers })
       authenticated = !!session
+      userId = session?.user?.id || null
 
       if (!authenticated) {
-        logRequest(request, tenantId, false)
+        // Check rate limiting for unauthenticated requests
+        const rateLimitResult = checkRateLimiting(request, null)
+        if (!rateLimitResult.allowed) {
+          logRequest(request, tenantId, false, null)
+          return rateLimitResult.response!
+        }
+
+        logRequest(request, tenantId, false, null)
         return NextResponse.json(
           { error: 'Unauthorized' },
           { status: 401 }
@@ -147,7 +236,7 @@ export async function middleware(request: NextRequest) {
 
       // Verify tenant access if tenant is specified
       if (tenantId && session.user.tenantId && session.user.tenantId !== tenantId) {
-        logRequest(request, tenantId, false)
+        logRequest(request, tenantId, authenticated, userId)
         return NextResponse.json(
           { error: 'Forbidden: Tenant mismatch' },
           { status: 403 }
@@ -160,17 +249,35 @@ export async function middleware(request: NextRequest) {
         { status: 500 }
       )
     }
+
+    // Validate CSRF for state-changing requests
+    const csrfValid = validateCSRFToken(request, session)
+    if (!csrfValid) {
+      logRequest(request, tenantId, authenticated, userId)
+      return NextResponse.json(
+        { error: 'Invalid CSRF token' },
+        { status: 403 }
+      )
+    }
+
+    // Check rate limiting for authenticated requests
+    const rateLimitResult = checkRateLimiting(request, userId)
+    if (!rateLimitResult.allowed) {
+      logRequest(request, tenantId, authenticated, userId)
+      return rateLimitResult.response!
+    }
   }
 
-  logRequest(request, tenantId, authenticated)
+  logRequest(request, tenantId, authenticated, userId)
 
-  // Add tenant context to request headers for use in API handlers
+  // Add context to request headers for use in API handlers
   const response = NextResponse.next()
   if (tenantId) {
     response.headers.set('x-tenant-id', tenantId)
   }
   if (authenticated) {
     response.headers.set('x-authenticated', 'true')
+    response.headers.set('x-user-id', userId!)
   }
 
   return response
