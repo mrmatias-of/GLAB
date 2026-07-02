@@ -6,7 +6,7 @@ import { AppError } from '@/src/shared/errors/app.error'
 /**
  * Cliente Service
  * Lógica de negócio para gerenciamento de clientes (CRM)
- * Multi-tenant com isolamento por tenantId
+ * Isolamento por userId (tenant isolation at database level)
  */
 export class ClienteService {
   private repository: ClienteRepository
@@ -19,11 +19,11 @@ export class ClienteService {
     try {
       validateClienteData(dados)
       
-      logger.info('ClienteService', 'Criando cliente', { userId, tenantId })
+      logger.info('ClienteService', 'Criando cliente', { userId })
       
-      const cliente = await this.repository.create(userId, tenantId, dados)
+      const cliente = await this.repository.create({ ...dados, userId })
       
-      logger.info('ClienteService', 'Cliente criado com sucesso', { clienteId: cliente.id, tenantId })
+      logger.info('ClienteService', 'Cliente criado com sucesso', { clienteId: cliente.id })
       
       return cliente
     } catch (error) {
@@ -33,7 +33,7 @@ export class ClienteService {
   }
 
   async obter(userId: string, tenantId: string, clienteId: number) {
-    const cliente = await this.repository.findById(clienteId, userId, tenantId)
+    const cliente = await this.repository.findById(clienteId, userId)
     
     if (!cliente) {
       throw AppError.NotFound('Cliente')
@@ -43,13 +43,13 @@ export class ClienteService {
   }
 
   async listar(userId: string, tenantId: string, filtros?: any) {
-    logger.info('ClienteService', 'Listando clientes', { userId, tenantId, filtros })
-    return await this.repository.findAll(userId, tenantId, filtros)
+    logger.info('ClienteService', 'Listando clientes', { userId, filtros })
+    return await this.repository.findAll(userId, filtros)
   }
 
   async atualizar(userId: string, tenantId: string, clienteId: number, dados: any) {
     try {
-      const cliente = await this.repository.findById(clienteId, userId, tenantId)
+      const cliente = await this.repository.findById(clienteId, userId)
       
       if (!cliente) {
         throw AppError.NotFound('Cliente')
@@ -57,11 +57,11 @@ export class ClienteService {
       
       validateClienteData(dados, true)
       
-      const clienteAtualizado = await this.repository.update(clienteId, userId, tenantId, dados)
+      const clienteAtualizado = await this.repository.update(clienteId, userId, dados)
       
-      logger.info('ClienteService', 'Cliente atualizado', { clienteId, tenantId })
+      logger.info('ClienteService', 'Cliente atualizado', { clienteId })
       
-      return clienteAtualizado[0]
+      return clienteAtualizado
     } catch (error) {
       logger.error('ClienteService', 'Erro ao atualizar cliente', error)
       throw error
@@ -70,15 +70,15 @@ export class ClienteService {
 
   async deletar(userId: string, tenantId: string, clienteId: number) {
     try {
-      const cliente = await this.repository.findById(clienteId, userId, tenantId)
+      const cliente = await this.repository.findById(clienteId, userId)
       
       if (!cliente) {
         throw AppError.NotFound('Cliente')
       }
       
-      await this.repository.delete(clienteId, userId, tenantId)
+      await this.repository.delete(clienteId, userId)
       
-      logger.info('ClienteService', 'Cliente deletado', { clienteId, tenantId })
+      logger.info('ClienteService', 'Cliente deletado', { clienteId })
       
       return true
     } catch (error) {
@@ -88,11 +88,11 @@ export class ClienteService {
   }
 
   async obterSatisfacaoMedia(userId: string, tenantId: string) {
-    return await this.repository.getSatisfacaoMedia(userId, tenantId)
+    return await this.repository.getSatisfacaoMedia(userId)
   }
 
   async adicionarValor(userId: string, tenantId: string, clienteId: number, valor: number) {
-    const cliente = await this.repository.findById(clienteId, userId, tenantId)
+    const cliente = await this.repository.findById(clienteId, userId)
     
     if (!cliente) {
       throw AppError.NotFound('Cliente')
@@ -101,7 +101,7 @@ export class ClienteService {
     const valorAtual = parseFloat(cliente.valor_acumulado) || 0
     const novoValor = valorAtual + valor
     
-    return await this.repository.updateValorAcumulado(clienteId, userId, tenantId, novoValor)
+    return await this.repository.updateValorAcumulado(clienteId, userId, novoValor)
   }
 }
 
