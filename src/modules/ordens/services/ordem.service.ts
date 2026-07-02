@@ -6,15 +6,15 @@ import { AppError } from '@/lib/utils/api-response'
 const repository = new OrdemRepository()
 
 export class OrdemService {
-  async criar(userId: string, dados: any) {
+  async criar(userId: string, tenantId: string, dados: any) {
     try {
       validateOrdemData(dados)
       
-      logger.info('OrdemService', 'Criando ordem de serviço', { userId })
+      logger.info('OrdemService', 'Criando ordem de serviço', { userId, tenantId })
       
-      const ordem = await repository.create(userId, dados)
+      const ordem = await repository.create(userId, tenantId, dados)
       
-      logger.info('OrdemService', 'Ordem criada com sucesso', { ordemId: ordem.id })
+      logger.info('OrdemService', 'Ordem criada com sucesso', { ordemId: ordem.id, tenantId })
       
       return ordem
     } catch (error) {
@@ -23,8 +23,8 @@ export class OrdemService {
     }
   }
 
-  async obter(userId: string, ordemId: number) {
-    const ordem = await repository.findById(ordemId, userId)
+  async obter(userId: string, tenantId: string, ordemId: number) {
+    const ordem = await repository.findById(ordemId, userId, tenantId)
     
     if (!ordem) {
       throw new AppError('Ordem não encontrada', 404)
@@ -33,18 +33,18 @@ export class OrdemService {
     return ordem
   }
 
-  async listar(userId: string, filtros?: any) {
-    logger.info('OrdemService', 'Listando ordens', { userId, filtros })
-    return await repository.findAll(userId, filtros)
+  async listar(userId: string, tenantId: string, filtros?: any) {
+    logger.info('OrdemService', 'Listando ordens', { userId, tenantId, filtros })
+    return await repository.findAll(userId, tenantId, filtros)
   }
 
-  async listarPorStatus(userId: string, status: string) {
-    return await repository.findByStatus(userId, status)
+  async listarPorStatus(userId: string, tenantId: string, status: string) {
+    return await repository.findByStatus(userId, tenantId, status)
   }
 
-  async atualizar(userId: string, ordemId: number, dados: any) {
+  async atualizar(userId: string, tenantId: string, ordemId: number, dados: any) {
     try {
-      const ordem = await repository.findById(ordemId, userId)
+      const ordem = await repository.findById(ordemId, userId, tenantId)
       
       if (!ordem) {
         throw new AppError('Ordem não encontrada', 404)
@@ -52,9 +52,9 @@ export class OrdemService {
       
       validateOrdemData(dados, true)
       
-      const ordemAtualizada = await repository.update(ordemId, userId, dados)
+      const ordemAtualizada = await repository.update(ordemId, userId, tenantId, dados)
       
-      logger.info('OrdemService', 'Ordem atualizada', { ordemId })
+      logger.info('OrdemService', 'Ordem atualizada', { ordemId, tenantId })
       
       return ordemAtualizada[0]
     } catch (error) {
@@ -63,9 +63,9 @@ export class OrdemService {
     }
   }
 
-  async alterarStatus(userId: string, ordemId: number, novoStatus: string) {
+  async alterarStatus(userId: string, tenantId: string, ordemId: number, novoStatus: string) {
     try {
-      const ordemValida = await repository.findById(ordemId, userId)
+      const ordemValida = await repository.findById(ordemId, userId, tenantId)
       
       if (!ordemValida) {
         throw new AppError('Ordem não encontrada', 404)
@@ -76,9 +76,9 @@ export class OrdemService {
         throw new AppError('Status inválido', 400)
       }
       
-      const ordem = await repository.updateStatus(ordemId, userId, novoStatus)
+      const ordem = await repository.updateStatus(ordemId, userId, tenantId, novoStatus)
       
-      logger.info('OrdemService', 'Status alterado', { ordemId, novoStatus })
+      logger.info('OrdemService', 'Status alterado', { ordemId, novoStatus, tenantId })
       
       return ordem[0]
     } catch (error) {
@@ -87,25 +87,25 @@ export class OrdemService {
     }
   }
 
-  async obterCounts(userId: string) {
-    return await repository.getStatusCounts(userId)
+  async obterCounts(userId: string, tenantId: string) {
+    return await repository.getStatusCounts(userId, tenantId)
   }
 
-  async obterProximasVencer(userId: string) {
-    return await repository.getProximasVencer(userId)
+  async obterProximasVencer(userId: string, tenantId: string) {
+    return await repository.getProximasVencer(userId, tenantId)
   }
 
-  async deletar(userId: string, ordemId: number) {
+  async deletar(userId: string, tenantId: string, ordemId: number) {
     try {
-      const ordem = await repository.findById(ordemId, userId)
+      const ordem = await repository.findById(ordemId, userId, tenantId)
       
       if (!ordem) {
         throw new AppError('Ordem não encontrada', 404)
       }
       
-      logger.info('OrdemService', 'Ordem cancelada', { ordemId })
+      logger.info('OrdemService', 'Ordem cancelada', { ordemId, tenantId })
       
-      return await repository.updateStatus(ordemId, userId, 'cancelado')
+      return await repository.updateStatus(ordemId, userId, tenantId, 'cancelado')
     } catch (error) {
       logger.error('OrdemService', 'Erro ao cancelar ordem', error)
       throw error
