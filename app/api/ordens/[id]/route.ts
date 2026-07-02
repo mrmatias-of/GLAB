@@ -1,26 +1,16 @@
-import { NextRequest } from "next/server"
-import { auth } from "@/lib/auth"
-import { headers } from "next/headers"
-import { createApiSuccess, createApiError } from "@/lib/middleware/api-response"
-import { checkRateLimit } from "@/lib/security/rate-limit"
+import { NextResponse } from 'next/server'
+import { withMiddleware, RequestContext } from '@/lib/middleware/route-handler'
+import { createApiSuccess, createApiError } from '@/lib/middleware/api-response'
 
-async function getRequestContext() {
-  const hdrs = await headers()
-  const session = await auth.api.getSession({ headers: hdrs })
-  if (!session?.user) return null
-  return { userId: session.user.id, tenantId: session.user.tenantId || "default" }
-}
-
-export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+async function handleGET(context: RequestContext): Promise<NextResponse> {
   try {
-    const rl = await checkRateLimit(req, "user")
-    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
-    const ctx = await getRequestContext()
-    if (!ctx) return createApiError("Unauthorized", 401)
-    const { id } = await params
-    // TODO: Get ordem
-    return createApiSuccess({}, "Ordem obtida")
+    const { userId, tenantId, request } = context
+    // TODO: Implement service call
+    return createApiSuccess([], 'Dados obtidos com sucesso')
   } catch (error) {
-    return createApiError("Error", 500)
+    console.error('[API] GET /ordens/[id]:', error)
+    return createApiError(error instanceof Error ? error.message : 'Erro', 500)
   }
 }
+
+export const GET = withMiddleware(handleGET, { requireAuth: true, requireTenant: true, rateLimit: 'user' })

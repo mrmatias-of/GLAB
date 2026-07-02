@@ -1,74 +1,51 @@
-import { NextRequest } from 'next/server'
-import { auth } from '@/lib/auth'
-import { headers } from 'next/headers'
-import { ordemService } from '@/src/modules/ordens'
+import { NextResponse } from 'next/server'
+import { withMiddleware, RequestContext } from '@/lib/middleware/route-handler'
 import { createApiSuccess, createApiError } from '@/lib/middleware/api-response'
-import { validateBody } from '@/lib/validators/schema-validator'
-import { CreateOrdemSchema } from '@/src/modules/ordens/schemas'
-import { checkRateLimit } from '@/lib/security/rate-limit'
+import { ordemServiceService } from '@/src/modules/ordens-servico'
+import { CreateOrdemSchema, ListOrdemSchema } from '@/src/modules/ordens-servico/schemas'
 
-async function getRequestContext() {
-  const hdrs = await headers()
-  const session = await auth.api.getSession({ headers: hdrs })
-  if (!session?.user) return null
-  return {
-    userId: session.user.id,
-    tenantId: session.user.tenantId || 'default',
-    session,
-  }
-}
-
-export async function GET(req: NextRequest) {
+async function handleGET(context: RequestContext): Promise<NextResponse> {
   try {
-    const rl = await checkRateLimit(req, 'user')
-    if (!rl.allowed) return createApiError('Rate limit exceeded', 429)
+    const { userId, tenantId, request } = context
+    const { searchParams } = new URL(request.url)
+    
+    const queryParams: any = {}
+    for (const [key, value] of searchParams.entries()) {
+      if (value === 'true') queryParams[key] = true
+      else if (value === 'false') queryParams[key] = false
+      else queryParams[key] = value
+    }
 
-    const ctx = await getRequestContext()
-    if (!ctx) return createApiError('Unauthorized', 401)
+    const validated = ListOrdemSchema.safeParse(queryParams)
+    if (!validated.success) {
+      return createApiError(`Validação falhou: ${validated.error.message}`, 400)
+    }
 
-    const { searchParams } = new URL(req.url)
-    const status = searchParams.get('status')
-    const clienteId = searchParams.get('clienteId')
-    const tecnicoId = searchParams.get('tecnicoId')
-
-    const filtros: any = {}
-    if (status) filtros.status = status
-    if (clienteId) filtros.clienteId = parseInt(clienteId)
-    if (tecnicoId) filtros.tecnicoId = parseInt(tecnicoId)
-
-    const ordens = await ordemService.listar(ctx.userId, ctx.tenantId, filtros)
-    return createApiSuccess(ordens, 'Ordens listadas com sucesso')
+    const result = await ordemServiceService.listar(userId, tenantId, validated.data)
+    return createApiSuccess(result, 'Listados com sucesso')
   } catch (error) {
     console.error('[API] GET /ordens-servico:', error)
-    return createApiError(
-      error instanceof Error ? error.message : 'Internal server error',
-      500
-    )
+    return createApiError(error instanceof Error ? error.message : 'Erro na requisição', 500)
   }
 }
 
-export async function POST(req: NextRequest) {
+async function handlePOST(context: RequestContext): Promise<NextResponse> {
   try {
-    const rl = await checkRateLimit(req, 'create')
-    if (!rl.allowed) return createApiError('Rate limit exceeded', 429)
+    const { userId, tenantId, request } = context
+    const body = await request.json()
+    const validated = CreateOrdemSchema.safeParse(body)
+    
+    if (!validated.success) {
+      return createApiError(`Validação falhou: ${validated.error.message}`, 400)
+    }
 
-    const ctx = await getRequestContext()
-    if (!ctx) return createApiError('Unauthorized', 401)
-
-    const csrfToken = req.headers.get('x-csrf-token')
-    if (!csrfToken) return createApiError('CSRF token required', 403)
-
-    const body = await req.json()
-    const validated = await validateBody(body, CreateOrdemSchema)
-    if (validated.error) return createApiError(validated.message, 400)
-
-    const ordem = await ordemService.criar(ctx.userId, ctx.tenantId, validated.data)
-    return createApiSuccess(ordem, 'Ordem criada com sucesso', 201)
+    const result = await ordemServiceService.criar(userId, tenantId, validated.data)
+    return createApiSuccess(result, 'Criado com sucesso', 201)
   } catch (error) {
     console.error('[API] POST /ordens-servico:', error)
-    return createApiError(
-      error instanceof Error ? error.message : 'Internal server error',
-      500
-    )
+    return createApiError(error instanceof Error ? error.message : 'Erro na requisição', 500)
   }
 }
+
+export const GET = withMiddleware(handleGET, { requireAuth: true, requireTenant: true, rateLimit: 'user' })
+export const POST = withMiddleware(handlePOST, { requireAuth: true, requireTenant: true, requireCsrf: true, rateLimit: 'create' })
