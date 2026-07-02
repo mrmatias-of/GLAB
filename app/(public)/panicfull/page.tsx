@@ -168,6 +168,7 @@ export default function PanicAnalysisPage() {
                   </p>
                   <button
                     type="button"
+                    onClick={() => {
                       e.stopPropagation()
                       setFile(null)
                     }}

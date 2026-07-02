@@ -222,6 +222,7 @@ export default function OrdensServicoPage() {
           <div className="space-y-4 mb-4">
             <button
               type="button"
+              onClick={() => {
                 console.log('[v0] Camera button clicked, opening camera')
                 setShowCameraCapture(true)
               }}

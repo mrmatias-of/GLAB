@@ -107,6 +107,7 @@ export default function FuncionariosPage() {
                         <Edit2 className="w-4 h-4 text-blue-600 hover:text-blue-700 cursor-pointer" />
                       </Link>
                       <button
+                        onClick={async () => {
                           if (confirm('Tem certeza?')) {
                             await fetch(`/api/rh/funcionarios/${func.id}`, { method: 'DELETE' })
                             fetchFuncionarios()
