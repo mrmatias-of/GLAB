@@ -1,57 +1,41 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from "next/server"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
+import { createApiSuccess, createApiError } from "@/lib/middleware/api-response"
+import { validateBody } from "@/lib/validators/schema-validator"
+import { checkRateLimit } from "@/lib/security/rate-limit"
 
-export async function POST(request: NextRequest) {
+async function getRequestContext() {
+  const hdrs = await headers()
+  const session = await auth.api.getSession({ headers: hdrs })
+  if (!session?.user) return null
+  return { userId: session.user.id, tenantId: session.user.tenantId || "default" }
+}
+
+export async function GET(req: NextRequest) {
   try {
-    const { image } = await request.json()
-
-    if (!image) {
-      return NextResponse.json({ error: 'Imagem não fornecida' }, { status: 400 })
-    }
-
-    // Usar Google Cloud Vision API
-    // Para funcionar, você precisa de uma chave de API configurada em GOOGLE_VISION_API_KEY
-    const apiKey = process.env.GOOGLE_VISION_API_KEY
-
-    if (!apiKey) {
-      // Fallback: retornar texto vazio para indicar que OCR não está configurado
-      console.warn('[v0] GOOGLE_VISION_API_KEY não configurada')
-      return NextResponse.json({ text: '' }, { status: 200 })
-    }
-
-    // Remover prefixo data:image/jpeg;base64, se existir
-    const base64Data = image.split(',')[1] || image
-
-    const response = await fetch(
-      `https://vision.googleapis.com/v1/images:annotateRequest?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          requests: [
-            {
-              image: { content: base64Data },
-              features: [{ type: 'TEXT_DETECTION' }],
-            },
-          ],
-        }),
-      }
-    )
-
-    if (!response.ok) {
-      throw new Error('Erro na API de Vision')
-    }
-
-    const data = await response.json()
-
-    // Extrair texto reconhecido
-    const text = data.responses?.[0]?.fullTextAnnotation?.text || ''
-
-    return NextResponse.json({ text })
+    const rl = await checkRateLimit(req, "user")
+    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError("Unauthorized", 401)
+    // TODO: Implement
+    return createApiSuccess([], "Success")
   } catch (error) {
-    console.error('[v0] OCR error:', error)
-    return NextResponse.json(
-      { error: 'Erro ao processar imagem', text: '' },
-      { status: 500 }
-    )
+    return createApiError("Error", 500)
+  }
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const rl = await checkRateLimit(req, "create")
+    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError("Unauthorized", 401)
+    const csrfToken = req.headers.get("x-csrf-token")
+    if (!csrfToken) return createApiError("CSRF token required", 403)
+    // TODO: Implement
+    return createApiSuccess(null, "Created", 201)
+  } catch (error) {
+    return createApiError("Error", 500)
   }
 }

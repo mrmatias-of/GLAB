@@ -1,20 +1,25 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from "next/server"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
+import { createApiSuccess, createApiError } from "@/lib/middleware/api-response"
+import { checkRateLimit } from "@/lib/security/rate-limit"
 
-export async function GET(request: NextRequest) {
+async function getRequestContext() {
+  const hdrs = await headers()
+  const session = await auth.api.getSession({ headers: hdrs })
+  if (!session?.user) return null
+  return { userId: session.user.id, tenantId: session.user.tenantId || "default" }
+}
+
+export async function GET(req: NextRequest) {
   try {
-    const mockData = [
-      { id: '1', numero: 'OS-001', clienteNome: 'João Silva', tecnicoNome: 'Pedro', descricao: 'Manutenção AC', status: 'concluida', dataCriacao: '2024-06-20', dataAgendada: '2024-06-21', valorTotal: 500 },
-      { id: '2', numero: 'OS-002', clienteNome: 'Maria Santos', tecnicoNome: 'João', descricao: 'Reparo Geladeira', status: 'em_progresso', dataCriacao: '2024-06-25', dataAgendada: '2024-06-26', valorTotal: 350 },
-    ]
-
-    return NextResponse.json({
-      success: true,
-      data: mockData,
-    })
+    const rl = await checkRateLimit(req, "user")
+    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError("Unauthorized", 401)
+    // TODO: Get orders from service
+    return createApiSuccess([], "Ordens listadas")
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: 'Failed to fetch orders' },
-      { status: 500 }
-    )
+    return createApiError("Error", 500)
   }
 }

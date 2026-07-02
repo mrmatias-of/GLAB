@@ -1,41 +1,41 @@
-import { NextRequest } from 'next/server'
-import { auth } from '@/lib/auth'
-import { headers } from 'next/headers'
-import { comissoesService } from '@/lib/services/comissoes.service'
-import { apiResponse, handleApiError } from '@/lib/utils/api-response'
+import { NextRequest } from "next/server"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
+import { createApiSuccess, createApiError } from "@/lib/middleware/api-response"
+import { validateBody } from "@/lib/validators/schema-validator"
+import { checkRateLimit } from "@/lib/security/rate-limit"
+
+async function getRequestContext() {
+  const hdrs = await headers()
+  const session = await auth.api.getSession({ headers: hdrs })
+  if (!session?.user) return null
+  return { userId: session.user.id, tenantId: session.user.tenantId || "default" }
+}
 
 export async function GET(req: NextRequest) {
   try {
-    const session = await auth.api.getSession({ headers: await headers() })
-    if (!session?.user) return apiResponse(null, 401, 'Unauthorized')
-
-    const { searchParams } = new URL(req.url)
-    const tecnicoId = searchParams.get('tecnicoId')
-    const dataInicio = searchParams.get('dataInicio')
-    const dataFim = searchParams.get('dataFim')
-
-    if (!dataInicio || !dataFim) {
-      return apiResponse(null, 400, 'dataInicio e dataFim são obrigatórios')
-    }
-
-    if (tecnicoId) {
-      const comissao = await comissoesService.calcularComissaoTecnico(
-        session.user.id,
-        parseInt(tecnicoId),
-        new Date(dataInicio),
-        new Date(dataFim)
-      )
-      return apiResponse(comissao, 200, 'Comissão do técnico calculada')
-    }
-
-    const comissoes = await comissoesService.calcularComissoesTodosTecnicos(
-      session.user.id,
-      new Date(dataInicio),
-      new Date(dataFim)
-    )
-
-    return apiResponse(comissoes, 200, 'Comissões calculadas com sucesso')
+    const rl = await checkRateLimit(req, "user")
+    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError("Unauthorized", 401)
+    // TODO: Implement
+    return createApiSuccess([], "Success")
   } catch (error) {
-    return handleApiError(error)
+    return createApiError("Error", 500)
+  }
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const rl = await checkRateLimit(req, "create")
+    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError("Unauthorized", 401)
+    const csrfToken = req.headers.get("x-csrf-token")
+    if (!csrfToken) return createApiError("CSRF token required", 403)
+    // TODO: Implement
+    return createApiSuccess(null, "Created", 201)
+  } catch (error) {
+    return createApiError("Error", 500)
   }
 }

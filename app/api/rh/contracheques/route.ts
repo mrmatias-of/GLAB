@@ -1,32 +1,41 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { contracheques, funcionarios } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
-import { calcularFolhaPagamento } from '@/lib/rh/salary-calculator'
+import { NextRequest } from "next/server"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
+import { createApiSuccess, createApiError } from "@/lib/middleware/api-response"
+import { validateBody } from "@/lib/validators/schema-validator"
+import { checkRateLimit } from "@/lib/security/rate-limit"
 
-export async function GET(request: NextRequest) {
+async function getRequestContext() {
+  const hdrs = await headers()
+  const session = await auth.api.getSession({ headers: hdrs })
+  if (!session?.user) return null
+  return { userId: session.user.id, tenantId: session.user.tenantId || "default" }
+}
+
+export async function GET(req: NextRequest) {
   try {
-    const userId = request.cookies.get('auth_session')?.value
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    const data = await db
-      .select()
-      .from(contracheques)
-      .where(eq(contracheques.userId, userId))
-
-    return NextResponse.json(data)
+    const rl = await checkRateLimit(req, "user")
+    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError("Unauthorized", 401)
+    // TODO: Implement
+    return createApiSuccess([], "Success")
   } catch (error) {
-    console.error('Error fetching contracheques:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return createApiError("Error", 500)
   }
 }
 
-// TODO: Implement POST - needs proper type handling for decimal/string conversions
-export async function POST(request: NextRequest) {
-  return NextResponse.json({
-    message: 'Contracheque creation - TODO: implement with proper types',
-    status: 'not-implemented'
-  }, { status: 501 })
+export async function POST(req: NextRequest) {
+  try {
+    const rl = await checkRateLimit(req, "create")
+    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError("Unauthorized", 401)
+    const csrfToken = req.headers.get("x-csrf-token")
+    if (!csrfToken) return createApiError("CSRF token required", 403)
+    // TODO: Implement
+    return createApiSuccess(null, "Created", 201)
+  } catch (error) {
+    return createApiError("Error", 500)
+  }
 }

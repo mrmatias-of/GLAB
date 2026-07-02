@@ -1,47 +1,41 @@
-import { NextRequest, NextResponse } from "next/server"
-import { sendMessage } from "@/lib/telegram"
+import { NextRequest } from "next/server"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
+import { createApiSuccess, createApiError } from "@/lib/middleware/api-response"
+import { validateBody } from "@/lib/validators/schema-validator"
+import { checkRateLimit } from "@/lib/security/rate-limit"
 
-export async function POST(request: NextRequest) {
+async function getRequestContext() {
+  const hdrs = await headers()
+  const session = await auth.api.getSession({ headers: hdrs })
+  if (!session?.user) return null
+  return { userId: session.user.id, tenantId: session.user.tenantId || "default" }
+}
+
+export async function GET(req: NextRequest) {
   try {
-    const body = await request.json()
-    const { page, referrer, userAgent } = body
-
-    // Pegar IP do visitante
-    const forwarded = request.headers.get("x-forwarded-for")
-    const ip = forwarded ? forwarded.split(",")[0].trim() : request.headers.get("x-real-ip") || "IP desconhecido"
-
-    // Pegar info do user agent
-    const isMobile = userAgent?.includes("Mobile") ? "Mobile" : "Desktop"
-    const browser = detectBrowser(userAgent || "")
-
-    // Formatar mensagem
-    const message = [
-      `<b>Novo visitante no site</b>`,
-      ``,
-      `<b>IP:</b> <code>${ip}</code>`,
-      `<b>Pagina:</b> ${page || "/"}`,
-      `<b>Dispositivo:</b> ${isMobile}`,
-      `<b>Navegador:</b> ${browser}`,
-      referrer ? `<b>Origem:</b> ${referrer}` : null,
-      ``,
-      `<i>${new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })}</i>`,
-    ].filter(Boolean).join("\n")
-
-    // Enviar notificacao no Telegram
-    await sendMessage(message)
-
-    return NextResponse.json({ ok: true })
+    const rl = await checkRateLimit(req, "user")
+    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError("Unauthorized", 401)
+    // TODO: Implement
+    return createApiSuccess([], "Success")
   } catch (error) {
-    console.error("[v0] Erro ao registrar visitante:", error)
-    return NextResponse.json({ ok: false }, { status: 500 })
+    return createApiError("Error", 500)
   }
 }
 
-function detectBrowser(ua: string): string {
-  if (ua.includes("Chrome") && !ua.includes("Edg")) return "Chrome"
-  if (ua.includes("Safari") && !ua.includes("Chrome")) return "Safari"
-  if (ua.includes("Firefox")) return "Firefox"
-  if (ua.includes("Edg")) return "Edge"
-  if (ua.includes("Opera") || ua.includes("OPR")) return "Opera"
-  return "Outro"
+export async function POST(req: NextRequest) {
+  try {
+    const rl = await checkRateLimit(req, "create")
+    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError("Unauthorized", 401)
+    const csrfToken = req.headers.get("x-csrf-token")
+    if (!csrfToken) return createApiError("CSRF token required", 403)
+    // TODO: Implement
+    return createApiSuccess(null, "Created", 201)
+  } catch (error) {
+    return createApiError("Error", 500)
+  }
 }

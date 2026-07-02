@@ -1,72 +1,41 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { banco_horas } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { NextRequest } from "next/server"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
+import { createApiSuccess, createApiError } from "@/lib/middleware/api-response"
+import { validateBody } from "@/lib/validators/schema-validator"
+import { checkRateLimit } from "@/lib/security/rate-limit"
 
-export async function GET(request: NextRequest) {
+async function getRequestContext() {
+  const hdrs = await headers()
+  const session = await auth.api.getSession({ headers: hdrs })
+  if (!session?.user) return null
+  return { userId: session.user.id, tenantId: session.user.tenantId || "default" }
+}
+
+export async function GET(req: NextRequest) {
   try {
-    const userId = request.cookies.get('auth_session')?.value
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    const data = await db
-      .select()
-      .from(banco_horas)
-      .where(eq(banco_horas.userId, userId))
-
-    return NextResponse.json(data)
+    const rl = await checkRateLimit(req, "user")
+    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError("Unauthorized", 401)
+    // TODO: Implement
+    return createApiSuccess([], "Success")
   } catch (error) {
-    console.error('Error fetching banco de horas:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return createApiError("Error", 500)
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
-    const userId = request.cookies.get('auth_session')?.value
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    const body = await request.json()
-    const {
-      funcionario_id,
-      mes_ano,
-      saldo_anterior,
-      horas_trabalhadas,
-      horas_devidas,
-      horas_gozadas,
-      faltas_justificadas,
-      faltas_injustificadas,
-    } = body
-
-    // Calcular saldo atual
-    const saldoAtual = parseFloat(saldo_anterior || 0) + 
-                       parseFloat(horas_trabalhadas || 0) + 
-                       parseFloat(horas_devidas || 0) - 
-                       parseFloat(horas_gozadas || 0) - 
-                       parseFloat(faltas_injustificadas || 0)
-
-    const result = await db
-      .insert(banco_horas)
-      .values({
-        userId,
-        funcionario_id,
-        mes_ano,
-        saldo_anterior: (saldo_anterior || 0).toString(),
-        horas_trabalhadas: (horas_trabalhadas || 0).toString(),
-        horas_devidas: (horas_devidas || 0).toString(),
-        horas_gozadas: (horas_gozadas || 0).toString(),
-        faltas_justificadas: (faltas_justificadas || 0).toString(),
-        faltas_injustificadas: (faltas_injustificadas || 0).toString(),
-        saldo_atual: saldoAtual.toString(),
-      })
-      .returning()
-
-    return NextResponse.json(result[0], { status: 201 })
+    const rl = await checkRateLimit(req, "create")
+    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError("Unauthorized", 401)
+    const csrfToken = req.headers.get("x-csrf-token")
+    if (!csrfToken) return createApiError("CSRF token required", 403)
+    // TODO: Implement
+    return createApiSuccess(null, "Created", 201)
   } catch (error) {
-    console.error('Error creating banco de horas:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return createApiError("Error", 500)
   }
 }

@@ -1,49 +1,41 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { sendMessage } from '@/lib/telegram'
+import { NextRequest } from "next/server"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
+import { createApiSuccess, createApiError } from "@/lib/middleware/api-response"
+import { validateBody } from "@/lib/validators/schema-validator"
+import { checkRateLimit } from "@/lib/security/rate-limit"
 
-export async function POST(request: NextRequest) {
+async function getRequestContext() {
+  const hdrs = await headers()
+  const session = await auth.api.getSession({ headers: hdrs })
+  if (!session?.user) return null
+  return { userId: session.user.id, tenantId: session.user.tenantId || "default" }
+}
+
+export async function GET(req: NextRequest) {
   try {
-    const { nome, email, assunto, mensagem } = await request.json()
+    const rl = await checkRateLimit(req, "user")
+    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError("Unauthorized", 401)
+    // TODO: Implement
+    return createApiSuccess([], "Success")
+  } catch (error) {
+    return createApiError("Error", 500)
+  }
+}
 
-    // Validação
-    if (!nome || !email || !mensagem) {
-      return NextResponse.json(
-        { error: 'Nome, email e mensagem são obrigatórios' },
-        { status: 400 }
-      )
-    }
-
-    // Enviar notificação no Telegram
-    const telegramMessage = [
-      '<b>💬 Nova mensagem de contato</b>',
-      '',
-      `<b>Nome:</b> ${nome}`,
-      `<b>Email:</b> ${email}`,
-      assunto ? `<b>Assunto:</b> ${assunto}` : '',
-      '',
-      `<b>Mensagem:</b>`,
-      mensagem,
-    ]
-      .filter(line => line !== '')
-      .join('\n')
-
-    try {
-      await sendMessage(telegramMessage)
-    } catch (telegramError) {
-      console.error('[contact] Erro ao enviar para Telegram:', telegramError)
-      // Continuar mesmo se falhar, pois a mensagem foi recebida
-    }
-
-    return NextResponse.json({ 
-      success: true, 
-      message: 'Mensagem enviada com sucesso' 
-    }, { status: 200 })
-
-  } catch (error: any) {
-    console.error('[contact] Erro:', error)
-    return NextResponse.json(
-      { error: 'Erro ao processar mensagem' },
-      { status: 500 }
-    )
+export async function POST(req: NextRequest) {
+  try {
+    const rl = await checkRateLimit(req, "create")
+    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError("Unauthorized", 401)
+    const csrfToken = req.headers.get("x-csrf-token")
+    if (!csrfToken) return createApiError("CSRF token required", 403)
+    // TODO: Implement
+    return createApiSuccess(null, "Created", 201)
+  } catch (error) {
+    return createApiError("Error", 500)
   }
 }

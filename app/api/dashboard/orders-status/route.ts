@@ -1,22 +1,28 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
+import { auth } from '@/lib/auth'
+import { headers } from 'next/headers'
+import { createApiSuccess, createApiError } from '@/lib/middleware/api-response'
+import { checkRateLimit } from '@/lib/security/rate-limit'
 
-export async function GET(request: NextRequest) {
+async function getRequestContext() {
+  const hdrs = await headers()
+  const session = await auth.api.getSession({ headers: hdrs })
+  if (!session?.user) return null
+  return { userId: session.user.id, tenantId: session.user.tenantId || 'default' }
+}
+
+export async function GET(req: NextRequest) {
   try {
-    const mockData = [
-      { name: 'Pendente', value: 18, fill: '#FFA500' },
-      { name: 'Em Progresso', value: 32, fill: '#3B82F6' },
-      { name: 'Concluída', value: 145, fill: '#10B981' },
-      { name: 'Cancelada', value: 5, fill: '#EF4444' },
-    ]
+    const rl = await checkRateLimit(req, 'user')
+    if (!rl.allowed) return createApiError('Rate limit exceeded', 429)
 
-    return NextResponse.json({
-      success: true,
-      data: mockData,
-    })
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError('Unauthorized', 401)
+
+    // TODO: Get orders-status data from service
+    return createApiSuccess({}, 'Dados obtidos com sucesso')
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: 'Failed to fetch orders status' },
-      { status: 500 }
-    )
+    console.error('[API] GET /dashboard/orders-status:', error)
+    return createApiError('Internal server error', 500)
   }
 }

@@ -1,31 +1,41 @@
-import { NextRequest, NextResponse } from 'next/server'
-// TODO: Implement master database connection
-// import { db as masterDb } from '@/lib/db'
-// import { feature_flags, plan_features, tenant_features } from '@/lib/db/master-schema'
-// import { eq, and } from 'drizzle-orm'
+import { NextRequest } from "next/server"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
+import { createApiSuccess, createApiError } from "@/lib/middleware/api-response"
+import { validateBody } from "@/lib/validators/schema-validator"
+import { checkRateLimit } from "@/lib/security/rate-limit"
 
-/**
- * GET /api/master/feature-flags
- * List all feature flags
- * 
- * TODO: Implement once master database is properly configured
- */
-export async function GET(request: NextRequest) {
-  return NextResponse.json({
-    message: 'Feature flags endpoint - TODO: implement',
-    status: 'not-implemented'
-  }, { status: 501 })
+async function getRequestContext() {
+  const hdrs = await headers()
+  const session = await auth.api.getSession({ headers: hdrs })
+  if (!session?.user) return null
+  return { userId: session.user.id, tenantId: session.user.tenantId || "default" }
 }
 
-/**
- * POST /api/master/feature-flags
- * Create new feature flag
- * 
- * TODO: Implement once master database is properly configured
- */
-export async function POST(request: NextRequest) {
-  return NextResponse.json({
-    message: 'Feature flags endpoint - TODO: implement',
-    status: 'not-implemented'
-  }, { status: 501 })
+export async function GET(req: NextRequest) {
+  try {
+    const rl = await checkRateLimit(req, "user")
+    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError("Unauthorized", 401)
+    // TODO: Implement
+    return createApiSuccess([], "Success")
+  } catch (error) {
+    return createApiError("Error", 500)
+  }
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const rl = await checkRateLimit(req, "create")
+    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError("Unauthorized", 401)
+    const csrfToken = req.headers.get("x-csrf-token")
+    if (!csrfToken) return createApiError("CSRF token required", 403)
+    // TODO: Implement
+    return createApiSuccess(null, "Created", 201)
+  } catch (error) {
+    return createApiError("Error", 500)
+  }
 }

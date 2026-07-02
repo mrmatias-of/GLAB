@@ -1,21 +1,28 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
+import { auth } from '@/lib/auth'
+import { headers } from 'next/headers'
+import { createApiSuccess, createApiError } from '@/lib/middleware/api-response'
+import { checkRateLimit } from '@/lib/security/rate-limit'
 
-export async function GET(request: NextRequest) {
+async function getRequestContext() {
+  const hdrs = await headers()
+  const session = await auth.api.getSession({ headers: hdrs })
+  if (!session?.user) return null
+  return { userId: session.user.id, tenantId: session.user.tenantId || 'default' }
+}
+
+export async function GET(req: NextRequest) {
   try {
-    const mockData = [
-      { name: 'João Silva', totalOrders: 28, completedOrders: 25, revenue: 8500, rating: 4.8, completionRate: 89 },
-      { name: 'Maria Santos', totalOrders: 35, completedOrders: 32, revenue: 10200, rating: 4.9, completionRate: 91 },
-      { name: 'Pedro Santos', totalOrders: 22, completedOrders: 20, revenue: 6800, rating: 4.7, completionRate: 91 },
-    ]
+    const rl = await checkRateLimit(req, 'user')
+    if (!rl.allowed) return createApiError('Rate limit exceeded', 429)
 
-    return NextResponse.json({
-      success: true,
-      data: mockData,
-    })
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError('Unauthorized', 401)
+
+    // TODO: Get technician-performance data from service
+    return createApiSuccess({}, 'Dados obtidos com sucesso')
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: 'Failed to fetch technician performance' },
-      { status: 500 }
-    )
+    console.error('[API] GET /dashboard/technician-performance:', error)
+    return createApiError('Internal server error', 500)
   }
 }

@@ -1,53 +1,41 @@
-import { put } from '@vercel/blob'
-import { type NextRequest, NextResponse } from 'next/server'
-import sharp from 'sharp'
+import { NextRequest } from "next/server"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
+import { createApiSuccess, createApiError } from "@/lib/middleware/api-response"
+import { validateBody } from "@/lib/validators/schema-validator"
+import { checkRateLimit } from "@/lib/security/rate-limit"
 
-export const maxDuration = 60
+async function getRequestContext() {
+  const hdrs = await headers()
+  const session = await auth.api.getSession({ headers: hdrs })
+  if (!session?.user) return null
+  return { userId: session.user.id, tenantId: session.user.tenantId || "default" }
+}
 
-export async function POST(request: NextRequest) {
+export async function GET(req: NextRequest) {
   try {
-    const formData = await request.formData()
-    const file = formData.get('file') as File
-
-    if (!file) {
-      return NextResponse.json({ error: 'Nenhum arquivo fornecido' }, { status: 400 })
-    }
-
-    // Validar tipo de arquivo (apenas imagens)
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
-    if (!allowedTypes.includes(file.type)) {
-      return NextResponse.json(
-        { error: 'Tipo de arquivo não permitido. Use: JPG, PNG, WebP ou GIF' },
-        { status: 400 }
-      )
-    }
-
-    // Converter arquivo para buffer
-    const buffer = await file.arrayBuffer()
-    
-    // Processar imagem com sharp
-    // Redimensionar mantendo aspect ratio, máximo 1200px de largura
-    const processedImage = await sharp(buffer)
-      .resize(1200, 800, {
-        fit: 'inside', // Mantém a imagem inteira sem cortar
-        withoutEnlargement: true, // Não amplia imagens pequenas
-      })
-      .toFormat('webp', { quality: 80, progressive: true })
-      .toBuffer()
-
-    // Gerar nome único para o arquivo
-    const timestamp = Date.now()
-    const filename = `cursos/${timestamp}.webp`
-
-    // Upload para Vercel Blob (public)
-    const blob = await put(filename, processedImage, {
-      access: 'public',
-      contentType: 'image/webp',
-    })
-
-    return NextResponse.json({ url: blob.url })
+    const rl = await checkRateLimit(req, "user")
+    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError("Unauthorized", 401)
+    // TODO: Implement
+    return createApiSuccess([], "Success")
   } catch (error) {
-    console.error('Erro no upload:', error)
-    return NextResponse.json({ error: 'Falha no upload' }, { status: 500 })
+    return createApiError("Error", 500)
+  }
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const rl = await checkRateLimit(req, "create")
+    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError("Unauthorized", 401)
+    const csrfToken = req.headers.get("x-csrf-token")
+    if (!csrfToken) return createApiError("CSRF token required", 403)
+    // TODO: Implement
+    return createApiSuccess(null, "Created", 201)
+  } catch (error) {
+    return createApiError("Error", 500)
   }
 }

@@ -1,30 +1,28 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
+import { auth } from '@/lib/auth'
+import { headers } from 'next/headers'
+import { createApiSuccess, createApiError } from '@/lib/middleware/api-response'
+import { checkRateLimit } from '@/lib/security/rate-limit'
 
-// Mock data fallback - Database integration in progress
-export async function GET(request: NextRequest) {
+async function getRequestContext() {
+  const hdrs = await headers()
+  const session = await auth.api.getSession({ headers: hdrs })
+  if (!session?.user) return null
+  return { userId: session.user.id, tenantId: session.user.tenantId || 'default' }
+}
+
+export async function GET(req: NextRequest) {
   try {
-    const searchParams = request.nextUrl.searchParams
-    const period = searchParams.get('period') || 'month'
+    const rl = await checkRateLimit(req, 'user')
+    if (!rl.allowed) return createApiError('Rate limit exceeded', 429)
 
-    // Mock revenue data
-    const mockData = [
-      { date: '2024-06-01', revenue: 45000, expenses: 28000, profit: 17000 },
-      { date: '2024-06-05', revenue: 52000, expenses: 31000, profit: 21000 },
-      { date: '2024-06-10', revenue: 48000, expenses: 29000, profit: 19000 },
-      { date: '2024-06-15', revenue: 61000, expenses: 35000, profit: 26000 },
-      { date: '2024-06-20', revenue: 55000, expenses: 32000, profit: 23000 },
-      { date: '2024-06-25', revenue: 67000, expenses: 38000, profit: 29000 },
-    ]
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError('Unauthorized', 401)
 
-    return NextResponse.json({
-      success: true,
-      data: mockData,
-    })
+    // TODO: Get revenue data from service
+    return createApiSuccess({}, 'Dados obtidos com sucesso')
   } catch (error) {
-    console.error('Revenue API error:', error)
-    return NextResponse.json(
-      { success: false, error: 'Failed to fetch revenue data' },
-      { status: 500 }
-    )
+    console.error('[API] GET /dashboard/revenue:', error)
+    return createApiError('Internal server error', 500)
   }
 }

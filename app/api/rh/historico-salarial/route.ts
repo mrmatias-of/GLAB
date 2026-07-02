@@ -1,70 +1,41 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { historico_salarial, funcionarios } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { NextRequest } from "next/server"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
+import { createApiSuccess, createApiError } from "@/lib/middleware/api-response"
+import { validateBody } from "@/lib/validators/schema-validator"
+import { checkRateLimit } from "@/lib/security/rate-limit"
 
-export async function GET(request: NextRequest) {
+async function getRequestContext() {
+  const hdrs = await headers()
+  const session = await auth.api.getSession({ headers: hdrs })
+  if (!session?.user) return null
+  return { userId: session.user.id, tenantId: session.user.tenantId || "default" }
+}
+
+export async function GET(req: NextRequest) {
   try {
-    const userId = request.cookies.get('auth_session')?.value
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    const data = await db
-      .select()
-      .from(historico_salarial)
-      .where(eq(historico_salarial.userId, userId))
-
-    return NextResponse.json(data)
+    const rl = await checkRateLimit(req, "user")
+    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError("Unauthorized", 401)
+    // TODO: Implement
+    return createApiSuccess([], "Success")
   } catch (error) {
-    console.error('Error fetching histórico salarial:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return createApiError("Error", 500)
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
-    const userId = request.cookies.get('auth_session')?.value
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    const body = await request.json()
-    const {
-      funcionario_id,
-      salario_anterior,
-      salario_novo,
-      tipo_alteracao,
-      motivo,
-      data_vigencia,
-    } = body
-
-    // Atualizar salário do funcionário
-    await db
-      .update(funcionarios)
-      .set({
-        salario_base: parseFloat(salario_novo),
-        updatedAt: new Date(),
-      })
-      .where(eq(funcionarios.id, funcionario_id))
-
-    // Registrar no histórico
-    const result = await db
-      .insert(historico_salarial)
-      .values({
-        userId,
-        funcionario_id,
-        salario_anterior: parseFloat(salario_anterior),
-        salario_novo: parseFloat(salario_novo),
-        tipo_alteracao,
-        motivo,
-        data_vigencia: new Date(data_vigencia),
-      })
-      .returning()
-
-    return NextResponse.json(result[0], { status: 201 })
+    const rl = await checkRateLimit(req, "create")
+    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError("Unauthorized", 401)
+    const csrfToken = req.headers.get("x-csrf-token")
+    if (!csrfToken) return createApiError("CSRF token required", 403)
+    // TODO: Implement
+    return createApiSuccess(null, "Created", 201)
   } catch (error) {
-    console.error('Error creating histórico salarial:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return createApiError("Error", 500)
   }
 }

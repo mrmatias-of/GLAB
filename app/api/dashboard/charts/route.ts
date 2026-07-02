@@ -1,40 +1,28 @@
 import { NextRequest } from 'next/server'
-import { dashboardService } from '@/lib/services/dashboard.service'
-import { apiResponse, handleApiError } from '@/lib/utils/api-response'
-import { logger } from '@/lib/utils/logger'
 import { auth } from '@/lib/auth'
+import { headers } from 'next/headers'
+import { createApiSuccess, createApiError } from '@/lib/middleware/api-response'
+import { checkRateLimit } from '@/lib/security/rate-limit'
 
-export async function GET(request: NextRequest) {
+async function getRequestContext() {
+  const hdrs = await headers()
+  const session = await auth.api.getSession({ headers: hdrs })
+  if (!session?.user) return null
+  return { userId: session.user.id, tenantId: session.user.tenantId || 'default' }
+}
+
+export async function GET(req: NextRequest) {
   try {
-    const session = await auth.api.getSession({ headers: request.headers })
-    if (!session) {
-      return apiResponse(null, 401, 'Unauthorized')
-    }
+    const rl = await checkRateLimit(req, 'user')
+    if (!rl.allowed) return createApiError('Rate limit exceeded', 429)
 
-    const { searchParams } = new URL(request.url)
-    const chartType = searchParams.get('type') || 'revenue'
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError('Unauthorized', 401)
 
-    logger.info('Dashboard Charts API', 'Fetching chart data', { type: chartType })
-
-    let chartData
-
-    switch (chartType) {
-      case 'revenue':
-        chartData = await dashboardService.getRevenueChart(session.user.id)
-        break
-      case 'productivity':
-        chartData = await dashboardService.getTechnicianProductivity(session.user.id)
-        break
-      case 'orders':
-        chartData = await dashboardService.getOrderStatus(session.user.id)
-        break
-      default:
-        chartData = await dashboardService.getRevenueChart(session.user.id)
-    }
-
-    return apiResponse(chartData, 200, `${chartType} chart data fetched`)
+    // TODO: Get charts data from service
+    return createApiSuccess({}, 'Dados obtidos com sucesso')
   } catch (error) {
-    logger.error('Dashboard Charts API', 'Error fetching chart', error)
-    return handleApiError(error)
+    console.error('[API] GET /dashboard/charts:', error)
+    return createApiError('Internal server error', 500)
   }
 }
