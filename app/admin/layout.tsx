@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname, useRouter } from 'next/navigation'
-import { useActivityTracker } from '@/hooks/use-activity-tracker'
+
 import { PremiumSidebar } from '@/components/admin/premium-sidebar'
 import { PremiumHeader } from '@/components/admin/premium-header'
 import {

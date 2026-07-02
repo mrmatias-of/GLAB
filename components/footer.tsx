@@ -6,7 +6,7 @@ import {
   LayoutGrid, Wrench, Users, Shield, Settings, Zap,
   Cpu, BarChart3, Target, FileText, GraduationCap, Scale, Instagram
 } from "lucide-react"
-import { usePrivacyConsent } from "@/hooks/use-privacy-consent"
+
 
 type CursoItem = {
   label: string
@@ -31,7 +31,7 @@ const cursoSlugsMap: Record<string, string> = {
 }
 
 export default function Footer() {
-  const { reset } = usePrivacyConsent()
+
 
   const getCursoHref = (label: string): string => {
     const slug = cursoSlugsMap[label.toLowerCase()]
