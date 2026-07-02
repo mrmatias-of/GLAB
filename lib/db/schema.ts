@@ -164,8 +164,76 @@ export const itens_os = pgTable("itens_os", {
   descricao: text("descricao").notNull(),
   quantidade: decimal("quantidade", { precision: 10, scale: 2 }).notNull(),
   valor_unitario: decimal("valor_unitario", { precision: 12, scale: 2 }).notNull(),
-  valor_total: decimal("valor_total", { precision: 12, scale: 2 }).notNull(),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+})
+
+// --- MULTI-TENANT MASTER TABLES (Central Database) ---
+
+export const tenants = pgTable("tenants", {
+  id: text("id").primaryKey(),
+  slug: text("slug").notNull().unique(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  databaseUrl: text("databaseUrl").notNull(),
+  databaseName: text("databaseName").notNull(),
+  ownerUserId: text("ownerUserId").notNull(),
+  plan: varchar("plan", { length: 50 }).default("free"), // free, pro, enterprise
+  status: varchar("status", { length: 20 }).default("active"), // active, suspended, deleted
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+  deletedAt: timestamp("deletedAt"),
+})
+
+export const tenantMembers = pgTable("tenantMembers", {
+  id: text("id").primaryKey(),
+  tenantId: text("tenantId").notNull().references(() => tenants.id, { onDelete: "cascade" }),
+  userId: text("userId").notNull().references(() => user.id, { onDelete: "cascade" }),
+  role: varchar("role", { length: 20 }).default("member"), // owner, admin, member
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+})
+
+export const tenantBranding = pgTable("tenantBranding", {
+  id: text("id").primaryKey(),
+  tenantId: text("tenantId").notNull().unique().references(() => tenants.id, { onDelete: "cascade" }),
+  logoUrl: text("logoUrl"),
+  primaryColor: varchar("primaryColor", { length: 7 }).default("#3B82F6"), // Blue
+  secondaryColor: varchar("secondaryColor", { length: 7 }).default("#06B6D4"), // Cyan
+  accentColor: varchar("accentColor", { length: 7 }).default("#10B981"), // Green
+  backgroundColor: varchar("backgroundColor", { length: 7 }).default("#0B0F19"), // Navy
+  textColor: varchar("textColor", { length: 7 }).default("#F1F5F9"), // Light
+  theme: varchar("theme", { length: 20 }).default("dark"), // dark, light
+  favicon: text("favicon"),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+})
+
+export const tenantPlans = pgTable("tenantPlans", {
+  id: text("id").primaryKey(),
+  name: varchar("name", { length: 100 }).notNull().unique(),
+  slug: varchar("slug", { length: 100 }).notNull().unique(),
+  description: text("description"),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  billingCycle: varchar("billingCycle", { length: 20 }).default("monthly"), // monthly, yearly
+  maxUsers: integer("maxUsers"),
+  maxClients: integer("maxClients"),
+  maxServiceOrders: integer("maxServiceOrders"),
+  features: text("features"), // JSON array of features
+  active: boolean("active").notNull().default(true),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+})
+
+export const tenantSubscriptions = pgTable("tenantSubscriptions", {
+  id: text("id").primaryKey(),
+  tenantId: text("tenantId").notNull().unique().references(() => tenants.id, { onDelete: "cascade" }),
+  planId: text("planId").notNull().references(() => tenantPlans.id),
+  stripeSubscriptionId: text("stripeSubscriptionId"),
+  status: varchar("status", { length: 20 }).default("active"), // active, canceled, past_due
+  currentPeriodStart: timestamp("currentPeriodStart"),
+  currentPeriodEnd: timestamp("currentPeriodEnd"),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 })
 
 export const estoque = pgTable("estoque", {

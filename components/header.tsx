@@ -18,7 +18,7 @@ export default function Header() {
     <>
       <header
         className="sticky top-0 z-50"
-        style={{ backgroundColor: '#ffffff', borderBottom: '1px solid #e5e7eb' }}
+        style={{ backgroundColor: '#0B0F19', borderBottom: '1px solid #1e293b' }}
       >
         <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
           {/* Logo */}
