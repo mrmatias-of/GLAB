@@ -1,8 +1,10 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
-import { comissoesService } from '@/lib/services/comissoes.service'
+import { ComissaoService } from '@/src/modules/comissoes/services/comissao.service'
 import { apiResponse, handleApiError } from '@/lib/utils/api-response'
+
+const comissaoService = new ComissaoService()
 
 export async function POST(req: NextRequest) {
   try {
@@ -15,7 +17,7 @@ export async function POST(req: NextRequest) {
       return apiResponse(null, 400, 'Dados obrigatórios faltando')
     }
 
-    const resultado = await comissoesService.registrarPagamentoComissao(
+    const resultado = await comissaoService.registrarPagamentoComissao(
       session.user.id,
       tecnicoId,
       new Date(dataInicio),

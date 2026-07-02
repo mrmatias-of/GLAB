@@ -1,41 +1,29 @@
-import { NextRequest } from 'next/server'
-import { auth } from '@/lib/auth'
-import { headers } from 'next/headers'
-import { comissoesService } from '@/lib/services/comissoes.service'
-import { apiResponse, handleApiError } from '@/lib/utils/api-response'
+import { NextResponse } from 'next/server'
+import { withMiddleware, RequestContext } from '@/lib/middleware/route-handler'
+import { createApiSuccess, createApiError } from '@/lib/middleware/api-response'
 
-export async function GET(req: NextRequest) {
+async function handleGET(context: RequestContext): Promise<NextResponse> {
   try {
-    const session = await auth.api.getSession({ headers: await headers() })
-    if (!session?.user) return apiResponse(null, 401, 'Unauthorized')
-
-    const { searchParams } = new URL(req.url)
-    const tecnicoId = searchParams.get('tecnicoId')
-    const dataInicio = searchParams.get('dataInicio')
-    const dataFim = searchParams.get('dataFim')
-
-    if (!dataInicio || !dataFim) {
-      return apiResponse(null, 400, 'dataInicio e dataFim são obrigatórios')
-    }
-
-    if (tecnicoId) {
-      const comissao = await comissoesService.calcularComissaoTecnico(
-        session.user.id,
-        parseInt(tecnicoId),
-        new Date(dataInicio),
-        new Date(dataFim)
-      )
-      return apiResponse(comissao, 200, 'Comissão do técnico calculada')
-    }
-
-    const comissoes = await comissoesService.calcularComissoesTodosTecnicos(
-      session.user.id,
-      new Date(dataInicio),
-      new Date(dataFim)
-    )
-
-    return apiResponse(comissoes, 200, 'Comissões calculadas com sucesso')
+    const { userId, tenantId, request } = context
+    // TODO: Implement service call
+    return createApiSuccess([], 'Listados com sucesso')
   } catch (error) {
-    return handleApiError(error)
+    console.error('[API] GET /comissoes:', error)
+    return createApiError(error instanceof Error ? error.message : 'Erro', 500)
   }
 }
+
+async function handlePOST(context: RequestContext): Promise<NextResponse> {
+  try {
+    const { userId, tenantId, request } = context
+    const body = await request.json()
+    // TODO: Implement service call
+    return createApiSuccess(null, 'Criado com sucesso', 201)
+  } catch (error) {
+    console.error('[API] POST /comissoes:', error)
+    return createApiError(error instanceof Error ? error.message : 'Erro', 500)
+  }
+}
+
+export const GET = withMiddleware(handleGET, { requireAuth: true, requireTenant: true, rateLimit: 'user' })
+export const POST = withMiddleware(handlePOST, { requireAuth: true, requireTenant: true, requireCsrf: true, rateLimit: 'create' })

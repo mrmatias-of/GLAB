@@ -41,12 +41,15 @@ export async function POST(request: NextRequest) {
     // Hash da senha
     const hashedPassword = await bcrypt.hash(password, 10)
     const userId = uuidv4()
+    // Get tenantId from header or use default
+    const tenantId = request.headers.get('x-tenant-id') || 'default-tenant'
 
     // Criar novo usuário
     await db.insert(user).values({
       id: userId,
       email,
       name,
+      tenantId,
       emailVerified: true,
     })
 
@@ -54,6 +57,7 @@ export async function POST(request: NextRequest) {
     await db.insert(account).values({
       id: uuidv4(),
       userId,
+      tenantId,
       providerId: 'credential',
       accountId: email,
       password: hashedPassword,

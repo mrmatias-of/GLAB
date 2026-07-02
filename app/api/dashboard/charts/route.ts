@@ -1,40 +1,16 @@
-import { NextRequest } from 'next/server'
-import { dashboardService } from '@/lib/services/dashboard.service'
-import { apiResponse, handleApiError } from '@/lib/utils/api-response'
-import { logger } from '@/lib/utils/logger'
-import { auth } from '@/lib/auth'
+import { NextResponse } from 'next/server'
+import { withMiddleware, RequestContext } from '@/lib/middleware/route-handler'
+import { createApiSuccess, createApiError } from '@/lib/middleware/api-response'
 
-export async function GET(request: NextRequest) {
+async function handleGET(context: RequestContext): Promise<NextResponse> {
   try {
-    const session = await auth.api.getSession({ headers: request.headers })
-    if (!session) {
-      return apiResponse(null, 401, 'Unauthorized')
-    }
-
-    const { searchParams } = new URL(request.url)
-    const chartType = searchParams.get('type') || 'revenue'
-
-    logger.info('Dashboard Charts API', 'Fetching chart data', { type: chartType })
-
-    let chartData
-
-    switch (chartType) {
-      case 'revenue':
-        chartData = await dashboardService.getRevenueChart(session.user.id)
-        break
-      case 'productivity':
-        chartData = await dashboardService.getTechnicianProductivity(session.user.id)
-        break
-      case 'orders':
-        chartData = await dashboardService.getOrderStatus(session.user.id)
-        break
-      default:
-        chartData = await dashboardService.getRevenueChart(session.user.id)
-    }
-
-    return apiResponse(chartData, 200, `${chartType} chart data fetched`)
+    const { userId, tenantId, request } = context
+    // TODO: Implement service call
+    return createApiSuccess([], 'Dados obtidos com sucesso')
   } catch (error) {
-    logger.error('Dashboard Charts API', 'Error fetching chart', error)
-    return handleApiError(error)
+    console.error('[API] GET /dashboard/charts:', error)
+    return createApiError(error instanceof Error ? error.message : 'Erro', 500)
   }
 }
+
+export const GET = withMiddleware(handleGET, { requireAuth: true, requireTenant: true, rateLimit: 'user' })

@@ -1,45 +1,51 @@
-import { NextRequest } from 'next/server'
-import { auth } from '@/lib/auth'
-import { headers } from 'next/headers'
-import { ordemService } from '@/lib/services/ordem.service'
-import { apiResponse, handleApiError } from '@/lib/utils/api-response'
+import { NextResponse } from 'next/server'
+import { withMiddleware, RequestContext } from '@/lib/middleware/route-handler'
+import { createApiSuccess, createApiError } from '@/lib/middleware/api-response'
+import { ordemServiceService } from '@/src/modules/ordens-servico'
+import { CreateOrdemSchema, ListOrdemSchema } from '@/src/modules/ordens-servico/schemas'
 
-export async function GET(req: NextRequest) {
+async function handleGET(context: RequestContext): Promise<NextResponse> {
   try {
-    const session = await auth.api.getSession({ headers: await headers() })
-    if (!session?.user) {
-      return apiResponse(null, 401, 'Unauthorized')
+    const { userId, tenantId, request } = context
+    const { searchParams } = new URL(request.url)
+    
+    const queryParams: any = {}
+    for (const [key, value] of searchParams.entries()) {
+      if (value === 'true') queryParams[key] = true
+      else if (value === 'false') queryParams[key] = false
+      else queryParams[key] = value
     }
 
-    const { searchParams } = new URL(req.url)
-    const status = searchParams.get('status')
-    const clienteId = searchParams.get('clienteId')
-    const tecnicoId = searchParams.get('tecnicoId')
+    const validated = ListOrdemSchema.safeParse(queryParams)
+    if (!validated.success) {
+      return createApiError(`Validação falhou: ${validated.error.message}`, 400)
+    }
 
-    const filtros: any = {}
-    if (status) filtros.status = status
-    if (clienteId) filtros.clienteId = parseInt(clienteId)
-    if (tecnicoId) filtros.tecnicoId = parseInt(tecnicoId)
-
-    const ordens = await ordemService.listar(session.user.id, filtros)
-    return apiResponse(ordens, 200, 'Ordens listadas com sucesso')
+    const result = await ordemServiceService.listar(userId, tenantId, validated.data)
+    return createApiSuccess(result, 'Listados com sucesso')
   } catch (error) {
-    return handleApiError(error)
+    console.error('[API] GET /ordens-servico:', error)
+    return createApiError(error instanceof Error ? error.message : 'Erro na requisição', 500)
   }
 }
 
-export async function POST(req: NextRequest) {
+async function handlePOST(context: RequestContext): Promise<NextResponse> {
   try {
-    const session = await auth.api.getSession({ headers: await headers() })
-    if (!session?.user) {
-      return apiResponse(null, 401, 'Unauthorized')
+    const { userId, tenantId, request } = context
+    const body = await request.json()
+    const validated = CreateOrdemSchema.safeParse(body)
+    
+    if (!validated.success) {
+      return createApiError(`Validação falhou: ${validated.error.message}`, 400)
     }
 
-    const dados = await req.json()
-    const ordem = await ordemService.criar(session.user.id, dados)
-
-    return apiResponse(ordem, 201, 'Ordem criada com sucesso')
+    const result = await ordemServiceService.criar(userId, tenantId, validated.data)
+    return createApiSuccess(result, 'Criado com sucesso', 201)
   } catch (error) {
-    return handleApiError(error)
+    console.error('[API] POST /ordens-servico:', error)
+    return createApiError(error instanceof Error ? error.message : 'Erro na requisição', 500)
   }
 }
+
+export const GET = withMiddleware(handleGET, { requireAuth: true, requireTenant: true, rateLimit: 'user' })
+export const POST = withMiddleware(handlePOST, { requireAuth: true, requireTenant: true, requireCsrf: true, rateLimit: 'create' })

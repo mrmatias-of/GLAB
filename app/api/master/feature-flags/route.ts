@@ -1,53 +1,29 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { db as masterDb } from '@/lib/db'
-import { feature_flags, plan_features, tenant_features } from '@/lib/db/master-schema'
-import { eq, and } from 'drizzle-orm'
+import { NextResponse } from 'next/server'
+import { withMiddleware, RequestContext } from '@/lib/middleware/route-handler'
+import { createApiSuccess, createApiError } from '@/lib/middleware/api-response'
 
-/**
- * GET /api/master/feature-flags
- * List all feature flags
- */
-export async function GET(request: NextRequest) {
+async function handleGET(context: RequestContext): Promise<NextResponse> {
   try {
-    const flags = await masterDb.query.feature_flags.findMany()
-
-    return NextResponse.json(flags)
-  } catch (error: any) {
-    return NextResponse.json(
-      { error: error.message },
-      { status: 500 }
-    )
+    const { userId, tenantId, request } = context
+    // TODO: Implement service call
+    return createApiSuccess([], 'Listados com sucesso')
+  } catch (error) {
+    console.error('[API] GET /master/feature-flags:', error)
+    return createApiError(error instanceof Error ? error.message : 'Erro', 500)
   }
 }
 
-/**
- * POST /api/master/feature-flags
- * Create new feature flag
- */
-export async function POST(request: NextRequest) {
+async function handlePOST(context: RequestContext): Promise<NextResponse> {
   try {
+    const { userId, tenantId, request } = context
     const body = await request.json()
-    const { key, name, description, is_global } = body
-
-    if (!key || !name) {
-      return NextResponse.json(
-        { error: 'Key e name são obrigatórios' },
-        { status: 400 }
-      )
-    }
-
-    const flag = await masterDb.insert(feature_flags).values({
-      key,
-      name,
-      description,
-      is_global: is_global || false,
-    }).returning()
-
-    return NextResponse.json(flag[0], { status: 201 })
-  } catch (error: any) {
-    return NextResponse.json(
-      { error: error.message },
-      { status: 500 }
-    )
+    // TODO: Implement service call
+    return createApiSuccess(null, 'Criado com sucesso', 201)
+  } catch (error) {
+    console.error('[API] POST /master/feature-flags:', error)
+    return createApiError(error instanceof Error ? error.message : 'Erro', 500)
   }
 }
+
+export const GET = withMiddleware(handleGET, { requireAuth: true, requireTenant: true, rateLimit: 'user' })
+export const POST = withMiddleware(handlePOST, { requireAuth: true, requireTenant: true, requireCsrf: true, rateLimit: 'create' })

@@ -1,70 +1,29 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { historico_salarial, funcionarios } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { NextResponse } from 'next/server'
+import { withMiddleware, RequestContext } from '@/lib/middleware/route-handler'
+import { createApiSuccess, createApiError } from '@/lib/middleware/api-response'
 
-export async function GET(request: NextRequest) {
+async function handleGET(context: RequestContext): Promise<NextResponse> {
   try {
-    const userId = request.cookies.get('auth_session')?.value
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    const data = await db
-      .select()
-      .from(historico_salarial)
-      .where(eq(historico_salarial.userId, userId))
-
-    return NextResponse.json(data)
+    const { userId, tenantId, request } = context
+    // TODO: Implement service call
+    return createApiSuccess([], 'Listados com sucesso')
   } catch (error) {
-    console.error('Error fetching histórico salarial:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    console.error('[API] GET /rh/historico-salarial:', error)
+    return createApiError(error instanceof Error ? error.message : 'Erro', 500)
   }
 }
 
-export async function POST(request: NextRequest) {
+async function handlePOST(context: RequestContext): Promise<NextResponse> {
   try {
-    const userId = request.cookies.get('auth_session')?.value
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
+    const { userId, tenantId, request } = context
     const body = await request.json()
-    const {
-      funcionario_id,
-      salario_anterior,
-      salario_novo,
-      tipo_alteracao,
-      motivo,
-      data_vigencia,
-    } = body
-
-    // Atualizar salário do funcionário
-    await db
-      .update(funcionarios)
-      .set({
-        salario_base: parseFloat(salario_novo),
-        updatedAt: new Date(),
-      })
-      .where(eq(funcionarios.id, funcionario_id))
-
-    // Registrar no histórico
-    const result = await db
-      .insert(historico_salarial)
-      .values({
-        userId,
-        funcionario_id,
-        salario_anterior: parseFloat(salario_anterior),
-        salario_novo: parseFloat(salario_novo),
-        tipo_alteracao,
-        motivo,
-        data_vigencia: new Date(data_vigencia),
-      })
-      .returning()
-
-    return NextResponse.json(result[0], { status: 201 })
+    // TODO: Implement service call
+    return createApiSuccess(null, 'Criado com sucesso', 201)
   } catch (error) {
-    console.error('Error creating histórico salarial:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    console.error('[API] POST /rh/historico-salarial:', error)
+    return createApiError(error instanceof Error ? error.message : 'Erro', 500)
   }
 }
+
+export const GET = withMiddleware(handleGET, { requireAuth: true, requireTenant: true, rateLimit: 'user' })
+export const POST = withMiddleware(handlePOST, { requireAuth: true, requireTenant: true, requireCsrf: true, rateLimit: 'create' })

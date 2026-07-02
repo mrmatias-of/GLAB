@@ -214,7 +214,6 @@ export default function FinanceiroPage() {
         {['all', 'receita', 'despesa', 'comissao'].map((type) => (
           <button
             key={type}
-            onClick={() => setFilterType(type as any)}
             className={`px-4 py-2 rounded-lg border transition ${
               filterType === type
                 ? 'bg-blue-600 text-white border-blue-600'

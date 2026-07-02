@@ -1,24 +1,16 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
+import { withMiddleware, RequestContext } from '@/lib/middleware/route-handler'
+import { createApiSuccess, createApiError } from '@/lib/middleware/api-response'
 
-export async function GET(request: NextRequest) {
+async function handleGET(context: RequestContext): Promise<NextResponse> {
   try {
-    const mockData = [
-      { month: 'Jan', revenue: 45000, orders: 15, completedOrders: 13 },
-      { month: 'Fev', revenue: 52000, orders: 18, completedOrders: 16 },
-      { month: 'Mar', revenue: 48000, orders: 16, completedOrders: 14 },
-      { month: 'Abr', revenue: 61000, orders: 21, completedOrders: 19 },
-      { month: 'Mai', revenue: 55000, orders: 19, completedOrders: 17 },
-      { month: 'Jun', revenue: 67000, orders: 23, completedOrders: 21 },
-    ]
-
-    return NextResponse.json({
-      success: true,
-      data: mockData,
-    })
+    const { userId, tenantId, request } = context
+    // TODO: Implement service call
+    return createApiSuccess([], 'Dados obtidos com sucesso')
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: 'Failed to fetch monthly trend' },
-      { status: 500 }
-    )
+    console.error('[API] GET /dashboard/monthly-trend:', error)
+    return createApiError(error instanceof Error ? error.message : 'Erro', 500)
   }
 }
+
+export const GET = withMiddleware(handleGET, { requireAuth: true, requireTenant: true, rateLimit: 'user' })

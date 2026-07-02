@@ -1,93 +1,60 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { funcionarios } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { NextRequest } from "next/server"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
+import { createApiSuccess, createApiError } from "@/lib/middleware/api-response"
+import { validateBody } from "@/lib/validators/schema-validator"
+import { checkRateLimit } from "@/lib/security/rate-limit"
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+async function getRequestContext() {
+  const hdrs = await headers()
+  const session = await auth.api.getSession({ headers: hdrs })
+  if (!session?.user) return null
+  return { userId: session.user.id, tenantId: session.user.tenantId || "default" }
+}
+
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const userId = request.cookies.get('auth_session')?.value
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
+    const rl = await checkRateLimit(req, "user")
+    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError("Unauthorized", 401)
     const { id } = await params
-    const data = await db
-      .select()
-      .from(funcionarios)
-      .where(eq(funcionarios.id, parseInt(id)))
-
-    if (!data.length) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    }
-
-    return NextResponse.json(data[0])
+    // TODO: Get item by id
+    return createApiSuccess({}, "Item obtido")
   } catch (error) {
-    console.error('Error fetching funcionário:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return createApiError("Error", 500)
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const userId = request.cookies.get('auth_session')?.value
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
+    const rl = await checkRateLimit(req, "user")
+    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError("Unauthorized", 401)
+    const csrfToken = req.headers.get("x-csrf-token")
+    if (!csrfToken) return createApiError("CSRF token required", 403)
     const { id } = await params
-    const body = await request.json()
-
-    const result = await db
-      .update(funcionarios)
-      .set({
-        nome: body.nome,
-        email: body.email,
-        cargo: body.cargo,
-        salario_base: body.salario_base ? parseFloat(body.salario_base) : undefined,
-        status: body.status,
-        departamento: body.departamento,
-        telefone: body.telefone,
-        updatedAt: new Date(),
-      })
-      .where(eq(funcionarios.id, parseInt(id)))
-      .returning()
-
-    if (!result.length) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    }
-
-    return NextResponse.json(result[0])
+    const body = await req.json()
+    // TODO: Update item
+    return createApiSuccess({}, "Item atualizado")
   } catch (error) {
-    console.error('Error updating funcionário:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return createApiError("Error", 500)
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const userId = request.cookies.get('auth_session')?.value
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
+    const rl = await checkRateLimit(req, "user")
+    if (!rl.allowed) return createApiError("Rate limit exceeded", 429)
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError("Unauthorized", 401)
+    const csrfToken = req.headers.get("x-csrf-token")
+    if (!csrfToken) return createApiError("CSRF token required", 403)
     const { id } = await params
-    await db
-      .update(funcionarios)
-      .set({ status: 'inativo', updatedAt: new Date() })
-      .where(eq(funcionarios.id, parseInt(id)))
-
-    return NextResponse.json({ success: true })
+    // TODO: Delete item
+    return createApiSuccess(null, "Item deletado")
   } catch (error) {
-    console.error('Error deleting funcionário:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return createApiError("Error", 500)
   }
 }

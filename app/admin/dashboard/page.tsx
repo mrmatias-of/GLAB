@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { StatCard } from '@/components/shared/stat-card'
+import { Clipboard, Cog, CheckCircle, XCircle } from 'lucide-react'
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
 interface DashboardStats {
@@ -99,30 +100,20 @@ export default function DashboardPage() {
         <StatCard
           title="Ordens Abertas"
           value={stats.osAberta}
-          iconName="clipboard"
-          color="blue"
-          onClick={() => window.location.href = '/admin/ordens-servico?status=aberto'}
+          icon={<Clipboard className="w-6 h-6 text-blue-400" />}
         />
         <StatCard
           title="Em Andamento"
           value={stats.osEmProgresso}
-          iconName="cog"
-          color="yellow"
-          onClick={() => window.location.href = '/admin/ordens-servico?status=em_progresso'}
+          icon={<Cog className="w-6 h-6 text-yellow-400" />}
         />
         <StatCard
           title="Finalizadas"
           value={stats.osFinalizadas}
-          iconName="check"
-          color="green"
-          onClick={() => window.location.href = '/admin/ordens-servico?status=finalizado'}
         />
         <StatCard
           title="Canceladas"
           value={stats.osCanceladas}
-          iconName="x"
-          color="red"
-          onClick={() => window.location.href = '/admin/ordens-servico?status=cancelado'}
         />
       </div>
 
@@ -131,30 +122,18 @@ export default function DashboardPage() {
         <StatCard
           title="Técnicos Cadastrados"
           value={stats.tecnicos}
-          iconName="wrench"
-          color="blue"
-          onClick={() => window.location.href = '/admin/tecnicos'}
         />
         <StatCard
           title="Clientes Ativos"
           value={stats.clientes}
-          iconName="users"
-          color="blue"
-          onClick={() => window.location.href = '/admin/clientes'}
         />
         <StatCard
           title="Receita do Mês"
           value={`R$ ${stats.receitaMes.toFixed(2)}`}
-          iconName="dollar"
-          color="green"
-          trend={15}
-          trendLabel="vs mês anterior"
         />
         <StatCard
           title="Margem de Lucro"
           value={`${margemPercentual}%`}
-          iconName="trending"
-          color="green"
         />
       </div>
 

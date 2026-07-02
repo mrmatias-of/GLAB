@@ -1,0 +1,726 @@
+{
+  "routes": [
+    {
+      "path": "/vercel/share/v0-project/app/api/auth/signup/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": false,
+      "hasTenantId": true,
+      "score": 20
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/auth/[...all]/route.ts",
+      "methods": [],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": false,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/auth/activity/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/auth/confirm-reset-password/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": false,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/auth/logout/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/auth/reset-password/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": false,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/auth/signin/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/clientes/[id]/route.ts",
+      "methods": [
+        "GET",
+        "PUT",
+        "DELETE"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/clientes/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/comissoes/registrar/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/comissoes/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/contact/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": false,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/dashboard/charts/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/dashboard/metrics/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/dashboard/monthly-trend/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": false,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/dashboard/orders-status/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": false,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/dashboard/revenue/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": false,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/dashboard/technician-performance/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": false,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/estoque/[id]/route.ts",
+      "methods": [
+        "GET",
+        "PUT",
+        "DELETE"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/estoque/movimentacoes/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/estoque/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/financeiro/[id]/route.ts",
+      "methods": [
+        "GET",
+        "PUT",
+        "DELETE"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/financeiro/cash-flow/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": false,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/financeiro/commissions/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": false,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/financeiro/contas-pagar/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": false,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/financeiro/contas-receber/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": false,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/financeiro/resumo/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/financeiro/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/geolocation/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/master/feature-flags/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": false,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/notificacoes/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/ocr/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": false,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/ordens-servico/[id]/route.ts",
+      "methods": [
+        "GET",
+        "PUT",
+        "DELETE"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/ordens-servico/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/ordens/[id]/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": false,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/ordens/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": false,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/relatorios/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/rh/banco-horas/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/rh/config-impostos/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/rh/contracheques/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/rh/eventos-folha/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/rh/funcionarios/[id]/route.ts",
+      "methods": [
+        "GET",
+        "PUT",
+        "DELETE"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/rh/funcionarios/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/rh/gerar-folha-pagamento/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/rh/historico-salarial/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/roteamento/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/servicos/[id]/route.ts",
+      "methods": [
+        "GET",
+        "PUT",
+        "DELETE"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/servicos/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/tecnicos/[id]/route.ts",
+      "methods": [
+        "GET",
+        "PUT",
+        "DELETE"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/tecnicos/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": true,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/track/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": false,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/upload/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": false,
+      "hasTenantId": false,
+      "score": 0
+    },
+    {
+      "path": "/vercel/share/v0-project/app/api/validate-equipment/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "hasMiddleware": false,
+      "hasValidation": false,
+      "hasCsrf": false,
+      "hasRateLimit": false,
+      "hasAuth": false,
+      "hasTenantId": false,
+      "score": 0
+    }
+  ],
+  "summary": {
+    "completed": 0,
+    "partial": 1,
+    "notStarted": 52
+  }
+}

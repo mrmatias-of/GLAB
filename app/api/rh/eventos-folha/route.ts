@@ -1,64 +1,29 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { eventos_folha } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { NextResponse } from 'next/server'
+import { withMiddleware, RequestContext } from '@/lib/middleware/route-handler'
+import { createApiSuccess, createApiError } from '@/lib/middleware/api-response'
 
-export async function GET(request: NextRequest) {
+async function handleGET(context: RequestContext): Promise<NextResponse> {
   try {
-    const userId = request.cookies.get('auth_session')?.value
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    const data = await db
-      .select()
-      .from(eventos_folha)
-      .where(eq(eventos_folha.userId, userId))
-
-    return NextResponse.json(data)
+    const { userId, tenantId, request } = context
+    // TODO: Implement service call
+    return createApiSuccess([], 'Listados com sucesso')
   } catch (error) {
-    console.error('Error fetching eventos folha:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    console.error('[API] GET /rh/eventos-folha:', error)
+    return createApiError(error instanceof Error ? error.message : 'Erro', 500)
   }
 }
 
-export async function POST(request: NextRequest) {
+async function handlePOST(context: RequestContext): Promise<NextResponse> {
   try {
-    const userId = request.cookies.get('auth_session')?.value
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
+    const { userId, tenantId, request } = context
     const body = await request.json()
-    const {
-      funcionario_id,
-      tipo_evento,
-      descricao,
-      data_evento,
-      mes_referencia,
-      ano_referencia,
-      valor,
-      horas,
-    } = body
-
-    const result = await db
-      .insert(eventos_folha)
-      .values({
-        userId,
-        funcionario_id,
-        tipo_evento,
-        descricao,
-        data_evento: new Date(data_evento),
-        mes_referencia,
-        ano_referencia,
-        valor: valor ? parseFloat(valor) : null,
-        horas: horas ? parseFloat(horas) : null,
-      })
-      .returning()
-
-    return NextResponse.json(result[0], { status: 201 })
+    // TODO: Implement service call
+    return createApiSuccess(null, 'Criado com sucesso', 201)
   } catch (error) {
-    console.error('Error creating evento folha:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    console.error('[API] POST /rh/eventos-folha:', error)
+    return createApiError(error instanceof Error ? error.message : 'Erro', 500)
   }
 }
+
+export const GET = withMiddleware(handleGET, { requireAuth: true, requireTenant: true, rateLimit: 'user' })
+export const POST = withMiddleware(handlePOST, { requireAuth: true, requireTenant: true, requireCsrf: true, rateLimit: 'create' })

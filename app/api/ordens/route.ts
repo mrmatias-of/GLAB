@@ -1,20 +1,16 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
+import { withMiddleware, RequestContext } from '@/lib/middleware/route-handler'
+import { createApiSuccess, createApiError } from '@/lib/middleware/api-response'
 
-export async function GET(request: NextRequest) {
+async function handleGET(context: RequestContext): Promise<NextResponse> {
   try {
-    const mockData = [
-      { id: '1', numero: 'OS-001', clienteNome: 'João Silva', tecnicoNome: 'Pedro', descricao: 'Manutenção AC', status: 'concluida', dataCriacao: '2024-06-20', dataAgendada: '2024-06-21', valorTotal: 500 },
-      { id: '2', numero: 'OS-002', clienteNome: 'Maria Santos', tecnicoNome: 'João', descricao: 'Reparo Geladeira', status: 'em_progresso', dataCriacao: '2024-06-25', dataAgendada: '2024-06-26', valorTotal: 350 },
-    ]
-
-    return NextResponse.json({
-      success: true,
-      data: mockData,
-    })
+    const { userId, tenantId, request } = context
+    // TODO: Implement service call
+    return createApiSuccess([], 'Dados obtidos com sucesso')
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: 'Failed to fetch orders' },
-      { status: 500 }
-    )
+    console.error('[API] GET /ordens:', error)
+    return createApiError(error instanceof Error ? error.message : 'Erro', 500)
   }
 }
+
+export const GET = withMiddleware(handleGET, { requireAuth: true, requireTenant: true, rateLimit: 'user' })

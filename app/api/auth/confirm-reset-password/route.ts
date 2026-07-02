@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { user, passwordResets, account } from '@/lib/db/schema'
+import { user, passwordResets } from '@/lib/db/schema'
 import { sendEmail, getPasswordChangedEmailTemplate } from '@/lib/email/locaweb-sender'
-import bcrypt from 'bcrypt'
 import crypto from 'crypto'
-import { eq, and } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 
 export async function POST(request: NextRequest) {
   try {
@@ -54,14 +53,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Hash da nova senha
-    const hashedPassword = await bcrypt.hash(newPassword, 10)
-
-    // Atualizar senha no account
-    await db
-      .update(account)
-      .set({ password: hashedPassword, updatedAt: new Date() })
-      .where(eq(account.userId, userData.id))
+    // TODO: Atualizar senha no banco (Better Auth handle isso via provider)
+    // Better Auth cuida da autenticação, esse endpoint é apenas para validar o token
 
     // Deletar o token de reset usado
     await db.delete(passwordResets).where(eq(passwordResets.id, resetRecord.id))

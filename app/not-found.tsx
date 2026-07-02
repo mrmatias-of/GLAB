@@ -1,44 +1,22 @@
 import Link from "next/link"
-import Header from "@/components/header"
-import Footer from "@/components/footer"
-import { ArrowLeft, Search } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 
 export default function NotFound() {
   return (
-    <>
-      <Header />
-      <main className="min-h-[calc(100vh-112px)] flex items-center justify-center px-6 py-20" style={{ backgroundColor: '#ffffff' }}>
+    <div className="bg-slate-950 text-slate-50 min-h-screen flex flex-col">
+      <main className="flex-1 flex items-center justify-center px-6 py-20">
         <div className="max-w-md w-full text-center">
-
-          {/* Número 404 */}
-          <p
-            className="text-[120px] font-extrabold leading-none tracking-tighter mb-4 select-none"
-            style={{ color: '#1c1c1f' }}
-          >
-            404
+          <p className="text-6xl md:text-7xl font-bold mb-6 text-blue-400">404</p>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">Página não encontrada</h1>
+          <p className="text-slate-400 mb-8">
+            O endereço que você acessou não existe. Volte à home e continue explorando.
           </p>
-
-          <p className="eyebrow mb-4">Página não encontrada</p>
-          <h1 className="text-2xl font-black text-white mb-3 text-balance">
-            Essa rota não existe
-          </h1>
-          <p className="text-sm leading-relaxed mb-10" style={{ color: '#71717a' }}>
-            O endereço que você acessou não foi encontrado. Pode ter sido removido, renomeado ou nunca ter existido.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/" className="btn-primary justify-center">
-              <ArrowLeft size={15} />
-              Voltar ao início
-            </Link>
-            <Link href="/cursos" className="btn-outline justify-center">
-              <Search size={15} />
-              Ver cursos
-            </Link>
-          </div>
+          <Link href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-slate-50 rounded-lg font-medium hover:bg-blue-500 transition-colors">
+            <ArrowLeft size={18} />
+            Voltar ao início
+          </Link>
         </div>
       </main>
-      <Footer />
-    </>
+    </div>
   )
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname, useRouter } from 'next/navigation'
-import { useActivityTracker } from '@/hooks/use-activity-tracker'
+
 import { PremiumSidebar } from '@/components/admin/premium-sidebar'
 import { PremiumHeader } from '@/components/admin/premium-header'
 import {
@@ -31,9 +31,6 @@ export default function AdminLayout({
 }) {
   const pathname = usePathname()
   const router = useRouter()
-
-  // Rastrear atividade do usuário para timeout
-  useActivityTracker()
 
   const handleLogout = async () => {
     try {

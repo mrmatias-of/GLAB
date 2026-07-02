@@ -1,55 +1,51 @@
-import { NextRequest } from 'next/server'
-import { auth } from '@/lib/auth'
-import { headers } from 'next/headers'
-import { financeiroService } from '@/lib/services/financeiro.service'
-import { apiResponse, handleApiError } from '@/lib/utils/api-response'
+import { NextResponse } from 'next/server'
+import { withMiddleware, RequestContext } from '@/lib/middleware/route-handler'
+import { createApiSuccess, createApiError } from '@/lib/middleware/api-response'
+import { financeiroServiceService } from '@/src/modules/financeiro'
+import { CreateFinanceiroSchema, ListFinanceiroSchema } from '@/src/modules/financeiro/schemas'
 
-export async function GET(req: NextRequest) {
+async function handleGET(context: RequestContext): Promise<NextResponse> {
   try {
-    const session = await auth.api.getSession({ headers: await headers() })
-    if (!session?.user) {
-      return apiResponse(null, 401, 'Unauthorized')
+    const { userId, tenantId, request } = context
+    const { searchParams } = new URL(request.url)
+    
+    const queryParams: any = {}
+    for (const [key, value] of searchParams.entries()) {
+      if (value === 'true') queryParams[key] = true
+      else if (value === 'false') queryParams[key] = false
+      else queryParams[key] = value
     }
 
-    const { searchParams } = new URL(req.url)
-    const tipo = searchParams.get('tipo')
-    const status = searchParams.get('status')
-    const dataInicio = searchParams.get('dataInicio')
-    const dataFim = searchParams.get('dataFim')
-    const dashboard = searchParams.get('dashboard')
-
-    if (dashboard === 'true') {
-      const result = await financeiroService.obterDashboard(session.user.id)
-      return apiResponse(result, 200, 'Dashboard obtido com sucesso')
+    const validated = ListFinanceiroSchema.safeParse(queryParams)
+    if (!validated.success) {
+      return createApiError(`Validação falhou: ${validated.error.message}`, 400)
     }
 
-    const filtros: any = {}
-    if (tipo) filtros.tipo = tipo
-    if (status) filtros.status = status
-    if (dataInicio && dataFim) {
-      filtros.dataInicio = new Date(dataInicio)
-      filtros.dataFim = new Date(dataFim)
-    }
-
-    const transacoes = await financeiroService.listar(session.user.id, filtros)
-    return apiResponse(transacoes, 200, 'Transações listadas com sucesso')
+    const result = await financeiroServiceService.listar(userId, tenantId, validated.data)
+    return createApiSuccess(result, 'Listados com sucesso')
   } catch (error) {
-    return handleApiError(error)
+    console.error('[API] GET /financeiro:', error)
+    return createApiError(error instanceof Error ? error.message : 'Erro na requisição', 500)
   }
 }
 
-export async function POST(req: NextRequest) {
+async function handlePOST(context: RequestContext): Promise<NextResponse> {
   try {
-    const session = await auth.api.getSession({ headers: await headers() })
-    if (!session?.user) {
-      return apiResponse(null, 401, 'Unauthorized')
+    const { userId, tenantId, request } = context
+    const body = await request.json()
+    const validated = CreateFinanceiroSchema.safeParse(body)
+    
+    if (!validated.success) {
+      return createApiError(`Validação falhou: ${validated.error.message}`, 400)
     }
 
-    const dados = await req.json()
-    const transacao = await financeiroService.criar(session.user.id, dados)
-
-    return apiResponse(transacao, 201, 'Transação criada com sucesso')
+    const result = await financeiroServiceService.criar(userId, tenantId, validated.data)
+    return createApiSuccess(result, 'Criado com sucesso', 201)
   } catch (error) {
-    return handleApiError(error)
+    console.error('[API] POST /financeiro:', error)
+    return createApiError(error instanceof Error ? error.message : 'Erro na requisição', 500)
   }
 }
+
+export const GET = withMiddleware(handleGET, { requireAuth: true, requireTenant: true, rateLimit: 'user' })
+export const POST = withMiddleware(handlePOST, { requireAuth: true, requireTenant: true, requireCsrf: true, rateLimit: 'create' })

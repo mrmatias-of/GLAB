@@ -1,54 +1,52 @@
-import { NextRequest } from 'next/server'
-import { auth } from '@/lib/auth'
-import { headers } from 'next/headers'
-import { financeiroService } from '@/lib/services/financeiro.service'
-import { apiResponse, handleApiError } from '@/lib/utils/api-response'
+import { NextResponse } from 'next/server'
+import { withMiddleware, RequestContext } from '@/lib/middleware/route-handler'
+import { createApiSuccess, createApiError } from '@/lib/middleware/api-response'
+import { financeiroServiceService } from '@/src/modules/financeiro'
+import { UpdateFinanceiroSchema } from '@/src/modules/financeiro/schemas'
 
-export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+async function handleGET(context: RequestContext): Promise<NextResponse> {
   try {
-    const session = await auth.api.getSession({ headers: await headers() })
-    if (!session?.user) {
-      return apiResponse(null, 401, 'Unauthorized')
-    }
-
-    const { id } = await params
-    const transacao = await financeiroService.obter(session.user.id, parseInt(id))
-
-    return apiResponse(transacao, 200, 'Transação obtida com sucesso')
+    const { userId, tenantId, params } = context
+    const id = parseInt(params?.id as string, 10)
+    if (isNaN(id)) return createApiError('ID inválido', 400)
+    const result = await financeiroServiceService.obter(userId, tenantId, id)
+    if (!result) return createApiError('Não encontrado', 404)
+    return createApiSuccess(result, 'Obtido com sucesso')
   } catch (error) {
-    return handleApiError(error)
+    console.error('[API] GET /financeiro/[id]:', error)
+    return createApiError(error instanceof Error ? error.message : 'Erro', 500)
   }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+async function handlePUT(context: RequestContext): Promise<NextResponse> {
   try {
-    const session = await auth.api.getSession({ headers: await headers() })
-    if (!session?.user) {
-      return apiResponse(null, 401, 'Unauthorized')
-    }
-
-    const { id } = await params
-    const dados = await req.json()
-    const transacao = await financeiroService.atualizar(session.user.id, parseInt(id), dados)
-
-    return apiResponse(transacao, 200, 'Transação atualizada com sucesso')
+    const { userId, tenantId, params, request } = context
+    const id = parseInt(params?.id as string, 10)
+    if (isNaN(id)) return createApiError('ID inválido', 400)
+    const body = await request.json()
+    const validated = UpdateFinanceiroSchema.safeParse(body)
+    if (!validated.success) return createApiError(`Validação: ${validated.error.message}`, 400)
+    const result = await financeiroServiceService.atualizar(userId, tenantId, id, validated.data)
+    return createApiSuccess(result, 'Atualizado com sucesso')
   } catch (error) {
-    return handleApiError(error)
+    console.error('[API] PUT /financeiro/[id]:', error)
+    return createApiError(error instanceof Error ? error.message : 'Erro', 500)
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+async function handleDELETE(context: RequestContext): Promise<NextResponse> {
   try {
-    const session = await auth.api.getSession({ headers: await headers() })
-    if (!session?.user) {
-      return apiResponse(null, 401, 'Unauthorized')
-    }
-
-    const { id } = await params
-    await financeiroService.deletar(session.user.id, parseInt(id))
-
-    return apiResponse(null, 200, 'Transação deletada com sucesso')
+    const { userId, tenantId, params } = context
+    const id = parseInt(params?.id as string, 10)
+    if (isNaN(id)) return createApiError('ID inválido', 400)
+    await financeiroServiceService.deletar(userId, tenantId, id)
+    return createApiSuccess(null, 'Deletado com sucesso')
   } catch (error) {
-    return handleApiError(error)
+    console.error('[API] DELETE /financeiro/[id]:', error)
+    return createApiError(error instanceof Error ? error.message : 'Erro', 500)
   }
 }
+
+export const GET = withMiddleware(handleGET, { requireAuth: true, requireTenant: true, rateLimit: 'user' })
+export const PUT = withMiddleware(handlePUT, { requireAuth: true, requireTenant: true, requireCsrf: true, rateLimit: 'user' })
+export const DELETE = withMiddleware(handleDELETE, { requireAuth: true, requireTenant: true, requireCsrf: true, rateLimit: 'user' })

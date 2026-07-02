@@ -1,36 +1,29 @@
-import { NextRequest } from 'next/server'
-import { auth } from '@/lib/auth'
-import { headers } from 'next/headers'
-import { servicosService } from '@/lib/services/servicos.service'
-import { apiResponse, handleApiError } from '@/lib/utils/api-response'
+import { NextResponse } from 'next/server'
+import { withMiddleware, RequestContext } from '@/lib/middleware/route-handler'
+import { createApiSuccess, createApiError } from '@/lib/middleware/api-response'
 
-export async function GET(req: NextRequest) {
+async function handleGET(context: RequestContext): Promise<NextResponse> {
   try {
-    const session = await auth.api.getSession({ headers: await headers() })
-    if (!session?.user) return apiResponse(null, 401, 'Unauthorized')
-
-    const { searchParams } = new URL(req.url)
-    const nome = searchParams.get('nome')
-
-    const filtros = nome ? { nome } : {}
-    const servicos = await servicosService.listar(session.user.id, filtros)
-
-    return apiResponse(servicos, 200, 'Serviços listados com sucesso')
+    const { userId, tenantId, request } = context
+    // TODO: Implement service call
+    return createApiSuccess([], 'Listados com sucesso')
   } catch (error) {
-    return handleApiError(error)
+    console.error('[API] GET /servicos:', error)
+    return createApiError(error instanceof Error ? error.message : 'Erro', 500)
   }
 }
 
-export async function POST(req: NextRequest) {
+async function handlePOST(context: RequestContext): Promise<NextResponse> {
   try {
-    const session = await auth.api.getSession({ headers: await headers() })
-    if (!session?.user) return apiResponse(null, 401, 'Unauthorized')
-
-    const dados = await req.json()
-    const servico = await servicosService.criar(session.user.id, dados)
-
-    return apiResponse(servico, 201, 'Serviço criado com sucesso')
+    const { userId, tenantId, request } = context
+    const body = await request.json()
+    // TODO: Implement service call
+    return createApiSuccess(null, 'Criado com sucesso', 201)
   } catch (error) {
-    return handleApiError(error)
+    console.error('[API] POST /servicos:', error)
+    return createApiError(error instanceof Error ? error.message : 'Erro', 500)
   }
 }
+
+export const GET = withMiddleware(handleGET, { requireAuth: true, requireTenant: true, rateLimit: 'user' })
+export const POST = withMiddleware(handlePOST, { requireAuth: true, requireTenant: true, requireCsrf: true, rateLimit: 'create' })

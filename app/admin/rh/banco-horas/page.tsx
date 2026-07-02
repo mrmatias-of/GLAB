@@ -21,7 +21,7 @@ export default function BancoHorasPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetch = async () => {
+    const loadData = async () => {
       try {
         const response = await fetch('/api/rh/banco-horas')
         if (response.ok) {
@@ -35,7 +35,7 @@ export default function BancoHorasPage() {
       }
     }
 
-    fetch()
+    loadData()
   }, [])
 
   const saldoColor = (saldo: string) => {

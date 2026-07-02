@@ -1,81 +1,68 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { funcionarios } from '@/lib/db/schema'
-import { eq, and } from 'drizzle-orm'
+import { NextRequest } from 'next/server'
+import { auth } from '@/lib/auth'
+import { headers } from 'next/headers'
+import { rhService } from '@/src/modules/rh'
+import { createApiSuccess, createApiError } from '@/lib/middleware/api-response'
+import { validateBody } from '@/lib/validators/schema-validator'
+import { checkRateLimit } from '@/lib/security/rate-limit'
 
-export async function GET(request: NextRequest) {
-  try {
-    const userId = request.cookies.get('auth_session')?.value
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    const data = await db
-      .select()
-      .from(funcionarios)
-      .where(eq(funcionarios.userId, userId))
-
-    return NextResponse.json(data)
-  } catch (error) {
-    console.error('Error fetching funcionários:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+async function getRequestContext() {
+  const hdrs = await headers()
+  const session = await auth.api.getSession({ headers: hdrs })
+  if (!session?.user) return null
+  return {
+    userId: session.user.id,
+    tenantId: session.user.tenantId || 'default',
+    session,
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function GET(req: NextRequest) {
   try {
-    const userId = request.cookies.get('auth_session')?.value
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    const rl = await checkRateLimit(req, 'user')
+    if (!rl.allowed) return createApiError('Rate limit exceeded', 429)
 
-    const body = await request.json()
-    const {
-      nome,
-      email,
-      cpf,
-      cargo,
-      salario_base,
-      data_admissao,
-      tipo_contrato,
-      regime_jornada,
-      departamento,
-      telefone,
-      endereco,
-      cidade,
-      estado,
-      cep,
-    } = body
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError('Unauthorized', 401)
 
-    if (!nome || !cpf || !cargo || !salario_base) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
-    }
+    const { searchParams } = new URL(req.url)
+    const ativo = searchParams.get('ativo')
+    const departamento = searchParams.get('departamento')
 
-    const result = await db
-      .insert(funcionarios)
-      .values({
-        userId,
-        nome,
-        email,
-        cpf,
-        cargo,
-        salario_base: parseFloat(salario_base),
-        data_admissao: new Date(data_admissao),
-        tipo_contrato: tipo_contrato || 'CLT',
-        regime_jornada: regime_jornada || 'normal',
-        departamento,
-        telefone,
-        endereco,
-        cidade,
-        estado,
-        cep,
-        status: 'ativo',
-      })
-      .returning()
+    const filtros: any = {}
+    if (ativo !== null) filtros.ativo = ativo === 'true'
+    if (departamento) filtros.departamento = departamento
 
-    return NextResponse.json(result[0], { status: 201 })
+    const funcionarios = await rhService.listarFuncionarios(ctx.userId, ctx.tenantId, filtros)
+    return createApiSuccess(funcionarios, 'Funcionários listados com sucesso')
   } catch (error) {
-    console.error('Error creating funcionário:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    console.error('[API] GET /rh/funcionarios:', error)
+    return createApiError(
+      error instanceof Error ? error.message : 'Internal server error',
+      500
+    )
+  }
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const rl = await checkRateLimit(req, 'create')
+    if (!rl.allowed) return createApiError('Rate limit exceeded', 429)
+
+    const ctx = await getRequestContext()
+    if (!ctx) return createApiError('Unauthorized', 401)
+
+    const csrfToken = req.headers.get('x-csrf-token')
+    if (!csrfToken) return createApiError('CSRF token required', 403)
+
+    const body = await req.json()
+    const funcionario = await rhService.criarFuncionario(ctx.userId, ctx.tenantId, body)
+    return createApiSuccess(funcionario, 'Funcionário criado com sucesso', 201)
+  } catch (error) {
+    console.error('[API] POST /rh/funcionarios:', error)
+    return createApiError(
+      error instanceof Error ? error.message : 'Internal server error',
+      500
+    )
   }
 }

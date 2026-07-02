@@ -203,7 +203,6 @@ export default function PanicAnalysisPage() {
             {/* Analyze Button */}
             <div className="mt-8 flex justify-center">
               <button
-                onClick={handleAnalyze}
                 disabled={!file || loading}
                 className="
                   px-8 py-3 rounded-xl font-medium text-white
@@ -291,7 +290,6 @@ export default function PanicAnalysisPage() {
               {/* Actions */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
                 <button
-                  onClick={resetAnalysis}
                   className="px-6 py-3 rounded-xl font-medium text-white bg-zinc-800 hover:bg-zinc-700 transition-colors"
                 >
                   Analisar Outro Arquivo
