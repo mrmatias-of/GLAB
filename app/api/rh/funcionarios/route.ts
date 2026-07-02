@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
         email,
         cpf,
         cargo,
-        salario_base: parseFloat(salario_base),
+        salario_base: salario_base.toString(),
         data_admissao: new Date(data_admissao),
         tipo_contrato: tipo_contrato || 'CLT',
         regime_jornada: regime_jornada || 'normal',

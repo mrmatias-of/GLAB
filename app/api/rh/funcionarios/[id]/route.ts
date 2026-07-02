@@ -49,7 +49,7 @@ export async function PUT(
         nome: body.nome,
         email: body.email,
         cargo: body.cargo,
-        salario_base: body.salario_base ? parseFloat(body.salario_base) : undefined,
+        salario_base: body.salario_base ? body.salario_base.toString() : undefined,
         status: body.status,
         departamento: body.departamento,
         telefone: body.telefone,
