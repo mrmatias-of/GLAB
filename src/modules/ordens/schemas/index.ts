@@ -1,43 +1,29 @@
 import { z } from 'zod'
-import {
-  IdSchema,
-  PaginationSchema,
-  OrderStatusSchema,
-  DateSchema,
-  CurrencySchema,
-} from '@/src/shared/schemas/common.schemas'
-
-/**
- * Ordens (Service Orders) Validation Schemas
- */
 
 export const CreateOrdemSchema = z.object({
-  cliente_id: IdSchema,
-  tecnico_id: IdSchema,
-  descricao: z.string().min(10).max(1000),
-  status: OrderStatusSchema.default('novo'),
-  data_inicio: DateSchema.optional(),
-  data_conclusao: DateSchema.optional(),
-  valor_total: CurrencySchema,
-  notas: z.string().max(1000).optional(),
+  clienteId: z.number(),
+  servicoId: z.number(),
+  tecnicoId: z.number().optional(),
+  descricao: z.string(),
+  dataAgendada: z.string().datetime().optional(),
+  prioridade: z.enum(['baixa', 'media', 'alta']).default('media'),
+  valor: z.number().min(0).optional(),
+  ativo: z.boolean().default(true),
 })
-
-export type CreateOrdemInput = z.infer<typeof CreateOrdemSchema>
 
 export const UpdateOrdemSchema = CreateOrdemSchema.partial()
 
-export type UpdateOrdemInput = z.infer<typeof UpdateOrdemSchema>
-
-export const QueryOrdemSchema = PaginationSchema.extend({
-  status: OrderStatusSchema.optional(),
-  cliente_id: IdSchema.optional(),
-  tecnico_id: IdSchema.optional(),
+export const ListOrdemSchema = z.object({
+  status: z.string().optional(),
+  clienteId: z.number().optional(),
+  tecnicoId: z.number().optional(),
 })
 
-export type QueryOrdemInput = z.infer<typeof QueryOrdemSchema>
-
-export const OrdemIdSchema = z.object({
-  id: IdSchema,
+export const UpdateOrdemStatusSchema = z.object({
+  status: z.enum(['pendente', 'emaExecucao', 'concluida', 'cancelada']),
+  observacao: z.string().optional(),
 })
 
-export type OrdemIdInput = z.infer<typeof OrdemIdSchema>
+export type CreateOrdem = z.infer<typeof CreateOrdemSchema>
+export type UpdateOrdem = z.infer<typeof UpdateOrdemSchema>
+export type UpdateOrdemStatus = z.infer<typeof UpdateOrdemStatusSchema>

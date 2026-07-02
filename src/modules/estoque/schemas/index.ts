@@ -1,41 +1,32 @@
 import { z } from 'zod'
-import {
-  IdSchema,
-  NameSchema,
-  PaginationSchema,
-  CurrencySchema,
-} from '@/src/shared/schemas/common.schemas'
-
-/**
- * Estoque (Inventory) Validation Schemas
- */
 
 export const CreateEstoqueSchema = z.object({
-  nome: NameSchema,
-  sku: z.string().min(1).max(50),
-  descricao: z.string().max(500).optional(),
-  quantidade_atual: z.number().int().nonnegative(),
-  quantidade_minima: z.number().int().nonnegative(),
-  preco_unitario: CurrencySchema,
-  categoria: z.string().min(1).max(100).optional(),
-  localizacao: z.string().max(255).optional(),
+  nome: z.string().min(3),
+  descricao: z.string().optional(),
+  sku: z.string().optional(),
+  categoria: z.string(),
+  quantidade: z.number().min(0),
+  preco: z.number().min(0),
+  estoqueBaixoAlerta: z.number().min(0).optional(),
+  fornecedor: z.string().optional(),
+  ativo: z.boolean().default(true),
 })
-
-export type CreateEstoqueInput = z.infer<typeof CreateEstoqueSchema>
 
 export const UpdateEstoqueSchema = CreateEstoqueSchema.partial()
 
-export type UpdateEstoqueInput = z.infer<typeof UpdateEstoqueSchema>
-
-export const QueryEstoqueSchema = PaginationSchema.extend({
+export const ListEstoqueSchema = z.object({
   categoria: z.string().optional(),
-  disponivel: z.boolean().optional(),
+  ativo: z.boolean().optional(),
+  estoqueBaixo: z.boolean().optional(),
 })
 
-export type QueryEstoqueInput = z.infer<typeof QueryEstoqueSchema>
-
-export const EstoqueIdSchema = z.object({
-  id: IdSchema,
+export const MovimentacaoEstoqueSchema = z.object({
+  tipo: z.enum(['entrada', 'saida', 'ajuste']),
+  quantidade: z.number().min(1),
+  motivo: z.string().optional(),
+  referencia: z.string().optional(),
 })
 
-export type EstoqueIdInput = z.infer<typeof EstoqueIdSchema>
+export type CreateEstoque = z.infer<typeof CreateEstoqueSchema>
+export type UpdateEstoque = z.infer<typeof UpdateEstoqueSchema>
+export type MovimentacaoEstoque = z.infer<typeof MovimentacaoEstoqueSchema>

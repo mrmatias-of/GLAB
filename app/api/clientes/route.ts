@@ -1,47 +1,61 @@
-import { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 import { withMiddleware, RequestContext } from '@/lib/middleware/route-handler'
 import { createApiSuccess, createApiError } from '@/lib/middleware/api-response'
 import { clienteService } from '@/src/modules/clientes'
-import { validateBody } from '@/lib/validators/schema-validator'
-import { CreateClienteSchema } from '@/src/modules/clientes/schemas'
+import { CreateClienteSchema, ListClientesSchema } from '@/src/modules/clientes/schemas'
 
-// GET: List clientes
-async function handleGET(context: RequestContext) {
-  const { userId, tenantId, request } = context
-  
-  const { searchParams } = new URL(request.url)
-  const filtros: any = {}
-  
-  if (searchParams.has('ativo')) {
-    filtros.ativo = searchParams.get('ativo') === 'true'
-  }
-  if (searchParams.has('cidade')) {
-    filtros.cidade = searchParams.get('cidade')
-  }
-  if (searchParams.has('page')) {
-    filtros.page = parseInt(searchParams.get('page') || '1')
-  }
-  if (searchParams.has('limit')) {
-    filtros.limit = parseInt(searchParams.get('limit') || '10')
-  }
+async function handleGET(context: RequestContext): Promise<NextResponse> {
+  try {
+    const { userId, tenantId, request } = context
+    const { searchParams } = new URL(request.url)
+    
+    // Parse and validate query parameters
+    const queryParams = {
+      ativo: searchParams.get('ativo') ? searchParams.get('ativo') === 'true' : undefined,
+      cidade: searchParams.get('cidade') || undefined,
+      search: searchParams.get('search') || undefined,
+      page: parseInt(searchParams.get('page') || '1'),
+      limit: parseInt(searchParams.get('limit') || '10'),
+    }
 
-  const clientes = await clienteService.listar(userId, tenantId, filtros)
-  return createApiSuccess(clientes, 'Clientes listados com sucesso')
+    // Validate with Zod
+    const validated = ListClientesSchema.safeParse(queryParams)
+    if (!validated.success) {
+      return createApiError(`Validação falhou: ${validated.error.message}`, 400)
+    }
+
+    // Call service with validated data
+    const result = await clienteService.listar(userId, tenantId, validated.data)
+    return createApiSuccess(result, 'Clientes listados com sucesso')
+  } catch (error) {
+    console.error('[API] GET /clientes:', error)
+    return createApiError(
+      error instanceof Error ? error.message : 'Erro ao listar clientes',
+      500
+    )
+  }
 }
 
-// POST: Create cliente
-async function handlePOST(context: RequestContext) {
-  const { userId, tenantId, request } = context
-  
-  const body = await request.json()
-  const validated = await validateBody(body, CreateClienteSchema)
-  
-  if (validated.error) {
-    return createApiError(validated.message, 400)
-  }
+async function handlePOST(context: RequestContext): Promise<NextResponse> {
+  try {
+    const { userId, tenantId, request } = context
+    
+    const body = await request.json()
+    const validated = CreateClienteSchema.safeParse(body)
+    
+    if (!validated.success) {
+      return createApiError(`Validação falhou: ${validated.error.message}`, 400)
+    }
 
-  const cliente = await clienteService.criar(userId, tenantId, validated.data)
-  return createApiSuccess(cliente, 'Cliente criado com sucesso', 201)
+    const cliente = await clienteService.criar(userId, tenantId, validated.data)
+    return createApiSuccess(cliente, 'Cliente criado com sucesso', 201)
+  } catch (error) {
+    console.error('[API] POST /clientes:', error)
+    return createApiError(
+      error instanceof Error ? error.message : 'Erro ao criar cliente',
+      500
+    )
+  }
 }
 
 export const GET = withMiddleware(handleGET, {

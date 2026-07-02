@@ -1,60 +1,27 @@
 import { z } from 'zod'
-import {
-  IdSchema,
-  NameSchema,
-  EmailSchema,
-  PhoneSchema,
-  StatusSchema,
-  PaginationSchema,
-  CurrencySchema,
-} from '@/src/shared/schemas/common.schemas'
 
-/**
- * Cliente (CRM) Validation Schemas
- */
-
-// Create Cliente
 export const CreateClienteSchema = z.object({
-  nome: NameSchema,
-  email: EmailSchema,
-  telefone: PhoneSchema,
-  empresa: z.string().min(1).max(255).optional(),
-  cidade: z.string().min(1).max(255).optional(),
-  estado: z.string().length(2).uppercase().optional(),
-  cep: z.string().regex(/^\d{5}-?\d{3}$/).optional(),
-  endereco: z.string().max(255).optional(),
-  status: StatusSchema.default('ativo'),
-  satisfacao: z.number().min(1).max(5).optional(),
-  valor_acumulado: CurrencySchema.default(0),
+  nome: z.string().min(3, 'Nome deve ter pelo menos 3 caracteres'),
+  email: z.string().email('Email inválido').optional(),
+  telefone: z.string().optional(),
+  endereco: z.string().optional(),
+  cidade: z.string().optional(),
+  estado: z.string().optional(),
+  cep: z.string().optional(),
+  documento: z.string().optional(),
+  tipo: z.enum(['PF', 'PJ']).default('PF'),
+  ativo: z.boolean().default(true),
 })
 
-export type CreateClienteInput = z.infer<typeof CreateClienteSchema>
-
-// Update Cliente
 export const UpdateClienteSchema = CreateClienteSchema.partial()
 
-export type UpdateClienteInput = z.infer<typeof UpdateClienteSchema>
-
-// Query Cliente
-export const QueryClienteSchema = PaginationSchema.extend({
+export const ListClientesSchema = z.object({
   ativo: z.boolean().optional(),
   cidade: z.string().optional(),
-  status: StatusSchema.optional(),
+  tipo: z.enum(['PF', 'PJ']).optional(),
+  search: z.string().optional(),
 })
 
-export type QueryClienteInput = z.infer<typeof QueryClienteSchema>
-
-// Cliente ID param
-export const ClienteIdSchema = z.object({
-  id: IdSchema,
-})
-
-export type ClienteIdInput = z.infer<typeof ClienteIdSchema>
-
-// Get Cliente (query string)
-export const GetClienteSchema = z.object({
-  ativo: z.string().transform(v => v === 'true').optional(),
-  cidade: z.string().optional(),
-})
-
-export type GetClienteInput = z.infer<typeof GetClienteSchema>
+export type CreateCliente = z.infer<typeof CreateClienteSchema>
+export type UpdateCliente = z.infer<typeof UpdateClienteSchema>
+export type ListClientes = z.infer<typeof ListClientesSchema>
