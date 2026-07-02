@@ -5,8 +5,9 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const mockOrder = {
-      ordem: { id: await params.id, numero: 'OS-001', descricao: 'Manutenção AC', status: 'concluida', valorTotal: 500 },
+      ordem: { id, numero: 'OS-001', descricao: 'Manutenção AC', status: 'concluida', valorTotal: 500 },
       cliente: { nome: 'João Silva' },
       tecnico: { nome: 'Pedro' },
       equipamento: { nome: 'Ar Condicionado' },

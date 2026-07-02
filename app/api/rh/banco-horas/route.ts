@@ -54,13 +54,13 @@ export async function POST(request: NextRequest) {
         userId,
         funcionario_id,
         mes_ano,
-        saldo_anterior: parseFloat(saldo_anterior || 0),
-        horas_trabalhadas: parseFloat(horas_trabalhadas || 0),
-        horas_devidas: parseFloat(horas_devidas || 0),
-        horas_gozadas: parseFloat(horas_gozadas || 0),
-        faltas_justificadas: parseFloat(faltas_justificadas || 0),
-        faltas_injustificadas: parseFloat(faltas_injustificadas || 0),
-        saldo_atual: saldoAtual,
+        saldo_anterior: (saldo_anterior || 0).toString(),
+        horas_trabalhadas: (horas_trabalhadas || 0).toString(),
+        horas_devidas: (horas_devidas || 0).toString(),
+        horas_gozadas: (horas_gozadas || 0).toString(),
+        faltas_justificadas: (faltas_justificadas || 0).toString(),
+        faltas_injustificadas: (faltas_injustificadas || 0).toString(),
+        saldo_atual: saldoAtual.toString(),
       })
       .returning()
 

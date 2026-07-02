@@ -17,11 +17,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Verificar se email existe
-    const user = await db.query.users.findFirst({
-      where: (users, { eq }) => eq(users.email, email),
+    const userData = await db.query.user.findFirst({
+      where: (u, { eq }) => eq(u.email, email),
     })
 
-    if (!user) {
+    if (!userData) {
       // Não retornar que email não existe por segurança
       return NextResponse.json({
         success: true,
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     // Por enquanto, vamos armazenar no banco
     try {
       await db.insert(passwordResets).values({
-        userId: user.id,
+        userId: userData.id,
         token: hashedToken,
         expiresAt,
       })
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
       await sendEmail({
         to: email,
         subject: 'Redefinir Senha - G•Lab Cursos',
-        html: getResetPasswordEmailTemplate(user.name || 'Usuário', resetLink),
+        html: getResetPasswordEmailTemplate(userData.name || 'Usuário', resetLink),
       })
     } catch (emailError) {
       console.error('Erro ao enviar email:', emailError)
