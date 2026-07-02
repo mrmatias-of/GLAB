@@ -4,11 +4,20 @@ import { useState } from 'react'
 import { DataTable } from '@/components/shared/data-table'
 import { StatCard } from '@/components/shared/stat-card'
 
+interface ReportRow {
+  id: number
+  descricao: string
+  valor: number
+  data: string
+  status?: string
+  tipo?: string
+}
+
 export default function RelatoriosPage() {
   const [reportType, setReportType] = useState('ordens')
   const [period, setPeriod] = useState('mes')
   const [loading, setLoading] = useState(false)
-  const [data, setData] = useState([])
+  const [data, setData] = useState<ReportRow[]>([])
 
   const handleGenerateReport = async () => {
     setLoading(true)

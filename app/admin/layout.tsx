@@ -32,9 +32,6 @@ export default function AdminLayout({
   const pathname = usePathname()
   const router = useRouter()
 
-  // Rastrear atividade do usuário para timeout
-  useActivityTracker()
-
   const handleLogout = async () => {
     try {
       await fetch('/api/auth/logout', {
