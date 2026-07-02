@@ -24,7 +24,7 @@ export default function ConfigImpostosPage() {
   })
 
   useEffect(() => {
-    const fetch = async () => {
+    const loadData = async () => {
       try {
         const response = await fetch('/api/rh/config-impostos')
         if (response.ok) {
@@ -40,7 +40,7 @@ export default function ConfigImpostosPage() {
       }
     }
 
-    fetch()
+    loadData()
   }, [])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
