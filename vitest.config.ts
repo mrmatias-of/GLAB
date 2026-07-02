@@ -8,18 +8,26 @@ export default defineConfig({
     setupFiles: ['./tests/setup.ts'],
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'json', 'html'],
+      reporter: ['text', 'json', 'html', 'lcov'],
       exclude: [
         'node_modules/',
         'tests/',
         '**/*.test.ts',
         '**/*.spec.ts',
+        'dist/',
+        '.next/',
       ],
+      lines: 60,
+      functions: 60,
+      branches: 50,
+      statements: 60,
     },
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './'),
+      '@': path.resolve(__dirname, './src'),
+      '@/lib': path.resolve(__dirname, './src/lib'),
+      '@/modules': path.resolve(__dirname, './src/modules'),
     },
   },
 })
