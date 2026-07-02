@@ -7,24 +7,91 @@ import { validateFuncionarioData } from '@/lib/utils/validators'
  * Gerenciamento de funcionários, folha de pagamento, banco de horas
  * Multi-tenant com isolamento por tenantId
  */
+import { FuncionarioRepository } from '../repositories/funcionario.repository'
+import { validateFuncionarioData } from '../validators'
+import { logger } from '@/lib/logging'
+import { AppError } from '@/lib/errors'
+
 export class FuncionarioService {
-  // TODO: Implementar repository para RH
-  // private repository: FuncionarioRepository
+  private repository: FuncionarioRepository
+
+  constructor() {
+    this.repository = new FuncionarioRepository()
+  }
 
   async criar(userId: string, tenantId: string, dados: any) {
     try {
       validateFuncionarioData(dados)
-      logger.info('FuncionarioService', 'Criando funcionário', { userId, tenantId, nome: dados.nome })
       
-      // TODO: Call repository to create funcionario
-      // const funcionario = await this.repository.create(userId, tenantId, dados)
+      logger.info('FuncionarioService', 'Criando funcionário', { userId })
       
-      logger.info('FuncionarioService', 'Funcionário criado com sucesso', { tenantId })
-      return { id: 1, ...dados, tenantId }
+      const funcionario = await this.repository.criar({ ...dados, userId })
+      
+      logger.info('FuncionarioService', 'Funcionário criado', { funcionarioId: funcionario.id })
+      
+      return funcionario
     } catch (error) {
       logger.error('FuncionarioService', 'Erro ao criar funcionário', error)
       throw error
     }
+  }
+
+  async obter(userId: string, tenantId: string, id: number) {
+    const funcionario = await this.repository.obter(id, userId)
+    if (!funcionario) {
+      throw AppError.NotFound('Funcionário')
+    }
+    return funcionario
+  }
+
+  async listar(userId: string, tenantId: string, filtros?: any) {
+    logger.info('FuncionarioService', 'Listando funcionários', { userId })
+    return await this.repository.listar(userId, filtros)
+  }
+
+  async atualizar(userId: string, tenantId: string, id: number, dados: any) {
+    try {
+      await this.obter(userId, tenantId, id)
+      validateFuncionarioData(dados, true)
+      
+      logger.info('FuncionarioService', 'Atualizando funcionário', { userId, id })
+      return await this.repository.atualizar(id, userId, dados)
+    } catch (error) {
+      logger.error('FuncionarioService', 'Erro ao atualizar funcionário', error)
+      throw error
+    }
+  }
+
+  async deletar(userId: string, tenantId: string, id: number) {
+    try {
+      await this.obter(userId, tenantId, id)
+      
+      logger.info('FuncionarioService', 'Deletando funcionário', { userId, id })
+      await this.repository.deletar(id, userId)
+    } catch (error) {
+      logger.error('FuncionarioService', 'Erro ao deletar funcionário', error)
+      throw error
+    }
+  }
+
+  async obterContracheques(userId: string, tenantId: string, funcionarioId: number) {
+    await this.obter(userId, tenantId, funcionarioId)
+    // TODO: Implement - fetch contracheques for this funcionário
+    return []
+  }
+
+  async gerarContracheque(userId: string, tenantId: string, funcionarioId: number, mes: number, ano: number) {
+    await this.obter(userId, tenantId, funcionarioId)
+    // TODO: Implement - Calculate payroll based on eventos_folha
+    // Should consider salary, hours, deductions, taxes, etc
+    return {}
+  }
+
+  async obterBancoHoras(userId: string, tenantId: string, funcionarioId: number) {
+    await this.obter(userId, tenantId, funcionarioId)
+    return await this.repository.obterBancoHoras(funcionarioId, userId)
+  }
+}
   }
 
   async obter(userId: string, tenantId: string, funcionarioId: number) {

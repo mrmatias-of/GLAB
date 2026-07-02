@@ -6,11 +6,10 @@ import { logger } from '@/lib/utils/logger'
 export class EstoqueService {
   async criar(userId: string, tenantId: string, dados: any) {
     validateEstoqueData(dados)
-    logger.info('EstoqueService', 'Criando novo item', { userId, tenantId, nome: dados.nome })
+    logger.info('EstoqueService', 'Criando novo item', { userId, nome: dados.nome })
     
     return await estoqueRepository.criar({
       userId,
-      tenantId,
       ...dados,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -18,7 +17,7 @@ export class EstoqueService {
   }
 
   async obter(userId: string, tenantId: string, id: number) {
-    const item = await estoqueRepository.obter(id, userId, tenantId)
+    const item = await estoqueRepository.obter(id, userId)
     if (!item) {
       throw new AppError('Item não encontrado', 404)
     }
@@ -26,72 +25,70 @@ export class EstoqueService {
   }
 
   async listar(userId: string, tenantId: string, filtros: any = {}) {
-    return await estoqueRepository.listar(userId, tenantId, filtros)
+    return await estoqueRepository.listar(userId, filtros)
   }
 
   async atualizar(userId: string, tenantId: string, id: number, dados: any) {
     await this.obter(userId, tenantId, id) // Verifica se existe
     validateEstoqueData(dados, true)
     
-    logger.info('EstoqueService', 'Atualizando item', { userId, tenantId, id })
-    return await estoqueRepository.atualizar(id, userId, tenantId, dados)
+    logger.info('EstoqueService', 'Atualizando item', { userId, id })
+    return await estoqueRepository.atualizar(id, userId, dados)
   }
 
   async deletar(userId: string, tenantId: string, id: number) {
     await this.obter(userId, tenantId, id) // Verifica se existe
     
-    logger.info('EstoqueService', 'Deletando item', { userId, tenantId, id })
-    await estoqueRepository.deletar(id, userId, tenantId)
+    logger.info('EstoqueService', 'Deletando item', { userId, id })
+    await estoqueRepository.deletar(id, userId)
   }
 
   async adicionarQuantidade(userId: string, tenantId: string, id: number, quantidade: number, motivo: string) {
     const item = await this.obter(userId, tenantId, id)
     const novaQuantidade = (item.quantidade_atual || 0) + quantidade
 
-    await estoqueRepository.atualizar(id, userId, tenantId, {
+    await estoqueRepository.atualizar(id, userId, {
       quantidade_atual: novaQuantidade,
     })
 
     await estoqueRepository.registrarMovimentacao({
       userId,
-      tenantId,
       estoque_id: id,
       tipo: 'entrada',
       quantidade,
       motivo,
-      data: new Date(),
+      createdAt: new Date(),
     })
 
-    logger.info('EstoqueService', 'Quantidade adicionada', { id, quantidade, motivo, tenantId })
+    logger.info('EstoqueService', 'Quantidade adicionada', { id, quantidade, motivo })
   }
 
   async removerQuantidade(userId: string, tenantId: string, id: number, quantidade: number, motivo: string) {
     const item = await this.obter(userId, tenantId, id)
     const novaQuantidade = Math.max(0, (item.quantidade_atual || 0) - quantidade)
 
-    await estoqueRepository.atualizar(id, userId, tenantId, {
+    await estoqueRepository.atualizar(id, userId, {
       quantidade_atual: novaQuantidade,
     })
 
     await estoqueRepository.registrarMovimentacao({
       userId,
-      tenantId,
       estoque_id: id,
       tipo: 'saida',
       quantidade,
       motivo,
-      data: new Date(),
+      createdAt: new Date(),
     })
 
-    logger.info('EstoqueService', 'Quantidade removida', { id, quantidade, motivo, tenantId })
+    logger.info('EstoqueService', 'Quantidade removida', { id, quantidade, motivo })
   }
 
   async obterEstoqueBaixo(userId: string, tenantId: string) {
-    return await estoqueRepository.verificarEstoqueBaixo(userId, tenantId)
+    return await estoqueRepository.verificarEstoqueBaixo(userId)
   }
 
   async obterMovimentacoes(userId: string, tenantId: string, estoqueId?: number) {
-    return await estoqueRepository.obterMovimentacoes(userId, tenantId, estoqueId)
+    return await estoqueRepository.obterMovimentacoes(userId, estoqueId)
   }
 
   async obterResumo(userId: string, tenantId: string) {
@@ -105,7 +102,7 @@ export class EstoqueService {
       valorTotal: items.reduce((acc: number, i: any) => acc + ((i.quantidade_atual || 0) * (i.valor_unitario || 0)), 0),
       itensComEstoqueBaixo: itensLagos.length,
       movimentacoesUltimos30Dias: movimentacoes.filter((m: any) => 
-        new Date(m.data).getTime() > Date.now() - 30 * 24 * 60 * 60 * 1000
+        new Date(m.createdAt).getTime() > Date.now() - 30 * 24 * 60 * 60 * 1000
       ).length,
     }
   }

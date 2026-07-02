@@ -6,20 +6,18 @@ import { logger } from '@/lib/utils/logger'
 export class FinanceiroService {
   async criar(userId: string, tenantId: string, dados: any) {
     validateFinanceiroData(dados)
-    logger.info('FinanceiroService', 'Registrando transação', { userId, tenantId, tipo: dados.tipo })
+    logger.info('FinanceiroService', 'Registrando transação', { userId, tipo: dados.tipo })
 
     return await financeiroRepository.criar({
       userId,
-      tenantId,
       ...dados,
-      data: new Date(dados.data),
       createdAt: new Date(),
       updatedAt: new Date(),
     })
   }
 
   async obter(userId: string, tenantId: string, id: number) {
-    const transacao = await financeiroRepository.obter(id, userId, tenantId)
+    const transacao = await financeiroRepository.obter(id, userId)
     if (!transacao) {
       throw new AppError('Transação não encontrada', 404)
     }
@@ -27,27 +25,27 @@ export class FinanceiroService {
   }
 
   async listar(userId: string, tenantId: string, filtros: any = {}) {
-    return await financeiroRepository.listar(userId, tenantId, filtros)
+    return await financeiroRepository.listar(userId, filtros)
   }
 
   async atualizar(userId: string, tenantId: string, id: number, dados: any) {
     await this.obter(userId, tenantId, id)
     validateFinanceiroData(dados, true)
 
-    logger.info('FinanceiroService', 'Atualizando transação', { userId, tenantId, id })
-    return await financeiroRepository.atualizar(id, userId, tenantId, dados)
+    logger.info('FinanceiroService', 'Atualizando transação', { userId, id })
+    return await financeiroRepository.atualizar(id, userId, dados)
   }
 
   async deletar(userId: string, tenantId: string, id: number) {
     await this.obter(userId, tenantId, id)
 
-    logger.info('FinanceiroService', 'Deletando transação', { userId, tenantId, id })
-    await financeiroRepository.deletar(id, userId, tenantId)
+    logger.info('FinanceiroService', 'Deletando transação', { userId, id })
+    await financeiroRepository.deletar(id, userId)
   }
 
   async obterResumo(userId: string, tenantId: string, dataInicio?: Date, dataFim?: Date) {
-    const receitas = await financeiroRepository.obterReceitas(userId, tenantId, dataInicio, dataFim)
-    const despesas = await financeiroRepository.obterDespesas(userId, tenantId, dataInicio, dataFim)
+    const receitas = await financeiroRepository.obterReceitas(userId, dataInicio, dataFim)
+    const despesas = await financeiroRepository.obterDespesas(userId, dataInicio, dataFim)
 
     const totalReceitas = receitas.reduce((acc: number, r: any) => acc + (r.valor || 0), 0)
     const totalDespesas = despesas.reduce((acc: number, d: any) => acc + (d.valor || 0), 0)
@@ -83,7 +81,7 @@ export class FinanceiroService {
     const despesasPorDia: any = {}
 
     transacoes.forEach((t: any) => {
-      const dia = new Date(t.data).toLocaleDateString('pt-BR')
+      const dia = new Date(t.createdAt).toLocaleDateString('pt-BR')
       if (t.tipo === 'receita') {
         receitasPorDia[dia] = (receitasPorDia[dia] || 0) + (t.valor || 0)
       } else {

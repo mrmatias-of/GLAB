@@ -10,11 +10,11 @@ export class OrdemService {
     try {
       validateOrdemData(dados)
       
-      logger.info('OrdemService', 'Criando ordem de serviço', { userId, tenantId })
+      logger.info('OrdemService', 'Criando ordem de serviço', { userId })
       
-      const ordem = await repository.create(userId, tenantId, dados)
+      const ordem = await repository.create(userId, dados)
       
-      logger.info('OrdemService', 'Ordem criada com sucesso', { ordemId: ordem.id, tenantId })
+      logger.info('OrdemService', 'Ordem criada com sucesso', { ordemId: ordem.id })
       
       return ordem
     } catch (error) {
@@ -24,7 +24,7 @@ export class OrdemService {
   }
 
   async obter(userId: string, tenantId: string, ordemId: number) {
-    const ordem = await repository.findById(ordemId, userId, tenantId)
+    const ordem = await repository.findById(ordemId, userId)
     
     if (!ordem) {
       throw new AppError('Ordem não encontrada', 404)
@@ -34,17 +34,17 @@ export class OrdemService {
   }
 
   async listar(userId: string, tenantId: string, filtros?: any) {
-    logger.info('OrdemService', 'Listando ordens', { userId, tenantId, filtros })
-    return await repository.findAll(userId, tenantId, filtros)
+    logger.info('OrdemService', 'Listando ordens', { userId, filtros })
+    return await repository.findAll(userId, filtros)
   }
 
   async listarPorStatus(userId: string, tenantId: string, status: string) {
-    return await repository.findByStatus(userId, tenantId, status)
+    return await repository.findByStatus(userId, status)
   }
 
   async atualizar(userId: string, tenantId: string, ordemId: number, dados: any) {
     try {
-      const ordem = await repository.findById(ordemId, userId, tenantId)
+      const ordem = await repository.findById(ordemId, userId)
       
       if (!ordem) {
         throw new AppError('Ordem não encontrada', 404)
@@ -52,11 +52,11 @@ export class OrdemService {
       
       validateOrdemData(dados, true)
       
-      const ordemAtualizada = await repository.update(ordemId, userId, tenantId, dados)
+      const ordemAtualizada = await repository.update(ordemId, userId, dados)
       
-      logger.info('OrdemService', 'Ordem atualizada', { ordemId, tenantId })
+      logger.info('OrdemService', 'Ordem atualizada', { ordemId })
       
-      return ordemAtualizada[0]
+      return ordemAtualizada
     } catch (error) {
       logger.error('OrdemService', 'Erro ao atualizar ordem', error)
       throw error
@@ -65,7 +65,7 @@ export class OrdemService {
 
   async alterarStatus(userId: string, tenantId: string, ordemId: number, novoStatus: string) {
     try {
-      const ordemValida = await repository.findById(ordemId, userId, tenantId)
+      const ordemValida = await repository.findById(ordemId, userId)
       
       if (!ordemValida) {
         throw new AppError('Ordem não encontrada', 404)
@@ -76,11 +76,11 @@ export class OrdemService {
         throw new AppError('Status inválido', 400)
       }
       
-      const ordem = await repository.updateStatus(ordemId, userId, tenantId, novoStatus)
+      const ordem = await repository.updateStatus(ordemId, userId, novoStatus)
       
-      logger.info('OrdemService', 'Status alterado', { ordemId, novoStatus, tenantId })
+      logger.info('OrdemService', 'Status alterado', { ordemId, novoStatus })
       
-      return ordem[0]
+      return ordem
     } catch (error) {
       logger.error('OrdemService', 'Erro ao alterar status', error)
       throw error
@@ -88,24 +88,24 @@ export class OrdemService {
   }
 
   async obterCounts(userId: string, tenantId: string) {
-    return await repository.getStatusCounts(userId, tenantId)
+    return await repository.getStatusCounts(userId)
   }
 
   async obterProximasVencer(userId: string, tenantId: string) {
-    return await repository.getProximasVencer(userId, tenantId)
+    return await repository.getProximasVencer(userId)
   }
 
   async deletar(userId: string, tenantId: string, ordemId: number) {
     try {
-      const ordem = await repository.findById(ordemId, userId, tenantId)
+      const ordem = await repository.findById(ordemId, userId)
       
       if (!ordem) {
         throw new AppError('Ordem não encontrada', 404)
       }
       
-      logger.info('OrdemService', 'Ordem cancelada', { ordemId, tenantId })
+      logger.info('OrdemService', 'Ordem cancelada', { ordemId })
       
-      return await repository.updateStatus(ordemId, userId, tenantId, 'cancelado')
+      return await repository.updateStatus(ordemId, userId, 'cancelado')
     } catch (error) {
       logger.error('OrdemService', 'Erro ao cancelar ordem', error)
       throw error
