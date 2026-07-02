@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { users, passwordResets } from '@/lib/db/schema'
+import { user, passwordResets } from '@/lib/db/schema'
 import { sendEmail, getResetPasswordEmailTemplate } from '@/lib/email/locaweb-sender'
 import crypto from 'crypto'
 
