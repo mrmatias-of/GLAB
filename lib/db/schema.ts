@@ -361,3 +361,13 @@ export const historico_salarial = pgTable("historico_salarial", {
   data_vigencia: timestamp("data_vigencia").notNull(),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
 })
+
+// --- Auth Tables ---
+
+export const passwordResets = pgTable("passwordResets", {
+  id: serial("id").primaryKey(),
+  userId: text("userId").notNull(),
+  token: text("token").notNull().unique(),
+  expiresAt: timestamp("expiresAt").notNull(),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+})
