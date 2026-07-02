@@ -1,11 +1,9 @@
 export interface Cliente {
-  id: string
+  id: number
   tenantId: string
   nome: string
   email: string
   telefone?: string
-  cpf?: string
-  cnpj?: string
   endereco?: string
   cidade?: string
   estado?: string

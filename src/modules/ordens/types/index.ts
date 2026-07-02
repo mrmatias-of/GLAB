@@ -1,15 +1,12 @@
 export interface Ordem {
-  id: string
+  id: number
   tenantId: string
   numero: string
-  clienteId: string
+  clienteId: number
   descricao: string
-  status: 'pendente' | 'em-andamento' | 'concluida' | 'cancelada'
-  prioridade: 'baixa' | 'media' | 'alta'
-  dataCriacao: Date
-  dataVencimento?: Date
-  dataConclusao?: Date
-  valorTotal: number
+  status: 'aberta' | 'em_andamento' | 'concluida' | 'cancelada'
+  dataAbertura: Date
+  dataFechamento?: Date
   createdAt: Date
   updatedAt: Date
 }

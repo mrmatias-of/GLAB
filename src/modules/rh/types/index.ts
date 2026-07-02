@@ -1,37 +1,23 @@
 export interface Funcionario {
-  id: string
+  id: number
   tenantId: string
   nome: string
   email: string
-  cpf: string
   cargo: string
-  departamento: string
   salarioBase: number
+  status: 'ativo' | 'inativo'
   dataAdmissao: Date
-  dataDemissao?: Date
-  status: 'ativo' | 'inativo' | 'demitido'
   createdAt: Date
-  updatedAt: Date
 }
 
 export interface Contracheque {
-  id: string
+  id: number
   tenantId: string
-  funcionarioId: string
+  funcionarioId: number
   mes: number
   ano: number
   salarioBase: number
-  inss: number
-  irpf: number
-  fgts: number
-  liquido: number
-  status: 'pendente' | 'pago'
-  dataPagamento?: Date
+  descontos: number
+  valorLiquido: number
   createdAt: Date
-}
-
-export interface Impostos {
-  inss: number
-  irpf: number
-  fgts: number
 }
