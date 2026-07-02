@@ -4,7 +4,7 @@ import { headers } from 'next/headers'
 import { estoqueService } from '@/lib/services/estoque.service'
 import { apiResponse, handleApiError } from '@/lib/utils/api-response'
 
-export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(req: NextRequest, { params } Promise<{ id: string }> }) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
@@ -21,7 +21,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function PUT(req: NextRequest, { params } Promise<{ id: string }> }) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
@@ -38,7 +38,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(req: NextRequest, { params } Promise<{ id: string }> }) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {

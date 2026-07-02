@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params } { id: string } }
 ) {
   try {
     const mockOrder = {
-      ordem: { id: params.id, numero: 'OS-001', descricao: 'Manutenção AC', status: 'concluida', valorTotal: 500 },
+      ordem: { id: await params.id, numero: 'OS-001', descricao: 'Manutenção AC', status: 'concluida', valorTotal: 500 },
       cliente: { nome: 'João Silva' },
       tecnico: { nome: 'Pedro' },
       equipamento: { nome: 'Ar Condicionado' },
