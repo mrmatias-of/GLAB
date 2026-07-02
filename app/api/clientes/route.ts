@@ -1,43 +1,59 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/lib/auth'
-import { headers } from 'next/headers'
+import { NextRequest } from 'next/server'
+import { withMiddleware, RequestContext } from '@/lib/middleware/route-handler'
+import { createApiSuccess, createApiError } from '@/lib/middleware/api-response'
 import { clienteService } from '@/src/modules/clientes'
-import { apiResponse, handleApiError } from '@/lib/utils/api-response'
+import { validateBody } from '@/lib/validators/schema-validator'
+import { CreateClienteSchema } from '@/src/modules/clientes/schemas'
 
-export async function GET(req: NextRequest) {
-  try {
-    const session = await auth.api.getSession({ headers: await headers() })
-    if (!session?.user) {
-      return apiResponse(null, 401, 'Unauthorized')
-    }
-
-    const { searchParams } = new URL(req.url)
-    const ativo = searchParams.get('ativo')
-    const cidade = searchParams.get('cidade')
-
-    const filtros: any = {}
-    if (ativo !== null) filtros.ativo = ativo === 'true'
-    if (cidade) filtros.cidade = cidade
-
-    const clientes = await clienteService.listar(session.user.id, filtros)
-    return apiResponse(clientes, 200, 'Clientes listados com sucesso')
-  } catch (error) {
-    return handleApiError(error)
+// GET: List clientes
+async function handleGET(context: RequestContext) {
+  const { userId, tenantId, request } = context
+  
+  const { searchParams } = new URL(request.url)
+  const filtros: any = {}
+  
+  if (searchParams.has('ativo')) {
+    filtros.ativo = searchParams.get('ativo') === 'true'
   }
+  if (searchParams.has('cidade')) {
+    filtros.cidade = searchParams.get('cidade')
+  }
+  if (searchParams.has('page')) {
+    filtros.page = parseInt(searchParams.get('page') || '1')
+  }
+  if (searchParams.has('limit')) {
+    filtros.limit = parseInt(searchParams.get('limit') || '10')
+  }
+
+  const clientes = await clienteService.listar(userId, tenantId, filtros)
+  return createApiSuccess(clientes, 'Clientes listados com sucesso')
 }
 
-export async function POST(req: NextRequest) {
-  try {
-    const session = await auth.api.getSession({ headers: await headers() })
-    if (!session?.user) {
-      return apiResponse(null, 401, 'Unauthorized')
-    }
-
-    const dados = await req.json()
-    const cliente = await clienteService.criar(session.user.id, dados)
-
-    return apiResponse(cliente, 201, 'Cliente criado com sucesso')
-  } catch (error) {
-    return handleApiError(error)
+// POST: Create cliente
+async function handlePOST(context: RequestContext) {
+  const { userId, tenantId, request } = context
+  
+  const body = await request.json()
+  const validated = await validateBody(body, CreateClienteSchema)
+  
+  if (validated.error) {
+    return createApiError(validated.message, 400)
   }
+
+  const cliente = await clienteService.criar(userId, tenantId, validated.data)
+  return createApiSuccess(cliente, 'Cliente criado com sucesso', 201)
 }
+
+export const GET = withMiddleware(handleGET, {
+  requireAuth: true,
+  requireTenant: true,
+  requireCsrf: false,
+  rateLimit: 'user',
+})
+
+export const POST = withMiddleware(handlePOST, {
+  requireAuth: true,
+  requireTenant: true,
+  requireCsrf: true,
+  rateLimit: 'create',
+})

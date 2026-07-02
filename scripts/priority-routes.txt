@@ -1,0 +1,10 @@
+app/api/clientes/[id]/route.ts
+app/api/estoque/route.ts
+app/api/estoque/[id]/route.ts
+app/api/ordens-servico/route.ts
+app/api/ordens-servico/[id]/route.ts
+app/api/financeiro/route.ts
+app/api/rh/funcionarios/route.ts
+app/api/rh/banco-horas/route.ts
+app/api/auth/signin/route.ts
+app/api/auth/logout/route.ts
