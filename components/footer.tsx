@@ -244,7 +244,6 @@ export default function Footer() {
                 &copy; {new Date().getFullYear()} G•Lab Cursos. Todos os direitos reservados.
               </p>
               <button
-                onClick={reset}
                 className="text-xs text-gray-500 hover:text-blue-600 transition-colors underline underline-offset-2"
                 type="button"
               >
