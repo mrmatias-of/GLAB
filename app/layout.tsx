@@ -5,8 +5,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'G•Lab - Assistência Técnica Mobile',
-  description: 'Guias práticos e cursos profissionais para dominar assistência técnica em celulares',
+  title: 'G•Lab - Assistência Técnica em Celulares',
+  description: 'Aprenda assistência técnica mobile com guias profissionais e cursos práticos.',
 }
 
 export default function RootLayout({
@@ -15,8 +15,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="pt-BR">
-      <body className={`${inter.className} bg-slate-950 text-slate-50`}>
+    <html lang="pt-BR" className={inter.className}>
+      <body className="bg-black text-white">
         {children}
       </body>
     </html>
