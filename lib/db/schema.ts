@@ -1,22 +1,37 @@
 import { pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core'
 
-// --- Better Auth required tables -------------------------------------------
+// =============================================================================
+// TENANT DATABASE SCHEMA - Per-tenant isolated data
+// Each tenant has its own PostgreSQL database/schema
+// =============================================================================
+
+// --- Tenant Context ---
+
+// NOTE: tenantId is set at connection time via environment or passed via middleware
+// All tenant tables include tenantId for logical isolation + queryfiltering
+
+// --- Better Auth required tables (Tenant-specific) ---
 // Column names are camelCase to match Better Auth's defaults. Do not rename.
 
 export const user = pgTable('user', {
   id: text('id').primaryKey(),
+  tenantId: text('tenantId').notNull(), // Tenant isolation
   name: text('name').notNull(),
-  email: text('email').notNull().unique(),
+  email: text('email').notNull(),
   emailVerified: boolean('emailVerified').notNull().default(false),
   image: text('image'),
   createdAt: timestamp('createdAt').notNull().defaultNow(),
   updatedAt: timestamp('updatedAt').notNull().defaultNow(),
 })
 
+// Add unique constraint per tenant
+// CREATE UNIQUE INDEX idx_user_email_per_tenant ON "user"(tenantId, email);
+
 export const session = pgTable('session', {
   id: text('id').primaryKey(),
+  tenantId: text('tenantId').notNull(),
   expiresAt: timestamp('expiresAt').notNull(),
-  token: text('token').notNull().unique(),
+  token: text('token').notNull(),
   createdAt: timestamp('createdAt').notNull().defaultNow(),
   updatedAt: timestamp('updatedAt').notNull().defaultNow(),
   ipAddress: text('ipAddress'),
@@ -28,6 +43,7 @@ export const session = pgTable('session', {
 
 export const account = pgTable('account', {
   id: text('id').primaryKey(),
+  tenantId: text('tenantId').notNull(),
   accountId: text('accountId').notNull(),
   providerId: text('providerId').notNull(),
   userId: text('userId')
