@@ -1,23 +1,25 @@
+import Image from 'next/image'
+
 export default function Home() {
   return (
-    <main className="min-h-screen bg-white flex flex-col items-center justify-center px-6">
-      {/* Logo */}
+    <main className="min-h-screen bg-[#0e0e14] flex flex-col items-center justify-center px-6">
       <div className="flex flex-col items-center gap-10 text-center">
-        <div className="space-y-2">
-          <h1 className="text-[clamp(4rem,12vw,9rem)] font-black tracking-tighter leading-none text-gray-950 select-none">
-            G<span className="text-gray-400">•</span>Lab
-          </h1>
-          <p className="text-xs font-bold tracking-[0.4em] uppercase text-gray-400">
-            Assistência Técnica Mobile
-          </p>
-        </div>
+        {/* Real logo */}
+        <Image
+          src="/logo-glab-neon.png"
+          alt="G•Lab"
+          width={220}
+          height={220}
+          priority
+          className="select-none"
+        />
 
         {/* Divider */}
-        <div className="w-12 h-px bg-gray-200" />
+        <div className="w-12 h-px bg-white/10" />
 
         {/* Message */}
         <div className="space-y-3 max-w-sm">
-          <p className="text-gray-900 font-semibold text-lg leading-snug">
+          <p className="text-white font-semibold text-lg leading-snug">
             Estamos em manutenção.
           </p>
           <p className="text-gray-400 text-sm leading-relaxed">
@@ -27,7 +29,7 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <p className="absolute bottom-8 text-xs text-gray-300">
+      <p className="absolute bottom-8 text-xs text-gray-600">
         &copy; 2025 G•Lab
       </p>
     </main>
