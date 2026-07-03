@@ -11,7 +11,7 @@ export function AnimatedLogo() {
         style={{
           width: '180px',
           height: '180px',
-          background: 'radial-gradient(circle, rgba(156,163,175,0.18) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(109,77,255,0.22) 0%, rgba(59,130,246,0.12) 50%, transparent 70%)',
           filter: 'blur(16px)',
           animation: 'breatheGlow 4s ease-in-out infinite',
         }}
@@ -46,10 +46,10 @@ export function AnimatedLogo() {
         </div>
 
         <Image
-          src="/logo-glab-neon.png"
+          src="/logo.png"
           alt="G-Lab"
-          width={140}
-          height={140}
+          width={200}
+          height={200}
           priority
           className="relative z-0 select-none"
           draggable={false}
