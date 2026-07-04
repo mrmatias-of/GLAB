@@ -84,7 +84,7 @@ function ResetPasswordContent() {
           <div className="text-center mb-8">
             <div className="flex justify-center mb-6">
               <Image
-                src="/logo-glab-neon.png"
+                src="/logo.png"
                 alt="G•Lab Cursos"
                 width={80}
                 height={80}
