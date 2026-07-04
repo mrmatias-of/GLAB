@@ -52,8 +52,8 @@ export default function LoginPage() {
               <Image
                 src="/logo.png"
                 alt="G•Lab Cursos"
-                width={80}
-                height={80}
+                width={160}
+                height={160}
                 className="drop-shadow-lg"
               />
             </div>
