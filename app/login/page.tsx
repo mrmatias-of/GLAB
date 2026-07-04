@@ -3,6 +3,7 @@
 import { useState, FormEvent, ChangeEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { signIn } from '@/lib/auth-client'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -18,18 +19,24 @@ export default function LoginPage() {
     setError('')
 
     try {
-      const response = await fetch('/api/auth/signin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+      const result = await signIn.email({
+        email,
+        password,
+        callbackURL: '/admin/dashboard',
+        fetchOptions: {
+          onSuccess: () => {
+            setSuccess(true)
+            setTimeout(() => router.push('/admin/dashboard'), 800)
+          },
+          onError: (ctx) => {
+            setError(ctx.error?.message || 'Email ou senha incorretos')
+          },
+        },
       })
 
-      if (!response.ok) {
-        throw new Error('Falha ao fazer login')
+      if (result?.error) {
+        setError(result.error.message || 'Email ou senha incorretos')
       }
-
-      setSuccess(true)
-      setTimeout(() => router.push('/admin'), 1500)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao fazer login')
     } finally {

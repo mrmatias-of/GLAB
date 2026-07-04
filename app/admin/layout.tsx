@@ -1,6 +1,7 @@
 'use client'
 
 import { usePathname, useRouter } from 'next/navigation'
+import { signOut } from '@/lib/auth-client'
 
 import { PremiumSidebar } from '@/components/admin/premium-sidebar'
 import { PremiumHeader } from '@/components/admin/premium-header'
@@ -33,16 +34,11 @@ export default function AdminLayout({
   const router = useRouter()
 
   const handleLogout = async () => {
-    try {
-      await fetch('/api/auth/logout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      })
-    } catch (err) {
-      console.error('[Logout] Erro:', err)
-    } finally {
-      router.push('/login')
-    }
+    await signOut({
+      fetchOptions: {
+        onSuccess: () => router.push('/login'),
+      },
+    })
   }
 
   const currentTitle =
