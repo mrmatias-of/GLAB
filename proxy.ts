@@ -117,6 +117,19 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // Proteger rotas /admin — redirecionar para login se nao houver sessao
+  if (pathname.startsWith('/admin')) {
+    const sessionCookie =
+      request.cookies.get('better-auth.session_token') ||
+      request.cookies.get('__Secure-better-auth.session_token')
+
+    if (!sessionCookie?.value) {
+      const loginUrl = new URL('/login', request.url)
+      loginUrl.searchParams.set('redirect', pathname)
+      return NextResponse.redirect(loginUrl)
+    }
+  }
+
   const tenantId = extractTenantId(request)
   const isAPI = pathname.startsWith(PROTECTED_API_ROUTES)
 
