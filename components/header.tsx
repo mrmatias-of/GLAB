@@ -19,7 +19,7 @@ export default function Header() {
       <header className="sticky top-0 z-50 border-b border-white/10 bg-[#050712]/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-5 md:px-8 h-20 flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
             <Image
               src="/logo-glab-neon-transparent.png"
               alt="G-LAB Logo"
@@ -27,6 +27,10 @@ export default function Header() {
               height={80}
               className="w-16 h-16 object-contain drop-shadow-[0_0_18px_rgba(59,130,246,.45)]"
             />
+            <span className="hidden sm:block">
+              <strong className="block text-sm font-black tracking-[.16em] text-white">G·LAB CURSOS</strong>
+              <span className="mt-1 block text-[8px] font-bold uppercase tracking-[.18em] text-white/35">Formação técnica profissional</span>
+            </span>
           </Link>
 
           {/* Nav desktop */}
@@ -48,7 +52,7 @@ export default function Header() {
               href="/cursos"
               className="hidden md:inline-flex items-center gap-2 rounded-full border border-blue-400/30 bg-blue-500 px-5 py-2.5 text-xs font-bold text-white shadow-[0_0_30px_rgba(37,99,235,.3)] transition hover:-translate-y-0.5 hover:bg-blue-400"
             >
-              Explorar cursos <ArrowUpRight size={15} />
+              Ver catálogo completo <ArrowUpRight size={15} />
             </Link>
             <button
               onClick={() => setOpen(!open)}
