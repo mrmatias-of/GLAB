@@ -3,9 +3,9 @@ import Link from "next/link"
 import { ArrowRight, BatteryCharging, Check, CircuitBoard, Cpu, Gauge, Smartphone, Sparkles, Star, Wrench } from "lucide-react"
 
 const cards = [
-  { title: "Troca de tela", text: "Execução limpa, desmontagem segura e acabamento profissional.", icon: Smartphone, image: "/thumbnail_combo_iniciante_mobile_v3.jpg", href: "/cursos/guia-troca-de-tela" },
-  { title: "Diagnóstico de placa", text: "Encontre a causa antes de trocar peças ou perder tempo.", icon: CircuitBoard, image: "/hero-tech-pcb.jpg", href: "/cursos/guia-curto-em-placa" },
-  { title: "Bateria e carga", text: "Protocolos confiáveis para falhas de autonomia e alimentação.", icon: BatteryCharging, image: "/thumbnail_combo_iniciante_mobile_v2.jpg", href: "/cursos/guia-troca-de-bateria" },
+  { title: "Troca de tela", text: "Execução limpa, desmontagem segura e acabamento profissional.", icon: Smartphone, image: "/thumbnail_combo_iniciante_mobile_v3.jpg", href: "/cursos/guia-troca-de-tela", fit: "contain" },
+  { title: "Diagnóstico de placa", text: "Encontre a causa antes de trocar peças ou perder tempo.", icon: CircuitBoard, image: "/hero-tech-pcb.jpg", href: "/cursos/guia-curto-em-placa", fit: "cover" },
+  { title: "Bateria e carga", text: "Protocolos confiáveis para falhas de autonomia e alimentação.", icon: BatteryCharging, image: "/thumbnail_combo_iniciante_mobile_v2.jpg", href: "/cursos/guia-troca-de-bateria", fit: "contain" },
 ]
 
 export default function PremiumHomeSections() {
@@ -25,7 +25,7 @@ export default function PremiumHomeSections() {
         </div>
         <div className="grid gap-5 lg:grid-cols-3">
           {cards.map((card, i) => <Link href={card.href} key={card.title} className="group premium-course-card">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-[20px]"><Image src={card.image} alt={card.title} fill className="object-cover transition duration-700 group-hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-t from-[#070914] via-transparent to-transparent" /><span className="absolute left-4 top-4 rounded-full border border-white/15 bg-black/45 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[.18em] text-white backdrop-blur">0{i+1} · Formação</span></div>
+            <div className="relative aspect-square overflow-hidden rounded-[20px] bg-[#070a15]"><Image src={card.image} alt={card.title} fill sizes="(max-width: 1024px) 100vw, 33vw" className={`${card.fit === "contain" ? "object-contain p-2" : "object-cover object-center"} transition duration-700 group-hover:scale-[1.03]`} /><div className="absolute inset-0 bg-gradient-to-t from-[#070914]/80 via-transparent to-transparent" /><span className="absolute left-4 top-4 rounded-full border border-white/15 bg-black/45 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[.18em] text-white backdrop-blur">0{i+1} · Formação</span></div>
             <div className="p-6"><div className="mb-4 flex items-center justify-between"><card.icon className="text-cyan-300" size={24}/><ArrowRight size={19} className="text-white/40 transition group-hover:translate-x-1 group-hover:text-white"/></div><h3 className="text-xl font-bold text-white">{card.title}</h3><p className="mt-2 text-sm leading-6 text-slate-400">{card.text}</p></div>
           </Link>)}
         </div>
