@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { Menu, X, Search } from 'lucide-react'
+import { ArrowUpRight, Menu, X } from 'lucide-react'
 import { useState } from 'react'
 
 const NAV = [
@@ -16,11 +16,8 @@ export default function Header() {
 
   return (
     <>
-      <header
-        className="sticky top-0 z-50"
-        style={{ backgroundColor: '#ffffff', borderBottom: '1px solid #e5e7eb' }}
-      >
-        <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#050712]/80 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-5 md:px-8 h-20 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <Image
@@ -28,7 +25,7 @@ export default function Header() {
               alt="G-LAB Logo"
               width={80}
               height={80}
-              className="w-16 h-16 sm:w-20 sm:h-20"
+              className="w-16 h-16 object-contain drop-shadow-[0_0_18px_rgba(59,130,246,.45)]"
             />
           </Link>
 
@@ -38,10 +35,7 @@ export default function Header() {
               <Link
                 key={n.href}
                 href={n.href}
-                className="text-xs font-semibold tracking-widest uppercase transition-colors"
-                style={{ color: '#6b7280' }}
-                onMouseEnter={e => (e.currentTarget.style.color = '#2563eb')}
-                onMouseLeave={e => (e.currentTarget.style.color = '#6b7280')}
+                className="text-[11px] font-bold tracking-[.18em] uppercase text-white/55 transition-colors hover:text-white"
               >
                 {n.label}
               </Link>
@@ -52,15 +46,14 @@ export default function Header() {
           <div className="flex items-center gap-3">
             <Link
               href="/cursos"
-              className="hidden md:inline-flex btn-primary text-xs py-2 px-5"
+              className="hidden md:inline-flex items-center gap-2 rounded-full border border-blue-400/30 bg-blue-500 px-5 py-2.5 text-xs font-bold text-white shadow-[0_0_30px_rgba(37,99,235,.3)] transition hover:-translate-y-0.5 hover:bg-blue-400"
             >
-              Ver Cursos
+              Explorar cursos <ArrowUpRight size={15} />
             </Link>
             <button
               onClick={() => setOpen(!open)}
               aria-label={open ? 'Fechar menu' : 'Abrir menu'}
-              className="md:hidden transition-colors cursor-pointer"
-              style={{ color: '#6b7280' }}
+              className="md:hidden text-white transition-colors cursor-pointer"
             >
               {open ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -70,21 +63,19 @@ export default function Header() {
         {/* Menu mobile */}
         {open && (
           <nav
-            className="md:hidden px-6 py-4 space-y-1"
-            style={{ borderTop: '1px solid #e5e7eb', backgroundColor: '#ffffff' }}
+            className="md:hidden px-6 py-5 space-y-1 border-t border-white/10 bg-[#080b18]"
           >
             {NAV.map((n) => (
               <Link
                 key={n.href}
                 href={n.href}
                 onClick={() => setOpen(false)}
-                className="block py-2 text-sm font-semibold tracking-wider uppercase transition-colors"
-                style={{ color: '#6b7280' }}
+                className="block py-3 text-sm font-semibold tracking-wider uppercase text-white/70 transition-colors hover:text-white"
               >
                 {n.label}
               </Link>
             ))}
-            <div className="pt-4 border-t border-gray-200">
+            <div className="pt-4 border-t border-white/10">
               <Link href="/cursos" className="btn-primary w-full justify-center text-xs py-2.5" onClick={() => setOpen(false)}>
                 Ver Cursos
               </Link>
