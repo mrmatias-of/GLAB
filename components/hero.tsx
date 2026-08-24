@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowRight, CheckCircle2, Play, ShieldCheck, Sparkles, Star } from "lucide-react"
+import { ArrowRight, CheckCircle2, Play, ShieldCheck, Sparkles } from "lucide-react"
 
 export default function Hero() {
   return (
@@ -57,19 +57,10 @@ export default function Hero() {
                 alt="Ferramentas técnicas profissionais - PCB com sonda laser"
                 width={1536}
                 height={1024}
-                className="aspect-[16/11] w-full rounded-[24px] object-cover object-center"
+                className="aspect-video w-full rounded-[24px] bg-[#050712] object-contain"
                 priority
                 sizes="(max-width: 1024px) 100vw, 46vw"
               />
-              <div className="absolute inset-x-5 bottom-5 rounded-2xl border border-white/15 bg-[#070a15]/80 p-5 backdrop-blur-xl">
-                <div className="flex items-center justify-between">
-                  <div><p className="text-[10px] uppercase tracking-[.2em] text-cyan-300">Método G·Lab</p><p className="mt-1 font-bold text-white">Precisão em cada procedimento</p></div>
-                  <div className="flex items-center gap-1 text-amber-300"><Star size={14} fill="currentColor" /><span className="text-xs font-bold">4.9</span></div>
-                </div>
-              </div>
-            </div>
-            <div className="absolute -left-6 top-10 hidden rounded-2xl border border-white/15 bg-[#0c1020]/90 px-5 py-4 shadow-xl backdrop-blur md:block">
-              <p className="text-2xl font-black text-white">+10 anos</p><p className="text-[10px] uppercase tracking-widest text-slate-400">de experiência real</p>
             </div>
           </div>
         </div>
