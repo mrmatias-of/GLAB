@@ -16,8 +16,8 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#050712]/80 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-5 md:px-8 h-20 flex items-center justify-between">
+      <header className="sticky top-0 z-50 border-b border-white/[.08] bg-[#040610]/85 backdrop-blur-2xl">
+        <div className="mx-auto flex h-[88px] max-w-[1440px] items-center justify-between px-5 md:px-8 xl:px-12">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
             <Image
@@ -25,21 +25,21 @@ export default function Header() {
               alt="G-LAB Logo"
               width={80}
               height={80}
-              className="w-16 h-16 object-contain drop-shadow-[0_0_18px_rgba(59,130,246,.45)]"
+              className="h-14 w-14 object-contain drop-shadow-[0_0_18px_rgba(59,130,246,.45)]"
             />
             <span className="hidden sm:block">
-              <strong className="block text-sm font-black tracking-[.16em] text-white">G·LAB CURSOS</strong>
-              <span className="mt-1 block text-[8px] font-bold uppercase tracking-[.18em] text-white/35">Formação técnica profissional</span>
+              <strong className="block text-[13px] font-black tracking-[.18em] text-white">G·LAB CURSOS</strong>
+              <span className="mt-1 block text-[8px] font-bold uppercase tracking-[.2em] text-cyan-200/45">Tecnologia · Precisão · Confiança</span>
             </span>
           </Link>
 
           {/* Nav desktop */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden items-center gap-1 rounded-full border border-white/[.08] bg-white/[.035] p-1.5 md:flex">
             {NAV.map((n) => (
               <Link
                 key={n.href}
                 href={n.href}
-                className="text-[11px] font-bold tracking-[.18em] uppercase text-white/55 transition-colors hover:text-white"
+                className="rounded-full px-5 py-2 text-[9px] font-black uppercase tracking-[.18em] text-white/50 transition-colors hover:bg-white/[.06] hover:text-white"
               >
                 {n.label}
               </Link>
@@ -50,7 +50,7 @@ export default function Header() {
           <div className="flex items-center gap-3">
             <Link
               href="/cursos"
-              className="hidden md:inline-flex items-center gap-2 rounded-full border border-blue-400/30 bg-blue-500 px-5 py-2.5 text-xs font-bold text-white shadow-[0_0_30px_rgba(37,99,235,.3)] transition hover:-translate-y-0.5 hover:bg-blue-400"
+              className="hidden items-center gap-2 rounded-full bg-white px-5 py-3 text-[10px] font-black uppercase tracking-[.1em] text-[#061020] shadow-[0_12px_40px_rgba(255,255,255,.09)] transition hover:-translate-y-0.5 hover:bg-cyan-100 md:inline-flex"
             >
               Ver catálogo completo <ArrowUpRight size={15} />
             </Link>
