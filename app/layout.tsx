@@ -1,18 +1,9 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter } from 'next/font/google'
 import { VisitorTracker } from '@/components/visitor-tracker'
 import { SiteOverlays } from '@/components/site-overlays'
 import { PrivacyBannerWrapper } from '@/components/privacy-banner-wrapper'
 import { ConditionalAnalytics } from '@/components/conditional-analytics'
 import './globals.css'
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  weight: ['400', '500', '600', '700', '800'],
-  display: 'swap',
-  preload: true,
-})
 
 const SITE_URL = 'https://www.glabcursos.com.br'
 const OG_IMAGE = `${SITE_URL}/og-image.jpg`
@@ -83,10 +74,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR" className={`${inter.variable}`} style={{ backgroundColor: '#ffffff' }}>
+    <html lang="pt-BR" style={{ backgroundColor: '#050712' }}>
       <head>
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <meta name="format-detection" content="telephone=no" />
       </head>
       <body className="font-sans antialiased">
