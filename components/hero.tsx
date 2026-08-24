@@ -57,8 +57,9 @@ export default function Hero() {
                 alt="Ferramentas técnicas profissionais - PCB com sonda laser"
                 width={1536}
                 height={1024}
-                className="aspect-[4/5] w-full rounded-[24px] object-cover lg:aspect-[4/5]"
+                className="aspect-[16/11] w-full rounded-[24px] object-cover object-center"
                 priority
+                sizes="(max-width: 1024px) 100vw, 46vw"
               />
               <div className="absolute inset-x-5 bottom-5 rounded-2xl border border-white/15 bg-[#070a15]/80 p-5 backdrop-blur-xl">
                 <div className="flex items-center justify-between">
