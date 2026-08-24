@@ -4,7 +4,7 @@ const curso = (id: string, slug: string, titulo: string, descricao: string, tril
 
 export const CATALOGO: CursoCatalogo[] = [
   curso("01", "combo-iniciante-mobile", "Combo Iniciante Mobile", "A base completa para começar na assistência técnica com segurança e método.", "fundamentos", "Iniciante", "/images/combo/combo-iniciante.webp", ["Montagem da bancada", "Ferramentas essenciais", "Diagnóstico inicial", "Boas práticas"], true),
-  curso("02", "guia-troca-de-tela", "Troca de Tela Profissional", "Desmontagem, preparação, aplicação e testes com acabamento premium.", "fundamentos", "Iniciante", "/images/iphone.png", ["Triagem", "Desmontagem segura", "Aplicação e vedação", "Testes de qualidade"]),
+  curso("02", "guia-troca-de-tela", "Troca de Tela Profissional", "Desmontagem, preparação, aplicação e testes com acabamento premium.", "fundamentos", "Iniciante", "/images/course-troca-tela-v2.png", ["Triagem", "Desmontagem segura", "Aplicação e vedação", "Testes de qualidade"]),
   curso("03", "guia-troca-de-bateria", "Troca de Bateria Segura", "Remoção, instalação, calibração e validação de baterias.", "fundamentos", "Iniciante", "/images/samsung.png", ["Segurança com lítio", "Remoção", "Instalação", "Calibração"]),
   curso("04", "guia-conectores-carga", "Conectores de Carga", "Diagnóstico e substituição com soldagem e controle térmico.", "fundamentos", "Intermediário", "/images/diagnostico.png", ["Diagnóstico", "Remoção", "Preparação das ilhas", "Soldagem"]),
   curso("05", "guia-software-celular", "Software para Celulares", "Atualização, restauração, backup e correção das falhas mais frequentes.", "fundamentos", "Iniciante", "/images/samsung.png", ["Backup", "Firmware", "Restauração", "Testes"]),
