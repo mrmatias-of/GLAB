@@ -1,13 +1,10 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import { SocialProofPopup } from "@/components/social-proof-popup"
 import WhatsAppButton from "@/components/whatsapp-button"
 
 /**
- * Renderiza os overlays promocionais globais (popup de prova social e botão
- * do WhatsApp) em todas as rotas, exceto nas landing pages dedicadas onde esses
- * elementos são distratores indesejados.
+ * Renderiza apenas o canal real de atendimento em todas as rotas públicas.
  *
  * O PrivacyConsentBanner é mantido fora deste componente (diretamente no layout)
  * para garantir que o consentimento de privacidade funcione em todas as rotas.
@@ -27,9 +24,7 @@ export function SiteOverlays() {
 
   return (
     <>
-      <SocialProofPopup />
-      {/* TODO: Fix WhatsAppButton rendering - currently renders gigantic and occupies full viewport */}
-      {/* <WhatsAppButton /> */}
+      <WhatsAppButton />
     </>
   )
 }

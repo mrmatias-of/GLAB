@@ -1,67 +1,16 @@
-'use client'
+import { redirect } from 'next/navigation'
+import { AdminShell } from '@/components/admin/admin-shell'
+import { currentPlatformUser, isPlatformAdmin } from '@/lib/learning-platform'
 
-import { usePathname, useRouter } from 'next/navigation'
-import { signOut } from '@/lib/auth-client'
-
-import { PremiumSidebar } from '@/components/admin/premium-sidebar'
-import { PremiumHeader } from '@/components/admin/premium-header'
-import {
-  LayoutDashboard,
-  ClipboardList,
-  Users,
-  Wrench,
-  Package,
-  Wallet,
-  TrendingUp,
-} from 'lucide-react'
-
-const navigation = [
-  { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
-  { name: 'Ordens de Serviço', href: '/admin/ordens-servico', icon: ClipboardList },
-  { name: 'Clientes', href: '/admin/clientes', icon: Users },
-  { name: 'Técnicos', href: '/admin/tecnicos', icon: Wrench },
-  { name: 'Estoque', href: '/admin/estoque', icon: Package },
-  { name: 'Financeiro', href: '/admin/financeiro', icon: Wallet },
-  { name: 'Relatórios', href: '/admin/relatorios', icon: TrendingUp },
-]
-
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const pathname = usePathname()
-  const router = useRouter()
+  const session = await currentPlatformUser()
 
-  const handleLogout = async () => {
-    await signOut({
-      fetchOptions: {
-        onSuccess: () => router.push('/login'),
-      },
-    })
-  }
+  if (!session) redirect('/sign-in')
+  if (!isPlatformAdmin(session.email)) redirect('/aluno')
 
-  const currentTitle =
-    navigation.find((n) => pathname === n.href || pathname.startsWith(n.href + '/'))?.name ||
-    'Painel'
-
-  return (
-    <div className="min-h-screen bg-white flex" style={{ backgroundColor: '#ffffff' }}>
-      {/* Premium Sidebar */}
-      <PremiumSidebar />
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col lg:ml-64">
-        {/* Premium Header */}
-        <PremiumHeader title={currentTitle} />
-
-        {/* Page Content */}
-        <main className="flex-1 p-4 lg:p-8 overflow-y-auto">
-          <div className="max-w-7xl mx-auto w-full">
-            {children}
-          </div>
-        </main>
-      </div>
-    </div>
-  )
+  return <AdminShell>{children}</AdminShell>
 }

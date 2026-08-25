@@ -1,8 +1,12 @@
 import { betterAuth } from 'better-auth'
 import { pool } from '@/lib/db'
+import { sendResetPasswordEmail, sendVerificationEmail } from '@/lib/email'
 
 export const auth = betterAuth({
-  database: { db: pool, schema: 'neon_auth' },
+  database: pool,
+  user: { modelName: 'glab_auth_user' },
+  account: { modelName: 'glab_auth_account' },
+  verification: { modelName: 'glab_auth_verification' },
   baseURL:
     process.env.BETTER_AUTH_URL ??
     (process.env.VERCEL_PROJECT_PRODUCTION_URL
@@ -13,6 +17,17 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     autoSignIn: true,
+    requireEmailVerification: true,
+    sendResetPassword: async ({ user, url }) => {
+      await sendResetPasswordEmail({ email: user.email, name: user.name, url })
+    },
+  },
+  emailVerification: {
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+    sendVerificationEmail: async ({ user, url }) => {
+      await sendVerificationEmail({ email: user.email, name: user.name, url })
+    },
   },
   trustedOrigins: [
     ...(process.env.V0_RUNTIME_URL ? [process.env.V0_RUNTIME_URL] : []),
@@ -22,6 +37,7 @@ export const auth = betterAuth({
       : []),
   ],
   session: {
+    modelName: 'glab_auth_session',
     expiresIn: 60 * 60 * 24 * 7, // 7 days
     updateAge: 60 * 60 * 24, // 1 day
   },
