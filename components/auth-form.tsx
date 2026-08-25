@@ -16,6 +16,7 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [verificationSent, setVerificationSent] = useState(false)
 
   const isSignUp = mode === 'sign-up'
 
@@ -35,7 +36,12 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
       return
     }
 
-    router.push('/')
+    if (isSignUp) {
+      setVerificationSent(true)
+      return
+    }
+
+    router.push('/aluno')
     router.refresh()
   }
 
@@ -44,19 +50,19 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
       <Card className="w-full max-w-sm p-6">
         <div className="mb-6">
           <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-            {isSignUp ? 'Create an account' : 'Welcome back'}
+            {isSignUp ? 'Crie sua conta' : 'Bem-vindo de volta'}
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
             {isSignUp
-              ? 'Sign up to get started'
-              : 'Sign in to your account to continue'}
+              ? 'Seu acesso à plataforma técnica começa aqui.'
+              : 'Entre para acessar sua biblioteca G‑LAB.'}
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        {verificationSent ? <div className="rounded-xl border border-cyan-400/30 bg-cyan-400/10 p-5 text-sm leading-6 text-cyan-950 dark:text-cyan-100"><strong className="block text-base">Confirme seu e-mail.</strong>Enviamos um link de ativação para <strong>{email}</strong>. Verifique também a caixa de spam. Após confirmar, entre normalmente na sua conta.</div> : <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {isSignUp && (
             <div className="flex flex-col gap-2">
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name">Nome</Label>
               <Input
                 id="name"
                 value={name}
@@ -67,7 +73,7 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
             </div>
           )}
           <div className="flex flex-col gap-2">
-            <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">E-mail</Label>
             <Input
               id="email"
               type="email"
@@ -78,7 +84,7 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Senha</Label>
             <Input
               id="password"
               type="password"
@@ -98,22 +104,23 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
 
           <Button type="submit" disabled={loading} className="w-full">
             {loading
-              ? 'Please wait...'
+              ? 'Aguarde...'
               : isSignUp
-                ? 'Create account'
-                : 'Sign in'}
+                ? 'Criar conta e enviar confirmação'
+                : 'Entrar na plataforma'}
           </Button>
-        </form>
+        </form>}
 
         <p className="text-sm text-muted-foreground text-center mt-6">
-          {isSignUp ? 'Already have an account? ' : "Don't have an account? "}
+          {isSignUp ? 'Já tem uma conta? ' : 'Ainda não possui conta? '}
           <Link
             href={isSignUp ? '/sign-in' : '/sign-up'}
             className="text-foreground font-medium underline-offset-4 hover:underline"
           >
-            {isSignUp ? 'Sign in' : 'Sign up'}
+            {isSignUp ? 'Entrar' : 'Criar conta'}
           </Link>
         </p>
+        {!isSignUp && <p className="mt-4 text-center text-sm"><Link href="/esqueci-a-senha" className="text-muted-foreground underline-offset-4 hover:underline">Esqueci minha senha</Link></p>}
       </Card>
     </main>
   )
