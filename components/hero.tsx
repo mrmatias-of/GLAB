@@ -31,7 +31,7 @@ export default function Hero() {
 
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             <Link href="/cursos" className="group inline-flex items-center justify-center gap-3 rounded-full bg-white px-7 py-4 text-sm font-black text-[#071020] shadow-[0_18px_50px_rgba(255,255,255,.12)] transition hover:-translate-y-1 hover:bg-cyan-100">
-              Explorar as 16 formações <ArrowRight size={18} className="transition group-hover:translate-x-1" />
+              Explorar as 48 formações <ArrowRight size={18} className="transition group-hover:translate-x-1" />
             </Link>
             <Link href="#metodo" className="inline-flex items-center justify-center gap-3 rounded-full border border-white/15 bg-white/[.05] px-7 py-4 text-sm font-bold text-white backdrop-blur transition hover:border-cyan-300/30 hover:bg-white/[.09]">
               Conhecer o método <ChevronRight size={17} />
