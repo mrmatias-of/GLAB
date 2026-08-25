@@ -19,7 +19,7 @@ export default function PremiumHomeSections() {
   return <>
     <section className="relative z-10 border-b border-white/[.08] bg-[#070914]">
       <div className="mx-auto grid max-w-[1440px] grid-cols-2 divide-x divide-white/[.08] px-5 md:grid-cols-4 md:px-8 xl:px-12">
-        {[["+10", "anos de experiência"], ["16", "formações técnicas"], ["4", "trilhas especializadas"], ["01", "método de bancada"]].map(([value, label]) => <div key={label} className="px-3 py-8 text-center md:py-11"><p className="text-3xl font-black tracking-[-.05em] text-white md:text-4xl">{value}</p><p className="mt-2 text-[8px] font-bold uppercase tracking-[.2em] text-white/35 md:text-[9px]">{label}</p></div>)}
+        {[["+10", "anos de experiência"], ["48", "formações técnicas"], ["8", "trilhas especializadas"], ["01", "método de bancada"]].map(([value, label]) => <div key={label} className="px-3 py-8 text-center md:py-11"><p className="text-3xl font-black tracking-[-.05em] text-white md:text-4xl">{value}</p><p className="mt-2 text-[8px] font-bold uppercase tracking-[.2em] text-white/35 md:text-[9px]">{label}</p></div>)}
       </div>
     </section>
 
