@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from 'next'
-import { VisitorTracker } from '@/components/visitor-tracker'
 import { SiteOverlays } from '@/components/site-overlays'
 import { PrivacyBannerWrapper } from '@/components/privacy-banner-wrapper'
 import { ConditionalAnalytics } from '@/components/conditional-analytics'
@@ -79,7 +78,6 @@ export default function RootLayout({
         <meta name="format-detection" content="telephone=no" />
       </head>
       <body className="font-sans antialiased">
-        <VisitorTracker />
         <SiteOverlays />
         {children}
         <PrivacyBannerWrapper />
