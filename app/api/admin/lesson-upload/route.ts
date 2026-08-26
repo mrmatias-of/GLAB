@@ -28,10 +28,9 @@ export async function POST(request: Request): Promise<NextResponse> {
           maximumSizeInBytes: 2 * 1024 * 1024 * 1024, // 2GB
         }
       },
-      onUploadCompleted: async () => {
-        // Nada a persistir aqui: o cliente recebe a URL final e a envia junto
-        // com o formulário de criação/edição da aula, que grava content_url.
-      },
+      // Sem onUploadCompleted: nada a persistir no servidor neste passo — o
+      // cliente recebe a URL final do blob e a envia junto com o formulário
+      // de criação/edição da aula, que grava content_url.
     })
 
     return NextResponse.json(jsonResponse)
