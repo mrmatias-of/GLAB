@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
+import { AuthBrandHeader } from '@/components/auth-brand-header'
 
 export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
   const router = useRouter()
@@ -40,7 +41,8 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
   }
 
   return (
-    <main className="min-h-svh bg-background flex items-center justify-center px-4">
+    <main className="min-h-svh bg-background flex flex-col items-center justify-center px-4 py-12">
+      <AuthBrandHeader />
       <Card className="w-full max-w-sm p-6">
         <div className="mb-6">
           <h1 className="text-2xl font-semibold tracking-tight text-foreground">
