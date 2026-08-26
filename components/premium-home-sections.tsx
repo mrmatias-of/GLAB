@@ -3,10 +3,10 @@ import Link from "next/link"
 import { ArrowRight, BookOpenCheck, Check, ChevronRight, CircuitBoard, Cpu, Gauge, Headphones, Layers3, LockKeyhole, Microscope, RefreshCw, ShieldCheck, Smartphone, Sparkles, Wrench } from "lucide-react"
 
 const areas = [
-  { icon: Smartphone, number: "01", title: "Reparos essenciais", text: "Tela, bateria, conectores e procedimentos que sustentam a rotina da assistência.", color: "from-cyan-400/20" },
-  { icon: CircuitBoard, number: "02", title: "Diagnóstico e placa", text: "Consumo, curto, esquemas, PMIC, sinais e raciocínio técnico avançado.", color: "from-blue-500/20" },
-  { icon: Layers3, number: "03", title: "Gestão da bancada", text: "Precificação, padronização, controle de qualidade e posicionamento profissional.", color: "from-violet-500/20" },
-  { icon: Gauge, number: "04", title: "PC & Performance", text: "Diagnóstico de gargalos, estabilidade, temperatura e otimização real.", color: "from-fuchsia-500/20" },
+  { icon: Smartphone, number: "01", title: "Reparos essenciais", text: "Tela, bateria, conectores e procedimentos que sustentam a rotina da assistência.", color: "from-cyan-400/20", image: "/images/samsung.png" },
+  { icon: CircuitBoard, number: "02", title: "Diagnóstico e placa", text: "Consumo, curto, esquemas, PMIC, sinais e raciocínio técnico avançado.", color: "from-blue-500/20", image: "/images/diagnostico.png" },
+  { icon: Layers3, number: "03", title: "Gestão da bancada", text: "Precificação, padronização, controle de qualidade e posicionamento profissional.", color: "from-violet-500/20", image: "/images/gestao.png" },
+  { icon: Gauge, number: "04", title: "PC & Performance", text: "Diagnóstico de gargalos, estabilidade, temperatura e otimização real.", color: "from-fuchsia-500/20", image: "/images/pc.png" },
 ]
 
 const featured = [
@@ -31,9 +31,11 @@ export default function PremiumHomeSections() {
           <p className="max-w-2xl text-base leading-7 text-slate-400 lg:justify-self-end lg:text-lg">Uma biblioteca construída para acompanhar a evolução do técnico: da primeira abertura de aparelho ao diagnóstico eletrônico e à gestão profissional da bancada.</p>
         </div>
 
-        <div className="mt-14 grid gap-4 md:grid-cols-2 xl:grid-cols-4">{areas.map((area) => <article key={area.number} className="group relative min-h-[330px] overflow-hidden rounded-[28px] border border-white/[.09] bg-[#090c17] p-7 transition duration-500 hover:-translate-y-2 hover:border-cyan-300/25">
-          <div className={`absolute inset-0 bg-gradient-to-br ${area.color} via-transparent to-transparent opacity-40 transition group-hover:opacity-70`} />
-          <div className="relative flex h-full flex-col"><div className="flex items-center justify-between"><span className="text-[10px] font-black tracking-[.2em] text-white/30">{area.number}</span><div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[.05] text-cyan-200"><area.icon size={21} /></div></div><div className="mt-auto pt-20"><h3 className="text-2xl font-black tracking-[-.03em] text-white">{area.title}</h3><p className="mt-4 text-sm leading-6 text-slate-400">{area.text}</p></div></div>
+        <div className="mt-14 grid gap-4 md:grid-cols-2 xl:grid-cols-4">{areas.map((area) => <article key={area.number} className="group relative min-h-[420px] overflow-hidden rounded-[28px] border border-white/[.09] bg-[#090c17] transition duration-500 hover:-translate-y-2 hover:border-cyan-300/25 hover:shadow-[0_30px_90px_rgba(0,0,0,.35)]">
+          <Image src={area.image} alt={area.title} fill sizes="(max-width:768px) 100vw, (max-width:1280px) 50vw, 25vw" className="object-cover transition duration-700 group-hover:scale-105" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#050712]/20 via-[#050712]/45 to-[#050712]/98" />
+          <div className={`absolute inset-0 bg-gradient-to-br ${area.color} via-transparent to-black/40 opacity-70 transition group-hover:opacity-90`} />
+          <div className="relative flex h-full min-h-[420px] flex-col p-7"><div className="flex items-center justify-between"><span className="rounded-full border border-white/10 bg-black/35 px-3 py-1.5 text-[10px] font-black tracking-[.2em] text-white/60 backdrop-blur">{area.number}</span><div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/15 bg-black/35 text-cyan-100 backdrop-blur"><area.icon size={21} /></div></div><div className="mt-auto"><h3 className="max-w-[12rem] text-3xl font-black leading-none tracking-[-.04em] text-white drop-shadow-lg">{area.title}</h3><p className="mt-4 text-sm leading-6 text-slate-200/85">{area.text}</p></div></div>
         </article>)}</div>
       </div>
     </section>
