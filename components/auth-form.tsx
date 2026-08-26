@@ -3,11 +3,8 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { Lock, ShieldCheck } from 'lucide-react'
 import { authClient } from '@/lib/auth-client'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Card } from '@/components/ui/card'
 import { AuthBrandHeader } from '@/components/auth-brand-header'
 
 export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
@@ -32,7 +29,7 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
     setLoading(false)
 
     if (error) {
-      setError(error.message ?? 'Something went wrong')
+      setError(error.message ?? 'Algo deu errado. Tente novamente.')
       return
     }
 
@@ -41,83 +38,120 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
   }
 
   return (
-    <main className="min-h-svh bg-background flex flex-col items-center justify-center px-4 py-12">
-      <AuthBrandHeader />
-      <Card className="w-full max-w-sm p-6">
-        <div className="mb-6">
-          <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+    <main className="relative isolate flex min-h-svh flex-col items-center justify-center overflow-hidden bg-[#040610] px-4 py-14 text-white">
+      {/* Atmosfera de fundo, consistente com a home */}
+      <div className="premium-grid absolute inset-0 opacity-40" />
+      <div className="absolute -left-40 top-0 h-[520px] w-[520px] rounded-full bg-blue-600/[.14] blur-[160px]" />
+      <div className="absolute -right-32 bottom-0 h-[560px] w-[560px] rounded-full bg-violet-600/[.13] blur-[180px]" />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/50 to-transparent" />
+
+      <div className="relative z-10 flex w-full flex-col items-center">
+        <AuthBrandHeader />
+
+        <section className="w-full max-w-sm rounded-[28px] border border-white/[.12] bg-[#080b16]/90 p-7 shadow-[0_45px_120px_rgba(0,0,0,.55)] backdrop-blur-xl">
+          <span className="inline-flex items-center gap-2 rounded-full border border-cyan-300/20 bg-cyan-300/[.08] px-3 py-1.5 text-[9px] font-black uppercase tracking-[.22em] text-cyan-200">
+            <ShieldCheck size={12} /> Acesso restrito
+          </span>
+
+          <h1 className="mt-4 text-2xl font-black tracking-tight text-white">
             {isSignUp ? 'Crie sua conta' : 'Bem-vindo de volta'}
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="mt-2 text-sm leading-6 text-slate-400">
             {isSignUp
-              ? 'Seu acesso à plataforma técnica começa aqui.'
-              : 'Entre para acessar sua biblioteca G‑LAB.'}
+              ? 'Seu acesso à formação técnica começa aqui.'
+              : 'Entre para acessar sua biblioteca G·LAB.'}
           </p>
-        </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          {isSignUp && (
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="name">Nome</Label>
-              <Input
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+          <form onSubmit={handleSubmit} className="mt-7 flex flex-col gap-4">
+            {isSignUp && (
+              <label className="block text-sm font-bold text-white/90">
+                Nome
+                <input
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  autoComplete="name"
+                  placeholder="Seu nome completo"
+                  className="mt-2 w-full rounded-xl border border-white/15 bg-black/20 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-colors focus:border-cyan-300"
+                />
+              </label>
+            )}
+
+            <label className="block text-sm font-bold text-white/90">
+              E-mail
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
-                autoComplete="name"
+                autoComplete="email"
+                placeholder="voce@exemplo.com"
+                className="mt-2 w-full rounded-xl border border-white/15 bg-black/20 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-colors focus:border-cyan-300"
               />
-            </div>
-          )}
-          <div className="flex flex-col gap-2">
-              <Label htmlFor="email">E-mail</Label>
-            <Input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              autoComplete="email"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-              <Label htmlFor="password">Senha</Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={8}
-              autoComplete={isSignUp ? 'new-password' : 'current-password'}
-            />
-          </div>
+            </label>
 
-          {error && (
-            <p className="text-sm text-destructive" role="alert">
-              {error}
+            <label className="block text-sm font-bold text-white/90">
+              Senha
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={8}
+                autoComplete={isSignUp ? 'new-password' : 'current-password'}
+                placeholder="••••••••"
+                className="mt-2 w-full rounded-xl border border-white/15 bg-black/20 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-colors focus:border-cyan-300"
+              />
+            </label>
+
+            {error && (
+              <p
+                role="alert"
+                className="rounded-xl border border-red-400/25 bg-red-400/10 p-3 text-sm leading-5 text-red-200"
+              >
+                {error}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="mt-1 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-300 to-blue-500 px-4 py-3 text-sm font-black text-slate-950 transition disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              <Lock size={15} />
+              {loading
+                ? 'Aguarde...'
+                : isSignUp
+                  ? 'Criar conta'
+                  : 'Entrar na plataforma'}
+            </button>
+          </form>
+
+          <p className="mt-6 text-center text-sm text-slate-400">
+            {isSignUp ? 'Já tem uma conta? ' : 'Ainda não possui conta? '}
+            <Link
+              href={isSignUp ? '/sign-in' : '/sign-up'}
+              className="font-bold text-cyan-300 underline-offset-4 hover:text-cyan-200 hover:underline"
+            >
+              {isSignUp ? 'Entrar' : 'Criar conta'}
+            </Link>
+          </p>
+
+          {!isSignUp && (
+            <p className="mt-3 text-center text-sm">
+              <Link
+                href="/esqueci-a-senha"
+                className="text-slate-500 underline-offset-4 hover:text-cyan-300 hover:underline"
+              >
+                Esqueci minha senha
+              </Link>
             </p>
           )}
-
-          <Button type="submit" disabled={loading} className="w-full">
-            {loading
-              ? 'Aguarde...'
-              : isSignUp
-                ? 'Criar conta'
-                : 'Entrar na plataforma'}
-          </Button>
-        </form>
-
-        <p className="text-sm text-muted-foreground text-center mt-6">
-          {isSignUp ? 'Já tem uma conta? ' : 'Ainda não possui conta? '}
-          <Link
-            href={isSignUp ? '/sign-in' : '/sign-up'}
-            className="text-foreground font-medium underline-offset-4 hover:underline"
-          >
-            {isSignUp ? 'Entrar' : 'Criar conta'}
-          </Link>
-        </p>
-        {!isSignUp && <p className="mt-4 text-center text-sm"><Link href="/esqueci-a-senha" className="text-muted-foreground underline-offset-4 hover:underline">Esqueci minha senha</Link></p>}
-      </Card>
+        </section>
+      </div>
     </main>
   )
 }
