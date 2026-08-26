@@ -1,5 +1,4 @@
-import { drizzle } from 'drizzle-orm/mysql2'
-import { createPool } from 'mysql2/promise'
+import { createPool, type Pool } from 'mysql2/promise'
 
 const connectionString = process.env.DATABASE_URL
 
@@ -13,24 +12,22 @@ const databaseConfigError = new Error(
 // entire build pipeline.
 const isMySql = connectionString?.startsWith('mysql')
 
+function createUnconfiguredPool(): Pool {
+  const throwConfigError = async () => {
+    throw databaseConfigError
+  }
+  return {
+    query: throwConfigError,
+    execute: throwConfigError,
+  } as unknown as Pool
+}
+
 /** Single server-side pool shared by Better Auth and the learning platform. */
-export const pool = (isMySql
+export const pool: Pool = isMySql
   ? createPool({
       uri: connectionString,
       connectionLimit: 5,
       enableKeepAlive: true,
       timezone: 'Z',
     })
-  : {
-      query: async () => {
-        throw databaseConfigError
-      },
-      execute: async () => {
-        throw databaseConfigError
-      },
-    }) as any
-
-// The legacy technical-assistance repositories are not part of the new
-// learning platform. Keep this untyped client only while that old area is
-// being retired; new code should use explicit MySQL queries/repositories.
-export const db = drizzle(pool)
+  : createUnconfiguredPool()
