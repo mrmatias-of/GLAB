@@ -540,3 +540,69 @@ export async function grantManualEnrollment(studentEmail: string, productId: num
     connection.release()
   }
 }
+
+// --- Certificado de conclusão ---
+
+export type CertificateData = {
+  code: string
+  issuedAt: Date
+  studentName: string
+  studentEmail: string
+  courseTitle: string
+}
+
+function generateCertificateCode() {
+  return randomUUID().replace(/-/g, '').slice(0, 12).toUpperCase()
+}
+
+/**
+ * Confirma que o aluno concluiu 100% das aulas ativas do curso e retorna
+ * (ou emite, se ainda não existir) o registro do certificado.
+ * Lança erro se a matrícula não existir ou o curso não estiver 100% concluído.
+ */
+export async function ensureCertificate(slug: string, email: string): Promise<CertificateData> {
+  const course = await courseForStudent(slug, email)
+  if (!course) throw new Error('Matrícula não encontrada para este curso.')
+
+  const [[progress]] = await pool.execute<Array<RowDataPacket & { lessonCount: number; completedCount: number }>>(
+    `SELECT COUNT(DISTINCT l.id) AS lessonCount,
+       COUNT(DISTINCT CASE WHEN lp.completed_at IS NOT NULL THEN lp.lesson_id END) AS completedCount
+     FROM glab_lessons l LEFT JOIN glab_lesson_progress lp ON lp.lesson_id = l.id AND lp.enrollment_id = ?
+     WHERE l.product_id = ? AND l.is_active = 1`,
+    [course.enrollmentId, course.id],
+  )
+  if (!progress || progress.lessonCount === 0 || progress.completedCount < progress.lessonCount) {
+    throw new Error('Conclua todas as aulas do curso para emitir o certificado.')
+  }
+
+  const [[existing]] = await pool.execute<Array<RowDataPacket & { code: string; issuedAt: Date }>>(
+    'SELECT code, issued_at AS issuedAt FROM glab_certificates WHERE enrollment_id = ?',
+    [course.enrollmentId],
+  )
+
+  const student = await currentPlatformUser()
+  const studentName = student?.name || email
+
+  if (existing) {
+    return { code: existing.code, issuedAt: existing.issuedAt, studentName, studentEmail: email, courseTitle: course.title }
+  }
+
+  const code = generateCertificateCode()
+  try {
+    await pool.execute(
+      'INSERT INTO glab_certificates (enrollment_id, code, issued_at) VALUES (?, ?, NOW())',
+      [course.enrollmentId, code],
+    )
+  } catch (error) {
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'ER_DUP_ENTRY') {
+      const [[row]] = await pool.execute<Array<RowDataPacket & { code: string; issuedAt: Date }>>(
+        'SELECT code, issued_at AS issuedAt FROM glab_certificates WHERE enrollment_id = ?',
+        [course.enrollmentId],
+      )
+      if (row) return { code: row.code, issuedAt: row.issuedAt, studentName, studentEmail: email, courseTitle: course.title }
+    }
+    throw error
+  }
+
+  return { code, issuedAt: new Date(), studentName, studentEmail: email, courseTitle: course.title }
+}
