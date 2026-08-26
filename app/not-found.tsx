@@ -2,11 +2,14 @@ import Link from "next/link"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { ArrowLeft, Search } from "lucide-react"
+import { currentPlatformUser } from "@/lib/learning-platform"
 
-export default function NotFound() {
+export default async function NotFound() {
+  const user = await currentPlatformUser()
+
   return (
     <>
-      <Header />
+      <Header isAuthenticated={Boolean(user)} />
       <main className="min-h-[calc(100vh-112px)] flex items-center justify-center px-6 py-20" style={{ backgroundColor: '#ffffff' }}>
         <div className="max-w-md w-full text-center">
 
