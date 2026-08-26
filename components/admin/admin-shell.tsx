@@ -7,8 +7,10 @@ import { signOut } from '@/lib/auth-client'
 import {
   LayoutDashboard,
   BookOpen,
-  MessageSquare,
+  Users,
+  GraduationCap as EnrollmentIcon,
   TrendingUp,
+  Ticket,
   Settings,
   GraduationCap,
   LogOut,
@@ -19,8 +21,10 @@ import {
 const navigation = [
   { name: 'Início', href: '/admin', icon: LayoutDashboard },
   { name: 'Cursos', href: '/admin/cursos', icon: BookOpen },
-  { name: 'Suporte', href: '/admin/suporte', icon: MessageSquare },
+  { name: 'Alunos', href: '/admin/alunos', icon: Users },
+  { name: 'Matrículas', href: '/admin/matriculas', icon: EnrollmentIcon },
   { name: 'Vendas', href: '/admin/vendas', icon: TrendingUp },
+  { name: 'Cupons', href: '/admin/cupons', icon: Ticket },
   { name: 'Configurações', href: '/admin/configuracoes', icon: Settings },
 ]
 

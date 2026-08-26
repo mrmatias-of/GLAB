@@ -1,77 +1,71 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { BookOpen, MessageSquare, TrendingUp, Settings } from 'lucide-react'
+import { BookOpen, Users, GraduationCap, TrendingUp, Ticket, Settings, ArrowUpRight } from 'lucide-react'
+import { platformAdminSummary, platformSalesSummary } from '@/lib/learning-platform'
 
 export const metadata: Metadata = {
   title: 'Painel Admin | G•Lab Cursos',
   description: 'Painel administrativo da plataforma de cursos',
 }
 
-export default function AdminDashboard() {
+export const dynamic = 'force-dynamic'
+
+const money = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
+
+const modules = [
+  { name: 'Cursos', href: '/admin/cursos', icon: BookOpen, description: 'Gerenciar catálogo e conteúdo', accent: 'text-cyan-300' },
+  { name: 'Alunos', href: '/admin/alunos', icon: Users, description: 'Base de alunos e histórico de compras', accent: 'text-blue-300' },
+  { name: 'Matrículas', href: '/admin/matriculas', icon: GraduationCap, description: 'Acessos liberados por curso', accent: 'text-emerald-300' },
+  { name: 'Vendas', href: '/admin/vendas', icon: TrendingUp, description: 'Pedidos, receita e status de pagamento', accent: 'text-amber-300' },
+  { name: 'Cupons', href: '/admin/cupons', icon: Ticket, description: 'Descontos e campanhas promocionais', accent: 'text-pink-300' },
+  { name: 'Configurações', href: '/admin/configuracoes', icon: Settings, description: 'Ajustes gerais da plataforma', accent: 'text-purple-300' },
+]
+
+export default async function AdminDashboard() {
+  const [summary, sales] = await Promise.all([platformAdminSummary(), platformSalesSummary()])
+
+  const stats = [
+    { label: 'Receita confirmada', value: money.format(sales.revenueCents / 100) },
+    { label: 'Cursos publicados', value: `${summary.activeProducts} / ${summary.products}` },
+    { label: 'Alunos com acesso ativo', value: summary.students },
+    { label: 'Pedidos pagos', value: sales.paidOrders },
+  ]
+
   return (
-    <div className="space-y-4">
-      {/* Page Title */}
+    <div className="space-y-8 text-white">
       <div>
-        <h1 className="text-3xl font-bold text-white">Bem-vindo ao painel administrativo</h1>
-        <p className="text-slate-400 mt-1 text-sm">Selecione uma seção abaixo para gerenciar cursos, suporte, vendas e configurações</p>
+        <p className="text-xs font-black uppercase tracking-[.18em] text-cyan-400">Visão geral</p>
+        <h1 className="mt-2 text-3xl font-black">Painel administrativo G·LAB</h1>
+        <p className="mt-2 text-sm text-slate-400">Acompanhe vendas, alunos e catálogo em tempo real, direto do banco de produção.</p>
       </div>
 
-      {/* Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-        {/* Card Cursos */}
-        <Link href="/admin/cursos" className="block">
-          <div className="card-elegant bg-slate-900/40 border border-slate-700 hover:border-blue-500/50 transition-all p-4 cursor-pointer">
-            <div className="text-blue-400 mb-2">
-              <BookOpen className="w-8 h-8" />
-            </div>
-            <h3 className="text-base font-semibold text-white mb-1">Cursos</h3>
-            <p className="text-slate-400 text-xs">Gerenciar cursos e conteúdo</p>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {stats.map((stat) => (
+          <div key={stat.label} className="rounded-2xl border border-white/10 bg-white/[.03] p-5">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">{stat.label}</p>
+            <p className="mt-2 text-2xl font-black">{stat.value}</p>
           </div>
-        </Link>
-
-        {/* Card Suporte */}
-        <Link href="/admin/suporte" className="block">
-          <div className="card-elegant bg-slate-900/40 border border-slate-700 hover:border-blue-500/50 transition-all p-4 cursor-pointer">
-            <div className="text-blue-400 mb-2">
-              <MessageSquare className="w-8 h-8" />
-            </div>
-            <h3 className="text-base font-semibold text-white mb-1">Suporte</h3>
-            <p className="text-slate-400 text-xs">Gerenciar tickets de suporte</p>
-          </div>
-        </Link>
-
-        {/* Card Vendas */}
-        <Link href="/admin/vendas" className="block">
-          <div className="card-elegant bg-slate-900/40 border border-slate-700 hover:border-green-500/50 transition-all p-4 cursor-pointer">
-            <div className="text-green-400 mb-2">
-              <TrendingUp className="w-8 h-8" />
-            </div>
-            <h3 className="text-base font-semibold text-white mb-1">Vendas</h3>
-            <p className="text-slate-400 text-xs">Relatórios e análises</p>
-          </div>
-        </Link>
-
-        {/* Card Configurações */}
-        <Link href="/admin/configuracoes" className="block">
-          <div className="card-elegant bg-slate-900/40 border border-slate-700 hover:border-purple-500/50 transition-all p-4 cursor-pointer">
-            <div className="text-purple-400 mb-2">
-              <Settings className="w-8 h-8" />
-            </div>
-            <h3 className="text-base font-semibold text-white mb-1">Configurações</h3>
-            <p className="text-slate-400 text-xs">Ajustes do sistema</p>
-          </div>
-        </Link>
+        ))}
       </div>
 
-      {/* Info Card */}
-      <div className="card-elegant bg-slate-900/40 border border-slate-700 p-4">
-        <h2 className="text-base font-semibold text-white mb-2">Dicas de navegação</h2>
-        <p className="text-slate-400 mb-3 text-sm">
-          Use o menu lateral para acessar rapidamente as seções do painel. Clique em qualquer seção acima ou use o menu para gerenciar diferentes aspectos da plataforma.
-        </p>
-        <Link href="/" className="text-blue-400 hover:text-blue-300 font-medium transition">
-          ← Voltar para home
-        </Link>
+      <div>
+        <h2 className="mb-4 text-sm font-black uppercase tracking-wider text-slate-500">Módulos</h2>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {modules.map((mod) => (
+            <Link key={mod.href} href={mod.href} className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/[.03] p-5 transition-all hover:border-cyan-300/40 hover:bg-white/[.05]">
+              <div className="flex items-center gap-4">
+                <span className={`flex h-11 w-11 items-center justify-center rounded-xl bg-white/5 ${mod.accent}`}>
+                  <mod.icon size={20} />
+                </span>
+                <div>
+                  <p className="font-bold">{mod.name}</p>
+                  <p className="mt-0.5 text-xs text-slate-500">{mod.description}</p>
+                </div>
+              </div>
+              <ArrowUpRight size={16} className="text-slate-600 transition-colors group-hover:text-cyan-300" />
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   )
