@@ -1,13 +1,8 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
-import { currentPlatformUser, isPlatformAdmin, createCoupon, setCouponActive } from '@/lib/learning-platform'
-
-async function requireAdmin() {
-  const user = await currentPlatformUser()
-  if (!user || !isPlatformAdmin(user.email)) redirect('/sign-in')
-}
+import { createCoupon, setCouponActive } from '@/lib/learning-platform'
+import { requireAdmin } from '@/lib/require-admin'
 
 export type CreateCouponActionState = { error?: string; success?: boolean }
 

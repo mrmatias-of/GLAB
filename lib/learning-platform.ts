@@ -239,3 +239,198 @@ export async function createCoupon(input: CreateCouponInput) {
 export async function setCouponActive(id: number, isActive: boolean) {
   await pool.execute('UPDATE glab_coupons SET is_active = ? WHERE id = ?', [isActive ? 1 : 0, id])
 }
+
+// --- Gestão de cursos (produtos) ---
+
+export type PlatformProductDetail = RowDataPacket & {
+  id: number
+  slug: string
+  title: string
+  description: string | null
+  priceCents: number
+  isActive: number
+  coverUrl: string | null
+  createdAt: Date
+  updatedAt: Date
+}
+
+export async function platformProductById(id: number) {
+  const [[row]] = await pool.execute<PlatformProductDetail[]>(
+    `SELECT id, slug, title, description, price_cents AS priceCents, is_active AS isActive,
+      cover_url AS coverUrl, created_at AS createdAt, updated_at AS updatedAt
+     FROM glab_products WHERE id = ?`,
+    [id],
+  )
+  return row ?? null
+}
+
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+}
+
+export type SaveProductInput = {
+  title: string
+  slug?: string
+  description?: string
+  priceCents: number
+  coverUrl?: string | null
+  isActive: boolean
+}
+
+export async function createProduct(input: SaveProductInput) {
+  const title = input.title.trim()
+  if (!title) throw new Error('Informe o título do curso.')
+  if (!Number.isFinite(input.priceCents) || input.priceCents < 0) {
+    throw new Error('Informe um preço válido.')
+  }
+
+  const slug = slugify(input.slug?.trim() || title)
+  if (!slug) throw new Error('Não foi possível gerar um slug válido para este título.')
+
+  try {
+    const [result] = await pool.execute<import('mysql2').ResultSetHeader>(
+      `INSERT INTO glab_products (slug, title, description, price_cents, is_active, cover_url)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [slug, title, input.description?.trim() || null, Math.round(input.priceCents), input.isActive ? 1 : 0, input.coverUrl || null],
+    )
+    return result.insertId
+  } catch (error) {
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'ER_DUP_ENTRY') {
+      throw new Error(`Já existe um curso com o slug "${slug}".`)
+    }
+    throw error
+  }
+}
+
+export async function updateProduct(id: number, input: SaveProductInput) {
+  const title = input.title.trim()
+  if (!title) throw new Error('Informe o título do curso.')
+  if (!Number.isFinite(input.priceCents) || input.priceCents < 0) {
+    throw new Error('Informe um preço válido.')
+  }
+
+  const slug = slugify(input.slug?.trim() || title)
+  if (!slug) throw new Error('Não foi possível gerar um slug válido para este título.')
+
+  try {
+    await pool.execute(
+      `UPDATE glab_products
+       SET slug = ?, title = ?, description = ?, price_cents = ?, is_active = ?, cover_url = ?
+       WHERE id = ?`,
+      [slug, title, input.description?.trim() || null, Math.round(input.priceCents), input.isActive ? 1 : 0, input.coverUrl || null, id],
+    )
+  } catch (error) {
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'ER_DUP_ENTRY') {
+      throw new Error(`Já existe um curso com o slug "${slug}".`)
+    }
+    throw error
+  }
+}
+
+// --- Gestão de aulas ---
+
+export type PlatformLessonRow = RowDataPacket & {
+  id: number
+  productId: number
+  title: string
+  lessonType: string
+  contentUrl: string | null
+  position: number
+  isPreview: number
+  isActive: number
+  createdAt: Date
+}
+
+export async function lessonsByProductId(productId: number) {
+  const [rows] = await pool.execute<PlatformLessonRow[]>(
+    `SELECT id, product_id AS productId, title, lesson_type AS lessonType,
+      content_url AS contentUrl, position, is_preview AS isPreview,
+      is_active AS isActive, created_at AS createdAt
+     FROM glab_lessons
+     WHERE product_id = ?
+     ORDER BY position ASC, id ASC`,
+    [productId],
+  )
+  return rows
+}
+
+export async function lessonById(id: number) {
+  const [[row]] = await pool.execute<PlatformLessonRow[]>(
+    `SELECT id, product_id AS productId, title, lesson_type AS lessonType,
+      content_url AS contentUrl, position, is_preview AS isPreview,
+      is_active AS isActive, created_at AS createdAt
+     FROM glab_lessons WHERE id = ?`,
+    [id],
+  )
+  return row ?? null
+}
+
+export type SaveLessonInput = {
+  productId: number
+  title: string
+  lessonType: 'VIDEO' | 'PDF' | 'TEXT'
+  contentUrl?: string | null
+  isPreview: boolean
+  isActive: boolean
+}
+
+export async function createLesson(input: SaveLessonInput) {
+  const title = input.title.trim()
+  if (!title) throw new Error('Informe o título da aula.')
+
+  const [[{ nextPosition }]] = await pool.execute<Array<RowDataPacket & { nextPosition: number }>>(
+    'SELECT COALESCE(MAX(position), 0) + 1 AS nextPosition FROM glab_lessons WHERE product_id = ?',
+    [input.productId],
+  )
+
+  const [result] = await pool.execute<import('mysql2').ResultSetHeader>(
+    `INSERT INTO glab_lessons (product_id, title, lesson_type, content_url, position, is_preview, is_active)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    [
+      input.productId,
+      title,
+      input.lessonType,
+      input.contentUrl || null,
+      nextPosition,
+      input.isPreview ? 1 : 0,
+      input.isActive ? 1 : 0,
+    ],
+  )
+  return result.insertId
+}
+
+export async function updateLesson(id: number, input: SaveLessonInput) {
+  const title = input.title.trim()
+  if (!title) throw new Error('Informe o título da aula.')
+
+  await pool.execute(
+    `UPDATE glab_lessons
+     SET title = ?, lesson_type = ?, content_url = ?, is_preview = ?, is_active = ?
+     WHERE id = ?`,
+    [title, input.lessonType, input.contentUrl || null, input.isPreview ? 1 : 0, input.isActive ? 1 : 0, id],
+  )
+}
+
+export async function deleteLesson(id: number) {
+  await pool.execute('DELETE FROM glab_lessons WHERE id = ?', [id])
+}
+
+export async function reorderLesson(productId: number, lessonId: number, direction: 'up' | 'down') {
+  const lessons = await lessonsByProductId(productId)
+  const index = lessons.findIndex((l) => l.id === lessonId)
+  if (index === -1) return
+
+  const swapIndex = direction === 'up' ? index - 1 : index + 1
+  if (swapIndex < 0 || swapIndex >= lessons.length) return
+
+  const current = lessons[index]
+  const swap = lessons[swapIndex]
+
+  await pool.execute('UPDATE glab_lessons SET position = ? WHERE id = ?', [swap.position, current.id])
+  await pool.execute('UPDATE glab_lessons SET position = ? WHERE id = ?', [current.position, swap.id])
+}
