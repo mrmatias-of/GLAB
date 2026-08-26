@@ -16,7 +16,6 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const [verificationSent, setVerificationSent] = useState(false)
 
   const isSignUp = mode === 'sign-up'
 
@@ -33,11 +32,6 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
 
     if (error) {
       setError(error.message ?? 'Something went wrong')
-      return
-    }
-
-    if (isSignUp) {
-      setVerificationSent(true)
       return
     }
 
@@ -59,7 +53,7 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
           </p>
         </div>
 
-        {verificationSent ? <div className="rounded-xl border border-cyan-400/30 bg-cyan-400/10 p-5 text-sm leading-6 text-cyan-950 dark:text-cyan-100"><strong className="block text-base">Confirme seu e-mail.</strong>Enviamos um link de ativação para <strong>{email}</strong>. Verifique também a caixa de spam. Após confirmar, entre normalmente na sua conta.</div> : <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {isSignUp && (
             <div className="flex flex-col gap-2">
               <Label htmlFor="name">Nome</Label>
@@ -106,10 +100,10 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
             {loading
               ? 'Aguarde...'
               : isSignUp
-                ? 'Criar conta e enviar confirmação'
+                ? 'Criar conta'
                 : 'Entrar na plataforma'}
           </Button>
-        </form>}
+        </form>
 
         <p className="text-sm text-muted-foreground text-center mt-6">
           {isSignUp ? 'Já tem uma conta? ' : 'Ainda não possui conta? '}

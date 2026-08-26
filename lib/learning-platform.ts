@@ -25,12 +25,20 @@ export async function currentPlatformUser(): Promise<PlatformUser | null> {
   return { id: session.user.id, email: session.user.email.toLowerCase(), name: session.user.name || 'Aluno G-LAB' }
 }
 
+// TODO(temporário): sem a variável de ambiente GLAB_ADMIN_EMAILS configurada,
+// caímos neste e-mail fixo para não deixar a área /admin totalmente
+// inacessível. Configure GLAB_ADMIN_EMAILS no projeto e remova este
+// fallback assim que possível — ele fica exposto no código-fonte.
+const FALLBACK_ADMIN_EMAILS = ['admin@glabcursos.com.br']
+
 export function isPlatformAdmin(email: string) {
-  return (process.env.GLAB_ADMIN_EMAILS ?? '')
+  const configured = (process.env.GLAB_ADMIN_EMAILS ?? '')
     .split(',')
     .map((value) => value.trim().toLowerCase())
     .filter(Boolean)
-    .includes(email.toLowerCase())
+
+  const admins = configured.length > 0 ? configured : FALLBACK_ADMIN_EMAILS
+  return admins.includes(email.toLowerCase())
 }
 
 export async function studentEnrollments(email: string): Promise<EnrollmentRow[]> {
