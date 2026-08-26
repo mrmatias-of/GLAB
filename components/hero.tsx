@@ -39,7 +39,7 @@ export default function Hero() {
           </div>
 
           <div className="mt-9 flex flex-wrap gap-x-6 gap-y-3 text-[11px] font-medium text-slate-400">
-            <span className="flex items-center gap-2"><BookOpenCheck size={15} className="text-cyan-300" /> Currículo por trilhas</span>
+            <span className="flex items-center gap-2"><BookOpenCheck size={15} className="text-cyan-300" /> Progressão técnica por módulos</span>
             <span className="flex items-center gap-2"><ShieldCheck size={15} className="text-cyan-300" /> Autoria identificada</span>
             <span className="flex items-center gap-2"><Check size={15} className="text-cyan-300" /> Aplicação imediata</span>
           </div>

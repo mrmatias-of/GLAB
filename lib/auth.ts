@@ -17,7 +17,12 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     autoSignIn: true,
-    requireEmailVerification: true,
+    // TODO(temporário): sem credenciais SMTP configuradas (SMTP_HOST,
+    // SMTP_PORT, SMTP_USER, SMTP_PASSWORD) o e-mail de confirmação nunca
+    // chega e o cadastro ficaria travado para sempre. Enquanto isso,
+    // liberamos o acesso sem confirmação. Configure o SMTP e volte esta
+    // flag para `true` assim que possível.
+    requireEmailVerification: false,
     sendResetPassword: async ({ user, url }) => {
       await sendResetPasswordEmail({ email: user.email, name: user.name, url })
     },
@@ -29,13 +34,21 @@ export const auth = betterAuth({
       await sendVerificationEmail({ email: user.email, name: user.name, url })
     },
   },
-  trustedOrigins: [
-    ...(process.env.V0_RUNTIME_URL ? [process.env.V0_RUNTIME_URL] : []),
-    ...(process.env.VERCEL_URL ? [`https://${process.env.VERCEL_URL}`] : []),
-    ...(process.env.VERCEL_PROJECT_PRODUCTION_URL
-      ? [`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`]
-      : []),
-  ],
+  trustedOrigins:
+    process.env.NODE_ENV === 'development'
+      ? [
+          'http://localhost:3000',
+          ...(process.env.V0_RUNTIME_URL ? [process.env.V0_RUNTIME_URL] : []),
+          ...(process.env.V0_DEV_APP_URL ? [process.env.V0_DEV_APP_URL] : []),
+          ...(process.env.V0_BUILD_URL ? [process.env.V0_BUILD_URL] : []),
+          ...(process.env.V0_SANDBOX_URL ? [process.env.V0_SANDBOX_URL] : []),
+        ]
+      : [
+          ...(process.env.VERCEL_URL ? [`https://${process.env.VERCEL_URL}`] : []),
+          ...(process.env.VERCEL_PROJECT_PRODUCTION_URL
+            ? [`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`]
+            : []),
+        ],
   session: {
     modelName: 'glab_auth_session',
     expiresIn: 60 * 60 * 24 * 7, // 7 days

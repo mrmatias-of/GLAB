@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowUpRight, Menu, X } from 'lucide-react'
+import { ArrowUpRight, Menu, User, X } from 'lucide-react'
 import { useState } from 'react'
 
 const NAV = [
@@ -11,8 +11,10 @@ const NAV = [
   { label: 'Contato', href: '/contato' },
 ]
 
-export default function Header() {
+export default function Header({ isAuthenticated = false }: { isAuthenticated?: boolean }) {
   const [open, setOpen] = useState(false)
+  const accountHref = isAuthenticated ? '/aluno' : '/sign-in'
+  const accountLabel = isAuthenticated ? 'Área do aluno' : 'Entrar'
 
   return (
     <>
@@ -49,6 +51,12 @@ export default function Header() {
           {/* Ações direita */}
           <div className="flex items-center gap-3">
             <Link
+              href={accountHref}
+              className="hidden items-center gap-2 rounded-full border border-white/[.12] px-5 py-3 text-[10px] font-black uppercase tracking-[.1em] text-white/80 transition hover:border-cyan-300/40 hover:text-white md:inline-flex"
+            >
+              <User size={14} /> {accountLabel}
+            </Link>
+            <Link
               href="/cursos"
               className="hidden items-center gap-2 rounded-full bg-white px-5 py-3 text-[10px] font-black uppercase tracking-[.1em] text-[#061020] shadow-[0_12px_40px_rgba(255,255,255,.09)] transition hover:-translate-y-0.5 hover:bg-cyan-100 md:inline-flex"
             >
@@ -79,7 +87,14 @@ export default function Header() {
                 {n.label}
               </Link>
             ))}
-            <div className="pt-4 border-t border-white/10">
+            <div className="pt-4 border-t border-white/10 space-y-3">
+              <Link
+                href={accountHref}
+                onClick={() => setOpen(false)}
+                className="flex items-center justify-center gap-2 rounded-full border border-white/[.12] py-3 text-[11px] font-black uppercase tracking-[.14em] text-white/80"
+              >
+                <User size={14} /> {accountLabel}
+              </Link>
               <Link href="/cursos" className="btn-primary w-full justify-center text-xs py-2.5" onClick={() => setOpen(false)}>
                 Ver Cursos
               </Link>
