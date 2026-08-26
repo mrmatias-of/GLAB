@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { GraduationCap, CheckCircle2, XCircle } from 'lucide-react'
-import { platformEnrollments } from '@/lib/learning-platform'
+import { platformEnrollments, platformProducts } from '@/lib/learning-platform'
+import { EnrollmentForm } from './enrollment-form'
 
 export const metadata: Metadata = {
   title: 'Matrículas | Painel Admin',
@@ -17,7 +18,7 @@ const statusLabel: Record<string, string> = {
 }
 
 export default async function MatriculasPage() {
-  const enrollments = await platformEnrollments()
+  const [enrollments, products] = await Promise.all([platformEnrollments(), platformProducts()])
 
   return (
     <div className="space-y-8 text-white">
@@ -26,6 +27,8 @@ export default async function MatriculasPage() {
         <h1 className="mt-2 text-3xl font-black">Matrículas</h1>
         <p className="mt-2 text-sm text-slate-400">Cada matrícula libera o conteúdo de um curso para um aluno após a compra confirmada.</p>
       </div>
+
+      <EnrollmentForm products={products.map((product) => ({ id: product.id, title: product.title }))} />
 
       {enrollments.length === 0 ? (
         <div className="rounded-3xl border border-dashed border-white/15 bg-white/[.025] p-10 text-center">

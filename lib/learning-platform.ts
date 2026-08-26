@@ -1,5 +1,6 @@
 import 'server-only'
 
+import { randomUUID } from 'node:crypto'
 import { headers } from 'next/headers'
 import { auth } from '@/lib/auth'
 import { pool } from '@/lib/db'
@@ -39,6 +40,55 @@ export function isPlatformAdmin(email: string) {
 
   const admins = configured.length > 0 ? configured : FALLBACK_ADMIN_EMAILS
   return admins.includes(email.toLowerCase())
+}
+
+export type StudentCourse = RowDataPacket & {
+  id: number
+  slug: string
+  title: string
+  description: string | null
+  coverUrl: string | null
+  enrollmentId: string
+}
+
+/** Curso + matrícula ativa do aluno, usado tanto na página do curso quanto no player de aula. */
+export async function courseForStudent(slug: string, email: string): Promise<StudentCourse | null> {
+  const [[row]] = await pool.execute<StudentCourse[]>(
+    `SELECT p.id, p.slug, p.title, p.description, p.cover_url AS coverUrl, e.id AS enrollmentId
+     FROM glab_enrollments e INNER JOIN glab_products p ON p.id = e.product_id
+     WHERE p.slug = ? AND e.student_email = ? AND e.status = 'ACTIVE' LIMIT 1`,
+    [slug, email],
+  )
+  return row ?? null
+}
+
+export type StudentLessonRow = RowDataPacket & {
+  id: number
+  position: number
+  title: string
+  lessonType: string
+  contentUrl: string | null
+  isPreview: number
+  completedAt: Date | null
+}
+
+export async function lessonsWithProgress(productId: number, enrollmentId: string): Promise<StudentLessonRow[]> {
+  const [rows] = await pool.execute<StudentLessonRow[]>(
+    `SELECT l.id, l.position, l.title, l.lesson_type AS lessonType, l.content_url AS contentUrl, l.is_preview AS isPreview, lp.completed_at AS completedAt
+     FROM glab_lessons l LEFT JOIN glab_lesson_progress lp ON lp.lesson_id = l.id AND lp.enrollment_id = ?
+     WHERE l.product_id = ? AND l.is_active = 1 ORDER BY l.position`,
+    [enrollmentId, productId],
+  )
+  return rows
+}
+
+export async function markLessonComplete(enrollmentId: string, lessonId: number) {
+  await pool.execute(
+    `INSERT INTO glab_lesson_progress (enrollment_id, lesson_id, completed_at, last_opened_at)
+     VALUES (?, ?, NOW(), NOW())
+     ON DUPLICATE KEY UPDATE completed_at = NOW(), last_opened_at = NOW()`,
+    [enrollmentId, lessonId],
+  )
 }
 
 export async function studentEnrollments(email: string): Promise<EnrollmentRow[]> {
@@ -433,4 +483,60 @@ export async function reorderLesson(productId: number, lessonId: number, directi
 
   await pool.execute('UPDATE glab_lessons SET position = ? WHERE id = ?', [swap.position, current.id])
   await pool.execute('UPDATE glab_lessons SET position = ? WHERE id = ?', [current.position, swap.id])
+}
+
+// --- Matrícula manual (ponte até o checkout real existir) ---
+
+/**
+ * Libera o acesso de um aluno a um curso sem passar por um pagamento real.
+ * Cria um pedido PAID "sintético" (valor = preço atual do produto) e a
+ * matrícula ACTIVE correspondente, em uma única transação, para satisfazer
+ * a FK glab_enrollments.order_id -> glab_orders.id.
+ */
+export async function grantManualEnrollment(studentEmail: string, productId: number) {
+  const email = studentEmail.trim().toLowerCase()
+  if (!email) throw new Error('Informe o e-mail do aluno.')
+
+  const [[product]] = await pool.execute<Array<RowDataPacket & { id: number; title: string; priceCents: number }>>(
+    'SELECT id, title, price_cents AS priceCents FROM glab_products WHERE id = ?',
+    [productId],
+  )
+  if (!product) throw new Error('Curso não encontrado.')
+
+  const [[existing]] = await pool.execute<RowDataPacket[]>(
+    "SELECT id FROM glab_enrollments WHERE student_email = ? AND product_id = ? AND status = 'ACTIVE'",
+    [email, productId],
+  )
+  if (existing) throw new Error(`Este aluno já está matriculado em "${product.title}".`)
+
+  const connection = await pool.getConnection()
+  try {
+    await connection.beginTransaction()
+
+    const orderId = randomUUID()
+    const enrollmentId = randomUUID()
+    const referenceId = `manual-${orderId}`
+
+    await connection.execute(
+      `INSERT INTO glab_orders (id, product_id, reference_id, buyer_email, amount_cents, status, paid_at)
+       VALUES (?, ?, ?, ?, ?, 'PAID', NOW())`,
+      [orderId, productId, referenceId, email, product.priceCents],
+    )
+
+    await connection.execute(
+      `INSERT INTO glab_enrollments (id, product_id, order_id, student_email, status, granted_at)
+       VALUES (?, ?, ?, ?, 'ACTIVE', NOW())`,
+      [enrollmentId, productId, orderId, email],
+    )
+
+    await connection.commit()
+  } catch (error) {
+    await connection.rollback()
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'ER_DUP_ENTRY') {
+      throw new Error(`Este aluno já está matriculado em "${product.title}".`)
+    }
+    throw error
+  } finally {
+    connection.release()
+  }
 }
