@@ -107,8 +107,8 @@ export default function TermosPage() {
                 pagina de contato
               </Link>{' '}
               ou pelo e-mail{' '}
-              <a href="mailto:contato@glabcursos.com.br" className="underline hover:text-cyan-400 transition-colors" style={{ color: '#00D4C8' }}>
-                contato@glabcursos.com.br
+              <a href="mailto:suporte@glabcursos.com.br" className="underline hover:text-cyan-400 transition-colors" style={{ color: '#00D4C8' }}>
+                suporte@glabcursos.com.br
               </a>.
             </p>
           </section>

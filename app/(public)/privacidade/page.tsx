@@ -53,11 +53,11 @@ export default function PrivacidadePage() {
               </Link>{" "}
               ou envie e-mail para{" "}
               <a
-                href="mailto:contato@glabcursos.com.br"
+                href="mailto:suporte@glabcursos.com.br"
                 className="underline hover:opacity-80 transition-opacity"
                 style={{ color: "#00D4C8" }}
               >
-                contato@glabcursos.com.br
+                suporte@glabcursos.com.br
               </a>
               .
             </p>
