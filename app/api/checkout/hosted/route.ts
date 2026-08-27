@@ -8,6 +8,7 @@ import { normalizeEmail, validateEmailForPagBank } from '@/lib/email-validation'
 const schema = z.object({
   productSlug: z.string().min(1, 'Curso não informado.').max(120),
   buyerName: z.string().min(3, 'Informe seu nome completo.').max(160, 'Nome muito longo.'),
+  couponCode: z.string().trim().max(40).optional(),
   buyerEmail: z
     .string()
     .transform(normalizeEmail)

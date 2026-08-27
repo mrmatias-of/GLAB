@@ -285,9 +285,9 @@ export async function createPendingOrder(input: {
   const id = randomUUID()
   const referenceId = `GLAB-${id.replaceAll('-', '').slice(0, 24).toUpperCase()}`
   await pool.execute(
-    `INSERT INTO glab_orders (id, product_id, reference_id, buyer_name, buyer_email, amount_cents, currency, status)
-     VALUES (?, ?, ?, ?, ?, ?, 'BRL', 'PENDING')`,
-    [id, product.id, referenceId, buyerName, buyerEmail, amountCents],
+    `INSERT INTO glab_orders (id, product_id, reference_id, buyer_name, buyer_email, amount_cents, currency, status, coupon_id)
+     VALUES (?, ?, ?, ?, ?, ?, 'BRL', 'PENDING', ?)`,
+    [id, product.id, referenceId, buyerName, buyerEmail, amountCents, couponId],
   )
   return { id, productId: product.id, productTitle: product.title, buyerName, buyerEmail, amountCents, referenceId, couponId }
 }
@@ -344,11 +344,16 @@ export async function fulfillPaidOrder(orderId: string) {
   try {
     await connection.beginTransaction()
     const [[order]] = await connection.execute<Array<RowDataPacket & { productId: number; productTitle: string; buyerName: string; buyerEmail: string; status: string }>>(
-      `SELECT o.product_id AS productId, p.title AS productTitle, o.buyer_name AS buyerName, o.buyer_email AS buyerEmail, o.status
+      `SELECT o.product_id AS productId, p.title AS productTitle, o.buyer_name AS buyerName, o.buyer_email AS buyerEmail, o.status, o.coupon_id AS couponId
        FROM glab_orders o JOIN glab_products p ON p.id = o.product_id WHERE o.id = ? FOR UPDATE`, [orderId],
     )
     if (!order) throw new Error('Pedido não encontrado.')
-    if (order.status !== 'PAID') await connection.execute(`UPDATE glab_orders SET status = 'PAID', paid_at = COALESCE(paid_at, NOW()) WHERE id = ?`, [orderId])
+    if (order.status !== 'PAID') {
+      await connection.execute(`UPDATE glab_orders SET status = 'PAID', paid_at = COALESCE(paid_at, NOW()) WHERE id = ?`, [orderId])
+      if (order.couponId) {
+        await connection.execute('UPDATE glab_coupons SET redeemed_count = redeemed_count + 1 WHERE id = ?', [order.couponId])
+      }
+    }
 
     // Combo libera todos os cursos que o compõem; curso comum libera só a si.
     const productIds = await entitledProductIds(connection, order.productId)

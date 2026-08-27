@@ -21,6 +21,7 @@ type Product = {
 export function HostedPagBankCheckout({ product }: { product: Product }) {
   const [buyerName, setBuyerName] = useState('')
   const [buyerEmail, setBuyerEmail] = useState('')
+  const [couponCode, setCouponCode] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -33,7 +34,7 @@ export function HostedPagBankCheckout({ product }: { product: Product }) {
       const response = await fetch('/api/checkout/hosted', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productSlug: product.slug, buyerName, buyerEmail }),
+        body: JSON.stringify({ productSlug: product.slug, buyerName, buyerEmail, couponCode: couponCode.trim() || undefined }),
       })
       const data = await response.json()
       if (!response.ok || !data.checkoutUrl) {
@@ -79,6 +80,12 @@ export function HostedPagBankCheckout({ product }: { product: Product }) {
           <span className="text-xs leading-5 text-slate-500">É neste e-mail que o acesso ao curso será liberado.</span>
         </label>
       </div>
+
+      <label className="flex flex-col gap-2">
+        <span className="text-xs font-black uppercase tracking-[.14em] text-slate-400">Cupom de desconto</span>
+        <input value={couponCode} onChange={event => setCouponCode(event.target.value.toUpperCase())} placeholder="Digite seu cupom (opcional)" autoComplete="off" maxLength={40} className={inputClass} />
+        <span className="text-xs leading-5 text-slate-500">O desconto será validado e aplicado antes de abrir o PagBank.</span>
+      </label>
 
       <div className="rounded-2xl border border-white/[.1] bg-white/[.03] p-5">
         <p className="text-xs font-black uppercase tracking-[.16em] text-cyan-300">Formas de pagamento no PagBank</p>
