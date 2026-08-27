@@ -2,9 +2,10 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, ExternalLink } from 'lucide-react'
-import { platformProductById, lessonsByProductId } from '@/lib/learning-platform'
+import { platformProductById, lessonsByProductId, bundleCandidates } from '@/lib/learning-platform'
 import { ProductForm } from '../product-form'
 import { LessonManager } from '../lesson-manager'
+import { BundleManager } from '../bundle-manager'
 
 export const metadata: Metadata = {
   title: 'Editar curso | Painel Admin',
@@ -20,7 +21,11 @@ export default async function EditarCursoPage({ params }: { params: Promise<{ id
   const product = await platformProductById(productId)
   if (!product) notFound()
 
-  const lessons = await lessonsByProductId(productId)
+  const [lessons, candidates] = await Promise.all([
+    lessonsByProductId(productId),
+    bundleCandidates(productId),
+  ])
+  const includedCount = candidates.filter((candidate) => candidate.included === 1).length
 
   return (
     <div className="max-w-3xl space-y-8 text-white">
@@ -47,6 +52,13 @@ export default async function EditarCursoPage({ params }: { params: Promise<{ id
         <div className="rounded-3xl border border-white/10 bg-white/[.02] p-6">
           <ProductForm product={product} />
         </div>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-sm font-black uppercase tracking-wider text-slate-500">
+          Cursos liberados na compra ({includedCount})
+        </h2>
+        <BundleManager productId={productId} candidates={candidates} />
       </section>
 
       <section className="space-y-4">

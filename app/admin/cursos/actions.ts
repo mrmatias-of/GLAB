@@ -10,6 +10,7 @@ import {
   updateLesson,
   deleteLesson,
   reorderLesson,
+  setBundleItems,
   type SaveProductInput,
   type SaveLessonInput,
 } from '@/lib/learning-platform'
@@ -59,6 +60,28 @@ export async function updateProductAction(
 
   revalidatePath('/admin/cursos')
   revalidatePath(`/admin/cursos/${id}`)
+  return { success: true }
+}
+
+export type BundleActionState = { error?: string; success?: boolean }
+
+export async function setBundleItemsAction(
+  bundleProductId: number,
+  _prevState: BundleActionState,
+  formData: FormData,
+): Promise<BundleActionState> {
+  await requireAdmin()
+
+  const itemIds = formData.getAll('itemIds').map((value) => Number(value))
+
+  try {
+    await setBundleItems(bundleProductId, itemIds)
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : 'Não foi possível salvar o conteúdo do combo.' }
+  }
+
+  revalidatePath('/admin/cursos')
+  revalidatePath(`/admin/cursos/${bundleProductId}`)
   return { success: true }
 }
 

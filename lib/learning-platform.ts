@@ -297,6 +297,29 @@ export async function orderById(id: string) {
   return row ?? null
 }
 
+/** Aceita tanto o pool quanto uma conexão dentro de transação. */
+type SqlExecutor = Pick<typeof pool, 'execute'>
+
+/**
+ * Resolve quais cursos uma compra deve liberar.
+ *
+ * Produto sem itens em glab_product_bundle_items é um curso comum e libera
+ * apenas a si mesmo. Produto com itens é um combo: libera cada curso da
+ * lista e NÃO gera matrícula para o combo em si, que não tem aulas próprias
+ * e apareceria vazio na área do aluno.
+ *
+ * A regra vale para qualquer combo, atual ou futuro: o que é liberado vem
+ * sempre da definição do produto no banco, nunca de uma lista fixa.
+ */
+export async function entitledProductIds(executor: SqlExecutor, productId: number): Promise<number[]> {
+  const [items] = await executor.execute<Array<RowDataPacket & { itemProductId: number }>>(
+    `SELECT item_product_id AS itemProductId FROM glab_product_bundle_items
+     WHERE bundle_product_id = ? ORDER BY position, item_product_id`,
+    [productId],
+  )
+  return items.length > 0 ? items.map((item) => item.itemProductId) : [productId]
+}
+
 export async function fulfillPaidOrder(orderId: string) {
   const connection = await pool.getConnection()
   try {
@@ -307,11 +330,16 @@ export async function fulfillPaidOrder(orderId: string) {
     )
     if (!order) throw new Error('Pedido não encontrado.')
     if (order.status !== 'PAID') await connection.execute(`UPDATE glab_orders SET status = 'PAID', paid_at = COALESCE(paid_at, NOW()) WHERE id = ?`, [orderId])
-    await connection.execute(
-      `INSERT INTO glab_enrollments (id, product_id, order_id, student_email, status)
-       VALUES (?, ?, ?, ?, 'ACTIVE') ON DUPLICATE KEY UPDATE status = 'ACTIVE', revoked_at = NULL`,
-      [randomUUID(), order.productId, orderId, order.buyerEmail],
-    )
+
+    // Combo libera todos os cursos que o compõem; curso comum libera só a si.
+    const productIds = await entitledProductIds(connection, order.productId)
+    for (const productId of productIds) {
+      await connection.execute(
+        `INSERT INTO glab_enrollments (id, product_id, order_id, student_email, status)
+         VALUES (?, ?, ?, ?, 'ACTIVE') ON DUPLICATE KEY UPDATE status = 'ACTIVE', revoked_at = NULL`,
+        [randomUUID(), productId, orderId, order.buyerEmail],
+      )
+    }
     await connection.commit()
     // O e-mail é secundário: se falhar, a matrícula já está confirmada e o
     // erro não pode virar rollback nem sinalizar falha de liberação.
@@ -320,7 +348,7 @@ export async function fulfillPaidOrder(orderId: string) {
     } catch (emailError) {
       console.error('Acesso liberado, mas o e-mail de confirmação falhou', { orderId, emailError })
     }
-    return { email: order.buyerEmail, name: order.buyerName, productId: order.productId }
+    return { email: order.buyerEmail, name: order.buyerName, productId: order.productId, grantedProductIds: productIds }
   } catch (error) {
     await connection.rollback()
     throw error
@@ -497,6 +525,70 @@ export async function updateProduct(id: number, input: SaveProductInput) {
   }
 }
 
+// --- Gestão de combos ---
+
+export type BundleCandidate = RowDataPacket & {
+  id: number
+  title: string
+  slug: string
+  isBundle: number
+  included: number
+}
+
+/**
+ * Cursos que podem entrar em um combo, já marcando os que estão incluídos.
+ * Combos são listados como candidatos inválidos (isBundle) para evitar
+ * combo dentro de combo, que exigiria resolução recursiva.
+ */
+export async function bundleCandidates(bundleProductId: number) {
+  const [rows] = await pool.execute<BundleCandidate[]>(
+    `SELECT p.id, p.title, p.slug,
+       EXISTS (SELECT 1 FROM glab_product_bundle_items b WHERE b.bundle_product_id = p.id) AS isBundle,
+       EXISTS (SELECT 1 FROM glab_product_bundle_items i WHERE i.bundle_product_id = ? AND i.item_product_id = p.id) AS included
+     FROM glab_products p
+     WHERE p.id <> ?
+     ORDER BY p.title`,
+    [bundleProductId, bundleProductId],
+  )
+  return rows
+}
+
+export async function setBundleItems(bundleProductId: number, itemProductIds: number[]) {
+  const unique = [...new Set(itemProductIds.filter((id) => Number.isInteger(id) && id > 0 && id !== bundleProductId))]
+
+  if (unique.length > 0) {
+    // Um combo não pode conter outro combo: a liberação resolveria apenas um
+    // nível e o aluno ficaria sem parte dos cursos.
+    const [nested] = await pool.query<Array<RowDataPacket & { title: string }>>(
+      `SELECT DISTINCT p.title FROM glab_products p
+       JOIN glab_product_bundle_items b ON b.bundle_product_id = p.id
+       WHERE p.id IN (?)`,
+      [unique],
+    )
+    if (nested.length > 0) {
+      throw new Error(`Não é possível incluir outro combo: ${nested.map((row) => row.title).join(', ')}.`)
+    }
+  }
+
+  const connection = await pool.getConnection()
+  try {
+    await connection.beginTransaction()
+    await connection.execute('DELETE FROM glab_product_bundle_items WHERE bundle_product_id = ?', [bundleProductId])
+    for (const [index, itemProductId] of unique.entries()) {
+      await connection.execute(
+        'INSERT INTO glab_product_bundle_items (bundle_product_id, item_product_id, position) VALUES (?, ?, ?)',
+        [bundleProductId, itemProductId, index],
+      )
+    }
+    await connection.commit()
+  } catch (error) {
+    await connection.rollback()
+    throw error
+  } finally {
+    connection.release()
+  }
+}
+
 // --- Gestão de aulas ---
 
 export type PlatformLessonRow = RowDataPacket & {
@@ -618,18 +710,25 @@ export async function grantManualEnrollment(studentEmail: string, productId: num
   )
   if (!product) throw new Error('Curso não encontrado.')
 
-  const [[existing]] = await pool.execute<RowDataPacket[]>(
-    "SELECT id FROM glab_enrollments WHERE student_email = ? AND product_id = ? AND status = 'ACTIVE'",
-    [email, productId],
+  // Matricular em um combo significa matricular em cada curso dele.
+  const productIds = await entitledProductIds(pool, productId)
+
+  const [alreadyEnrolled] = await pool.query<Array<RowDataPacket & { title: string }>>(
+    `SELECT p.title FROM glab_enrollments e JOIN glab_products p ON p.id = e.product_id
+     WHERE e.student_email = ? AND e.status = 'ACTIVE' AND e.product_id IN (?)`,
+    [email, productIds],
   )
-  if (existing) throw new Error(`Este aluno já está matriculado em "${product.title}".`)
+  // Em um combo, só barramos se o aluno já tiver TODOS os cursos: com um
+  // deles em falta a matrícula precisa completar o que falta.
+  if (alreadyEnrolled.length >= productIds.length) {
+    throw new Error(`Este aluno já está matriculado em "${product.title}".`)
+  }
 
   const connection = await pool.getConnection()
   try {
     await connection.beginTransaction()
 
     const orderId = randomUUID()
-    const enrollmentId = randomUUID()
     const referenceId = `manual-${orderId}`
 
     await connection.execute(
@@ -638,11 +737,14 @@ export async function grantManualEnrollment(studentEmail: string, productId: num
       [orderId, productId, referenceId, email, product.priceCents],
     )
 
-    await connection.execute(
-      `INSERT INTO glab_enrollments (id, product_id, order_id, student_email, status, granted_at)
-       VALUES (?, ?, ?, ?, 'ACTIVE', NOW())`,
-      [enrollmentId, productId, orderId, email],
-    )
+    for (const itemProductId of productIds) {
+      await connection.execute(
+        `INSERT INTO glab_enrollments (id, product_id, order_id, student_email, status, granted_at)
+         VALUES (?, ?, ?, ?, 'ACTIVE', NOW())
+         ON DUPLICATE KEY UPDATE status = 'ACTIVE', revoked_at = NULL`,
+        [randomUUID(), itemProductId, orderId, email],
+      )
+    }
 
     await connection.commit()
   } catch (error) {
