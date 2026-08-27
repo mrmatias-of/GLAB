@@ -3,9 +3,8 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Lock, ShieldCheck } from 'lucide-react'
+import { Lock } from 'lucide-react'
 import { authClient } from '@/lib/auth-client'
-import { AuthBrandHeader } from '@/components/auth-brand-header'
 
 export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
   const router = useRouter()
@@ -38,22 +37,18 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
   }
 
   return (
-    <main className="relative isolate flex min-h-svh flex-col items-center justify-center overflow-hidden bg-[#040610] px-4 py-14 text-white">
+    <main className="relative isolate flex min-h-svh items-center justify-center overflow-hidden bg-[#040610] px-4 py-12 text-white">
       {/* Atmosfera de fundo, consistente com a home */}
       <div className="premium-grid absolute inset-0 opacity-40" />
       <div className="absolute -left-40 top-0 h-[520px] w-[520px] rounded-full bg-blue-600/[.14] blur-[160px]" />
       <div className="absolute -right-32 bottom-0 h-[560px] w-[560px] rounded-full bg-violet-600/[.13] blur-[180px]" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/50 to-transparent" />
 
-      <div className="relative z-10 flex w-full flex-col items-center">
-        <AuthBrandHeader />
+      <div className="relative z-10 flex w-full items-center justify-center">
+        <section className="w-full max-w-md rounded-[28px] border border-white/[.12] bg-[#080b16]/90 p-8 shadow-[0_45px_120px_rgba(0,0,0,.55)] backdrop-blur-xl">
+          <p className="text-xs font-black uppercase tracking-[.18em] text-cyan-300">Segurança G‑LAB</p>
 
-        <section className="w-full max-w-sm rounded-[28px] border border-white/[.12] bg-[#080b16]/90 p-7 shadow-[0_45px_120px_rgba(0,0,0,.55)] backdrop-blur-xl">
-          <span className="inline-flex items-center gap-2 rounded-full border border-cyan-300/20 bg-cyan-300/[.08] px-3 py-1.5 text-[9px] font-black uppercase tracking-[.22em] text-cyan-200">
-            <ShieldCheck size={12} /> Acesso restrito
-          </span>
-
-          <h1 className="mt-4 text-2xl font-black tracking-tight text-white">
+          <h1 className="mt-4 text-4xl font-black tracking-tight text-white">
             {isSignUp ? 'Crie sua conta' : 'Bem-vindo de volta'}
           </h1>
           <p className="mt-2 text-sm leading-6 text-slate-400">
