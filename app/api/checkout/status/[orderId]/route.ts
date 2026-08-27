@@ -16,7 +16,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ ord
         try {
           await fulfillPaidOrder(orderId)
         } catch (fulfillError) {
-          console.error('[v0] Falha ao liberar acesso após confirmação', { orderId, fulfillError })
+          console.error('Falha ao liberar acesso após confirmação', { orderId, fulfillError })
         }
       }
       return NextResponse.json({ status })
