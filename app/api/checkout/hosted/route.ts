@@ -26,11 +26,12 @@ export async function POST(request: Request) {
       amountCents: order.amountCents,
       description: order.productTitle,
       customer: { name: order.buyerName, email: order.buyerEmail },
+      orderId: order.id,
     })
 
     await pool.execute(
-      'UPDATE glab_orders SET pagbank_checkout_id = ?, updated_at = NOW() WHERE id = ?',
-      [checkout.checkoutId, order.id],
+      'UPDATE glab_orders SET pagbank_checkout_id = ?, pagbank_order_id = ?, updated_at = NOW() WHERE id = ?',
+      [checkout.checkoutId, checkout.pagbankOrderId, order.id],
     )
 
     return NextResponse.json({ orderId: order.id, checkoutUrl: checkout.checkoutUrl })

@@ -1,13 +1,26 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { BookOpen, CheckCircle2, ChevronRight, LockKeyhole, Sparkles } from 'lucide-react'
-import { currentPlatformUser, studentEnrollments } from '@/lib/learning-platform'
+import { currentPlatformUser, orderById, reconcilePagBankOrder, studentEnrollments } from '@/lib/learning-platform'
 
 export const dynamic = 'force-dynamic'
 
-export default async function AlunoPage() {
+export default async function AlunoPage({ searchParams }: { searchParams: Promise<{ pagbank?: string; orderId?: string }> }) {
   const user = await currentPlatformUser()
   if (!user) return null
+
+  const params = await searchParams
+  if (params.pagbank === 'retorno' && params.orderId) {
+    try {
+      const order = await orderById(params.orderId)
+      if (order?.buyerEmail === user.email && order.status !== 'PAID') {
+        await reconcilePagBankOrder(order.id, order.pagbankOrderId)
+      }
+    } catch (error) {
+      console.error('[v0] Falha ao reconciliar pagamento no retorno', error)
+    }
+  }
+
   const enrollments = await studentEnrollments(user.email)
   const firstName = user.name.split(' ')[0]
 

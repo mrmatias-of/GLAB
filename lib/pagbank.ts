@@ -105,6 +105,7 @@ export type PagBankHostedCheckout = {
   links?: Array<{ rel?: string; href?: string; media?: string; type?: string }>
   checkout_url?: string
   payment_url?: string
+  orders?: Array<{ id: string }>
 }
 
 /**
@@ -142,6 +143,7 @@ export async function createPagBankHostedCheckout(input: {
   amountCents: number
   description: string
   customer: { name: string; email: string }
+  orderId?: string
 }) {
   const checkout = await pagbankFetch<PagBankHostedCheckout>('/checkouts', {
     method: 'POST',
@@ -167,8 +169,8 @@ export async function createPagBankHostedCheckout(input: {
         { type: 'CREDIT_CARD', config_options: [{ option: 'INSTALLMENTS_LIMIT', value: '12' }] },
       ],
       soft_descriptor: 'GLABCURSOS',
-      redirect_url: `${appBaseUrl()}/aluno?pagbank=retorno`,
-      return_url: `${appBaseUrl()}/aluno?pagbank=retorno`,
+      redirect_url: `${appBaseUrl()}/aluno?pagbank=retorno${input.orderId ? `&orderId=${encodeURIComponent(input.orderId)}` : ''}`,
+      return_url: `${appBaseUrl()}/aluno?pagbank=retorno${input.orderId ? `&orderId=${encodeURIComponent(input.orderId)}` : ''}`,
       redirect_waiting_time: 10,
       notification_urls: [pagbankNotificationUrl()],
       payment_notification_urls: [pagbankNotificationUrl()],
@@ -177,7 +179,7 @@ export async function createPagBankHostedCheckout(input: {
 
   const checkoutUrl = resolvePayUrl(checkout)
   if (!checkoutUrl) throw new Error('PagBank criou o checkout, mas não retornou o link de pagamento.')
-  return { checkoutId: checkout.id, checkoutUrl }
+  return { checkoutId: checkout.id, checkoutUrl, pagbankOrderId: checkout.orders?.[0]?.id ?? null }
 }
 
 export async function getPagBankOrder(orderId: string) {

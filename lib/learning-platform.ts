@@ -324,6 +324,21 @@ export async function entitledProductIds(executor: SqlExecutor, productId: numbe
   return items.length > 0 ? items.map((item) => item.itemProductId) : [productId]
 }
 
+export async function reconcilePagBankOrder(orderId: string, pagbankOrderId: string | null) {
+  if (!pagbankOrderId) return false
+  const { getPagBankOrder } = await import('@/lib/pagbank')
+  const remote = await getPagBankOrder(pagbankOrderId)
+  const paid = remote.charges?.some((charge) => ['PAID', 'AUTHORIZED', 'AVAILABLE'].includes(charge.status))
+  if (!paid) return false
+
+  await pool.execute(
+    'UPDATE glab_orders SET pagbank_order_id = ?, updated_at = NOW() WHERE id = ?',
+    [pagbankOrderId, orderId],
+  )
+  await fulfillPaidOrder(orderId)
+  return true
+}
+
 export async function fulfillPaidOrder(orderId: string) {
   const connection = await pool.getConnection()
   try {
