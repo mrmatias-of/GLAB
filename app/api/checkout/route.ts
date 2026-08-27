@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
-import { createPagBankCardOrder, createPagBankPixOrder } from '@/lib/pagbank'
+import { createPagBankCardOrder, createPagBankPixOrder, PagBankError } from '@/lib/pagbank'
 import { createPendingOrder, fulfillPaidOrder } from '@/lib/learning-platform'
 import { pool } from '@/lib/db'
 
@@ -17,16 +17,16 @@ function isValidCpf(value: string) {
 }
 
 const schema = z.object({
-  productSlug: z.string().min(1).max(120),
-  buyerName: z.string().min(3).max(160),
-  buyerEmail: z.string().email().max(254),
+  productSlug: z.string().min(1, 'Curso não informado.').max(120),
+  buyerName: z.string().min(3, 'Informe seu nome completo.').max(160, 'Nome muito longo.'),
+  buyerEmail: z.string().email('Informe um e-mail válido.').max(254),
   taxId: z
     .string()
     .transform((value) => value.replace(/\D/g, ''))
     .refine(isValidCpf, 'Informe um CPF válido com 11 dígitos.'),
   method: z.enum(['CARD', 'PIX']),
-  encryptedCard: z.string().min(20).max(10000).optional(),
-  installments: z.number().int().min(1).max(12).optional(),
+  encryptedCard: z.string().min(20, 'Dados do cartão inválidos.').max(10000).optional(),
+  installments: z.number().int('Parcelas inválidas.').min(1, 'Escolha ao menos 1 parcela.').max(12, 'Máximo de 12 parcelas.').optional(),
   couponCode: z.string().max(40).optional(),
 })
 
@@ -73,7 +73,11 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues[0]?.message ?? 'Dados inválidos.' }, { status: 400 })
-    console.error('[v0] Checkout error', error)
+    if (error instanceof PagBankError) {
+      const status = error.status === 400 || error.status === 422 ? 400 : 502
+      return NextResponse.json({ error: error.message, details: error.details }, { status })
+    }
+    console.error('Erro no checkout', error)
     return NextResponse.json({ error: error instanceof Error ? error.message : 'Não foi possível iniciar o pagamento.' }, { status: 502 })
   }
 }

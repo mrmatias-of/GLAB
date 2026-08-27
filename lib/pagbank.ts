@@ -10,6 +10,44 @@ function token() {
   return value
 }
 
+export class PagBankError extends Error {
+  status: number
+  details: Array<{ code?: string; description?: string; parameter_name?: string }>
+  constructor(message: string, status: number, details: PagBankError['details']) {
+    super(message)
+    this.name = 'PagBankError'
+    this.status = status
+    this.details = details
+  }
+}
+
+const FIELD_LABELS: Record<string, string> = {
+  'charges[0].payment_method.card.encrypted': 'dados do cartão',
+  'charges[0].payment_method.card.exp_month': 'mês de validade',
+  'charges[0].payment_method.card.exp_year': 'ano de validade',
+  'charges[0].payment_method.card.security_code': 'código de segurança (CVV)',
+  'charges[0].payment_method.card.number': 'número do cartão',
+  'charges[0].payment_method.card.holder.name': 'nome impresso no cartão',
+  'charges[0].payment_method.installments': 'número de parcelas',
+  'customer.tax_id': 'CPF',
+  'customer.email': 'e-mail',
+  'customer.name': 'nome',
+}
+
+function humanizePagBankError(status: number, details: PagBankError['details']) {
+  if (status === 401 || status === 403) {
+    return 'A integração com o PagBank está com credenciais inválidas. Verifique o token configurado.'
+  }
+  const first = details[0]
+  if (first) {
+    const label = first.parameter_name ? FIELD_LABELS[first.parameter_name] : undefined
+    if (label) return `Confira o campo ${label} e tente novamente.`
+    if (first.description) return `PagBank recusou o pagamento: ${first.description}`
+  }
+  if (status >= 500) return 'O PagBank está temporariamente indisponível. Tente novamente em alguns instantes.'
+  return 'Não foi possível processar o pagamento no PagBank.'
+}
+
 async function pagbankFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
   const response = await fetch(`${PAGBANK_API}${path}`, {
     ...init,
@@ -25,8 +63,15 @@ async function pagbankFetch<T>(path: string, init: RequestInit = {}): Promise<T>
   let body: unknown = null
   try { body = text ? JSON.parse(text) : null } catch { body = text }
   if (!response.ok) {
-    console.error('[v0] PagBank API error', { status: response.status, path, body })
-    throw new Error('Não foi possível processar o pagamento no PagBank.')
+    const details = (body as { error_messages?: PagBankError['details'] } | null)?.error_messages ?? []
+    console.error('Erro na API do PagBank', {
+      status: response.status,
+      environment: process.env.PAGBANK_ENV ?? 'sandbox',
+      path,
+      details,
+      body: details.length ? undefined : body,
+    })
+    throw new PagBankError(humanizePagBankError(response.status, details), response.status, details)
   }
   return body as T
 }
