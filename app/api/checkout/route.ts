@@ -4,11 +4,26 @@ import { createPagBankCardOrder, createPagBankPixOrder } from '@/lib/pagbank'
 import { createPendingOrder } from '@/lib/learning-platform'
 import { pool } from '@/lib/db'
 
+function isValidCpf(value: string) {
+  if (!/^\d{11}$/.test(value) || /^(\d)\1{10}$/.test(value)) return false
+  const digits = value.split('').map(Number)
+  for (const [length, position] of [[9, 10], [10, 11]] as const) {
+    let sum = 0
+    for (let index = 0; index < length; index += 1) sum += digits[index] * (position - index)
+    const remainder = (sum * 10) % 11
+    if ((remainder === 10 ? 0 : remainder) !== digits[length]) return false
+  }
+  return true
+}
+
 const schema = z.object({
   productSlug: z.string().min(1).max(120),
   buyerName: z.string().min(3).max(160),
   buyerEmail: z.string().email().max(254),
-  taxId: z.string().regex(/^\\d{11}$/, 'CPF inválido'),
+  taxId: z
+    .string()
+    .transform((value) => value.replace(/\D/g, ''))
+    .refine(isValidCpf, 'Informe um CPF válido com 11 dígitos.'),
   method: z.enum(['CARD', 'PIX']),
   encryptedCard: z.string().min(20).max(10000).optional(),
   installments: z.number().int().min(1).max(12).optional(),
