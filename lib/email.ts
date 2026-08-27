@@ -2,7 +2,7 @@ import 'server-only'
 
 import nodemailer from 'nodemailer'
 
-const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://glabcursos.com.br').replace(/\/$/, '')
+const appUrl = (process.env.NEXT_PUBLIC_APP_URL?.trim() || 'https://www.glabcursos.com.br').replace(/\/$/, '')
 const from = process.env.EMAIL_FROM ?? 'G-LAB <no-reply@glabcursos.com.br>'
 const institutionalImageUrl = 'https://blobs.vusercontent.net/blob/%5BPasted%20159%20lines%5D-4C3v8eYldu8hmb9aQU8HILe7ytJgQQ'
 
