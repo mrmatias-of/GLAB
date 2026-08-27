@@ -13,6 +13,7 @@ import {
   type SaveProductInput,
   type SaveLessonInput,
 } from '@/lib/learning-platform'
+import { parsePriceToCents } from '@/lib/price'
 
 export type ProductActionState = { error?: string; success?: boolean }
 
@@ -21,7 +22,7 @@ function readProductInput(formData: FormData): SaveProductInput {
     title: String(formData.get('title') ?? ''),
     slug: String(formData.get('slug') ?? ''),
     description: String(formData.get('description') ?? ''),
-    priceCents: Math.round(Number(formData.get('price') ?? 0) * 100),
+    priceCents: parsePriceToCents(formData.get('price')),
     coverUrl: String(formData.get('coverUrl') ?? '') || null,
     isActive: formData.get('isActive') === 'on',
   }

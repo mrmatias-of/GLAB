@@ -3,6 +3,7 @@
 import { useActionState, useMemo, useState } from 'react'
 import { AlertCircle, CheckCircle2, Package, Search } from 'lucide-react'
 import { createComboAction, updateComboAction, type ComboActionState } from './actions'
+import { centsToInputValue, parsePriceToCents } from '@/lib/price'
 
 type Candidate = {
   id: number
@@ -36,7 +37,7 @@ export function ComboForm({ candidates, combo }: { candidates: Candidate[]; comb
   const [selected, setSelected] = useState<number[]>(
     candidates.filter((candidate) => candidate.included === 1).map((candidate) => candidate.id),
   )
-  const [price, setPrice] = useState(combo ? (combo.priceCents / 100).toFixed(2) : '')
+  const [price, setPrice] = useState(combo ? centsToInputValue(combo.priceCents) : '')
   const [search, setSearch] = useState('')
 
   const toggle = (id: number) =>
@@ -50,7 +51,8 @@ export function ComboForm({ candidates, combo }: { candidates: Candidate[]; comb
     [candidates, selected],
   )
 
-  const comboCents = Math.round((Number(price) || 0) * 100)
+  const parsedCents = parsePriceToCents(price)
+  const comboCents = Number.isFinite(parsedCents) ? parsedCents : 0
   const discount = partsCents > 0 && comboCents > 0 ? 1 - comboCents / partsCents : 0
 
   const visible = useMemo(() => {
@@ -64,6 +66,11 @@ export function ComboForm({ candidates, combo }: { candidates: Candidate[]; comb
 
   return (
     <form action={formAction} className="flex flex-col gap-6">
+      {/* Fonte da verdade do que será salvo, imune ao filtro de busca. */}
+      {selected.map((id) => (
+        <input key={id} type="hidden" name="itemIds" value={id} />
+      ))}
+
       {state?.error ? (
         <div
           role="alert"
@@ -113,10 +120,11 @@ export function ComboForm({ candidates, combo }: { candidates: Candidate[]; comb
                       isNested ? 'cursor-not-allowed opacity-40' : 'cursor-pointer hover:bg-white/[.04]'
                     }`}
                   >
+                    {/* Sem name: a seleção vai em hidden inputs no fim do
+                        form. Um checkbox filtrado pela busca sai do DOM e
+                        seria perdido no submit, apagando cursos do combo. */}
                     <input
                       type="checkbox"
-                      name="itemIds"
-                      value={candidate.id}
                       disabled={isNested}
                       checked={selected.includes(candidate.id)}
                       onChange={() => toggle(candidate.id)}
@@ -162,15 +170,16 @@ export function ComboForm({ candidates, combo }: { candidates: Candidate[]; comb
 
             <label className="flex flex-col gap-1.5 text-xs font-bold text-slate-400">
               Preço do combo (R$)
+              {/* Campo de texto, não number: o admin digita "29,90" e um
+                  input number descarta a vírgula, salvando R$ 2.990,00. */}
               <input
                 name="price"
-                type="number"
-                min={0}
-                step="0.01"
+                type="text"
+                inputMode="decimal"
                 required
                 value={price}
                 onChange={(event) => setPrice(event.target.value)}
-                placeholder="29.90"
+                placeholder="29,90"
                 className={fieldClass}
               />
             </label>

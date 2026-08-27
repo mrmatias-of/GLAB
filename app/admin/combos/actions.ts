@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { requireAdmin } from '@/lib/require-admin'
 import { clearBundleItems, saveBundle, type SaveBundleInput } from '@/lib/learning-platform'
+import { parsePriceToCents } from '@/lib/price'
 
 export type ComboActionState = { error?: string; success?: boolean }
 
@@ -12,7 +13,7 @@ function readComboInput(formData: FormData): SaveBundleInput {
     title: String(formData.get('title') ?? ''),
     slug: String(formData.get('slug') ?? ''),
     description: String(formData.get('description') ?? ''),
-    priceCents: Math.round(Number(formData.get('price') ?? 0) * 100),
+    priceCents: parsePriceToCents(formData.get('price')),
     coverUrl: String(formData.get('coverUrl') ?? '') || null,
     isActive: formData.get('isActive') === 'on',
   }
