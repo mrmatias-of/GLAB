@@ -55,7 +55,7 @@ export async function POST(request: Request) {
       try {
         await fulfillPaidOrder(order.id)
       } catch (fulfillError) {
-        console.error('[v0] Falha ao liberar acesso do pedido pago', { orderId: order.id, fulfillError })
+        console.error('Falha ao liberar acesso do pedido pago', { orderId: order.id, fulfillError })
       }
     }
     if (declined) {
