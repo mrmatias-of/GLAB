@@ -221,13 +221,14 @@ export type CheckoutProduct = RowDataPacket & {
   title: string
   description: string | null
   priceCents: number
+  compareAtCents: number | null
   currency: string
   isActive: number
 }
 
 export async function productBySlug(slug: string): Promise<CheckoutProduct | null> {
   const [[row]] = await pool.execute<CheckoutProduct[]>(
-    `SELECT id, slug, title, description, price_cents AS priceCents, currency, is_active AS isActive
+    `SELECT id, slug, title, description, price_cents AS priceCents, compare_at_cents AS compareAtCents, currency, is_active AS isActive
      FROM glab_products WHERE slug = ? AND is_active = 1 LIMIT 1`,
     [slug],
   )
