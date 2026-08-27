@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { createPagBankCardOrder, createPagBankPixOrder, PagBankError } from '@/lib/pagbank'
 import { createPendingOrder, fulfillPaidOrder } from '@/lib/learning-platform'
 import { pool } from '@/lib/db'
+import { normalizeEmail, validateEmailForPagBank } from '@/lib/email-validation'
 
 function isValidCpf(value: string) {
   if (!/^\d{11}$/.test(value) || /^(\d)\1{10}$/.test(value)) return false
@@ -19,7 +20,13 @@ function isValidCpf(value: string) {
 const schema = z.object({
   productSlug: z.string().min(1, 'Curso não informado.').max(120),
   buyerName: z.string().min(3, 'Informe seu nome completo.').max(160, 'Nome muito longo.'),
-  buyerEmail: z.string().email('Informe um e-mail válido.').max(254),
+  buyerEmail: z
+    .string()
+    .transform(normalizeEmail)
+    .superRefine((value, ctx) => {
+      const problem = validateEmailForPagBank(value)
+      if (problem) ctx.addIssue({ code: z.ZodIssueCode.custom, message: problem })
+    }),
   taxId: z
     .string()
     .transform((value) => value.replace(/\D/g, ''))

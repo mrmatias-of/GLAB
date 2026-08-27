@@ -140,7 +140,13 @@ export async function createPagBankPixOrder(input: {
     method: 'POST',
     body: JSON.stringify({
       reference_id: input.referenceId,
-      customer: input.customer,
+      // O PagBank espera tax_id (snake_case). Enviar taxId faz a API
+      // responder que o CPF está ausente e o Pix nunca é gerado.
+      customer: {
+        name: input.customer.name,
+        email: input.customer.email,
+        tax_id: input.customer.taxId,
+      },
       items: [{ reference_id: input.referenceId, name: input.description, quantity: 1, unit_amount: input.amountCents }],
       qr_codes: [{ amount: { value: input.amountCents }, expiration_date: new Date(Date.now() + 30 * 60_000).toISOString() }],
     }),
