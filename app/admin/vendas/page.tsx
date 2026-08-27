@@ -16,6 +16,9 @@ const statusMeta: Record<string, { label: string; icon: typeof CheckCircle2; cla
   PAID: { label: 'Pago', icon: CheckCircle2, className: 'text-emerald-300' },
   PENDING: { label: 'Pendente', icon: Clock, className: 'text-amber-300' },
   CANCELED: { label: 'Cancelado', icon: XCircle, className: 'text-red-300' },
+  DECLINED: { label: 'Recusado', icon: XCircle, className: 'text-red-300' },
+  IN_ANALYSIS: { label: 'Em análise', icon: Clock, className: 'text-blue-300' },
+  WAITING: { label: 'Aguardando Pix', icon: Clock, className: 'text-cyan-300' },
 }
 
 export default async function VendasPage() {
