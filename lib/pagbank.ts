@@ -107,11 +107,6 @@ export type PagBankHostedCheckout = {
   payment_url?: string
 }
 
-export async function getPagBankPublicKey() {
-  const response = await pagbankFetch<{ public_key: string }>('/public-keys/card')
-  return response.public_key
-}
-
 export async function createPagBankHostedCheckout(input: {
   referenceId: string
   amountCents: number
@@ -157,63 +152,6 @@ export async function createPagBankHostedCheckout(input: {
 
   if (!checkoutUrl) throw new Error('PagBank criou o checkout, mas não retornou o link de pagamento.')
   return { checkoutId: checkout.id, checkoutUrl }
-}
-
-export async function createPagBankCardOrder(input: {
-  referenceId: string
-  amountCents: number
-  description: string
-  customer: { name: string; email: string; taxId?: string; phones?: Array<{ country: string; area: string; number: string; type: string }> }
-  encryptedCard: string
-  installments?: number
-}) {
-  return pagbankFetch<PagBankOrder>('/orders', {
-    method: 'POST',
-    body: JSON.stringify({
-      reference_id: input.referenceId,
-      customer: {
-        name: input.customer.name,
-        email: input.customer.email,
-        tax_id: input.customer.taxId,
-        phones: input.customer.phones,
-      },
-      items: [{ reference_id: input.referenceId, name: input.description, quantity: 1, unit_amount: input.amountCents }],
-      charges: [{
-        reference_id: input.referenceId,
-        description: input.description,
-        amount: { value: input.amountCents, currency: 'BRL' },
-        payment_method: {
-          type: 'CREDIT_CARD',
-          installments: input.installments ?? 1,
-          capture: true,
-          card: { encrypted: input.encryptedCard, store: false },
-        },
-      }],
-    }),
-  })
-}
-
-export async function createPagBankPixOrder(input: {
-  referenceId: string
-  amountCents: number
-  description: string
-  customer: { name: string; email: string; taxId: string }
-}) {
-  return pagbankFetch<PagBankOrder>('/orders', {
-    method: 'POST',
-    body: JSON.stringify({
-      reference_id: input.referenceId,
-      // O PagBank espera tax_id (snake_case). Enviar taxId faz a API
-      // responder que o CPF está ausente e o Pix nunca é gerado.
-      customer: {
-        name: input.customer.name,
-        email: input.customer.email,
-        tax_id: input.customer.taxId,
-      },
-      items: [{ reference_id: input.referenceId, name: input.description, quantity: 1, unit_amount: input.amountCents }],
-      qr_codes: [{ amount: { value: input.amountCents }, expiration_date: new Date(Date.now() + 30 * 60_000).toISOString() }],
-    }),
-  })
 }
 
 export async function getPagBankOrder(orderId: string) {
