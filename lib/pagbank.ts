@@ -107,6 +107,36 @@ export type PagBankHostedCheckout = {
   payment_url?: string
 }
 
+/**
+ * Escolhe a URL para onde o aluno deve ser levado.
+ *
+ * O PagBank devolve vários links e o primeiro é sempre o SELF, que aponta
+ * para o próprio endpoint da API e exige o header Authorization. Redirecionar
+ * o navegador para ele resulta em "invalid_authorization_header", porque o
+ * token existe só no servidor. Por isso aceitamos apenas o link PAY e nunca
+ * caímos em um endereço do host da API.
+ */
+function resolvePayUrl(checkout: PagBankHostedCheckout) {
+  const isApiEndpoint = (href: string) => {
+    try {
+      return new URL(href).hostname.endsWith('api.pagseguro.com')
+    } catch {
+      return true
+    }
+  }
+
+  const candidates = [
+    checkout.links?.find(link => link.rel?.toUpperCase() === 'PAY')?.href,
+    checkout.checkout_url,
+    checkout.payment_url,
+    ...(checkout.links ?? [])
+      .filter(link => link.rel?.toUpperCase() !== 'SELF' && link.rel?.toUpperCase() !== 'INACTIVATE')
+      .map(link => link.href),
+  ]
+
+  return candidates.find((href): href is string => Boolean(href) && !isApiEndpoint(href!))
+}
+
 export async function createPagBankHostedCheckout(input: {
   referenceId: string
   amountCents: number
@@ -145,11 +175,7 @@ export async function createPagBankHostedCheckout(input: {
     }),
   })
 
-  const checkoutUrl = checkout.checkout_url
-    ?? checkout.payment_url
-    ?? checkout.links?.find(link => ['PAY', 'CHECKOUT', 'checkout'].includes(link.rel ?? '') || link.href?.includes('checkout'))?.href
-    ?? checkout.links?.find(link => Boolean(link.href))?.href
-
+  const checkoutUrl = resolvePayUrl(checkout)
   if (!checkoutUrl) throw new Error('PagBank criou o checkout, mas não retornou o link de pagamento.')
   return { checkoutId: checkout.id, checkoutUrl }
 }
