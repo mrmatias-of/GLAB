@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowUpRight, Menu, User, X } from 'lucide-react'
+import { ArrowUpRight, LogIn, Menu, X } from 'lucide-react'
 import { useState } from 'react'
 
 const NAV = [
@@ -11,10 +11,8 @@ const NAV = [
   { label: 'Contato', href: '/contato' },
 ]
 
-export default function Header({ isAuthenticated = false }: { isAuthenticated?: boolean }) {
+export default function Header() {
   const [open, setOpen] = useState(false)
-  const accountHref = isAuthenticated ? '/aluno' : '/sign-in'
-  const accountLabel = isAuthenticated ? 'Área do aluno' : 'Entrar'
 
   return (
     <>
@@ -51,10 +49,10 @@ export default function Header({ isAuthenticated = false }: { isAuthenticated?: 
           {/* Ações direita */}
           <div className="flex items-center gap-3">
             <Link
-              href={accountHref}
-              className="hidden items-center gap-2 rounded-full border border-white/[.12] px-5 py-3 text-[10px] font-black uppercase tracking-[.1em] text-white/80 transition hover:border-cyan-300/40 hover:text-white md:inline-flex"
+              href="/sign-in"
+              className="hidden items-center gap-2 rounded-full border border-cyan-300/25 bg-cyan-300/[.08] px-5 py-3 text-[10px] font-black uppercase tracking-[.1em] text-cyan-100 transition hover:-translate-y-0.5 hover:border-cyan-200/60 hover:bg-cyan-300/[.14] md:inline-flex"
             >
-              <User size={14} /> {accountLabel}
+              Entrar <LogIn size={15} />
             </Link>
             <Link
               href="/cursos"
@@ -87,13 +85,9 @@ export default function Header({ isAuthenticated = false }: { isAuthenticated?: 
                 {n.label}
               </Link>
             ))}
-            <div className="pt-4 border-t border-white/10 space-y-3">
-              <Link
-                href={accountHref}
-                onClick={() => setOpen(false)}
-                className="flex items-center justify-center gap-2 rounded-full border border-white/[.12] py-3 text-[11px] font-black uppercase tracking-[.14em] text-white/80"
-              >
-                <User size={14} /> {accountLabel}
+            <div className="pt-4 border-t border-white/10">
+              <Link href="/sign-in" className="mb-3 flex w-full items-center justify-center gap-2 rounded-full border border-cyan-300/25 bg-cyan-300/[.08] px-4 py-3 text-xs font-black uppercase tracking-[.12em] text-cyan-100" onClick={() => setOpen(false)}>
+                Entrar na plataforma <LogIn size={15} />
               </Link>
               <Link href="/cursos" className="btn-primary w-full justify-center text-xs py-2.5" onClick={() => setOpen(false)}>
                 Ver Cursos
@@ -105,4 +99,3 @@ export default function Header({ isAuthenticated = false }: { isAuthenticated?: 
     </>
   )
 }
-
