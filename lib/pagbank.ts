@@ -10,6 +10,14 @@ function token() {
   return value
 }
 
+function appBaseUrl() {
+  return (process.env.NEXT_PUBLIC_APP_URL || 'https://www.glabcursos.com.br').replace(/\/$/, '')
+}
+
+function pagbankNotificationUrl() {
+  return `${appBaseUrl()}/api/pagbank/webhook`
+}
+
 export class PagBankError extends Error {
   status: number
   details: Array<{ code?: string; description?: string; parameter_name?: string }>
@@ -91,9 +99,64 @@ export type PagBankOrder = {
   links?: Array<{ rel: string; href: string; media: string }>
 }
 
+export type PagBankHostedCheckout = {
+  id: string
+  reference_id?: string
+  links?: Array<{ rel?: string; href?: string; media?: string; type?: string }>
+  checkout_url?: string
+  payment_url?: string
+}
+
 export async function getPagBankPublicKey() {
   const response = await pagbankFetch<{ public_key: string }>('/public-keys/card')
   return response.public_key
+}
+
+export async function createPagBankHostedCheckout(input: {
+  referenceId: string
+  amountCents: number
+  description: string
+  customer: { name: string; email: string }
+}) {
+  const checkout = await pagbankFetch<PagBankHostedCheckout>('/checkouts', {
+    method: 'POST',
+    body: JSON.stringify({
+      reference_id: input.referenceId,
+      customer_modifiable: true,
+      customer: {
+        name: input.customer.name,
+        email: input.customer.email,
+      },
+      items: [{
+        reference_id: input.referenceId,
+        name: input.description,
+        quantity: 1,
+        unit_amount: input.amountCents,
+      }],
+      payment_methods: [
+        { type: 'CREDIT_CARD' },
+        { type: 'PIX' },
+        { type: 'BOLETO' },
+      ],
+      payment_methods_configs: [
+        { type: 'CREDIT_CARD', config_options: [{ option: 'INSTALLMENTS_LIMIT', value: '12' }] },
+      ],
+      soft_descriptor: 'GLABCURSOS',
+      redirect_url: `${appBaseUrl()}/aluno?pagbank=retorno`,
+      return_url: `${appBaseUrl()}/aluno?pagbank=retorno`,
+      redirect_waiting_time: 10,
+      notification_urls: [pagbankNotificationUrl()],
+      payment_notification_urls: [pagbankNotificationUrl()],
+    }),
+  })
+
+  const checkoutUrl = checkout.checkout_url
+    ?? checkout.payment_url
+    ?? checkout.links?.find(link => ['PAY', 'CHECKOUT', 'checkout'].includes(link.rel ?? '') || link.href?.includes('checkout'))?.href
+    ?? checkout.links?.find(link => Boolean(link.href))?.href
+
+  if (!checkoutUrl) throw new Error('PagBank criou o checkout, mas não retornou o link de pagamento.')
+  return { checkoutId: checkout.id, checkoutUrl }
 }
 
 export async function createPagBankCardOrder(input: {
