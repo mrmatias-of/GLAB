@@ -108,9 +108,7 @@ function PriceCard({ curso }: { curso: Curso }) {
         <p className="text-xs text-gray-600 mb-6">pagamento único</p>
 
         <a
-          href={curso.ctaHref}
-          target="_blank"
-          rel="noopener noreferrer"
+          href={curso.ctaHref.startsWith('/') ? curso.ctaHref : `/checkout/${curso.ctaHref}`}
           className="w-full inline-flex items-center justify-center gap-2 rounded-lg font-black text-base px-6 py-4 transition-all duration-300 bg-blue-600 text-white hover:bg-blue-700"
         >
           {curso.cta}
@@ -118,7 +116,7 @@ function PriceCard({ curso }: { curso: Curso }) {
 
         <p className="text-[11px] text-gray-600 text-center mt-4 flex items-center justify-center gap-2">
           <Tag size={12} />
-          Pagamento único via Kirvano
+          Pagamento seguro via PagBank
         </p>
       </div>
     </div>

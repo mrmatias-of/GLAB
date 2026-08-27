@@ -51,13 +51,13 @@ export default function TermosPage() {
           <section>
             <h2 className="text-lg font-semibold mb-3" style={{ color: '#fff' }}>3. Acesso ao conteudo</h2>
             <p>
-              Apos a confirmacao do pagamento pela <strong style={{ color: '#fff' }}>Kirvano</strong>,
-              o acesso ao produto adquirido e disponibilizado pela propria plataforma da Kirvano.
+              Apos a confirmacao do pagamento pela <strong style={{ color: '#fff' }}>PagBank</strong>,
+              o acesso ao produto adquirido e disponibilizado pela propria plataforma da PagBank.
               O G•Lab Cursos nao mantém painel de aluno proprio.
             </p>
             <p className="mt-2">
               Condicoes especificas de acesso, quando aplicaveis, constam na oferta correspondente
-              ou no ambiente da Kirvano.
+              ou no ambiente da PagBank.
             </p>
           </section>
 
@@ -82,8 +82,8 @@ export default function TermosPage() {
             <h2 className="text-lg font-semibold mb-3" style={{ color: '#fff' }}>6. Pagamentos e checkout</h2>
             <p>
               Todos os pagamentos sao processados pela{' '}
-              <strong style={{ color: '#fff' }}>Kirvano</strong>. Ao clicar em um botao de compra voce
-              e redirecionado para o ambiente seguro da Kirvano. O G•Lab Cursos nao armazena dados
+              <strong style={{ color: '#fff' }}>PagBank</strong>. Ao clicar em um botao de compra voce
+              e redirecionado para o ambiente seguro da PagBank. O G•Lab Cursos nao armazena dados
               de cartao de credito ou informacoes financeiras.
             </p>
           </section>
@@ -95,7 +95,7 @@ export default function TermosPage() {
               cancelamento da compra em ate <strong style={{ color: '#fff' }}>7 dias</strong> apos a
               data de aquisicao, para compras realizadas fora do estabelecimento comercial (inclusive
               pela internet). A solicitacao deve ser feita diretamente pela plataforma{' '}
-              <strong style={{ color: '#fff' }}>Kirvano</strong> ou pelo canal de suporte indicado abaixo.
+              <strong style={{ color: '#fff' }}>PagBank</strong> ou pelo canal de suporte indicado abaixo.
             </p>
           </section>
 

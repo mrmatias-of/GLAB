@@ -38,7 +38,7 @@ export default function PrivacidadePage() {
             </p>
             <p className="mt-2">
               A compra, o pagamento e a entrega dos guias sao processados exclusivamente pela{" "}
-              <strong style={{ color: "#fff" }}>Kirvano</strong>, plataforma externa de checkout e
+              <strong style={{ color: "#fff" }}>PagBank</strong>, plataforma externa de checkout e
               entrega digital. O G Lab Cursos nao processa pagamentos nem libera acessos
               diretamente.
             </p>
@@ -92,7 +92,7 @@ export default function PrivacidadePage() {
             <p className="mt-2">
               Nenhum dado de metricas opcionais e coletado pelo VisitorTracker quando voce escolhe{" "}
               <em>"Somente essenciais"</em>. Dados enviados voluntariamente pelo formulario de
-              contato e registros operacionais necessarios a compras realizadas na Kirvano seguem
+              contato e registros operacionais necessarios a compras realizadas na PagBank seguem
               as finalidades descritas nesta politica.
             </p>
             <p className="mt-2">
@@ -102,10 +102,10 @@ export default function PrivacidadePage() {
             </p>
 
             <h3 className="font-medium mb-1 mt-4" style={{ color: "#e4e4e7" }}>
-              2.3 Notificacoes operacionais de venda (webhook Kirvano)
+              2.3 Notificacoes operacionais de venda (webhook PagBank)
             </h3>
             <p>
-              Quando uma venda, reembolso ou chargeback e confirmado pela Kirvano, ela envia uma
+              Quando uma venda, reembolso ou chargeback e confirmado pela PagBank, ela envia uma
               notificacao automatica para o site. O tratamento desses dados e dividido em duas
               etapas distintas:
             </p>
@@ -132,12 +132,12 @@ export default function PrivacidadePage() {
               <strong style={{ color: "#fff" }}>Nao sao armazenados</strong> pelo site: nome do
               comprador, e-mail, CPF, telefone, endereco, dados bancarios, QR Code PIX, linha
               digitavel de boleto, payload completo da notificacao ou qualquer outro dado pessoal
-              do comprador. Esses dados permanecem exclusivamente na Kirvano.
+              do comprador. Esses dados permanecem exclusivamente na PagBank.
             </p>
             <p className="mt-2">
               Para novos eventos processados apos a atualizacao desta politica (maio de 2026), o
               site nao armazena payload completo, CPF, telefone, e-mail ou dados detalhados de
-              pagamento recebidos em notificacoes da Kirvano.
+              pagamento recebidos em notificacoes da PagBank.
             </p>
           </section>
 
@@ -153,7 +153,7 @@ export default function PrivacidadePage() {
               </li>
               <li>
                 <strong style={{ color: "#fff" }}>Execucao de contrato</strong> — notificacoes
-                operacionais de venda recebidas da Kirvano
+                operacionais de venda recebidas da PagBank
               </li>
               <li>
                 <strong style={{ color: "#fff" }}>Obrigacao legal</strong> — retencao de registros
@@ -178,7 +178,7 @@ export default function PrivacidadePage() {
                 de dados
               </li>
               <li>
-                <strong style={{ color: "#fff" }}>Kirvano</strong> — plataforma de checkout e
+                <strong style={{ color: "#fff" }}>PagBank</strong> — plataforma de checkout e
                 entrega; responsavel pelos dados completos de pagamento e cadastro do comprador
               </li>
               <li>

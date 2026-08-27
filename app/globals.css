@@ -95,6 +95,20 @@
 }
 
 @layer components {
+  .field {
+    width: 100%;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 0.85rem;
+    background: rgba(5,7,18,.72);
+    color: #eef5ff;
+    padding: .85rem 1rem;
+    font-size: .875rem;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .field::placeholder { color: #66738a; }
+  .field:focus { border-color: rgba(103,232,249,.7); box-shadow: 0 0 0 3px rgba(103,232,249,.12); }
+
   /* Button - Primary (Blue) */
   .btn-primary {
     display: inline-flex;

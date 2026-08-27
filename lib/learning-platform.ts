@@ -5,6 +5,7 @@ import { headers } from 'next/headers'
 import { auth } from '@/lib/auth'
 import { pool } from '@/lib/db'
 import type { RowDataPacket } from 'mysql2'
+import { sendPurchaseApprovedEmail } from '@/lib/email'
 
 export type PlatformUser = { id: string; email: string; name: string }
 
@@ -212,6 +213,111 @@ export async function platformSalesSummary() {
       (SELECT COUNT(*) FROM glab_orders WHERE status = 'CANCELED') AS canceledOrders`,
   )
   return summary ?? { revenueCents: 0, paidOrders: 0, pendingOrders: 0, canceledOrders: 0 }
+}
+
+export type CheckoutProduct = RowDataPacket & {
+  id: number
+  slug: string
+  title: string
+  description: string | null
+  priceCents: number
+  currency: string
+  isActive: number
+}
+
+export async function productBySlug(slug: string): Promise<CheckoutProduct | null> {
+  const [[row]] = await pool.execute<CheckoutProduct[]>(
+    `SELECT id, slug, title, description, price_cents AS priceCents, currency, is_active AS isActive
+     FROM glab_products WHERE slug = ? AND is_active = 1 LIMIT 1`,
+    [slug],
+  )
+  return row ?? null
+}
+
+export type PendingOrder = {
+  id: string
+  productId: number
+  productTitle: string
+  buyerName: string
+  buyerEmail: string
+  amountCents: number
+  referenceId: string
+}
+
+export async function createPendingOrder(input: {
+  productSlug: string
+  buyerName: string
+  buyerEmail: string
+  couponCode?: string
+}) {
+  const product = await productBySlug(input.productSlug)
+  if (!product) throw new Error('Curso não encontrado ou indisponível.')
+  const buyerName = input.buyerName.trim().replace(/\\s+/g, ' ')
+  const buyerEmail = input.buyerEmail.trim().toLowerCase()
+  if (buyerName.length < 3 || buyerName.length > 160) throw new Error('Informe seu nome completo.')
+  if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(buyerEmail)) throw new Error('Informe um e-mail válido.')
+
+  let amountCents = product.priceCents
+  let couponId: number | null = null
+  if (input.couponCode?.trim()) {
+    const [[coupon]] = await pool.execute<Array<RowDataPacket & { id: number; discountType: string; discountValue: number; productId: number | null; maxRedemptions: number | null; redeemedCount: number; expiresAt: Date | null }>>(
+      `SELECT id, discount_type AS discountType, discount_value AS discountValue, product_id AS productId,
+       max_redemptions AS maxRedemptions, redeemed_count AS redeemedCount, expires_at AS expiresAt
+       FROM glab_coupons WHERE code = ? AND is_active = 1 LIMIT 1`,
+      [input.couponCode.trim().toUpperCase()],
+    )
+    if (!coupon || (coupon.productId !== null && coupon.productId !== product.id) || (coupon.expiresAt && new Date(coupon.expiresAt).getTime() <= Date.now()) || (coupon.maxRedemptions !== null && coupon.redeemedCount >= coupon.maxRedemptions)) {
+      throw new Error('Cupom inválido, expirado ou indisponível para este curso.')
+    }
+    amountCents = coupon.discountType === 'PERCENT'
+      ? Math.max(0, Math.round(product.priceCents * (1 - Math.min(100, coupon.discountValue) / 100)))
+      : Math.max(0, product.priceCents - Math.round(coupon.discountValue * 100))
+    couponId = coupon.id
+  }
+  if (amountCents < 100) throw new Error('O valor final precisa ser de pelo menos R$ 1,00.')
+  const id = randomUUID()
+  const referenceId = `GLAB-${id.replaceAll('-', '').slice(0, 24).toUpperCase()}`
+  await pool.execute(
+    `INSERT INTO glab_orders (id, product_id, reference_id, buyer_name, buyer_email, amount_cents, currency, status)
+     VALUES (?, ?, ?, ?, ?, ?, 'BRL', 'PENDING')`,
+    [id, product.id, referenceId, buyerName, buyerEmail, amountCents],
+  )
+  return { id, productId: product.id, productTitle: product.title, buyerName, buyerEmail, amountCents, referenceId, couponId }
+}
+
+export async function orderById(id: string) {
+  const [[row]] = await pool.execute<Array<RowDataPacket & { id: string; productId: number; productTitle: string; buyerName: string; buyerEmail: string; amountCents: number; status: string; pagbankOrderId: string | null }>>(
+    `SELECT o.id, o.product_id AS productId, p.title AS productTitle, o.buyer_name AS buyerName, o.buyer_email AS buyerEmail,
+     o.amount_cents AS amountCents, o.status, o.pagbank_order_id AS pagbankOrderId
+     FROM glab_orders o JOIN glab_products p ON p.id = o.product_id WHERE o.id = ? LIMIT 1`, [id],
+  )
+  return row ?? null
+}
+
+export async function fulfillPaidOrder(orderId: string) {
+  const connection = await pool.getConnection()
+  try {
+    await connection.beginTransaction()
+    const [[order]] = await connection.execute<Array<RowDataPacket & { productId: number; productTitle: string; buyerName: string; buyerEmail: string; status: string }>>(
+      `SELECT o.product_id AS productId, p.title AS productTitle, o.buyer_name AS buyerName, o.buyer_email AS buyerEmail, o.status
+       FROM glab_orders o JOIN glab_products p ON p.id = o.product_id WHERE o.id = ? FOR UPDATE`, [orderId],
+    )
+    if (!order) throw new Error('Pedido não encontrado.')
+    if (order.status !== 'PAID') await connection.execute(`UPDATE glab_orders SET status = 'PAID', paid_at = COALESCE(paid_at, NOW()) WHERE id = ?`, [orderId])
+    await connection.execute(
+      `INSERT INTO glab_enrollments (id, product_id, order_id, student_email, status)
+       VALUES (?, ?, ?, ?, 'ACTIVE') ON DUPLICATE KEY UPDATE status = 'ACTIVE', revoked_at = NULL`,
+      [randomUUID(), order.productId, orderId, order.buyerEmail],
+    )
+    await connection.commit()
+    await sendPurchaseApprovedEmail({ email: order.buyerEmail, name: order.buyerName, courseName: order.productTitle })
+    return { email: order.buyerEmail, name: order.buyerName, productId: order.productId }
+  } catch (error) {
+    await connection.rollback()
+    throw error
+  } finally {
+    connection.release()
+  }
 }
 
 export type PlatformCouponRow = RowDataPacket & {
