@@ -2,8 +2,9 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowUpRight, LogIn, Menu, X } from 'lucide-react'
+import { ArrowUpRight, LogIn, LogOut, Menu, User, X } from 'lucide-react'
 import { useState } from 'react'
+import { signOut } from '@/lib/auth-client'
 
 const NAV = [
   { label: 'Home',   href: '/' },
@@ -11,8 +12,19 @@ const NAV = [
   { label: 'Contato', href: '/contato' },
 ]
 
-export default function Header() {
+export default function Header({ isAuthenticated }: { isAuthenticated?: boolean }) {
   const [open, setOpen] = useState(false)
+  const [isSigningOut, setIsSigningOut] = useState(false)
+
+  const handleSignOut = async () => {
+    setIsSigningOut(true)
+    try {
+      await signOut({ fetchOptions: { onSuccess: () => window.location.href = '/' } })
+    } catch (error) {
+      console.error('[v0] Erro ao sair:', error)
+      setIsSigningOut(false)
+    }
+  }
 
   return (
     <>
@@ -48,12 +60,15 @@ export default function Header() {
 
           {/* Ações direita */}
           <div className="flex items-center gap-3">
-            <Link
-              href="/sign-in"
-              className="hidden items-center gap-2 rounded-full border border-cyan-300/25 bg-cyan-300/[.08] px-5 py-3 text-[10px] font-black uppercase tracking-[.1em] text-cyan-100 transition hover:-translate-y-0.5 hover:border-cyan-200/60 hover:bg-cyan-300/[.14] md:inline-flex"
-            >
-              Entrar <LogIn size={15} />
-            </Link>
+            {isAuthenticated ? (
+              <Link href="/aluno" className="hidden items-center gap-2 rounded-full border border-cyan-300/25 bg-cyan-300/[.08] px-5 py-3 text-[10px] font-black uppercase tracking-[.1em] text-cyan-100 transition hover:-translate-y-0.5 hover:border-cyan-200/60 hover:bg-cyan-300/[.14] md:inline-flex">
+                Meu perfil <User size={15} />
+              </Link>
+            ) : (
+              <Link href="/sign-in" className="hidden items-center gap-2 rounded-full border border-cyan-300/25 bg-cyan-300/[.08] px-5 py-3 text-[10px] font-black uppercase tracking-[.1em] text-cyan-100 transition hover:-translate-y-0.5 hover:border-cyan-200/60 hover:bg-cyan-300/[.14] md:inline-flex">
+                Entrar <LogIn size={15} />
+              </Link>
+            )}
             <Link
               href="/cursos"
               className="hidden items-center gap-2 rounded-full bg-white px-5 py-3 text-[10px] font-black uppercase tracking-[.1em] text-[#061020] shadow-[0_12px_40px_rgba(255,255,255,.09)] transition hover:-translate-y-0.5 hover:bg-cyan-100 md:inline-flex"
@@ -86,9 +101,20 @@ export default function Header() {
               </Link>
             ))}
             <div className="pt-4 border-t border-white/10">
-              <Link href="/sign-in" className="mb-3 flex w-full items-center justify-center gap-2 rounded-full border border-cyan-300/25 bg-cyan-300/[.08] px-4 py-3 text-xs font-black uppercase tracking-[.12em] text-cyan-100" onClick={() => setOpen(false)}>
-                Entrar na plataforma <LogIn size={15} />
-              </Link>
+              {isAuthenticated ? (
+                <>
+                  <Link href="/aluno" className="mb-3 flex w-full items-center justify-center gap-2 rounded-full border border-cyan-300/25 bg-cyan-300/[.08] px-4 py-3 text-xs font-black uppercase tracking-[.12em] text-cyan-100" onClick={() => setOpen(false)}>
+                    Meu perfil <User size={15} />
+                  </Link>
+                  <button type="button" disabled={isSigningOut} onClick={handleSignOut} className="mb-3 flex w-full items-center justify-center gap-2 rounded-full border border-white/10 px-4 py-3 text-xs font-black uppercase tracking-[.12em] text-white/60 hover:text-white disabled:opacity-50">
+                    {isSigningOut ? 'Saindo...' : 'Sair'} <LogOut size={15} />
+                  </button>
+                </>
+              ) : (
+                <Link href="/sign-in" className="mb-3 flex w-full items-center justify-center gap-2 rounded-full border border-cyan-300/25 bg-cyan-300/[.08] px-4 py-3 text-xs font-black uppercase tracking-[.12em] text-cyan-100" onClick={() => setOpen(false)}>
+                  Entrar na plataforma <LogIn size={15} />
+                </Link>
+              )}
               <Link href="/cursos" className="btn-primary w-full justify-center text-xs py-2.5" onClick={() => setOpen(false)}>
                 Ver Cursos
               </Link>
