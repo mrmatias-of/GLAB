@@ -1,11 +1,10 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, ExternalLink } from 'lucide-react'
+import { ArrowLeft, ExternalLink, Package } from 'lucide-react'
 import { platformProductById, lessonsByProductId, bundleCandidates } from '@/lib/learning-platform'
 import { ProductForm } from '../product-form'
 import { LessonManager } from '../lesson-manager'
-import { BundleManager } from '../bundle-manager'
 
 export const metadata: Metadata = {
   title: 'Editar curso | Painel Admin',
@@ -55,10 +54,29 @@ export default async function EditarCursoPage({ params }: { params: Promise<{ id
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-sm font-black uppercase tracking-wider text-slate-500">
-          Cursos liberados na compra ({includedCount})
-        </h2>
-        <BundleManager productId={productId} candidates={candidates} />
+        <h2 className="text-sm font-black uppercase tracking-wider text-slate-500">Combo de venda</h2>
+        <div className="flex flex-col gap-3 rounded-3xl border border-white/10 bg-white/[.02] p-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="max-w-xl text-xs leading-relaxed text-slate-400">
+            {includedCount > 0 ? (
+              <>
+                Este produto é um <strong className="text-slate-200">combo</strong> e libera {includedCount}{' '}
+                {includedCount === 1 ? 'curso' : 'cursos'} na compra.
+              </>
+            ) : (
+              <>
+                Este é um curso avulso: a compra libera apenas ele. Para vender vários cursos em um só pagamento,
+                monte um combo.
+              </>
+            )}
+          </p>
+          <Link
+            href={includedCount > 0 ? `/admin/combos/${productId}` : '/admin/combos'}
+            className="inline-flex w-fit shrink-0 items-center gap-2 rounded-xl border border-white/10 px-3 py-2.5 text-xs font-bold text-cyan-300 transition-colors hover:border-cyan-300/50 hover:text-cyan-200"
+          >
+            <Package size={14} />
+            {includedCount > 0 ? 'Gerenciar combo' : 'Ir para combos'}
+          </Link>
+        </div>
       </section>
 
       <section className="space-y-4">

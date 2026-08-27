@@ -42,11 +42,18 @@ export default async function CursosPage() {
           {products.map((product) => (
             <Link
               key={product.id}
-              href={`/admin/cursos/${product.id}`}
+              href={product.isBundle ? `/admin/combos/${product.id}` : `/admin/cursos/${product.id}`}
               className="grid gap-3 border-b border-white/10 bg-[#0a0d19] px-6 py-5 transition-colors last:border-0 hover:bg-white/[.03] md:grid-cols-[1fr_140px_130px_120px] md:items-center"
             >
               <div>
-                <p className="font-bold">{product.title}</p>
+                <p className="flex items-center gap-2 font-bold">
+                  <span className="truncate">{product.title}</span>
+                  {product.isBundle ? (
+                    <span className="shrink-0 rounded bg-cyan-400/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-cyan-300">
+                      Combo
+                    </span>
+                  ) : null}
+                </p>
                 <p className="mt-1 text-xs text-slate-500">/{product.slug}</p>
               </div>
               <p className="text-sm font-bold">{money.format(product.priceCents / 100)}</p>

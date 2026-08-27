@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
-import { TrendingUp, CheckCircle2, Clock, XCircle } from 'lucide-react'
+import Link from 'next/link'
+import { TrendingUp, CheckCircle2, Clock, XCircle, Package } from 'lucide-react'
 import { platformOrders, platformSalesSummary } from '@/lib/learning-platform'
 
 export const metadata: Metadata = {
@@ -33,10 +34,18 @@ export default async function VendasPage() {
 
   return (
     <div className="space-y-8 text-white">
-      <div>
-        <p className="text-xs font-black uppercase tracking-[.18em] text-cyan-400">Financeiro</p>
-        <h1 className="mt-2 text-3xl font-black">Vendas</h1>
-        <p className="mt-2 text-sm text-slate-400">Pedidos processados pelo checkout, com status de pagamento em tempo real.</p>
+      <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[.18em] text-cyan-400">Financeiro</p>
+          <h1 className="mt-2 text-3xl font-black">Vendas</h1>
+          <p className="mt-2 text-sm text-slate-400">Pedidos processados pelo checkout, com status de pagamento em tempo real.</p>
+        </div>
+        <Link
+          href="/admin/combos"
+          className="inline-flex w-fit items-center gap-2 rounded-xl border border-white/10 px-4 py-3 text-sm font-bold text-cyan-300 transition-colors hover:border-cyan-300/50 hover:text-cyan-200"
+        >
+          <Package size={16} /> Combos de venda
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">

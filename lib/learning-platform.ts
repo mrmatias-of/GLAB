@@ -123,8 +123,12 @@ export async function platformAdminSummary() {
 }
 
 export async function platformProducts() {
-  const [rows] = await pool.query<Array<RowDataPacket & { id: number; slug: string; title: string; priceCents: number; isActive: number; coverUrl: string | null; updatedAt: Date }>>(
-    'SELECT id, slug, title, price_cents AS priceCents, is_active AS isActive, cover_url AS coverUrl, updated_at AS updatedAt FROM glab_products ORDER BY created_at DESC',
+  const [rows] = await pool.query<Array<RowDataPacket & { id: number; slug: string; title: string; priceCents: number; isActive: number; coverUrl: string | null; updatedAt: Date; isBundle: number }>>(
+    `SELECT p.id, p.slug, p.title, p.price_cents AS priceCents, p.is_active AS isActive, p.cover_url AS coverUrl,
+       p.updated_at AS updatedAt,
+       EXISTS (SELECT 1 FROM glab_product_bundle_items b WHERE b.bundle_product_id = p.id) AS isBundle
+     FROM glab_products p
+     ORDER BY p.created_at DESC`,
   )
   return rows
 }
@@ -475,7 +479,7 @@ export type SaveProductInput = {
   isActive: boolean
 }
 
-export async function createProduct(input: SaveProductInput) {
+export async function createProduct(input: SaveProductInput, executor: SqlExecutor = pool) {
   const title = input.title.trim()
   if (!title) throw new Error('Informe o título do curso.')
   if (!Number.isFinite(input.priceCents) || input.priceCents < 0) {
@@ -486,7 +490,7 @@ export async function createProduct(input: SaveProductInput) {
   if (!slug) throw new Error('Não foi possível gerar um slug válido para este título.')
 
   try {
-    const [result] = await pool.execute<import('mysql2').ResultSetHeader>(
+    const [result] = await executor.execute<import('mysql2').ResultSetHeader>(
       `INSERT INTO glab_products (slug, title, description, price_cents, is_active, cover_url)
        VALUES (?, ?, ?, ?, ?, ?)`,
       [slug, title, input.description?.trim() || null, Math.round(input.priceCents), input.isActive ? 1 : 0, input.coverUrl || null],
@@ -500,7 +504,7 @@ export async function createProduct(input: SaveProductInput) {
   }
 }
 
-export async function updateProduct(id: number, input: SaveProductInput) {
+export async function updateProduct(id: number, input: SaveProductInput, executor: SqlExecutor = pool) {
   const title = input.title.trim()
   if (!title) throw new Error('Informe o título do curso.')
   if (!Number.isFinite(input.priceCents) || input.priceCents < 0) {
@@ -511,7 +515,7 @@ export async function updateProduct(id: number, input: SaveProductInput) {
   if (!slug) throw new Error('Não foi possível gerar um slug válido para este título.')
 
   try {
-    await pool.execute(
+    await executor.execute(
       `UPDATE glab_products
        SET slug = ?, title = ?, description = ?, price_cents = ?, is_active = ?, cover_url = ?
        WHERE id = ?`,
@@ -531,62 +535,134 @@ export type BundleCandidate = RowDataPacket & {
   id: number
   title: string
   slug: string
+  priceCents: number
+  isActive: number
   isBundle: number
   included: number
 }
 
 /**
  * Cursos que podem entrar em um combo, já marcando os que estão incluídos.
- * Combos são listados como candidatos inválidos (isBundle) para evitar
- * combo dentro de combo, que exigiria resolução recursiva.
+ * Combos são marcados como candidatos inválidos (isBundle) para evitar combo
+ * dentro de combo, que exigiria resolução recursiva.
+ *
+ * Sem bundleProductId (combo ainda não criado), nenhum produto é excluído da
+ * lista e nada aparece como incluído.
  */
-export async function bundleCandidates(bundleProductId: number) {
+export async function bundleCandidates(bundleProductId?: number) {
+  const selfId = bundleProductId ?? 0
   const [rows] = await pool.execute<BundleCandidate[]>(
-    `SELECT p.id, p.title, p.slug,
+    `SELECT p.id, p.title, p.slug, p.price_cents AS priceCents, p.is_active AS isActive,
        EXISTS (SELECT 1 FROM glab_product_bundle_items b WHERE b.bundle_product_id = p.id) AS isBundle,
        EXISTS (SELECT 1 FROM glab_product_bundle_items i WHERE i.bundle_product_id = ? AND i.item_product_id = p.id) AS included
      FROM glab_products p
      WHERE p.id <> ?
      ORDER BY p.title`,
-    [bundleProductId, bundleProductId],
+    [selfId, selfId],
   )
   return rows
 }
 
-export async function setBundleItems(bundleProductId: number, itemProductIds: number[]) {
-  const unique = [...new Set(itemProductIds.filter((id) => Number.isInteger(id) && id > 0 && id !== bundleProductId))]
+export type PlatformBundleRow = RowDataPacket & {
+  id: number
+  slug: string
+  title: string
+  priceCents: number
+  isActive: number
+  updatedAt: Date
+  itemCount: number
+  partsCents: number
+}
 
-  if (unique.length > 0) {
-    // Um combo não pode conter outro combo: a liberação resolveria apenas um
-    // nível e o aluno ficaria sem parte dos cursos.
-    const [nested] = await pool.query<Array<RowDataPacket & { title: string }>>(
-      `SELECT DISTINCT p.title FROM glab_products p
-       JOIN glab_product_bundle_items b ON b.bundle_product_id = p.id
-       WHERE p.id IN (?)`,
-      [unique],
-    )
-    if (nested.length > 0) {
-      throw new Error(`Não é possível incluir outro combo: ${nested.map((row) => row.title).join(', ')}.`)
-    }
+/** Combos existentes, com quantos cursos liberam e quanto custariam separados. */
+export async function platformBundles() {
+  const [rows] = await pool.query<PlatformBundleRow[]>(
+    `SELECT p.id, p.slug, p.title, p.price_cents AS priceCents, p.is_active AS isActive, p.updated_at AS updatedAt,
+       COUNT(b.item_product_id) AS itemCount,
+       CAST(COALESCE(SUM(i.price_cents), 0) AS SIGNED) AS partsCents
+     FROM glab_products p
+     JOIN glab_product_bundle_items b ON b.bundle_product_id = p.id
+     JOIN glab_products i ON i.id = b.item_product_id
+     GROUP BY p.id
+     ORDER BY p.created_at DESC`,
+  )
+  return rows
+}
+
+function normalizeItemIds(itemProductIds: number[], bundleProductId?: number) {
+  return [
+    ...new Set(
+      itemProductIds.filter((id) => Number.isInteger(id) && id > 0 && id !== bundleProductId),
+    ),
+  ]
+}
+
+/**
+ * Um combo não pode conter outro combo: a liberação resolveria apenas um nível
+ * e o aluno ficaria sem parte dos cursos.
+ */
+async function assertNoNestedBundles(itemProductIds: number[]) {
+  if (itemProductIds.length === 0) return
+  const [nested] = await pool.query<Array<RowDataPacket & { title: string }>>(
+    `SELECT DISTINCT p.title FROM glab_products p
+     JOIN glab_product_bundle_items b ON b.bundle_product_id = p.id
+     WHERE p.id IN (?)`,
+    [itemProductIds],
+  )
+  if (nested.length > 0) {
+    throw new Error(`Não é possível incluir outro combo: ${nested.map((row) => row.title).join(', ')}.`)
   }
+}
+
+async function replaceBundleItems(executor: SqlExecutor, bundleProductId: number, itemProductIds: number[]) {
+  await executor.execute('DELETE FROM glab_product_bundle_items WHERE bundle_product_id = ?', [bundleProductId])
+  for (const [index, itemProductId] of itemProductIds.entries()) {
+    await executor.execute(
+      'INSERT INTO glab_product_bundle_items (bundle_product_id, item_product_id, position) VALUES (?, ?, ?)',
+      [bundleProductId, itemProductId, index],
+    )
+  }
+}
+
+export type SaveBundleInput = SaveProductInput & { id?: number }
+
+/**
+ * Cria ou atualiza um combo em uma única operação: os dados de venda e os
+ * cursos incluídos são gravados na mesma transação, para não deixar um combo
+ * pela metade (produto criado sem nenhum curso liberaria nada ao ser vendido).
+ */
+export async function saveBundle(input: SaveBundleInput, itemProductIds: number[]) {
+  const items = normalizeItemIds(itemProductIds, input.id)
+  if (items.length === 0) {
+    throw new Error('Selecione ao menos um curso para o combo liberar.')
+  }
+  await assertNoNestedBundles(items)
 
   const connection = await pool.getConnection()
   try {
     await connection.beginTransaction()
-    await connection.execute('DELETE FROM glab_product_bundle_items WHERE bundle_product_id = ?', [bundleProductId])
-    for (const [index, itemProductId] of unique.entries()) {
-      await connection.execute(
-        'INSERT INTO glab_product_bundle_items (bundle_product_id, item_product_id, position) VALUES (?, ?, ?)',
-        [bundleProductId, itemProductId, index],
-      )
+
+    let bundleId = input.id
+    if (bundleId) {
+      await updateProduct(bundleId, input, connection)
+    } else {
+      bundleId = await createProduct(input, connection)
     }
+
+    await replaceBundleItems(connection, bundleId, items)
     await connection.commit()
+    return bundleId
   } catch (error) {
     await connection.rollback()
     throw error
   } finally {
     connection.release()
   }
+}
+
+/** Desfaz o combo: o produto continua existindo, mas deixa de liberar cursos. */
+export async function clearBundleItems(bundleProductId: number) {
+  await pool.execute('DELETE FROM glab_product_bundle_items WHERE bundle_product_id = ?', [bundleProductId])
 }
 
 // --- Gestão de aulas ---
