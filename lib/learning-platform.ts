@@ -6,6 +6,7 @@ import { auth } from '@/lib/auth'
 import { pool } from '@/lib/db'
 import type { RowDataPacket } from 'mysql2'
 import { sendPurchaseApprovedEmail } from '@/lib/email'
+import { normalizeEmail, validateEmailForPagBank } from '@/lib/email-validation'
 
 export type PlatformUser = { id: string; email: string; name: string }
 
@@ -254,9 +255,10 @@ export async function createPendingOrder(input: {
   const product = await productBySlug(input.productSlug)
   if (!product) throw new Error('Curso não encontrado ou indisponível.')
   const buyerName = input.buyerName.trim().replace(/\s+/g, ' ')
-  const buyerEmail = input.buyerEmail.trim().toLowerCase()
+  const buyerEmail = normalizeEmail(input.buyerEmail)
   if (buyerName.length < 3 || buyerName.length > 160) throw new Error('Informe seu nome completo.')
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail)) throw new Error('Informe um e-mail válido.')
+  const emailProblem = validateEmailForPagBank(buyerEmail)
+  if (emailProblem) throw new Error(emailProblem)
 
   let amountCents = product.priceCents
   let couponId: number | null = null
@@ -311,7 +313,13 @@ export async function fulfillPaidOrder(orderId: string) {
       [randomUUID(), order.productId, orderId, order.buyerEmail],
     )
     await connection.commit()
-    await sendPurchaseApprovedEmail({ email: order.buyerEmail, name: order.buyerName, courseName: order.productTitle })
+    // O e-mail é secundário: se falhar, a matrícula já está confirmada e o
+    // erro não pode virar rollback nem sinalizar falha de liberação.
+    try {
+      await sendPurchaseApprovedEmail({ email: order.buyerEmail, name: order.buyerName, courseName: order.productTitle })
+    } catch (emailError) {
+      console.error('Acesso liberado, mas o e-mail de confirmação falhou', { orderId, emailError })
+    }
     return { email: order.buyerEmail, name: order.buyerName, productId: order.productId }
   } catch (error) {
     await connection.rollback()

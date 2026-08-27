@@ -20,22 +20,122 @@ function textVersion(title: string, body: string, ctaUrl?: string) {
   return `G-LAB\n\n${title}\n\n${body.replace(/<[^>]*>/g, '')}${ctaUrl ? `\n\n${ctaUrl}` : ''}\n\nSuporte: suporte@glabcursos.com.br`
 }
 
+export class EmailNotConfiguredError extends Error {
+  missing: string[]
+  constructor(missing: string[]) {
+    super(`SMTP incompleto. Configure: ${missing.join(', ')}.`)
+    this.name = 'EmailNotConfiguredError'
+    this.missing = missing
+  }
+}
+
+/** Variáveis sem valor padrão seguro. As demais são inferidas abaixo. */
+function missingSmtpVars() {
+  return (['SMTP_HOST', 'SMTP_USER', 'SMTP_PASSWORD'] as const).filter(key => !process.env[key]?.trim())
+}
+
 function transporter() {
-  const host = process.env.SMTP_HOST
-  const user = process.env.SMTP_USER
-  const pass = process.env.SMTP_PASSWORD
-  if (!host || !user || !pass) return null
-  return nodemailer.createTransport({ host, port: Number(process.env.SMTP_PORT ?? 465), secure: (process.env.SMTP_SECURE ?? 'true') === 'true', auth: { user, pass } })
+  const missing = missingSmtpVars()
+  if (missing.length) throw new EmailNotConfiguredError(missing)
+  const port = Number(process.env.SMTP_PORT ?? 465)
+  return nodemailer.createTransport({
+    host: process.env.SMTP_HOST!.trim(),
+    port,
+    // Porta 465 exige TLS implícito; 587 usa STARTTLS.
+    secure: process.env.SMTP_SECURE ? process.env.SMTP_SECURE === 'true' : port === 465,
+    auth: { user: process.env.SMTP_USER!.trim(), pass: process.env.SMTP_PASSWORD! },
+    connectionTimeout: 15_000,
+    greetingTimeout: 15_000,
+    socketTimeout: 20_000,
+  })
 }
 
 export async function sendEmail(input: { to: string; subject: string; html: string; text: string }) {
-  const client = transporter()
-  if (!client) {
-    console.warn('[email] SMTP não configurado; e-mail não enviado.', { subject: input.subject })
-    return { delivered: false as const, reason: 'SMTP_NOT_CONFIGURED' }
+  try {
+    const client = transporter()
+    const info = await client.sendMail({
+      from,
+      replyTo: process.env.EMAIL_REPLY_TO ?? 'suporte@glabcursos.com.br',
+      to: input.to,
+      subject: input.subject,
+      html: input.html,
+      text: input.text,
+    })
+    if (info.rejected?.length) throw new Error(`Destinatário recusado pelo servidor: ${info.rejected.join(', ')}`)
+    return { delivered: true as const, messageId: info.messageId }
+  } catch (error) {
+    // Falha silenciosa era a causa de nenhum e-mail chegar: o erro precisa
+    // aparecer no log e ser propagado para quem chamou.
+    console.error('Falha ao enviar e-mail', {
+      subject: input.subject,
+      to: input.to,
+      missingVars: error instanceof EmailNotConfiguredError ? error.missing : undefined,
+      code: (error as { code?: string }).code,
+      responseCode: (error as { responseCode?: number }).responseCode,
+      message: error instanceof Error ? error.message : String(error),
+    })
+    throw error
   }
-  await client.sendMail({ from, replyTo: process.env.EMAIL_REPLY_TO ?? 'suporte@glabcursos.com.br', to: input.to, subject: input.subject, html: input.html, text: input.text })
-  return { delivered: true as const }
+}
+
+
+/**
+ * Diagnóstico do SMTP para o painel admin. Nunca retorna a senha:
+ * apenas quais variáveis faltam e o erro exato devolvido pelo servidor.
+ */
+export async function checkEmailSetup(sendTestTo?: string) {
+  const missing = missingSmtpVars()
+  const port = Number(process.env.SMTP_PORT ?? 465)
+  const config = {
+    host: process.env.SMTP_HOST?.trim() ?? null,
+    port,
+    secure: process.env.SMTP_SECURE ? process.env.SMTP_SECURE === 'true' : port === 465,
+    user: process.env.SMTP_USER?.trim() ?? null,
+    from,
+    replyTo: process.env.EMAIL_REPLY_TO ?? 'suporte@glabcursos.com.br',
+    passwordConfigured: Boolean(process.env.SMTP_PASSWORD),
+  }
+  if (missing.length) return { ok: false as const, missing, config, stage: 'CONFIG' as const }
+
+  try {
+    await transporter().verify()
+  } catch (error) {
+    return {
+      ok: false as const,
+      missing,
+      config,
+      stage: 'CONNECTION' as const,
+      error: {
+        code: (error as { code?: string }).code ?? null,
+        responseCode: (error as { responseCode?: number }).responseCode ?? null,
+        message: error instanceof Error ? error.message : String(error),
+      },
+    }
+  }
+
+  if (!sendTestTo) return { ok: true as const, missing, config, stage: 'VERIFIED' as const }
+
+  try {
+    const result = await sendEmail({
+      to: sendTestTo,
+      subject: 'Teste de envio — G•Lab Cursos',
+      html: emailLayout({ eyebrow: 'Diagnóstico', title: 'Envio funcionando', preview: 'Teste de envio do G•Lab.', body: '<p>Se você recebeu esta mensagem, o envio de e-mails está operacional.</p>' }),
+      text: 'Se você recebeu esta mensagem, o envio de e-mails está operacional.',
+    })
+    return { ok: true as const, missing, config, stage: 'SENT' as const, messageId: result.messageId }
+  } catch (error) {
+    return {
+      ok: false as const,
+      missing,
+      config,
+      stage: 'SEND' as const,
+      error: {
+        code: (error as { code?: string }).code ?? null,
+        responseCode: (error as { responseCode?: number }).responseCode ?? null,
+        message: error instanceof Error ? error.message : String(error),
+      },
+    }
+  }
 }
 
 export async function sendVerificationEmail({ email, name, url }: { email: string; name: string; url: string }) {

@@ -32,8 +32,13 @@ export async function POST(request: NextRequest) {
         text: `Nome: ${nome}\nEmail: ${email}\n${assunto ? `Assunto: ${assunto}\n` : ''}\nMensagem:\n${mensagem}`,
       })
     } catch (emailError) {
-      console.error('[contact] Erro ao enviar e-mail:', emailError)
-      // Continuar mesmo se falhar, pois a mensagem foi recebida
+      // A mensagem não é persistida em nenhum lugar: se o e-mail falha, ela é
+      // perdida. Responder "sucesso" aqui escondia o problema do visitante.
+      console.error('Falha ao enviar mensagem de contato', emailError)
+      return NextResponse.json(
+        { error: 'Não foi possível enviar sua mensagem agora. Escreva direto para suporte@glabcursos.com.br que respondemos rápido.' },
+        { status: 502 },
+      )
     }
 
     return NextResponse.json({ 
