@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createPagBankCardOrder, createPagBankPixOrder } from '@/lib/pagbank'
-import { createPendingOrder } from '@/lib/learning-platform'
+import { createPendingOrder, fulfillPaidOrder } from '@/lib/learning-platform'
 import { pool } from '@/lib/db'
 
 function isValidCpf(value: string) {
@@ -42,11 +42,28 @@ export async function POST(request: Request) {
       ? await createPagBankPixOrder({ referenceId: order.referenceId, amountCents: order.amountCents, description: order.productTitle, customer })
       : await createPagBankCardOrder({ referenceId: order.referenceId, amountCents: order.amountCents, description: order.productTitle, customer, encryptedCard: input.encryptedCard!, installments: input.installments })
     const pagbankCharge = pagbankOrder.charges?.[0]
-    const status = pagbankCharge?.status === 'PAID' ? 'PAID' : 'PENDING'
+    const chargeStatus = pagbankCharge?.status ?? null
+    const declined = chargeStatus === 'DECLINED' || chargeStatus === 'CANCELED'
+    const status = chargeStatus === 'PAID' ? 'PAID' : declined ? 'CANCELED' : 'PENDING'
     await pool.execute(
-      `UPDATE glab_orders SET pagbank_order_id = ?, status = ?, paid_at = IF(? = 'PAID', NOW(), NULL) WHERE id = ?`,
-      [pagbankOrder.id, status, status, order.id],
+      `UPDATE glab_orders SET pagbank_order_id = ?, status = ?,
+       paid_at = IF(? = 'PAID', NOW(), paid_at), canceled_at = IF(? = 'CANCELED', NOW(), canceled_at)
+       WHERE id = ?`,
+      [pagbankOrder.id, status, status, status, order.id],
     )
+    if (status === 'PAID') {
+      try {
+        await fulfillPaidOrder(order.id)
+      } catch (fulfillError) {
+        console.error('[v0] Falha ao liberar acesso do pedido pago', { orderId: order.id, fulfillError })
+      }
+    }
+    if (declined) {
+      return NextResponse.json(
+        { error: 'O pagamento não foi autorizado pelo banco emissor. Confira os dados do cartão ou use outro meio de pagamento.' },
+        { status: 402 },
+      )
+    }
     const qrCode = pagbankOrder.qr_codes?.[0]
     return NextResponse.json({
       orderId: order.id,

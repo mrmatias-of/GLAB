@@ -253,10 +253,10 @@ export async function createPendingOrder(input: {
 }) {
   const product = await productBySlug(input.productSlug)
   if (!product) throw new Error('Curso não encontrado ou indisponível.')
-  const buyerName = input.buyerName.trim().replace(/\\s+/g, ' ')
+  const buyerName = input.buyerName.trim().replace(/\s+/g, ' ')
   const buyerEmail = input.buyerEmail.trim().toLowerCase()
   if (buyerName.length < 3 || buyerName.length > 160) throw new Error('Informe seu nome completo.')
-  if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(buyerEmail)) throw new Error('Informe um e-mail válido.')
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail)) throw new Error('Informe um e-mail válido.')
 
   let amountCents = product.priceCents
   let couponId: number | null = null
