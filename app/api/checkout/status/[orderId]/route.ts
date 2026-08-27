@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { orderById } from '@/lib/learning-platform'
+import { fulfillPaidOrder, orderById } from '@/lib/learning-platform'
 import { getPagBankOrder } from '@/lib/pagbank'
 import { pool } from '@/lib/db'
 
@@ -12,6 +12,13 @@ export async function GET(_request: Request, { params }: { params: Promise<{ ord
       const remote = await getPagBankOrder(order.pagbankOrderId)
       const status = remote.charges?.[0]?.status === 'PAID' ? 'PAID' : remote.charges?.[0]?.status === 'CANCELED' ? 'CANCELED' : 'PENDING'
       if (status !== order.status) await pool.execute(`UPDATE glab_orders SET status = ?, paid_at = IF(? = 'PAID', NOW(), paid_at), canceled_at = IF(? = 'CANCELED', NOW(), canceled_at) WHERE id = ?`, [status, status, status, orderId])
+      if (status === 'PAID') {
+        try {
+          await fulfillPaidOrder(orderId)
+        } catch (fulfillError) {
+          console.error('[v0] Falha ao liberar acesso após confirmação', { orderId, fulfillError })
+        }
+      }
       return NextResponse.json({ status })
     } catch (error) {
       console.error('[v0] PagBank status check failed', error)

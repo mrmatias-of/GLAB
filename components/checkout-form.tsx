@@ -29,7 +29,7 @@ export function CheckoutForm({ product }: { product: Product }) {
   const [error, setError] = useState(''); const [loading, setLoading] = useState(false); const [copied, setCopied] = useState(false); const [result, setResult] = useState<Result | null>(null); const [paid, setPaid] = useState(false)
 
   useEffect(() => { const script = document.createElement('script'); script.src = 'https://assets.pagseguro.com.br/checkout-sdk-js/rc/dist/browser/pagseguro.min.js'; script.async = true; document.body.appendChild(script); return () => script.remove() }, [])
-  useEffect(() => { if (!result?.pix || paid) return; const timer = window.setInterval(async () => { const response = await fetch(`/api/checkout/status/${result.orderId}`); if (!response.ok) return; const data = await response.json(); if (data.status === 'PAID') { setPaid(true); window.clearInterval(timer) } }, 4000); return () => window.clearInterval(timer) }, [result, paid])
+  useEffect(() => { if (!result || paid) return; const timer = window.setInterval(async () => { const response = await fetch(`/api/checkout/status/${result.orderId}`); if (!response.ok) return; const data = await response.json(); if (data.status === 'PAID') { setPaid(true); window.clearInterval(timer) } }, 4000); return () => window.clearInterval(timer) }, [result, paid])
 
   async function submit(event: FormEvent) {
     event.preventDefault(); setError(''); setLoading(true)
@@ -44,7 +44,7 @@ export function CheckoutForm({ product }: { product: Product }) {
         encryptedCard = card.encryptedCard
       }
       const response = await fetch('/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ productSlug: product.slug, buyerName: name, buyerEmail: email, taxId: taxId.replace(/\D/g, ''), method, encryptedCard, installments: Number(installments) }) })
-      const data = await response.json(); if (!response.ok) throw new Error(data.error ?? 'Não foi possível iniciar o pagamento.'); setResult(data)
+      const data = await response.json(); if (!response.ok) throw new Error(data.error ?? 'Não foi possível iniciar o pagamento.'); setResult(data); if (data.status === 'PAID') setPaid(true)
     } catch (exception) { setError(exception instanceof Error ? exception.message : 'Não foi possível iniciar o pagamento.') } finally { setLoading(false) }
   }
 
