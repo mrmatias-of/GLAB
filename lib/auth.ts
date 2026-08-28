@@ -44,12 +44,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     autoSignIn: true,
-    // TODO(temporário): sem credenciais SMTP configuradas (SMTP_HOST,
-    // SMTP_PORT, SMTP_USER, SMTP_PASSWORD) o e-mail de confirmação nunca
-    // chega e o cadastro ficaria travado para sempre. Enquanto isso,
-    // liberamos o acesso sem confirmação. Configure o SMTP e volte esta
-    // flag para `true` assim que possível.
-    requireEmailVerification: false,
+    requireEmailVerification: true,
     sendResetPassword: async ({ user, url }) => {
       await sendResetPasswordEmail({ email: user.email, name: user.name, url })
     },

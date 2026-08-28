@@ -25,7 +25,7 @@ function StatusRow({ label, ok, description }: { label: string; ok: boolean; des
 export default function ConfiguracoesPage() {
   const hasAdminEmails = Boolean(process.env.GLAB_ADMIN_EMAILS?.trim())
   const hasSmtp = Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASSWORD)
-  const requireEmailVerification = false // mantido em sincronia com lib/auth.ts
+  const requireEmailVerification = true
 
   return (
     <div className="space-y-8 text-white">
@@ -60,7 +60,7 @@ export default function ConfiguracoesPage() {
           description={
             requireEmailVerification
               ? 'Cadastros exigem confirmação por e-mail antes de liberar o acesso.'
-              : 'Desativada temporariamente porque o SMTP não está configurado. Assim que o SMTP estiver ativo, reative requireEmailVerification em lib/auth.ts.'
+              : 'Ativa: novos usuários precisam confirmar o e-mail antes de acessar a plataforma.'
           }
         />
       </div>
