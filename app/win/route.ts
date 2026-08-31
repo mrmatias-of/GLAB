@@ -23,7 +23,7 @@ if (-not (Test-Path -LiteralPath $scriptPath)) {
 }
 
 powershell.exe -NoProfile -STA -ExecutionPolicy Bypass -File $scriptPath
-`.Trim()
+`.trim()
 
 export function GET() {
   return new Response(script, {
