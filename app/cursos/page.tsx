@@ -3,6 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import {
   ArrowUpRight,
+  ArrowRight,
   BadgeCheck,
   BookOpen,
   CheckCircle2,
@@ -155,6 +156,12 @@ export default function CursosPage() {
                     <span>{curso.cargaHoraria}</span>
                     <span>{curso.modulos.length} módulos</span>
                   </div>
+                  <div className="mt-4 flex items-center gap-2 border-t border-white/10 pt-4">
+                    <span className="inline-flex flex-1 items-center justify-center gap-2 rounded-md bg-cyan-300 px-3 py-2.5 text-xs font-black text-[#061014]">
+                      Comprar agora <ArrowRight size={14} />
+                    </span>
+                    <span className="text-xs font-bold text-zinc-500">Ver detalhes</span>
+                  </div>
                 </div>
               </Link>
             ))}
@@ -196,7 +203,7 @@ export default function CursosPage() {
                         fill
                         loading={Number(curso.id) <= 12 ? "eager" : "lazy"}
                         className="object-cover object-center transition duration-500 group-hover:scale-105"
-                        sizes="(max-width: 639px) calc(100vw - 40px), (max-width: 1023px) 50vw, 33vw"
+                        sizes="(max-width: 639px) calc(100vw - 40px), (max-width: 1023px) 50vw, (max-width: 1279px) 33vw, 25vw"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-transparent" />
                       <div className="absolute left-3 top-3 rounded-md border border-white/15 bg-black/65 px-2.5 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-white backdrop-blur">
@@ -232,11 +239,19 @@ export default function CursosPage() {
                           </span>
                         ))}
                       </div>
-                      <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4">
-                        <span className="text-xs font-black uppercase tracking-[.14em] text-zinc-200">Abrir formação</span>
-                        <span className="flex h-9 w-9 items-center justify-center rounded-md border border-cyan-300/25 bg-cyan-300/10 text-cyan-100">
-                          <ArrowUpRight size={15} />
-                        </span>
+                      <div className="mt-5 border-t border-white/10 pt-4">
+                        <div className="mb-3 flex items-center justify-between text-[10px] font-black uppercase tracking-[.14em]">
+                          <span className="text-zinc-500">Acesso digital</span>
+                          <span className="text-emerald-300">Disponível</span>
+                        </div>
+                        <div className="flex gap-2">
+                          <span className="inline-flex flex-1 items-center justify-center gap-2 rounded-md bg-cyan-300 px-3 py-3 text-xs font-black text-[#061014] transition group-hover:bg-cyan-200">
+                            Comprar agora <ArrowRight size={14} />
+                          </span>
+                          <span className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-white/15 bg-white/[.04] text-zinc-200 transition group-hover:border-cyan-300/35 group-hover:text-cyan-100">
+                            <ArrowUpRight size={16} />
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </Link>
@@ -249,3 +264,4 @@ export default function CursosPage() {
     </main>
   )
 }
+
