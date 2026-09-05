@@ -106,7 +106,7 @@ export default function PanicAnalysisPage() {
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <Image
-              src="/logo-glab-neon-transparent.png"
+              src="/logo-glab-surreal.png"
               alt="G-LAB Logo"
               width={64}
               height={64}
@@ -344,3 +344,4 @@ export default function PanicAnalysisPage() {
     </div>
   )
 }
+

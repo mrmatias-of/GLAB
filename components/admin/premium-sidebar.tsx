@@ -65,7 +65,7 @@ export function PremiumSidebar() {
           <div className="flex items-center gap-3 min-w-0">
             <div className="relative w-9 h-9 lg:w-10 lg:h-10 rounded-lg overflow-hidden border border-blue-500/30 shadow-lg flex-shrink-0">
               <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-glab-neon-transparent-2kFvS2C6hGbJR8B91q0a0cgSa9Uqxz.png"
+                src="/logo-glab-surreal.png"
                 alt="G-Lab Logo"
                 fill
                 className="object-cover"
@@ -163,3 +163,4 @@ export function PremiumSidebar() {
     </>
   )
 }
+

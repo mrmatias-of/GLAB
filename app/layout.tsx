@@ -22,8 +22,8 @@ export const metadata: Metadata = {
     canonical: SITE_URL,
   },
   icons: {
-    icon: '/logo-glab-neon-transparent.png',
-    shortcut: '/logo-glab-neon-transparent.png',
+    icon: '/logo-glab-surreal.png',
+    shortcut: '/logo-glab-surreal.png',
   },
   robots: {
     index: true,
@@ -88,3 +88,4 @@ export default function RootLayout({
     </html>
   )
 }
+

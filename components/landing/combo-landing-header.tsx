@@ -20,7 +20,7 @@ export default function ComboLandingHeader() {
           aria-label="G•Lab Cursos — Página inicial"
         >
           <Image
-            src="/logo-glab-neon-transparent.png"
+            src="/logo-glab-surreal.png"
             alt="G•Lab Cursos"
             width={72}
             height={72}
@@ -50,3 +50,4 @@ export default function ComboLandingHeader() {
     </header>
   )
 }
+

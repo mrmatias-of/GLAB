@@ -272,7 +272,7 @@ export default function GrupoVIPPage() {
             {/* Footer brand */}
             <div className="mt-16 flex items-center justify-center gap-3">
               <Image
-                src="/logo-glab-neon.png"
+                src="/logo-glab-surreal.png"
                 alt="G-LAB"
                 width={80}
                 height={80}
@@ -289,3 +289,4 @@ export default function GrupoVIPPage() {
     </div>
   )
 }
+

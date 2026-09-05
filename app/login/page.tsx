@@ -50,7 +50,7 @@ export default function LoginPage() {
           <div className="text-center mb-8">
             <div className="flex justify-center mb-6">
               <Image
-                src="/logo-glab-neon.png"
+                src="/logo-glab-surreal.png"
                 alt="G•Lab Cursos"
                 width={80}
                 height={80}
@@ -123,3 +123,4 @@ export default function LoginPage() {
     </div>
   )
 }
+

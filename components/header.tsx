@@ -21,7 +21,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
             <Image
-              src="/logo-glab-neon-transparent.png"
+              src="/logo-glab-surreal.png"
               alt="G-LAB Logo"
               width={80}
               height={80}
