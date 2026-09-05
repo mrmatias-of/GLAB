@@ -1,7 +1,6 @@
 export type Trilha = "fundamentos" | "reparos" | "diagnostico" | "microsolda" | "apple" | "software" | "gestao" | "performance"
 export type CursoCatalogo = { id:string; slug:string; titulo:string; descricao:string; trilha:Trilha; nivel:"Iniciante"|"Intermediário"|"Avançado"; imagem:string; destaque?:boolean; cargaHoraria:string; modulos:string[] }
-const imagens:Record<Trilha,string>={fundamentos:"/images/combo/combo-iniciante.webp",reparos:"/images/course-troca-tela-v2.png",diagnostico:"/images/diagnostico.png",microsolda:"/images/hero-microscope-lab-v2.png",apple:"/images/iphone.png",software:"/images/samsung.png",gestao:"/images/gestao.png",performance:"/images/pc.png"}
-const c=(id:number,slug:string,titulo:string,descricao:string,trilha:Trilha,nivel:CursoCatalogo["nivel"],modulos:string[],destaque=false):CursoCatalogo=>({id:String(id).padStart(2,"0"),slug,titulo,descricao,trilha,nivel,imagem:imagens[trilha],destaque,cargaHoraria:nivel==="Avançado"?"12h":nivel==="Intermediário"?"8h":"6h",modulos})
+const c=(id:number,slug:string,titulo:string,descricao:string,trilha:Trilha,nivel:CursoCatalogo["nivel"],modulos:string[],destaque=false):CursoCatalogo=>({id:String(id).padStart(2,"0"),slug,titulo,descricao,trilha,nivel,imagem:`/images/courses/${slug}.webp`,destaque,cargaHoraria:nivel==="Avançado"?"12h":nivel==="Intermediário"?"8h":"6h",modulos})
 export const CATALOGO:CursoCatalogo[]=[
 c(1,"combo-iniciante-mobile","Combo Iniciante Mobile","A rota completa para iniciar na assistência técnica com segurança, método e padrão profissional.","fundamentos","Iniciante",["Bancada e segurança ESD","Ferramentas essenciais","Eletrônica aplicada","Triagem e ordem de serviço","Reparos fundamentais","Controle de qualidade"],true),
 c(2,"eletronica-basica-mobile","Eletrônica Básica para Mobile","Tensão, corrente, resistência e componentes no contexto real da bancada.","fundamentos","Iniciante",["Grandezas elétricas","Lei de Ohm","Componentes SMD","Série e paralelo","Uso do multímetro","Exercícios de bancada"]),
@@ -53,3 +52,4 @@ c(47,"notebook-manutencao","Manutenção de Notebooks","Desmontagem, limpeza, up
 c(48,"windows-diagnostico","Windows: Diagnóstico e Recuperação","Resolva inicialização, drivers, desempenho e integridade sem formatação automática.","performance","Intermediário",["Sintomas","Inicialização","Logs e integridade","Drivers","Desempenho","Recuperação e backup"]),
 ]
 export const encontrarCurso=(slug:string)=>CATALOGO.find(item=>item.slug===slug)
+
