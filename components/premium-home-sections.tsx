@@ -3,20 +3,20 @@ import Link from "next/link"
 import { ArrowRight, BookOpenCheck, Check, ChevronRight, CircuitBoard, Cpu, Gauge, Headphones, Layers3, LockKeyhole, Microscope, Radio, RefreshCw, Settings2, ShieldCheck, Smartphone, Sparkles, Wrench } from "lucide-react"
 
 const areas = [
-  { icon: Wrench, number: "01", title: "Fundamentos da bancada", text: "Eletrônica, multímetro, ferramentas, segurança ESD e triagem profissional.", image: "/images/combo/combo-iniciante.webp", href: "/cursos#fundamentos", span: "lg:col-span-7" },
-  { icon: Smartphone, number: "02", title: "Reparos e periféricos", text: "Telas, baterias, conectores, câmeras, áudio, sensores e danos por líquido.", image: "/images/course-troca-tela-v2.png", href: "/cursos#reparos", span: "lg:col-span-5" },
+  { icon: Wrench, number: "01", title: "Fundamentos da bancada", text: "Eletrônica, multímetro, ferramentas, segurança ESD e triagem profissional.", image: "/images/courses/combo-iniciante-mobile.webp", href: "/cursos#fundamentos", span: "lg:col-span-7" },
+  { icon: Smartphone, number: "02", title: "Reparos e periféricos", text: "Telas, baterias, conectores, câmeras, áudio, sensores e danos por líquido.", image: "/images/courses/guia-troca-de-tela.webp", href: "/cursos#reparos", span: "lg:col-span-5" },
   { icon: CircuitBoard, number: "03", title: "Diagnóstico e placa", text: "Consumo, curto, esquemas, PMIC, imagem, rede e falhas intermitentes.", image: "/images/courses/guia-diagnostico-avancado.webp", href: "/cursos#diagnostico", span: "lg:col-span-5" },
-  { icon: Microscope, number: "04", title: "Microsolda e componentes", text: "SMD, trilhas, pads, BGA, conectores delicados e memórias mobile.", image: "/images/hero-microscope-lab-v2.png", href: "/cursos#microsolda", span: "lg:col-span-7" },
-  { icon: Radio, number: "05", title: "Especialização Apple", text: "Panic logs, carga, Face ID, backlight e placas sanduíche de iPhone.", image: "/images/iphone.png", href: "/cursos#apple", span: "lg:col-span-7" },
-  { icon: Settings2, number: "06", title: "Software e dados", text: "Android, iOS, firmware oficial, recuperação, backup e privacidade.", image: "/images/samsung.png", href: "/cursos#software", span: "lg:col-span-5" },
-  { icon: Layers3, number: "07", title: "Gestão profissional", text: "Precificação, processos, estoque, atendimento, qualidade e marketing local.", image: "/images/gestao.png", href: "/cursos#gestao", span: "lg:col-span-5" },
-  { icon: Gauge, number: "08", title: "PC & Performance", text: "Hardware, notebooks, Windows, estabilidade, temperatura e otimização real.", image: "/images/pc.png", href: "/cursos#performance", span: "lg:col-span-7" },
+  { icon: Microscope, number: "04", title: "Microsolda e componentes", text: "SMD, trilhas, pads, BGA, conectores delicados e memórias mobile.", image: "/images/courses/microsolda-fundamentos.webp", href: "/cursos#microsolda", span: "lg:col-span-7" },
+  { icon: Radio, number: "05", title: "Especialização Apple", text: "Panic logs, carga, Face ID, backlight e placas sanduíche de iPhone.", image: "/images/courses/iphone-diagnostico.webp", href: "/cursos#apple", span: "lg:col-span-7" },
+  { icon: Settings2, number: "06", title: "Software e dados", text: "Android, iOS, firmware oficial, recuperação, backup e privacidade.", image: "/images/courses/android-software.webp", href: "/cursos#software", span: "lg:col-span-5" },
+  { icon: Layers3, number: "07", title: "Gestão profissional", text: "Precificação, processos, estoque, atendimento, qualidade e marketing local.", image: "/images/courses/precificacao-profissional.webp", href: "/cursos#gestao", span: "lg:col-span-5" },
+  { icon: Gauge, number: "08", title: "PC & Performance", text: "Hardware, notebooks, Windows, estabilidade, temperatura e otimização real.", image: "/images/courses/pc-diagnostico-hardware.webp", href: "/cursos#performance", span: "lg:col-span-7" },
 ]
 
 const featured = [
-  { number: "01", tag: "Fundamentos", title: "Troca de Tela Profissional", text: "Do diagnóstico inicial ao acabamento e validação final.", image: "/images/course-troca-tela-v2.png", href: "/cursos/guia-troca-de-tela" },
-  { number: "02", tag: "Avançado", title: "Diagnóstico de Placa", text: "Encontre a causa da falha antes de substituir componentes.", image: "/images/hero-microscope-lab-v2.png", href: "/cursos/guia-curto-em-placa" },
-  { number: "03", tag: "Formação completa", title: "Combo Iniciante Mobile", text: "Uma rota organizada para construir sua base técnica.", image: "/images/combo/combo-iniciante.webp", href: "/cursos/combo-iniciante-mobile" },
+  { number: "01", tag: "Fundamentos", title: "Troca de Tela Profissional", text: "Do diagnóstico inicial ao acabamento e validação final.", image: "/images/courses/guia-troca-de-tela.webp", href: "/cursos/guia-troca-de-tela" },
+  { number: "02", tag: "Avançado", title: "Diagnóstico de Placa", text: "Encontre a causa da falha antes de substituir componentes.", image: "/images/courses/microsolda-fundamentos.webp", href: "/cursos/guia-curto-em-placa" },
+  { number: "03", tag: "Formação completa", title: "Combo Iniciante Mobile", text: "Uma rota organizada para construir sua base técnica.", image: "/images/courses/combo-iniciante-mobile.webp", href: "/cursos/combo-iniciante-mobile" },
 ]
 
 export default function PremiumHomeSections() {
@@ -86,7 +86,7 @@ export default function PremiumHomeSections() {
       </div>
     </section>
 
-    <section className="px-5 py-24 md:px-8 md:py-36 xl:px-12"><div className="relative mx-auto max-w-[1360px] overflow-hidden rounded-[40px] border border-cyan-200/20 bg-[radial-gradient(circle_at_20%_20%,rgba(34,211,238,.24),transparent_35%),linear-gradient(135deg,#0c3e79_0%,#193da8_48%,#5621a8_100%)] px-7 py-20 text-center shadow-[0_40px_120px_rgba(37,99,235,.24)] md:px-16 md:py-28"><div className="premium-grid absolute inset-0 opacity-20" /><div className="relative"><p className="text-[10px] font-black uppercase tracking-[.26em] text-cyan-100">Sua evolução começa com método</p><h2 className="mx-auto mt-6 max-w-5xl text-5xl font-black leading-[.9] tracking-[-.065em] text-white md:text-8xl">Construa uma bancada<br />que inspira confiança.</h2><p className="mx-auto mt-7 max-w-2xl text-base leading-7 text-blue-100">Escolha a formação que resolve o seu próximo desafio e avance com uma rota técnica clara.</p><Link href="/cursos" className="group mt-10 inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-sm font-black text-blue-800 shadow-2xl transition hover:-translate-y-1">Quero escolher minha formação <ArrowRight size={18} className="transition group-hover:translate-x-1" /></Link></div></div></section>
+    <section className="px-5 py-24 md:px-8 md:py-36 xl:px-12"><div className="relative mx-auto max-w-[1360px] overflow-hidden rounded-[40px] border border-cyan-200/20 bg-[radial-gradient(circle_at_20%_20%,rgba(34,211,238,.24),transparent_35%),linear-gradient(135deg,#0c3e79_0%,#193da8_48%,#5621a8_100%)] px-7 py-20 text-center shadow-[0_40px_120px_rgba(37,99,235,.24)] md:px-16 md:py-28"><div className="premium-grid absolute inset-0 opacity-20" /><div className="relative"><p className="text-[10px] font-black uppercase tracking-[.26em] text-cyan-100">Sua evolução começa com método</p><h2 className="mx-auto mt-6 max-w-5xl text-5xl font-black leading-[.9] tracking-[-.065em] text-white md:text-8xl">Construa uma bancada<br />que inspira confiança.</h2><p className="mx-auto mt-7 max-w-2xl text-base leading-7 text-blue-100">Escolha a formação que resolve o seu próximo desafio e avance com uma rota técnica clara.</p><Link href="/cursos" className="group mt-10 inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-sm font-black text-blue-800 shadow-2xl transition hover:-translate-y-1">Explorar todas as formações <ArrowRight size={18} className="transition group-hover:translate-x-1" /></Link></div></div></section>
   </>
 }
 
