@@ -34,11 +34,11 @@ export default function PrivacidadePage() {
               O <strong style={{ color: "#fff" }}>G Lab Cursos</strong> e um negocio digital que
               apresenta e comercializa guias tecnicos de assistencia mobile. O site e hospedado na{" "}
               <strong style={{ color: "#fff" }}>Vercel</strong>. Dados operacionais sao armazenados
-              no <strong style={{ color: "#fff" }}>Supabase</strong> (banco PostgreSQL na AWS).
+              no <strong style={{ color: "#fff" }}>infraestrutura de banco PostgreSQL</strong> (banco PostgreSQL na AWS).
             </p>
             <p className="mt-2">
               A compra, o pagamento e a entrega dos guias sao processados exclusivamente pela{" "}
-              <strong style={{ color: "#fff" }}>PagBank</strong>, plataforma externa de checkout e
+              <strong style={{ color: "#fff" }}>Kirvano</strong>, plataforma externa de checkout e
               entrega digital. O G Lab Cursos nao processa pagamentos nem libera acessos
               diretamente.
             </p>
@@ -53,11 +53,11 @@ export default function PrivacidadePage() {
               </Link>{" "}
               ou envie e-mail para{" "}
               <a
-                href="mailto:suporte@glabcursos.com.br"
+                href="mailto:contato@glabcursos.com.br"
                 className="underline hover:opacity-80 transition-opacity"
                 style={{ color: "#00D4C8" }}
               >
-                suporte@glabcursos.com.br
+                contato@glabcursos.com.br
               </a>
               .
             </p>
@@ -86,13 +86,13 @@ export default function PrivacidadePage() {
               Se voce clicar em <em>"Permitir metricas"</em> no banner de consentimento, o site
               podera registrar dados tecnicos de navegacao, como pagina visitada, referencia de
               origem, navegador/dispositivo, endereco IP e data/hora de acesso, para analise
-              interna de uso e desempenho. Esses dados sao armazenados no Supabase e processados
+              interna de uso e desempenho. Esses dados sao armazenados no infraestrutura de banco PostgreSQL e processados
               pela Vercel Analytics.
             </p>
             <p className="mt-2">
               Nenhum dado de metricas opcionais e coletado pelo VisitorTracker quando voce escolhe{" "}
               <em>"Somente essenciais"</em>. Dados enviados voluntariamente pelo formulario de
-              contato e registros operacionais necessarios a compras realizadas na PagBank seguem
+              contato e registros operacionais necessarios a compras realizadas na Kirvano seguem
               as finalidades descritas nesta politica.
             </p>
             <p className="mt-2">
@@ -102,10 +102,10 @@ export default function PrivacidadePage() {
             </p>
 
             <h3 className="font-medium mb-1 mt-4" style={{ color: "#e4e4e7" }}>
-              2.3 Notificacoes operacionais de venda (webhook PagBank)
+              2.3 Notificacoes operacionais de venda (webhook Kirvano)
             </h3>
             <p>
-              Quando uma venda, reembolso ou chargeback e confirmado pela PagBank, ela envia uma
+              Quando uma venda, reembolso ou chargeback e confirmado pela Kirvano, ela envia uma
               notificacao automatica para o site. O tratamento desses dados e dividido em duas
               etapas distintas:
             </p>
@@ -132,12 +132,12 @@ export default function PrivacidadePage() {
               <strong style={{ color: "#fff" }}>Nao sao armazenados</strong> pelo site: nome do
               comprador, e-mail, CPF, telefone, endereco, dados bancarios, QR Code PIX, linha
               digitavel de boleto, payload completo da notificacao ou qualquer outro dado pessoal
-              do comprador. Esses dados permanecem exclusivamente na PagBank.
+              do comprador. Esses dados permanecem exclusivamente na Kirvano.
             </p>
             <p className="mt-2">
               Para novos eventos processados apos a atualizacao desta politica (maio de 2026), o
               site nao armazena payload completo, CPF, telefone, e-mail ou dados detalhados de
-              pagamento recebidos em notificacoes da PagBank.
+              pagamento recebidos em notificacoes da Kirvano.
             </p>
           </section>
 
@@ -153,7 +153,7 @@ export default function PrivacidadePage() {
               </li>
               <li>
                 <strong style={{ color: "#fff" }}>Execucao de contrato</strong> — notificacoes
-                operacionais de venda recebidas da PagBank
+                operacionais de venda recebidas da Kirvano
               </li>
               <li>
                 <strong style={{ color: "#fff" }}>Obrigacao legal</strong> — retencao de registros
@@ -174,11 +174,11 @@ export default function PrivacidadePage() {
                 de navegacao (quando autorizado)
               </li>
               <li>
-                <strong style={{ color: "#fff" }}>Supabase / AWS</strong> — armazenamento do banco
+                <strong style={{ color: "#fff" }}>Infraestrutura PostgreSQL gerenciada</strong> — armazenamento do banco
                 de dados
               </li>
               <li>
-                <strong style={{ color: "#fff" }}>PagBank</strong> — plataforma de checkout e
+                <strong style={{ color: "#fff" }}>Kirvano</strong> — plataforma de checkout e
                 entrega; responsavel pelos dados completos de pagamento e cadastro do comprador
               </li>
               <li>
@@ -268,3 +268,4 @@ export default function PrivacidadePage() {
     </main>
   )
 }
+
