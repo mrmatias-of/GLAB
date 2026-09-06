@@ -1,4 +1,5 @@
-export const dynamic = "force-static"
+export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 const script = String.raw`
 $ErrorActionPreference = "Stop"
@@ -29,7 +30,7 @@ export function GET() {
   return new Response(script, {
     headers: {
       "content-type": "text/plain; charset=utf-8",
-      "cache-control": "public, max-age=300",
+      "cache-control": "no-store, max-age=0",
     },
   })
 }
